@@ -4,6 +4,18 @@ title: "Electrical"
 ---
 
 <style>
+.tier-section { margin-bottom: 1em; border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; }
+.tier-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; cursor: pointer; user-select: none;
+  background: #f8f9fa; border: none; width: 100%; text-align: left;
+  font-size: 1.1em; font-weight: 700;
+}
+.tier-header:hover { background: #e9ecef; }
+.tier-icon { font-size: 1.2em; }
+.tier-count { font-size: 0.8em; font-weight: normal; color: #666; margin-left: auto; }
+.tier-body { padding: 0 16px 8px; display: none; }
+.tier-body.open { display: block; }
 .lesson-card { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
 .lesson-card:last-child { border-bottom: none; }
 .tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; white-space: nowrap; }
@@ -13,16 +25,46 @@ title: "Electrical"
 .lesson-card p { margin: 2px 0 0; color: #555; font-size: 0.92em; }
 </style>
 
-Understand the wiring, power systems, and electronics of your FTC robot.
+<p>Understand the wiring, power systems, and electronics of your FTC robot. Click a tier to expand.</p>
 
----
-
-<div class="lesson-card">
-  <span class="tier-badge tier-easier">Easier</span>
-  <div><a href="easier/electrical/">Electrical Systems</a><p>Learn how power flows from the battery through the REV Control Hub to motors and servos.</p></div>
+<div class="tier-section">
+  <button class="tier-header" onclick="toggleTier(this)">
+    <span class="tier-icon">🟢</span> Easier
+    <span class="tier-count">1 lesson</span>
+    <span>▶</span>
+  </button>
+  <div class="tier-body">
+    <div class="lesson-card">
+      <span class="tier-badge tier-easier">Easier</span>
+      <div><a href="easier/electrical/">Electrical Systems</a><p>How power flows from the battery through the REV Control Hub to motors and servos.</p></div>
+    </div>
+  </div>
 </div>
 
-<div class="lesson-card">
-  <span class="tier-badge tier-intermediate">Intermediate</span>
-  <div><a href="intermediate/electrical-issues/">Electrical Gremlins</a><p>Diagnose and fix common wiring problems: intermittent cuts, reversed polarity, and loose connections.</p></div>
+<div class="tier-section">
+  <button class="tier-header" onclick="toggleTier(this)">
+    <span class="tier-icon">🟦</span> Intermediate
+    <span class="tier-count">1 lesson</span>
+    <span>▶</span>
+  </button>
+  <div class="tier-body">
+    <div class="lesson-card">
+      <span class="tier-badge tier-intermediate">Intermediate</span>
+      <div><a href="intermediate/electrical-issues/">Electrical Gremlins</a><p>Diagnose and fix common wiring problems: intermittent cuts, reversed polarity, and loose connections.</p></div>
+    </div>
+  </div>
 </div>
+
+<script>
+function toggleTier(btn) {
+  const body = btn.nextElementSibling;
+  const arrow = btn.querySelector('span:last-child');
+  if (body.classList.contains('open')) {
+    body.classList.remove('open');
+    arrow.textContent = '▶';
+  } else {
+    body.classList.add('open');
+    arrow.textContent = '▼';
+  }
+}
+</script>
