@@ -14,7 +14,7 @@ navbar-links:
     - "Overview": "mechanical/"
     - "goBILDA RI3D": "mechanical/gobilda-ri3d/"
 
-title-img: assets/img/br_top.JPG
+title-img: /assets/img/br_logo.jpg
 
 
 navbar-col: "#EAEAEA"
