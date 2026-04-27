@@ -1,0 +1,753 @@
+---
+layout: page
+title: "SparkFun OTOS"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-advanced">Advanced</span>
+
+<h1>SparkFun OTOS</h1>
+<h2>Where Am I?</h2>
+<p>
+You have been driving the robot around by hand — pushing
+sticks, watching it move, and guiding it yourself. That works
+great for TeleOp. But what about <strong>Autonomous</strong>?
+</p>
+<p>
+In Autonomous, there is no driver. The robot has 30 seconds to
+score points <strong>entirely on its own</strong>. No joystick. No human.
+Just code. And the very first problem your code has to solve
+is deceptively simple:
+</p>
+<p>
+<strong>Where am I on the field?</strong>
+</p>
+<p>
+Think about it. You can tell the robot to drive forward 24
+inches. But how does the robot know when it has actually gone
+24 inches? You can tell it to turn right 90 degrees. But how
+does it know when it has actually turned 90 degrees? Without
+some way to measure its own movement, the robot is driving
+blind.
+</p>
+<p>
+This lesson introduces a sensor that solves exactly this
+problem — the <strong>SparkFun OTOS</strong>.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">In Autonomous, the robot must know **where it is** and
+<p>
+<strong>how far it has moved</strong> without any human input. Position-tracking
+sensors like the OTOS make this possible.</div></div>
+</p>
+<hr>
+<h2>What Is OTOS?</h2>
+<p>
+OTOS stands for <strong>Optical Tracking Odometry Sensor</strong>. That is
+a mouthful, so let's break it down one word at a time:
+</p>
+<ul>
+<li><strong>Optical</strong> — it uses light (specifically a tiny camera) to</li>
+</ul>
+<p>
+  see the surface below it
+</p>
+<ul>
+<li><strong>Tracking</strong> — it follows its own movement over time</li>
+<li><strong>Odometry</strong> — the measurement of distance traveled</li>
+</ul>
+<p>
+  (from the Greek <em>hodos</em> meaning "path" and <em>metron</em> meaning
+  "measure")
+</p>
+<ul>
+<li><strong>Sensor</strong> — a device that detects physical input and</li>
+</ul>
+<p>
+  reports it to the robot's brain
+</p>
+<p>
+Put it all together: the OTOS is a sensor that uses a tiny
+camera to measure how far the robot has traveled by watching
+the ground beneath it.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**OTOS** = **O**ptical **T**racking **O**dometry **S**ensor.
+<p>
+It uses a downward-facing camera to measure how far the robot
+has moved by watching the ground surface.</div></div>
+</p>
+<p>
+It is made by <strong>SparkFun Electronics</strong>, a company based in
+Colorado that builds sensors and electronics boards for
+makers, students, and robotics teams. The full product name
+is the "SparkFun Qwiic Optical Tracking Odometry Sensor" but
+everyone in FTC just calls it <strong>the OTOS</strong>.
+</p>
+<hr>
+<h2>How It Works — The Computer Mouse on Your Robot</h2>
+<p>
+You already know a device that works almost exactly the same
+way as the OTOS. It is sitting next to your keyboard right
+now.
+</p>
+<p>
+<strong>A computer mouse.</strong>
+</p>
+<p>
+Look at the bottom of a modern optical mouse and you will see
+a small light (usually red or infrared) and a tiny lens. That
+light illuminates the surface under the mouse, and a miniature
+camera inside takes thousands of pictures per second of the
+surface texture — the tiny scratches, bumps, and patterns in
+your desk or mousepad.
+</p>
+<p>
+A chip inside the mouse compares each frame to the one before
+it. If the pattern shifted two pixels to the left, the mouse
+knows you moved it to the left. If it shifted three pixels up,
+you moved it forward. By adding up all those tiny shifts,
+frame by frame, the mouse tracks your hand's position with
+incredible precision.
+</p>
+<p>
+<strong>The OTOS does the same thing, but for your robot.</strong>
+</p>
+<p>
+It points a tiny camera straight down at the game mat. The
+foam tiles have a slightly textured surface — just like a
+mousepad has a texture. The OTOS takes thousands of images per
+second of that texture and compares them frame by frame. Every
+tiny shift tells the sensor how far the robot moved and in
+which direction.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The OTOS works just like an **optical mouse** — sensor facing
+<p>
+down, tracking the surface beneath it. It photographs the
+ground thousands of times per second and tracks tiny shifts
+between frames to measure movement. It reports X position,
+Y position, and heading.</div></div>
+</p>
+<p>
+But the OTOS has a superpower that a regular mouse does not:
+a built-in <strong>IMU</strong> (Inertial Measurement Unit — the same type
+of gyroscope sensor you used in the IMU Heading lesson). This
+gives it an independent measurement of rotation. The optical
+tracking handles X and Y movement, and the IMU handles heading.
+Together, they give you a complete picture: *"I am at position
+(X, Y) and facing heading H."*
+</p>
+<h3>What It Reports</h3>
+<p>
+Every time you ask the OTOS for data, it gives you three
+numbers packed into a structure called a <strong>Pose2D</strong>:
+</p>
+<p>
+| Value | What It Means |
+| --- | --- |
+| <strong>x</strong> | Left/right position (inches from where you started) |
+| <strong>y</strong> | Forward/backward position (inches from where you started) |
+| <strong>h</strong> | Heading — which direction the robot is facing (degrees) |
+</p>
+<p>
+It can also report <strong>velocity</strong> (how fast you are moving right
+now) and <strong>acceleration</strong> (how quickly your speed is changing),
+but position is the most important one for autonomous
+navigation.
+</p>
+<hr>
+<h2>The Hardware</h2>
+<h3>What It Looks Like</h3>
+<p>
+The SparkFun OTOS is a small green circuit board, roughly the
+size of a postage stamp (about 1 inch by 1 inch). On the
+bottom is the optical sensor lens — a tiny dark window that
+faces the ground. On the top are the electronic components and
+a connector port.
+</p>
+<h3>The Wires — I2C Connection</h3>
+<p>
+The OTOS connects to the robot using an <strong>I2C</strong> bus (pronounced
+"I-squared-C" or "I-two-C"). I2C is a standard communication
+protocol that lets multiple sensors share just two data wires.
+The connection uses four wires:
+</p>
+<p>
+| Wire | Color | Purpose |
+| --- | --- | --- |
+| <strong>VCC</strong> | Red | Power (3.3V from the hub) |
+| <strong>GND</strong> | Black | Ground (completes the circuit) |
+| <strong>SDA</strong> | Blue | Data line (sensor sends readings here) |
+| <strong>SCL</strong> | Yellow | Clock line (timing signal so both sides stay in sync) |
+</p>
+<p>
+The OTOS uses a <strong>Qwiic connector</strong> — a small, keyed plug that
+only fits one way. You cannot plug it in backwards. This is a
+huge advantage over bare-wire connections where you might
+accidentally swap wires and fry the sensor.
+</p>
+<h3>Connecting to the Control Hub</h3>
+<p>
+On the REV Control Hub or Expansion Hub, you will find
+<strong>I2C ports</strong> labeled 0 through 3. Each port has a matching Qwiic-
+compatible connector. To install the OTOS:
+</p>
+<ol>
+<li>Plug one end of a Qwiic cable into the OTOS board</li>
+<li>Plug the other end into any I2C port on the Control Hub</li>
+<li>Mount the OTOS on the underside of the robot chassis,</li>
+</ol>
+<p>
+   pointing straight down at the ground
+</p>
+<ol>
+<li>Make sure the sensor is centered on the robot (or as close</li>
+</ol>
+<p>
+   to center as your design allows)
+</p>
+<p>
+That is it — no soldering, no stripping wires, no figuring out
+which pin is which. The Qwiic system makes it plug-and-play.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The OTOS connects via **I2C** using a **Qwiic cable** — a
+<p>
+keyed four-wire connector (power, ground, data, clock) that
+plugs directly into the Control Hub. No soldering required.</div></div>
+</p>
+<hr>
+<h2>The Critical Detail — Height Off the Mat</h2>
+<p>
+Here is the one thing that trips up almost every team the first
+time they install an OTOS:
+</p>
+<p>
+<strong>The distance between the sensor lens and the ground matters. A lot.</strong>
+</p>
+<p>
+The optical sensor has a tiny lens with a very specific focal
+range. If the sensor is too close to the ground, the lens
+cannot focus and the image is a blur — like holding a book one
+inch from your eyes. If the sensor is too far away, it sees too
+large an area and the individual surface details become too
+small to track reliably.
+</p>
+<p>
+The sweet spot is approximately <strong>10 millimeters</strong> — about the
+height of a pencil lying on its side, or roughly the thickness
+of your pinky finger. SparkFun's documentation recommends
+<strong>10.0 mm</strong> from the bottom of the sensor to the playing
+surface.
+</p>
+<h3>What Happens at the Wrong Height</h3>
+<p>
+| Height | What Goes Wrong |
+| --- | --- |
+| <strong>Too low</strong> (< 8 mm) | Lens cannot focus. Tracking fails or reports wildly wrong values. Status flag <code>warnOpticalTracking</code> fires. |
+| <strong>Sweet spot</strong> (~10 mm) | Clear image. Accurate tracking. This is where you want to be. |
+| <strong>Too high</strong> (> 14 mm) | Image is too zoomed out. Surface details are too small. Tracking becomes noisy and unreliable. |
+</p>
+<h3>How Teams Get the Height Right</h3>
+<p>
+Most teams 3D-print a custom standoff or mounting bracket that
+holds the OTOS at exactly the right height. Some use stacked
+washers, nylon spacers, or carefully measured L-brackets. The
+key is that the mounting must be <strong>rigid</strong> — if the sensor
+bounces or vibrates during driving, the readings will be
+garbage.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The OTOS lens must be approximately **10 mm** above the game
+<p>
+mat surface. Too close and it cannot focus. Too far and it
+loses detail. Most teams 3D-print a rigid mount to hold it at
+exactly the right height.</div></div>
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Pro tip:** After mounting, power on the robot and check the
+<p>
+OTOS status flags in telemetry. If <code>warnOpticalTracking</code> is
+true, the sensor cannot see the surface properly — adjust the
+height. You will learn how to check this in the coding section
+below.</div></div>
+</p>
+<hr>
+<h2>Why Use OTOS at All?</h2>
+<p>
+You might be wondering: "We already have the IMU for heading
+and motor encoders for distance. Why add another sensor?"
+</p>
+<p>
+Great question. Here is the problem with those other methods:
+</p>
+<h3>Motor Encoders Alone</h3>
+<p>
+Motor encoders count how many times the motor shaft has
+rotated. From that, you can calculate how far the wheel has
+turned. <strong>But</strong> — what if the wheel <strong>slips</strong>? On a mecanum
+robot, the wheels slip constantly during strafing movements.
+The encoder says the motor turned 1000 ticks, but the robot
+only moved half the expected distance because the rollers were
+sliding. Encoders measure what the <strong>motor</strong> did, not what the
+<strong>robot</strong> did.
+</p>
+<h3>IMU Alone</h3>
+<p>
+The IMU gives you heading (rotation), but it says nothing about
+X/Y position. You know which way the robot is facing, but not
+where it is on the field. And IMU heading drifts slowly over
+time — after a few minutes, it might be off by a few degrees.
+</p>
+<h3>OTOS Advantage</h3>
+<p>
+The OTOS tracks what the <strong>robot actually does</strong>, not what the
+motors commanded. If the wheels slip, the OTOS still sees the
+ground moving at the correct speed. It gives you X, Y, <strong>and</strong>
+heading — all in one sensor, all by watching the real motion.
+</p>
+<p>
+The tradeoff? The OTOS also drifts over time. Every frame-to-
+frame comparison has a tiny measurement error, and those errors
+add up — just like a computer mouse would slowly lose its
+position if you dragged it around for two minutes straight on a
+bumpy desk. After driving around the field for 30 seconds of
+autonomous, the OTOS might be off by an inch or two.
+</p>
+<p>
+That drift is manageable for short autonomous routines. In a
+later lesson, you will learn how to correct for it using a
+completely different kind of sensor. But for now, the OTOS
+gives you something no other single sensor can:
+<strong>a complete position estimate (X, Y, heading) from one device</strong>.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The OTOS measures what the **robot** actually does, not what
+<p>
+the <strong>motors</strong> commanded. It gives you X, Y, and heading in
+one sensor. The tradeoff is that it drifts over time — each
+reading has a small error that accumulates.</div></div>
+</p>
+<hr>
+<h2>Engineering Notebook Questions</h2>
+<p>
+Before coding, think about what you have learned. Write
+answers to these questions in your engineering notebook.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Write answers to these questions in your engineering notebook.
+<p>
+Use what you learned above — if unsure, do some research.
+</p>
+<ol>
+<li><strong>What does OTOS stand for?</strong> Write out the full name and</li>
+</ol>
+<p>
+   explain what each word means.
+</p>
+<ol>
+<li><strong>How is the OTOS similar to a computer mouse?</strong> Describe</li>
+</ol>
+<p>
+   the comparison in your own words.
+</p>
+<ol>
+<li><strong>Why does the height above the mat matter so much?</strong> What</li>
+</ol>
+<p>
+   happens if the sensor is too close? Too far?
+</p>
+<ol>
+<li><strong>What advantage does the OTOS have over motor encoders for tracking position?</strong></li>
+</ol>
+<p>
+   Think about mecanum wheels.
+</p>
+<ol>
+<li><strong>What is the main weakness of using OTOS alone for navigation?</strong></li>
+</ol>
+<p>
+   Why might you need additional sensors?</div></div>
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Hint for question 4:** Think about what happens during a
+<p>
+strafe movement. The mecanum rollers are sliding sideways — do
+motor encoders know about that sideways motion?</div></div>
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Hint for question 5:** Think about the computer mouse
+<p>
+analogy. What happens if you pick it up and put it back down?
+What happens if the surface is very smooth (like glass)?</div></div>
+</p>
+<hr>
+<h2>The OTOS in Our Simulator</h2>
+<p>
+In the real world, you would wire a physical SparkFun OTOS
+board to your Control Hub. In our simulator, the OTOS is
+already "installed" on the virtual robot and ready to use.
+</p>
+<p>
+The simulated OTOS behaves realistically:
+</p>
+<ul>
+<li>It tracks your robot's position as you drive around</li>
+<li>It accumulates small errors over time (drift), just like</li>
+</ul>
+<p>
+  the real sensor
+</p>
+<ul>
+<li>The built-in IMU provides heading data</li>
+<li>All the same API methods work identically</li>
+</ul>
+<p>
+You access it from the <strong>hardware map</strong> using the name
+<code>&quot;sensor_otos&quot;</code>:
+</p>
+<pre><code class="language-java">SparkFunOTOS otos = hardwareMap.get(SparkFunOTOS.class, &quot;sensor_otos&quot;);
+<p>
+</code></pre>
+</p>
+<p>
+This gives you an OTOS object with methods to configure the
+sensor, read position, reset tracking, and more.
+</p>
+<h3>Key API Methods</h3>
+<p>
+Here are the methods you will use most often:
+</p>
+<p>
+| Method | What It Does |
+| --- | --- |
+| <code>setLinearUnit(DistanceUnit.INCH)</code> | Sets position units to inches |
+| <code>setAngularUnit(AngleUnit.DEGREES)</code> | Sets heading units to degrees |
+| <code>calibrateImu()</code> | Calibrates the built-in gyroscope (keep robot still!) |
+| <code>resetTracking()</code> | Resets X, Y, and heading to zero |
+| <code>getPosition()</code> | Returns a <code>Pose2D</code> with current x, y, and h |
+| <code>getVelocity()</code> | Returns a <code>Pose2D</code> with current velocity |
+| <code>setPosition(pose)</code> | Manually sets the current position |
+</p>
+<p>
+The <code>Pose2D</code> object has three fields: <code>.x</code>, <code>.y</code>, and <code>.h</code>.
+When you call <code>getPosition()</code>, you get back a Pose2D and can
+read each value separately:
+</p>
+<pre><code class="language-java">SparkFunOTOS.Pose2D pos = otos.getPosition();
+<p>
+double xPos = pos.x;      // left/right offset in inches
+double yPos = pos.y;      // forward/backward offset in inches
+double heading = pos.h;    // heading in degrees
+</code></pre>
+</p>
+<hr>
+<h2>Time to Code!</h2>
+<p>
+Let's add OTOS telemetry to your robot so you can see your
+position update in real time as you drive.
+</p>
+<p>
+You will add code in two places:
+</p>
+<ol>
+<li><strong>Before the main loop</strong> — set up and configure the OTOS</li>
+<li><strong>Inside the main loop</strong> — read and display position data</li>
+</ol>
+<hr>
+<h2>Part 1 — Import the OTOS Classes</h2>
+<p>
+You need two new import lines so Java knows about the OTOS
+sensor and the unit types.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open MecanumDrive.java at the import
+<p>
+section:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › IMU Heading : Imports ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add these import lines right below the IMU Heading Imports
+<p>
+comment block:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// ===============================================
+<p>
+// OTOS Imports
+// ===============================================
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+</code></pre></div></div>
+</p>
+<hr>
+<h2>Part 2 — Initialize the OTOS</h2>
+<p>
+Before the robot starts driving, you need to get the sensor
+from the hardware map, tell it what units to use, and calibrate
+its IMU.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open your code at the OTOS setup
+<p>
+section:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › OTOS : Setup ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add this code in the OTOS Setup section (right below the
+<p>
+comment):</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Get the OTOS from the hardware map
+<p>
+SparkFunOTOS otos = hardwareMap.get(SparkFunOTOS.class, &quot;sensor_otos&quot;);
+</p>
+<p>
+// Configure units: inches for distance, degrees for heading
+otos.setLinearUnit(DistanceUnit.INCH);
+otos.setAngularUnit(AngleUnit.DEGREES);
+</p>
+<p>
+// Calibrate the built-in IMU (robot must be still!)
+otos.calibrateImu();
+</p>
+<p>
+// Reset position to (0, 0, 0)
+otos.resetTracking();
+</p>
+<p>
+telemetry.addData(&quot;OTOS&quot;, &quot;Initialized!&quot;);
+telemetry.update();
+</code></pre></div></div>
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Important:** The robot must be **completely still** when
+<p>
+<code>calibrateImu()</code> runs. The IMU calibration measures the
+"zero point" for rotation. If the robot is moving during
+calibration, the heading will be wrong for the entire match.</div></div>
+</p>
+<hr>
+<h2>Part 3 — Read Position in the Loop</h2>
+<p>
+Now add code inside the main loop to read the OTOS position
+every frame and display it on the Driver Hub.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to jump to the OTOS telemetry section
+<p>
+inside the loop:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › OTOS : Telemetry ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add this code in the OTOS Telemetry section:</div></div>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Read the current position from the OTOS
+<p>
+SparkFunOTOS.Pose2D pos = otos.getPosition();
+</p>
+<p>
+// Display position on the Driver Hub
+telemetry.addData(&quot;OTOS X&quot;, &quot;%.1f in&quot;, pos.x);
+telemetry.addData(&quot;OTOS Y&quot;, &quot;%.1f in&quot;, pos.y);
+telemetry.addData(&quot;OTOS Heading&quot;, &quot;%.1f°&quot;, pos.h);
+</code></pre></div></div>
+</p>
+<p>
+The <code>%.1f</code> in the format string means "show one decimal
+place." So instead of seeing <code>12.345678</code>, you see <code>12.3</code> —
+much easier to read on a bouncing Driver Hub screen.
+</p>
+<hr>
+<h2>Part 4 — Add OTOS Reset to the Right Bumper</h2>
+<p>
+You already have a right bumper block from the IMU Heading
+lesson that resets the IMU heading. Now you will extend it
+to also reset the OTOS position.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Scroll up to find the right bumper block you added in the
+<p>
+IMU Heading lesson. It looks like this:</div></div>
+</p>
+<pre><code class="language-java">if (gamepad1.right_bumper) {
+<p>
+    imu.resetYaw();
+}
+</code></pre>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add `otos.resetTracking();` right after `imu.resetYaw();`
+<p>
+so it looks like this:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">if (gamepad1.right_bumper) {
+<p>
+    imu.resetYaw();
+    otos.resetTracking();
+}
+</code></pre></div></div>
+</p>
+<p>
+Now pressing the <strong>right bumper</strong> resets both the IMU heading
+and the OTOS position back to zero. This is useful when you
+want to measure a specific distance — drive the robot to a
+starting point, press right bumper, then drive to the ending
+point and read the numbers.
+</p>
+<hr>
+<h2>Part 5 — Save, Compile, and Test!</h2>
+<p>
+Your OTOS code should now have three sections. Here is what the
+complete code looks like:
+</p>
+<p>
+<strong>Before the loop (OTOS Setup):</strong>
+</p>
+<pre><code class="language-java">SparkFunOTOS otos = hardwareMap.get(SparkFunOTOS.class, &quot;sensor_otos&quot;);
+<p>
+otos.setLinearUnit(DistanceUnit.INCH);
+otos.setAngularUnit(AngleUnit.DEGREES);
+otos.calibrateImu();
+otos.resetTracking();
+telemetry.addData(&quot;OTOS&quot;, &quot;Initialized!&quot;);
+telemetry.update();
+</code></pre>
+</p>
+<p>
+<strong>Inside the loop (OTOS Telemetry):</strong>
+</p>
+<pre><code class="language-java">SparkFunOTOS.Pose2D pos = otos.getPosition();
+<p>
+telemetry.addData(&quot;OTOS X&quot;, &quot;%.1f in&quot;, pos.x);
+telemetry.addData(&quot;OTOS Y&quot;, &quot;%.1f in&quot;, pos.y);
+telemetry.addData(&quot;OTOS Heading&quot;, &quot;%.1f°&quot;, pos.h);
+</code></pre>
+</p>
+<p>
+<strong>Right bumper block (updated from IMU Heading lesson):</strong>
+</p>
+<pre><code class="language-java">if (gamepad1.right_bumper) {
+<p>
+    imu.resetYaw();
+    otos.resetTracking();
+}
+</code></pre>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save**.
+<ol>
+<li>Click <strong>Recompile</strong> on the Driver Hub.</li>
+<li>Select <strong>MecanumDrive</strong> from TeleOp.</li>
+<li>Click <strong>INIT</strong>, then <strong>START</strong>.</div></div></li>
+</ol>
+<hr>
+<h2>Test Your OTOS!</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 1 — Forward:** Drive the robot straight forward about
+<p>
+two feet. Watch the <strong>OTOS Y</strong> value increase. It should read
+somewhere around 24 inches (give or take — the OTOS is not
+perfect!). Then drive backward to the start and watch it
+return toward zero.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 2 — Strafe:** Start from rest and strafe the robot to
+<p>
+the right about one foot. Watch <strong>OTOS X</strong> increase to around
+12 inches. The Y value should stay close to zero (you did
+not move forward or backward).</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 3 — Rotation:** Spin the robot 90 degrees clockwise.
+<p>
+Watch <strong>OTOS Heading</strong> change. It should read approximately
+-90 degrees (clockwise is negative in the OTOS coordinate
+system). Spin back and it should return toward zero.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 4 — Reset:** Drive the robot to a random spot on the
+<p>
+field. Press the <strong>right bumper</strong> on the gamepad. All three values
+(X, Y, Heading) should snap back to zero — and the IMU heading
+resets too, since both resets are on the same button. Now drive
+forward — the OTOS measures from this new starting point.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 5 — Drift:** This is the important one. Drive the robot
+<p>
+in a big square on the field — forward, right, backward, left —
+and end up back where you started. Look at the OTOS values.
+Are they exactly zero? Probably not. The small errors from each
+movement have added up. This is <strong>drift</strong> — and it is the main
+limitation of any dead-reckoning sensor.</div></div>
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Drift** is the accumulation of small measurement errors over
+<p>
+time. The OTOS is very accurate for short movements, but after
+driving around for a while, the reported position slowly
+diverges from reality. This is normal — all dead-reckoning
+sensors have this property.</div></div>
+</p>
+<hr>
+<h2>What You Learned</h2>
+<ul>
+<li><strong>OTOS</strong> stands for Optical Tracking Odometry Sensor — it</li>
+</ul>
+<p>
+  uses a tiny camera to track movement across the ground
+  surface, just like a computer mouse
+</p>
+<ul>
+<li>The sensor connects via <strong>I2C</strong> using a Qwiic cable — four</li>
+</ul>
+<p>
+  wires (power, ground, data, clock) in a keyed connector
+</p>
+<ul>
+<li>The lens must be approximately <strong>10 mm</strong> above the playing</li>
+</ul>
+<p>
+  surface — too close or too far causes tracking failures
+</p>
+<ul>
+<li>The OTOS reports <strong>Pose2D</strong>: x position, y position, and</li>
+</ul>
+<p>
+  heading — a complete position estimate from one sensor
+</p>
+<ul>
+<li>It has a built-in <strong>IMU</strong> for heading and optical tracking</li>
+</ul>
+<p>
+  for X/Y movement
+</p>
+<ul>
+<li>Unlike motor encoders, the OTOS measures what the <strong>robot</strong></li>
+</ul>
+<p>
+  actually does, not what the motors commanded — so wheel slip
+  does not fool it
+</p>
+<ul>
+<li>The OTOS <strong>drifts</strong> over time because tiny frame-to-frame</li>
+</ul>
+<p>
+  errors accumulate — this is the fundamental tradeoff of
+  dead-reckoning sensors
+</p>
+<ul>
+<li>In the FTC SDK, you access it through</li>
+</ul>
+<p>
+  <code>hardwareMap.get(SparkFunOTOS.class, &quot;sensor_otos&quot;)</code> and
+  read position with <code>otos.getPosition()</code>
+</p>
+<p>
+Notice how the OTOS numbers slowly drift from the real
+position? That is because it adds up tiny measurement errors
+over time — just like a computer mouse would if you dragged it
+across a bumpy desk for two minutes straight. In the next
+lesson, you will learn about a sensor that does <strong>not</strong> drift
+— but it has its own tradeoffs. Stay tuned.
+</p>
+<hr>

@@ -1,0 +1,893 @@
+---
+layout: page
+title: "Mecanum Drive"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-advanced">Advanced</span>
+
+<h1>Mecanum Drive</h1>
+<h2>Tank Drive Got You Here. Mecanum Takes You Further.</h2>
+<p>
+You already know how to make the robot drive forward, backward,
+and spin with tank drive. But watch your robot carefully -- it
+cannot move sideways. If you need to scoot three inches to the
+left to line up with a scoring target, you have to stop, turn,
+drive, turn back, and hope you end up in the right spot. That
+is slow, clumsy, and costs precious seconds in a match.
+</p>
+<p>
+What if the robot could just <strong>slide</strong> sideways?
+</p>
+<p>
+<img src="macanum_top_down.jpg" alt="Mecanum top-down view" class="lesson-img">
+</p>
+<p>
+That is exactly what <strong>mecanum wheels</strong> give you. They let your
+robot move in <strong>any direction</strong> -- forward, backward, sideways,
+diagonally -- all without rotating. Combined with rotation, your
+robot gets complete freedom of movement. This is called a
+<strong>holonomic drivetrain</strong>, and it is what most competitive FTC
+teams use.
+</p>
+<p>
+<img src="mecanum_chassis.jpg" alt="Mecanum chassis" class="lesson-img">
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Mecanum wheels** allow a robot to move in any direction --
+<p>
+forward, backward, sideways, and diagonally -- without
+rotating first. This is called <strong>holonomic</strong> movement.</div></div>
+</p>
+<p>
+By the end of this lesson, you will replace your tank drive
+code with full mecanum drive, including strafing and rotation.
+Your robot will move like the competition code.
+</p>
+<hr>
+<h2>What Makes Mecanum Wheels Special?</h2>
+<p>
+A normal wheel can only push in one direction -- the direction
+it rolls. But a mecanum wheel has a ring of <strong>rubber rollers</strong>
+mounted at a <strong>45-degree angle</strong> around the outside of the
+wheel. When the wheel spins, those angled rollers can slide
+sideways while still pushing forward. That sideways slip is
+the magic ingredient.
+</p>
+<p>
+<img src="mecanum_hweel.jpg" alt="Mecanum wheel close-up" class="lesson-img">
+</p>
+<p>
+Each wheel applies force at a 45-degree angle to its rolling
+direction. By spinning all four wheels at different speeds and
+directions, you can combine those angled forces to produce
+movement in <strong>any</strong> direction.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Mecanum wheels have **rollers at 45 degrees**. Each wheel
+<p>
+pushes at an angle. By combining all four wheels, you can
+create movement in any direction.</div></div>
+</p>
+<h3>The X Pattern</h3>
+<p>
+There is a catch -- mecanum wheels are <strong>not all identical</strong>.
+There are two types: left-hand and right-hand. The rollers on
+each type are angled in opposite directions.
+</p>
+<p>
+On your robot, the wheels <strong>must</strong> be mounted in an <strong>X pattern</strong>
+when viewed from above. This means the rollers on all four wheels
+point toward the center of the robot, forming an X shape. Two
+wheels have left-hand rollers, and two have right-hand rollers.
+</p>
+<p>
+<img src="mecanum_x_pattern.jpg" alt="X pattern viewed from above" class="lesson-img">
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Mecanum wheels must be mounted in an **X pattern** (rollers
+<p>
+point toward center). If mounted incorrectly (O pattern),
+strafing will not work and the robot drives unpredictably.</div></div>
+</p>
+<p>
+If the wheels are mounted in an O pattern instead (rollers
+pointing away from center), the robot loses all holonomic
+ability. Strafing will not work, driving straight will pull to
+one side, and the whole point of mecanum is lost. Always check
+the X pattern before driving!
+</p>
+<hr>
+<h2>See It in Action</h2>
+<p>
+Before we dive into the math, watch these two short videos to
+see how mecanum wheels work in the real world. Pay close
+attention to how the rollers create sideways motion.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Video 1** -- "The Mecanum Wheel Is So Weird, It Is Genius"
+<p>
+Watch through the 8:30 mark:
+https://www.youtube.com/watch?v=AlsCUzCCc-k</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Video 2** -- "The Simple Mechanics of Mecanum Wheels":
+<p>
+https://www.youtube.com/watch?v=0k-Ey9bS9lE</div></div>
+</p>
+<p>
+After watching, you should have a good visual understanding of
+<strong>why</strong> the rollers are angled, <strong>how</strong> combining wheel
+directions produces strafing, and <strong>why</strong> the X pattern matters.
+</p>
+<hr>
+<h2>Engineering Notebook Questions</h2>
+<p>
+Before coding, take a few minutes to think about what you just
+learned. Answer these questions in your engineering notebook.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Write answers to these questions in your engineering notebook.
+<p>
+Use what you learned from the videos -- if you are unsure about
+any answer, do some additional research online.
+</p>
+<ol>
+<li><strong>What are the pros and cons of mecanum wheels?</strong></li>
+</ol>
+<p>
+   List at least two of each.
+</p>
+<ol>
+<li><strong>Why are mecanum wheels mounted in an X pattern on the robot?</strong></li>
+</ol>
+<p>
+   What happens if they are mounted incorrectly?
+</p>
+<ol>
+<li><strong>What is strafe movement and why might it be useful in an FTC competition?</strong></li>
+</ol>
+<ol>
+<li><strong>Do you think mecanum wheels will make the robot harder or easier to drive compared to a simple tank drive?</strong></li>
+</ol>
+<p>
+   Explain
+   your reasoning.
+</p>
+<ol>
+<li><strong>If mecanum wheels are so useful, why don't we put them on cars?</strong></div></div></li>
+</ol>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Hint for question 1 -- Pros:** Think about positioning,
+<p>
+versatility, and autonomous navigation. <strong>Cons:</strong> Think about
+traction, cost, complexity, and defense.</div></div>
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Hint for question 5:** Think about what kind of surfaces cars
+<p>
+drive on versus what FTC robots drive on. Mecanum rollers are
+designed for smooth, flat surfaces. How would they handle gravel,
+rain, or a steep hill?</div></div>
+</p>
+<p>
+After you have written your answers, continue to the next
+section. There is no single right answer -- the goal is to think
+critically about the tradeoffs.
+</p>
+<hr>
+<h2>Understanding Strafe Movement</h2>
+<p>
+<strong>Strafing</strong> means moving sideways -- left or right -- without
+rotating the robot. The front of the robot stays pointing in
+the same direction the entire time while the whole robot slides
+to the side.
+</p>
+<p>
+<img src="mecanum_motion.png" alt="Mecanum motion directions" class="lesson-img">
+</p>
+<p>
+To understand how this works, imagine each wheel pushing at a
+45-degree angle. If you spin all four wheels the right way, the
+forward components cancel out and the sideways components add
+up. The result is pure sideways motion.
+</p>
+<p>
+Here is the pattern for strafing right:
+</p>
+<p>
+<img src="strafe_right.jpg" alt="Strafe right wheel pattern" class="lesson-img">
+</p>
+<p>
+<strong>Strafe Right:</strong>
+</p>
+<ul>
+<li>Front Left: <strong>forward</strong></li>
+<li>Back Left: <strong>backward</strong></li>
+<li>Front Right: <strong>backward</strong></li>
+<li>Back Right: <strong>forward</strong></li>
+</ul>
+<p>
+Each wheel pushes at 45 degrees. The forward/backward forces
+cancel each other out. The sideways forces all point right.
+The robot slides to the right.
+</p>
+<p>
+<strong>Strafe Left</strong> is the reverse -- flip every wheel direction.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Strafing** is pure sideways movement. It works because the
+<p>
+45-degree rollers convert opposing wheel spins into a net
+sideways force. Forward/backward forces cancel out.</div></div>
+</p>
+<hr>
+<h2>The Mecanum Math</h2>
+<p>
+In tank drive, you had two inputs and a simple formula:
+</p>
+<pre><code class="language-">leftPower  = drive + spin
+<p>
+rightPower = drive - spin
+</code></pre>
+</p>
+<p>
+Mecanum drive has <strong>three</strong> inputs:
+</p>
+<ul>
+<li><strong>drive</strong> (Y) -- forward and backward</li>
+<li><strong>strafe</strong> (X) -- left and right</li>
+<li><strong>turn</strong> -- rotation</li>
+</ul>
+<p>
+And each of the <strong>four motors</strong> gets its own power value. Here
+is the sign pattern for each component:
+</p>
+<p>
+| Wheel | strafe | drive | turn |
+| --- | --- | --- | --- |
+| <strong>FL</strong> | + | + | + |
+| <strong>BL</strong> | - | + | + |
+| <strong>FR</strong> | - | + | - |
+| <strong>BR</strong> | + | + | - |
+</p>
+<p>
+Written as formulas:
+</p>
+<pre><code class="language-">frontLeft  =  strafe + drive + turn
+<p>
+backLeft   = -strafe + drive + turn
+frontRight = -strafe + drive - turn
+backRight  =  strafe + drive - turn
+</code></pre>
+</p>
+<p>
+That looks like a lot, but there is a pattern. Let's break it
+down piece by piece.
+</p>
+<h3>Drive (Forward / Backward)</h3>
+<p>
+When you want to go forward, all four wheels spin forward.
+<code>drive</code> is added to every wheel with a <strong>+</strong> sign. This is the
+same as tank drive -- all wheels working together.
+</p>
+<h3>Strafe (Sideways)</h3>
+<p>
+To strafe right, you need the diagonal pattern from above.
+Notice the signs on <code>strafe</code>:
+</p>
+<ul>
+<li>Front Left: <strong>+strafe</strong> (forward)</li>
+<li>Back Left: <strong>-strafe</strong> (backward)</li>
+<li>Front Right: <strong>-strafe</strong> (backward)</li>
+<li>Back Right: <strong>+strafe</strong> (forward)</li>
+</ul>
+<p>
+The front-left and back-right wheels spin one way. The
+front-right and back-left wheels spin the other way. The
+forward/backward forces cancel, leaving pure sideways force.
+</p>
+<h3>Turn (Rotation)</h3>
+<p>
+Rotation works the same as tank drive. The left and right sides
+spin in opposite directions:
+</p>
+<ul>
+<li>Left motors: <strong>+turn</strong></li>
+<li>Right motors: <strong>-turn</strong></li>
+</ul>
+<p>
+When <code>turn</code> is positive (right trigger), the left side goes
+forward and the right side goes backward -- the robot rotates
+clockwise (to the right).
+</p>
+<h3>Putting It All Together</h3>
+<p>
+The beauty of mecanum math is that you can
+<strong>add all three components together</strong>. Want to strafe right while driving
+forward and rotating clockwise at the same time? Just add
+<code>drive</code>, <code>strafe</code>, and <code>turn</code> according to their signs for
+each wheel. The physics takes care of the rest.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The mecanum formula gives each wheel its own power by
+<p>
+<strong>adding</strong> three components: drive, strafe, and turn. Each
+component has a specific sign pattern for each wheel. The
+three motions combine seamlessly.</div></div>
+</p>
+<hr>
+<h2>Worked Examples</h2>
+<p>
+Let's trace through the math with real numbers to make sure
+it makes sense.
+</p>
+<h3>Example 1: Drive Forward</h3>
+<p>
+Push the left stick straight up. <code>drive = 1.0</code>, <code>strafe = 0</code>,
+<code>turn = 0</code>.
+</p>
+<p>
+| Wheel | ± strafe | + drive | ± turn | = Power |
+| --- | --- | --- | --- | --- |
+| <strong>FL</strong> | +0 | +1.0 | +0 | <strong>1.0</strong> |
+| <strong>BL</strong> | -0 | +1.0 | +0 | <strong>1.0</strong> |
+| <strong>FR</strong> | -0 | +1.0 | -0 | <strong>1.0</strong> |
+| <strong>BR</strong> | +0 | +1.0 | -0 | <strong>1.0</strong> |
+</p>
+<p>
+All four wheels spin forward at full power. The robot drives
+straight -- same as tank drive.
+</p>
+<h3>Example 2: Strafe Right</h3>
+<p>
+Push the left stick to the right. <code>drive = 0</code>, <code>strafe = 1.0</code>,
+<code>turn = 0</code>.
+</p>
+<p>
+| Wheel | ± strafe | + drive | ± turn | = Power |
+| --- | --- | --- | --- | --- |
+| <strong>FL</strong> | +1.0 | +0 | +0 | <strong>1.0</strong> |
+| <strong>BL</strong> | -1.0 | +0 | +0 | <strong>-1.0</strong> |
+| <strong>FR</strong> | -1.0 | +0 | -0 | <strong>-1.0</strong> |
+| <strong>BR</strong> | +1.0 | +0 | -0 | <strong>1.0</strong> |
+</p>
+<p>
+FL and BR spin forward. BL and FR spin backward. The diagonal
+pattern produces pure sideways motion to the right.
+</p>
+<h3>Example 3: Rotate Clockwise</h3>
+<p>
+Imagine <code>turn = 1.0</code>, everything else is zero.
+</p>
+<p>
+| Wheel | ± strafe | + drive | ± turn | = Power |
+| --- | --- | --- | --- | --- |
+| <strong>FL</strong> | +0 | +0 | +1.0 | <strong>1.0</strong> |
+| <strong>BL</strong> | -0 | +0 | +1.0 | <strong>1.0</strong> |
+| <strong>FR</strong> | -0 | +0 | -1.0 | <strong>-1.0</strong> |
+| <strong>BR</strong> | +0 | +0 | -1.0 | <strong>-1.0</strong> |
+</p>
+<p>
+Left side forward, right side backward. The robot spins
+clockwise -- just like tank drive.
+</p>
+<h3>Example 4: Drive Forward-Right (Diagonal)</h3>
+<p>
+Push the stick up and to the right. <code>drive = 0.7</code>,
+<code>strafe = 0.7</code>, <code>turn = 0</code>.
+</p>
+<p>
+| Wheel | ± strafe | + drive | ± turn | = Power |
+| --- | --- | --- | --- | --- |
+| <strong>FL</strong> | +0.7 | +0.7 | +0 | <strong>1.4</strong> |
+| <strong>BL</strong> | -0.7 | +0.7 | +0 | <strong>0.0</strong> |
+| <strong>FR</strong> | -0.7 | +0.7 | -0 | <strong>0.0</strong> |
+| <strong>BR</strong> | +0.7 | +0.7 | -0 | <strong>1.4</strong> |
+</p>
+<p>
+FL and BR spin at full power, while BL and FR are stopped.
+Only two wheels are working, and they are diagonal --
+the robot drives at a 45-degree angle to the right. Diagonal
+movement with zero rotation!
+</p>
+<p>
+But wait -- FL came out to <code>1.4</code>. Motor power only goes from
+<code>-1.0</code> to <code>1.0</code>. We need to fix that. Read on!
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Diagonal movement happens naturally with the mecanum formula.
+<p>
+When drive and strafe are equal, two opposite-corner wheels
+spin while the other two stop -- producing perfect 45-degree
+movement.</div></div>
+</p>
+<hr>
+<h2>Power Normalization</h2>
+<p>
+There is one problem with the formula. Look at Example 4 --
+FL came out to <code>1.4</code>. But motor power can only go from <code>-1.0</code>
+to <code>1.0</code>. If we send <code>1.4</code> to a motor, it gets clamped to
+<code>1.0</code> and the relative proportions are ruined.
+</p>
+<p>
+The fix is <strong>normalization</strong>. After calculating all four powers,
+we find the largest absolute value. If it is greater than 1.0,
+we divide all four powers by that value. This scales everything
+down proportionally so nothing exceeds 1.0.
+</p>
+<pre><code class="language-java">double max = Math.max(Math.abs(powFL), Math.abs(powBL));
+<p>
+max = Math.max(max, Math.abs(powFR));
+max = Math.max(max, Math.abs(powBR));
+</p>
+<p>
+if (max &gt; 1.0) {
+    powFL /= max;
+    powBL /= max;
+    powFR /= max;
+    powBR /= max;
+}
+</code></pre>
+</p>
+<p>
+For Example 4, after normalization:
+</p>
+<p>
+| Wheel | Raw Power | ÷ 1.4 | Normalized |
+| --- | --- | --- | --- |
+| <strong>FL</strong> | 1.4 | 1.4 ÷ 1.4 | <strong>1.0</strong> |
+| <strong>BL</strong> | 0.0 | 0.0 ÷ 1.4 | <strong>0.0</strong> |
+| <strong>FR</strong> | 0.0 | 0.0 ÷ 1.4 | <strong>0.0</strong> |
+| <strong>BR</strong> | 1.4 | 1.4 ÷ 1.4 | <strong>1.0</strong> |
+</p>
+<p>
+The ratios stay the same (FL and BR are equal, BL and FR are
+zero), but now everything is within the valid range.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">After computing all four wheel powers, **normalize** by
+<p>
+dividing all four by the largest absolute value (if it
+exceeds 1.0). This preserves the direction of movement
+while keeping all powers in the valid range.</div></div>
+</p>
+<hr>
+<h2>Time to Code!</h2>
+<p>
+You have the theory. Now let's put it into your robot.
+</p>
+<p>
+The mecanum drive code replaces your tank drive code. We will
+keep your existing telemetry, button actions, and everything
+else -- we are only changing how the joystick controls the
+wheels.
+</p>
+<hr>
+<h2>Part 1 -- Read the Joystick Inputs</h2>
+<p>
+In tank drive, you had two inputs: <code>drive</code> and <code>spin</code>. For
+mecanum, you need three: <code>drive</code>, <code>strafe</code>, and <code>turn</code>.
+</p>
+<p>
+We will use the left stick for drive and strafe, and the
+triggers for rotation (just like the competition code):
+</p>
+<ul>
+<li><strong>Left stick Y</strong> (up/down) → drive (forward/backward)</li>
+<li><strong>Left stick X</strong> (left/right) → strafe (left/right)</li>
+<li><strong>Left trigger</strong> → rotate counter-clockwise</li>
+<li><strong>Right trigger</strong> → rotate clockwise</li>
+</ul>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open MecanumDrive.java and jump to
+<p>
+your Tank Drive code:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Tank Drive : Loop ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Delete** all of your existing tank drive code (the lines
+<p>
+between the <code>Add your tank drive code below</code> comment and the
+next comment block). Then type the code from the green block
+in its place:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// === Mecanum Drive ===
+<p>
+// Read joystick inputs
+double drive  = -gamepad1.left_stick_y;   // forward/back
+double strafe =  gamepad1.left_stick_x;   // left/right
+double turn   =  gamepad1.right_trigger   // triggers for rotation
+              -  gamepad1.left_trigger;
+</p>
+<p>
+// Field-centric (challenge)
+// Your rotation code goes here if you complete the challenge
+</code></pre></div></div>
+</p>
+<p>
+The <code>drive</code> input is negated because the Y axis is inverted
+(pushing up gives a negative number). <code>strafe</code> is left/right
+on the same stick. <code>turn</code> uses the difference between the
+triggers -- right trigger rotates clockwise (positive),
+left trigger rotates counter-clockwise (negative).
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">Using triggers for rotation instead of the right stick gives
+<p>
+you finer control. Triggers are analog (0.0 to 1.0), so a
+light squeeze gives a gentle rotation and a full squeeze gives
+a fast spin. Many competition teams prefer this layout.</div></div>
+</p>
+<hr>
+<h2>Part 2 -- Apply the Mecanum Formula</h2>
+<p>
+Now compute the power for each wheel using the formula you
+learned.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add the following code right below the `Field-centric` comment
+<p>
+block (not above it -- leave room for the challenge later):</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Compute per-wheel power using mecanum formula
+<p>
+double powFL =  strafe + drive + turn;
+double powBL = -strafe + drive + turn;
+double powFR = -strafe + drive - turn;
+double powBR =  strafe + drive - turn;
+</code></pre></div></div>
+</p>
+<p>
+Take a moment to match these signs against the formula table
+from earlier. Each line adds drive, strafe (with alternating
+signs), and turn (negative for left, positive for right).
+</p>
+<hr>
+<h2>Part 3 -- Normalize the Powers</h2>
+<p>
+If drive + strafe + turn add up to more than 1.0, we need to
+scale everything down.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add the normalization code right below the four `pow` lines:</div></div>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Normalize so no motor exceeds 1.0
+<p>
+double max = Math.max(Math.abs(powFL), Math.abs(powBL));
+max = Math.max(max, Math.abs(powFR));
+max = Math.max(max, Math.abs(powBR));
+if (max &gt; 1.0) {
+    powFL /= max;
+    powBL /= max;
+    powFR /= max;
+    powBR /= max;
+}
+</code></pre></div></div>
+</p>
+<p>
+This finds the biggest absolute power value across all four
+wheels. If it exceeds 1.0, all four are divided by that value.
+If everything is already within range, nothing changes.
+</p>
+<hr>
+<h2>Part 4 -- Send Power to the Motors</h2>
+<p>
+The last step is the same as tank drive -- call <code>setPower</code> on
+each motor. But now each motor gets its <strong>own</strong> power value
+instead of sharing with its partner.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add (or update) the `setPower` calls right below normalization:</div></div>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Send power to each motor
+<p>
+frontLeft.setPower(powFL);
+backLeft.setPower(powBL);
+frontRight.setPower(powFR);
+backRight.setPower(powBR);
+</code></pre></div></div>
+</p>
+<hr>
+<h2>Part 5 -- Save, Compile, and Test!</h2>
+<p>
+Your complete Tank Drive section should now look like this:
+</p>
+<pre><code class="language-java">// === Mecanum Drive ===
+<p>
+// Read joystick inputs
+double drive  = -gamepad1.left_stick_y;
+double strafe =  gamepad1.left_stick_x;
+double turn   =  gamepad1.right_trigger
+              -  gamepad1.left_trigger;
+</p>
+<p>
+// Field-centric (challenge)
+// Your rotation code goes here if you complete the challenge
+</p>
+<p>
+// Compute per-wheel power using mecanum formula
+double powFL =  strafe + drive + turn;
+double powBL = -strafe + drive + turn;
+double powFR = -strafe + drive - turn;
+double powBR =  strafe + drive - turn;
+</p>
+<p>
+// Normalize so no motor exceeds 1.0
+double max = Math.max(Math.abs(powFL), Math.abs(powBL));
+max = Math.max(max, Math.abs(powFR));
+max = Math.max(max, Math.abs(powBR));
+if (max &gt; 1.0) {
+    powFL /= max;
+    powBL /= max;
+    powFR /= max;
+    powBR /= max;
+}
+</p>
+<p>
+// Send power to each motor
+frontLeft.setPower(powFL);
+backLeft.setPower(powBL);
+frontRight.setPower(powFR);
+backRight.setPower(powBR);
+</code></pre>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save**.
+<ol>
+<li>Click <strong>Recompile</strong> on the Driver Hub.</li>
+<li>Select <strong>MecanumDrive</strong> from TeleOp.</li>
+<li>Click <strong>INIT</strong>, then <strong>START</strong>.</div></div></li>
+</ol>
+<hr>
+<h2>Test Your Mecanum Drive!</h2>
+<p>
+First, test on the bench robot to see the wheel patterns:
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 1 -- Forward:** Push the left stick straight up. All
+<p>
+four wheels should spin forward at the same speed. Same as
+tank drive.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 2 -- Strafe Right:** Push the left stick to the right.
+<p>
+Watch the wheels carefully -- front-left and back-right should
+spin forward, while front-right and back-left spin backward.
+That is the diagonal pattern!</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 3 -- Rotate:** Squeeze the right trigger. The left
+<p>
+wheels should spin forward and the right wheels should spin
+backward -- the robot rotates clockwise.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 4 -- Diagonal:** Push the left stick up and to the
+<p>
+right (45 degrees). Two wheels should spin and two should be
+nearly stopped. The robot moves diagonally.</div></div>
+</p>
+<p>
+Now go test on the competition field! Click <strong>Return to Match</strong>,
+load your code, and drive around. Try strafing side to side
+along a wall. Try driving diagonally to a corner. Try rotating
+while strafing -- all three inputs work at the same time.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Mecanum drive lets you combine forward, strafe, and turn
+<p>
+<strong>simultaneously</strong>. This is the hallmark of holonomic
+movement -- complete freedom of motion.</div></div>
+</p>
+<hr>
+<h2>Challenge: Field-Centric Driving</h2>
+<p>
+Your mecanum drive works! But try this: drive out onto the
+field, then spin the robot 90 degrees to the right so it faces
+sideways. Now push the left stick straight up. The robot drives
+to the <strong>right</strong> from your perspective -- because "forward" on
+the stick means "forward for the robot," and the robot is
+facing right.
+</p>
+<p>
+This is confusing. Every time the robot turns, you have to
+mentally rotate the stick directions to match. In a fast-paced
+match, that is a recipe for mistakes.
+</p>
+<p>
+<strong>Field-centric driving</strong> fixes this. With field-centric, the
+joystick directions are locked to the <strong>field</strong> instead of the
+<strong>robot</strong>. Push the stick up, and the robot always moves away
+from you -- no matter which direction it is facing. Push the
+stick left, and the robot always moves to your left. The code
+automatically figures out which wheels to spin.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Field-centric** means the joystick controls movement
+<p>
+relative to the <strong>field</strong> (your point of view), not relative
+to the robot. The robot always moves the direction you push,
+regardless of which way it is pointing.</div></div>
+</p>
+<h3>How Does It Work?</h3>
+<p>
+You already have the <code>heading</code> variable from your IMU code in
+Lesson 4. It tells you exactly how far the robot has rotated
+(in radians). Field-centric driving uses that heading to
+"correct" the joystick inputs before the mecanum formula runs.
+</p>
+<p>
+Think of it this way: when the robot is rotated 30 degrees to
+the right, your stick inputs are 30 degrees "off" from what
+you intend. The fix is to rotate the stick direction by
+negative 30 degrees to cancel that out. The result: the stick
+always means what you think it means.
+</p>
+<p>
+Java has two built-in math functions called <code>Math.cos()</code> and
+<code>Math.sin()</code>. You do not need to understand how they work
+inside -- they are the tools that perform this rotation. You
+give them an angle, and they give back numbers that let you
+rotate a direction by that angle.
+</p>
+<h3>The Rotation Code</h3>
+<p>
+Right now your Tank Drive code reads the joystick and feeds
+<code>strafe</code> and <code>drive</code> directly into the mecanum formula. For
+field-centric, you need to add four lines at the
+<strong>field-centric placeholder</strong> -- the two comment lines between
+the joystick inputs and the mecanum formula. Those four lines
+create two new variables -- <code>fieldStrafe</code> and <code>fieldDrive</code> --
+which are the "corrected" versions of <code>strafe</code> and <code>drive</code>.
+</p>
+<p>
+The placeholder is there for exactly this reason -- it keeps
+the field-centric code <strong>above</strong> the mecanum formula so it
+runs first.
+</p>
+<p>
+Here is what you need to do:
+</p>
+<p>
+<!-- CHALLENGE -->
+<strong>Step 1:</strong> Open your code and find the field-centric
+placeholder:
+<!-- /CHALLENGE -->
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Field-centric (challenge) ]</span>
+<p>
+<!-- CHALLENGE -->
+<strong>Step 2:</strong> Replace the <code>Your rotation code goes here</code> comment
+with four lines of code. Keep the <code>Field-centric (challenge)</code>
+comment above them so you can find this section later.
+Here they are -- read carefully and type them in:
+</p>
+<p>
+The first two lines get the rotation values from the heading.
+Notice the <strong>negative</strong> sign on heading -- that is what "undoes"
+the robot's rotation:
+</p>
+<p>
+<code>double cos = Math.cos(-heading);</code>
+</p>
+<p>
+<code>double sin = Math.sin(-heading);</code>
+</p>
+<p>
+The next two lines apply the rotation to your stick inputs.
+Each one is a mix of <code>strafe</code>, <code>drive</code>, <code>cos</code>, and <code>sin</code>:
+</p>
+<p>
+<code>double fieldStrafe = strafe <em> cos - drive </em> sin;</code>
+</p>
+<p>
+<code>double fieldDrive  = strafe <em> sin + drive </em> cos;</code>
+</p>
+<p>
+<strong>Step 3:</strong> Now you need to update the mecanum formula to use
+your new corrected values. Open the formula:
+<!-- /CHALLENGE -->
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Compute per-wheel power ]</span>
+<p>
+<!-- CHALLENGE -->
+In all four <code>pow</code> lines, change every <code>strafe</code> to
+<code>fieldStrafe</code> and every <code>drive</code> to <code>fieldDrive</code>. The <code>turn</code>
+stays the same. For example, the first line changes from:
+</p>
+<p>
+<code>double powFL =  strafe + drive + turn;</code>
+</p>
+<p>
+to:
+</p>
+<p>
+<code>double powFL =  fieldStrafe + fieldDrive + turn;</code>
+</p>
+<p>
+Do the same for <code>powBL</code>, <code>powFR</code>, and <code>powBR</code>. Check the signs
+carefully -- only the variable <strong>names</strong> change, not the signs.
+</p>
+<p>
+<strong>Step 4:</strong> Save, recompile, and test! Spin the robot around
+and push the stick straight up. The robot should <strong>always</strong>
+drive away from you, no matter which direction it is facing.
+Push right -- it should always go right.
+</p>
+<p>
+If it does not work, double-check: did you change all four
+lines? Are <code>fieldStrafe</code> and <code>fieldDrive</code> spelled exactly the
+same everywhere? Did you keep the minus sign on <code>heading</code> in
+the cos and sin lines?
+<!-- /CHALLENGE -->
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**How do I know it is working?** Spin the robot 180 degrees
+<p>
+so it faces you. Push the stick UP. Without field-centric, the
+robot drives toward you. With field-centric, it drives away.
+That is the easiest test!</div></div>
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Stuck?** Compare your code to the competition code in
+<p>
+MecanumDrive.java (the reference version). The competition
+code uses <code>driveX</code> / <code>driveY</code> instead of <code>strafe</code> / <code>drive</code>,
+and <code>fieldX</code> / <code>fieldY</code> instead of <code>fieldStrafe</code> /
+<code>fieldDrive</code> -- but the math is identical.</div></div>
+</p>
+<hr>
+<h2>What You Learned</h2>
+<ul>
+<li><strong>Mecanum wheels</strong> have 45-degree rollers that allow</li>
+</ul>
+<p>
+  movement in any direction
+</p>
+<ul>
+<li>Wheels must be mounted in an <strong>X pattern</strong> (rollers point</li>
+</ul>
+<p>
+  toward center)
+</p>
+<ul>
+<li><strong>Strafing</strong> is pure sideways movement -- the diagonal</li>
+</ul>
+<p>
+  wheel pattern cancels forward/backward forces
+</p>
+<ul>
+<li><strong>Holonomic</strong> means the robot can move in any direction</li>
+</ul>
+<p>
+  while simultaneously rotating
+</p>
+<ul>
+<li>The mecanum formula gives each wheel its own power:</li>
+</ul>
+<p>
+  <code>drive ± strafe ± turn</code>
+</p>
+<ul>
+<li><strong>Normalization</strong> scales all four powers so nothing</li>
+</ul>
+<p>
+  exceeds the -1.0 to 1.0 range
+</p>
+<ul>
+<li>Drive, strafe, and turn can all happen <strong>at the same time</strong></li>
+<li><strong>Field-centric driving</strong> uses the IMU heading and rotation</li>
+</ul>
+<p>
+  math to make the joystick control movement relative to the
+  field instead of the robot
+</p>
+<ul>
+<li>Mecanum has tradeoffs: incredible maneuverability but</li>
+</ul>
+<p>
+  reduced pushing power and more complexity
+</p>
+<p>
+Your robot now moves like a competition machine. Forward, back,
+left, right, diagonal, spinning -- all at once if you want.
+Welcome to holonomic driving!
+</p>
+<hr>

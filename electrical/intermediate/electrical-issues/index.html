@@ -1,0 +1,248 @@
+---
+layout: page
+title: "Electrical Gremlins"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-intermediate">Intermediate</span>
+
+<h1>Electrical Gremlins</h1>
+<p>
+<img src="electrical_gremlin.png" alt="The electrical gremlin — lurking in every tangled wire harness" class="lesson-img">
+</p>
+<p>
+Every FTC team eventually meets "the gremlin." The robot works perfectly on the bench, passes inspection, drives through practice — and then mid-match, the Control Hub reboots, a motor freezes, or the Driver Hub loses connection. The team scrambles, swaps parts, and the gremlin vanishes as mysteriously as it arrived.
+</p>
+<p>
+These problems are almost never random. They are <strong>electrical</strong> — caused by static discharge, noise coupling into signal wires, or connectors that have worked themselves loose. This lesson will teach you where these gremlins come from and how to evict them from your robot for good.
+</p>
+<hr>
+<h2>The Battery: Where It All Starts</h2>
+<p>
+<img src="battery.jpg" alt="The standard 12V NiMH battery used in FTC" class="lesson-img">
+</p>
+<p>
+FTC robots run on a <strong>12V NiMH (Nickel-Metal Hydride) battery</strong>. This battery is the single power source for everything — drive motors, servos, the Control Hub, the Expansion Hub, and all of their electronics. That means every amp of current a motor draws flows through the same wires and connectors that feed your fragile digital logic.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">When a motor stalls or reverses direction, it can pull **10+ amps** in a fraction of a second. That sudden current spike creates voltage sags and electromagnetic noise across the entire power bus. The electronics sharing that bus — your Control Hub, your sensors — can be disrupted by those transients.</div></div>
+<p>
+This is the root tension in FTC wiring: <strong>big, noisy motor power</strong> and <strong>tiny, sensitive digital signals</strong> all live in the same small robot, sharing the same battery, the same frame, and often the same wire bundles.
+</p>
+<hr>
+<h2>ESD: The Invisible Zap</h2>
+<p>
+<strong>Electrostatic Discharge (ESD)</strong> is the most dramatic of the electrical gremlins. You have felt it yourself — shuffling across carpet in socks and touching a doorknob. That tiny spark can be <strong>several thousand volts</strong>. On a robot, the voltages can be even higher.
+</p>
+<p>
+<img src="esd_two_robots.png" alt="Two robots with differing electrostatic charges — when they touch, current rushes through the chassis" class="lesson-img">
+</p>
+<p>
+Here is how it happens on the field:
+</p>
+<ol>
+<li>The robot's wheels roll across the foam tile or carpet surface, building up static charge through friction (the <strong>triboelectric effect</strong>).</li>
+<li>The aluminum or steel frame accumulates that charge — the robot becomes a capacitor.</li>
+<li>The robot bumps into another robot, the field wall, or a game element. The charge difference equalizes in a <strong>microsecond-scale discharge</strong> — a spark you might not even see.</li>
+<li>That discharge pulse travels through the frame, through mounting screws, through the ground plane of the Control Hub's PCB, and into the processor. The Hub reboots.</li>
+</ol>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">ESD does not damage the Control Hub hardware (usually). Instead, it **crashes the processor** — the same way a power glitch crashes a desktop computer. The Hub reboots, your OpMode stops, and your robot sits dead for 5-10 seconds mid-match while the system restarts.</div></div>
+<p>
+The worst part? ESD is intermittent. It depends on humidity, carpet material, wheel tread, driving style, and which robot you collide with. Some matches, nothing happens. Other matches, three reboots in 30 seconds. Teams blame the code, the battery, the USB cable — everything except the actual cause.
+</p>
+<hr>
+<h2>Fighting ESD: The Grounding Strap</h2>
+<p>
+The single most important ESD defense is the <strong>grounding strap</strong>. This is an official part sold by REV Robotics (REV-31-1269). It connects the battery's <strong>negative terminal</strong> (via an XT30 connector) to a <strong>ring terminal</strong> bolted directly to the metal frame.
+</p>
+<p>
+<img src="official_grounding_strap.jpg" alt="The official REV Robotics grounding strap — XT30 to ring terminal" class="lesson-img">
+</p>
+<h3>Why It Works</h3>
+<p>
+Without the grounding strap, the robot's frame and the electronics have <strong>no deliberate electrical connection</strong>. Static charge accumulates on the frame with no easy path to the battery's ground reference. When a discharge event happens, the current finds its own path — and that path may go straight through the Hub's ground pins.
+</p>
+<p>
+The grounding strap gives static charge a <strong>low-impedance path</strong> from the frame to battery ground, keeping the frame at the same potential as the electronics. No voltage difference means no spark through the Hub.
+</p>
+<h3>How to Install It</h3>
+<p>
+<img src="grounding_strap_on_bot.jpg" alt="Grounding strap installed — hub connected to the metal frame with a secure bolt" class="lesson-img">
+</p>
+<ol>
+<li>Bolt the <strong>ring terminal</strong> to the frame using a metal-to-metal contact point. Scrape off any anodizing or paint at that spot — the bolt must touch bare metal.</li>
+<li>Plug the <strong>XT30 end</strong> into one of the battery's XT30 pigtails (you can use a splitter or the second XT30 port if your battery wiring supports it).</li>
+<li>Make sure the connection is <strong>tight</strong> and will not come loose from vibration over a match.</li>
+</ol>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A loose grounding strap is worse than no grounding strap — it gives the team a false sense of security while providing intermittent protection. Check the bolt before every match.</div></div>
+<p>
+<em>Reference: REV Robotics ESD Mitigation Guide; FTC Wiring Guide — Presented at FTC Kickoff Events (<a href="https://drive.google.com/file/d/1f64864o4RRL6wXY1GWElCoUQ9UinvoGr/view" target="_blank" rel="noopener">PDF</a>)</em>
+</p>
+<hr>
+<h2>Mount the Hub on an Insulator</h2>
+<p>
+Even with a grounding strap, you want to <strong>isolate</strong> the Control Hub and Expansion Hub from the metal frame. If the Hub case is bolted directly to aluminum channel, a discharge pulse on the frame has a direct metal path into the Hub's housing and ground plane.
+</p>
+<p>
+<img src="mount_rev_hub_on_insulator.jpg" alt="REV Hub mounted on an insulating plate — keeps the electronics isolated from the chassis" class="lesson-img">
+</p>
+<p>
+REV sells an <strong>insulating mount plate</strong> (part 605039) that goes between the Hub and the channel. Use it. The nylon standoffs included in the kit are the insulator — do not replace them with metal screws.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Ground the frame, isolate the Hub.** The grounding strap gives static a safe path to battery ground. The insulating mount keeps that same static from flowing through the Hub's PCB. Together, they form a two-layer defense.</div></div>
+<hr>
+<h2>Insulate the Robot's Perimeter</h2>
+<p>
+ESD happens at the point of contact. If the robot bumps another robot or the field wall with <strong>bare metal</strong>, the discharge goes straight into the frame. Cover every external surface that might contact another robot or a game element with an <strong>insulator</strong> — plastic, polycarb sheet, rubber bumpers, even tape.
+</p>
+<p>
+<img src="insulate_perimeter_of_bot.jpg" alt="Cover all external metal surfaces with an insulator — this robot uses a full polycarb perimeter" class="lesson-img">
+</p>
+<p>
+This does not prevent charge buildup, but it <strong>prevents the discharge event</strong> from happening in the first place. No metal-to-metal contact means no conduction path for the spark.
+</p>
+<p>
+Some teams go further and spray-coat exposed channel ends with Plasti Dip or wrap them in electrical tape. Every bit of insulation helps.
+</p>
+<hr>
+<h2>Noise Coupling: The Sneaky Gremlin</h2>
+<p>
+ESD is dramatic — a single event that crashes the system. <strong>Noise coupling</strong> is more subtle. It does not crash the Hub; instead, it corrupts sensor readings, causes phantom button presses, or makes the IMU drift wildly.
+</p>
+<h3>How Noise Gets Into Wires</h3>
+<p>
+DC motors are electrically noisy. When the motor controller rapidly switches current (PWM), the motor wires radiate electromagnetic energy — just like a tiny radio transmitter. Any wire running near those motor wires acts as a <strong>receiving antenna</strong>, picking up that noise.
+</p>
+<p>
+The physics is straightforward: a changing current in one wire creates a changing magnetic field, which induces a voltage in any nearby wire. This is <strong>electromagnetic coupling</strong> (also called <strong>crosstalk</strong>). The closer the wires, and the longer they run together, the worse it gets.
+</p>
+<h3>The Wire Loop Antenna</h3>
+<p>
+This is one of the most common and least-understood wiring mistakes in FTC:
+</p>
+<p>
+<img src="loop_vs_accordian_extra_wire.jpg" alt="Left: wire coiled in a loop acts as an antenna — Right: wire folded accordion-style cancels the field" class="lesson-img">
+</p>
+<p>
+When you have excess wire, your instinct is to coil it into a neat loop and zip-tie it. <strong>Do not do this.</strong> A coil of wire is literally an inductor — it picks up every changing magnetic field in the vicinity and converts it into voltage on the wire. The bigger the loop area, the more noise it captures.
+</p>
+<p>
+Instead, fold the excess wire <strong>back and forth</strong> in an accordion pattern. This causes the magnetic fields induced in adjacent sections to <strong>cancel each other out</strong>, dramatically reducing the antenna effect.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Never coil excess wire into loops.** Always accordion-fold it. This single habit eliminates one of the most common sources of sensor noise in FTC.</div></div>
+<h3>Keep Power and Signal Wires Separated</h3>
+<p>
+FTC robots are small, and it is tempting to bundle all wires together into one neat loom. Resist this temptation. Run <strong>motor power wires</strong> on one side of the robot and <strong>sensor/signal wires</strong> (I2C, encoder, digital, analog) on the other. If they must cross, cross them at a <strong>90-degree angle</strong> — this minimizes the coupling length.
+</p>
+<p>
+<img src="routing_wire_in_conduit.png" alt="Separate sleeved bundles routed through channel — motor/power wires kept apart from signal/encoder wires with air clearance" class="lesson-img">
+</p>
+<p>
+The gold standard is to run each group in its own <strong>braided sleeve</strong> through the robot's channel, as shown above. The sleeves keep bundles organized, and the physical separation plus air gap between them prevents both capacitive and inductive coupling. Do not press wire bundles flat against a conductive metal chassis either — that metal becomes a coupling path.
+</p>
+<p>
+Also keep motor wires away from the USB cable between the Control Hub and Driver Hub. Noise on this cable can cause the Driver Hub to disconnect and reconnect, which looks like a random Wi-Fi dropout.
+</p>
+<p>
+<em>Reference: "FTC ESD and Wiring Best Practices" presentation (<a href="https://drive.google.com/file/d/1f64864o4RRL6wXY1GWElCoUQ9UinvoGr/view" target="_blank" rel="noopener">PDF</a>); see also the video walkthrough by FTC community mentor (<a href="https://www.youtube.com/watch?v=V8vVv0it0VY" target="_blank" rel="noopener">YouTube</a>).</em>
+</p>
+<hr>
+<h2>Port Gotchas on the REV Hubs</h2>
+<p>
+Not all ports on the REV Hubs are created equal. Two common mistakes can cause bizarre problems:
+</p>
+<h3>Do Not Use I2C Port 0</h3>
+<p>
+<img src="do_not_use_I2C0.jpg" alt="I2C port 0 on the Expansion Hub is internally connected to the onboard IMU" class="lesson-img">
+</p>
+<p>
+Port <strong>I2C-0</strong> on both the Control Hub and the Expansion Hub is <strong>internally wired to the onboard BHI260AP IMU</strong>. If you plug an external I2C sensor into this port, it shares the bus with the IMU. This causes <strong>bus contention</strong> — two devices trying to talk at the same time on the same two wires. The result is corrupted IMU data, corrupted sensor data, or both.
+</p>
+<p>
+Use <strong>I2C ports 1, 2, or 3</strong> for external sensors. Leave port 0 for the IMU.
+</p>
+<h3>Use the USB 3.0 Port on the Control Hub</h3>
+<p>
+<img src="use_the_usb3_port.jpg" alt="The Control Hub&#x27;s USB 2.0 port is internally connected to the Wi-Fi module — always use USB 3.0" class="lesson-img">
+</p>
+<p>
+The REV Control Hub (REV-31-1595) has multiple USB ports on its front face. The <strong>USB 2.0 port</strong> is internally connected to the <strong>Wi-Fi module</strong> and should not be used for cameras, USB hubs, or other peripherals. Plugging something into it can interfere with the robot's Wi-Fi connection to the Driver Hub.
+</p>
+<p>
+Always connect external USB devices to the <strong>USB 3.0 port</strong> (the one with the blue plastic insert).
+</p>
+<hr>
+<h2>Connector Maintenance: The XT30</h2>
+<p>
+The XT30 connector is the standard power connector in FTC. It is compact and rated for the currents involved, but over hundreds of plug/unplug cycles, the internal split-pin contacts lose their spring tension. When this happens, the connector makes <strong>intermittent contact</strong> — solid enough most of the time, but a bump or vibration during a match can momentarily break the circuit. The Hub sees a power dropout and reboots.
+</p>
+<p>
+<img src="power_con_rebend_pins.png" alt="How to carefully re-bend XT30 pins to restore spring tension — only when fully unpowered" class="lesson-img">
+</p>
+<h3>Restoring XT30 Spring Tension</h3>
+<p>
+If a connector feels loose when you plug it in:
+</p>
+<ol>
+<li><strong>Completely disconnect</strong> the battery and all power sources. This is critical.</li>
+<li>Use a small flathead screwdriver or precision tweezers to <strong>gently bend one side</strong> of the split pin outward. Very light force — the pin is soft metal.</li>
+<li>Test the fit. The connector should feel snug when plugged in but not require excessive force.</li>
+</ol>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">If you need excessive force or can see the pin visibly deflected, the connector may be damaged. Replace it rather than risk a match with an unreliable connection. XT30 pigtails are inexpensive.</div></div>
+<hr>
+<h2>Putting It All Together: The ESD Checklist</h2>
+<p>
+Before every competition, run through this checklist:
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Pre-Match Electrical Checklist:**
+<ol>
+<li><strong>Grounding strap connected?</strong> Tug on it — the ring terminal should not move.</li>
+<li><strong>Hub mounted on insulator?</strong> No metal screws bypassing the nylon standoffs.</li>
+<li><strong>Perimeter insulated?</strong> No bare metal on any surface that might contact another robot.</li>
+<li><strong>Wire routing clean?</strong> Power wires and signal wires on opposite sides. No loops, only accordion folds.</li>
+<li><strong>I2C sensors on ports 1-3?</strong> Port 0 left for the IMU.</li>
+<li><strong>USB on the 3.0 port?</strong> Nothing in the USB 2.0 port.</li>
+<li><strong>XT30 connectors snug?</strong> Wiggle each one — no play, no clicking.</li>
+<li><strong>Battery inspected?</strong> No swelling, no frayed wires, no cracked casing.</div></div></li>
+</ol>
+<p>
+If you can answer "yes" to every item, you have eliminated the vast majority of the electrical gremlins that plague FTC robots. The few that remain are almost always:
+</p>
+<ul>
+<li>A bad cable (swap it)</li>
+<li>A firmware issue (update it)</li>
+<li>An actual code bug (now you can focus on that instead of chasing phantom electrical problems)</li>
+</ul>
+<hr>
+<h2>Summary</h2>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">FTC electrical issues boil down to three themes: **ESD crashes the processor**, **noise corrupts signals**, and **loose connectors drop power**. The fixes are mechanical, not magical — grounding straps, insulating mounts, clean wire routing, and regular connector maintenance. Do them consistently and the gremlins will have nowhere to hide.</div></div>
+<h3>References</h3>
+<ul>
+<li>REV Robotics ESD Mitigation Guide and official grounding strap (REV-31-1269)</li>
+<li><em>FTC ESD and Wiring Best Practices</em> presentation — <a href="https://drive.google.com/file/d/1f64864o4RRL6wXY1GWElCoUQ9UinvoGr/view" target="_blank" rel="noopener">Google Drive PDF</a></li>
+<li><em>FTC Electrical Troubleshooting</em> video walkthrough — <a href="https://www.youtube.com/watch?v=V8vVv0it0VY" target="_blank" rel="noopener">YouTube</a></li>
+<li>REV Control Hub technical documentation — <a href="https://docs.revrobotics.com" target="_blank" rel="noopener">docs.revrobotics.com</a></li>
+</ul>

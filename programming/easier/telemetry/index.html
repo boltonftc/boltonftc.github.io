@@ -1,0 +1,185 @@
+---
+layout: page
+title: "Telemetry"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-easier">Easier</span>
+
+<h1>Telemetry</h1>
+<h2>What is Telemetry (and Why It Matters)?</h2>
+<p>
+Telemetry is how your robot talks back to you while it’s running.
+It sends information from the robot controller (the code and hardware)
+to the Driver Station so you can see what’s happening in real time.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Telemetry** is the system that sends data from your robot
+<p>
+back to the Driver Station screen.</div></div>
+</p>
+<p>
+In FTC, your robot is constantly making decisions—reading sensors,
+checking button inputs, and controlling motors. But without telemetry,
+all of that is invisible. The robot would feel like a “black box.”
+</p>
+<p>
+Telemetry turns that black box into something you can see and understand.
+</p>
+<hr>
+<h2>Why Use Telemetry?</h2>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Telemetry** is your main debugging tool when working on a robot.</div></div>
+<p>
+Here are the most common reasons teams use telemetry:
+</p>
+<ul>
+<li><strong>Debugging code</strong></li>
+</ul>
+<p>
+  Check if your program is doing what you expect.
+  Example: “Is the button press actually being detected?”
+</p>
+<ul>
+<li><strong>Reading sensor values</strong></li>
+</ul>
+<p>
+  See live data from sensors like distance, color, or IMU.
+  Example: “What distance is the sensor actually reading?”
+</p>
+<ul>
+<li><strong>Understanding robot behavior</strong></li>
+</ul>
+<p>
+  Figure out why the robot is acting a certain way.
+  Example: “Why isn’t the motor turning?”
+</p>
+<ul>
+<li><strong>Driver feedback during matches</strong></li>
+</ul>
+<p>
+  Show useful info to drivers.
+  Example: “Is the intake running?” or “What mode are we in?”
+</p>
+<h2>How Does Telemetry Work In FTC Code?</h2>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Telemetry works by adding messages to a list, then sending them
+<p>
+to the Driver Station using telemetry.update().</div></div>
+</p>
+<p>
+<strong>Every loop of your program, you can:</strong>
+</p>
+<ul>
+<li>Add lines of text</li>
+<li>Add labeled data (like variables or sensor values)</li>
+<li>Send everything to the screen</li>
+</ul>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">If you don’t call telemetry.update(), nothing will appear!</div></div>
+<h2>Part 1 -- Your First Telemetry Message</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to jump to the right spot in the code:</div></div>
+<span class="sim-action" title="Simulator action only">[ Telemetry : Debug Output ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Right below the `Add your telemetry code below` comment, type
+<p>
+the code from the green block:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">telemetry.addLine(&quot;Hello from my robot!&quot;);
+<p>
+telemetry.update();
+</code></pre></div></div>
+</p>
+<h2>Save, recompile, and run your code</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save** in the **CODE EDITOR**
+<ol>
+<li>Click <strong>Recompile</strong> on the <strong>DRIVER HUB</strong></li>
+<li>Select <strong>MecanumDrive</strong> from <strong>TeleOp</strong></li>
+<li>Click <strong>INIT</strong>, then <strong>START</strong></div></div></li>
+</ol>
+<h2>Observe the console window in the <strong>DRIVER HUB</strong></h2>
+<p>
+You should see <code>Hello from my robot!</code> on the Driver Hub console.
+Try changing the text, save, recompile, and run again.
+</p>
+<hr>
+<h2>Part 2 -- Variables, Booleans, and Button States</h2>
+<p>
+Before we go further, let's talk about <strong>variables</strong>. A variable
+is a named container that holds a piece of information. Think of
+it like a labeled box -- the label is the variable's name, and
+whatever is inside the box is its value. Your code can look
+inside the box at any time to see what is there, and the value
+can change as the program runs.
+</p>
+<p>
+For example, <code>gamepad1.a</code> is a variable. Its name tells you it
+represents the A button on gamepad 1. Its value tells you
+whether that button is currently pressed or not.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A **variable** is a named container that holds a value. The
+<p>
+name never changes, but the value inside can change while
+your program runs.</div></div>
+</p>
+<p>
+Gamepad buttons are one of the simplest types of input in your robot code.
+Each button is either pressed or not pressed, and your program needs a way
+to represent that.
+</p>
+<p>
+In Java, this type is called boolean.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A boolean is a value that can only be true or false.</div></div>
+<p>
+Gamepad buttons use booleans. Each button is always in one of two states:
+</p>
+<ul>
+<li><strong>TRUE</strong> means the button is pressed</li>
+<li><strong>FALSE</strong> means the button is not pressed</li>
+</ul>
+<p>
+For example:
+</p>
+<ul>
+<li>When you press the A button, gamepad1.a becomes <strong>TRUE</strong></li>
+<li>When you release it, gamepad1.a becomes <strong>FALSE</strong></li>
+</ul>
+<p>
+There are no in-between values. It is always one or the other.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Replace what you typed in Part 1 with the code below:</div></div>
+<span class="sim-action" title="Simulator action only">[ Telemetry : Debug Output ]</span>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">telemetry.addLine(&quot;=== Debug Telemetry ===&quot;);
+<p>
+telemetry.addData(&quot;A button&quot;, gamepad1.a);
+telemetry.addData(&quot;B button&quot;, gamepad1.b);
+telemetry.addData(&quot;X button&quot;, gamepad1.x);
+telemetry.addData(&quot;Y button&quot;, gamepad1.y);
+telemetry.update();
+</code></pre></div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Save, recompile, and run. Press A, B, X, Y on your gamepad and
+<p>
+watch the values change in real time!</div></div>
+</p>
+<hr>

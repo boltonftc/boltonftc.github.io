@@ -1,0 +1,684 @@
+---
+layout: page
+title: "AprilTag Detection"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-advanced">Advanced</span>
+
+<h1>AprilTag Detection</h1>
+<h2>The Robot That Can See</h2>
+<p>
+In the last lesson, you gave your robot a sense of position
+with the OTOS. It can now track where it is by watching the
+ground — like a computer mouse on wheels. But you also
+discovered the OTOS's weakness: <strong>drift</strong>. Drive around for
+30 seconds and the numbers slowly wander away from reality.
+</p>
+<p>
+What if the robot could look up, see a landmark, and instantly
+know <strong>exactly</strong> where it is — like a sailor spotting a
+lighthouse?
+</p>
+<p>
+That is exactly what <strong>AprilTags</strong> do. They are black-and-white
+coded markers placed around the FTC field. When the robot's
+camera sees one, it can calculate its own position on the field
+with no drift at all. Every detection is a fresh, independent
+measurement — the errors do not pile up.
+</p>
+<p>
+In this lesson, you will connect a camera to your robot, point
+it at AprilTags, and read detection data in telemetry. You will
+not build a full navigation system yet — that comes in the next
+lesson. For now, you are giving the robot <strong>eyes</strong>.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**AprilTags** are coded visual markers. When the camera sees
+<p>
+one, the robot can calculate its exact position on the field.
+Unlike the OTOS, AprilTag detections do <strong>not</strong> drift — each
+one is an independent measurement.</div></div>
+</p>
+<hr>
+<h2>What Is an AprilTag?</h2>
+<p>
+An AprilTag is a printed black-and-white square pattern — like
+a simplified QR code. Each tag has a unique <strong>ID number</strong> encoded
+in its grid of black and white cells. The camera does not just
+see "a square" — it reads the specific binary pattern and knows
+exactly which tag it is looking at.
+</p>
+<p>
+FTC uses the <strong>36h11</strong> tag family. The "36" means the data
+area is a 6×6 grid of cells (36 total). The "h11" means the
+minimum "Hamming distance" between any two valid codes is 11 —
+translation: even if part of the tag is obscured or blurry,
+the camera can still identify it correctly. It is remarkably
+robust.
+</p>
+<h3>Tags on the FTC Field</h3>
+<p>
+Every FTC field has AprilTags mounted on the walls at specific,
+published locations. For the INTO THE DEEP season, there are
+<strong>eight tags</strong> numbered 11 through 18:
+</p>
+<p>
+| Tag ID | Wall | Position |
+| --- | --- | --- |
+| 11, 12 | North (audience side) | Left and right |
+| 13, 14 | East (red alliance) | Left and right |
+| 15, 16 | West (blue alliance) | Left and right |
+| 17, 18 | South (far side) | Left and right |
+</p>
+<p>
+Because the exact position of each tag on the field is
+published by FIRST, and because each tag has a unique ID, the
+robot can do some math: "I can see Tag 13 at a certain angle
+and distance, and I know Tag 13 is at coordinates (X, Y) on
+the field, so <strong>I</strong> must be at coordinates (A, B)."
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Each AprilTag has a unique **ID number** encoded in its
+<p>
+pattern. Because the exact field position of each tag is
+published by FIRST, seeing a tag tells the robot exactly
+where it is on the field.</div></div>
+</p>
+<hr>
+<h2>The Limelight 3A</h2>
+<h3>What Is It?</h3>
+<p>
+The <strong>Limelight 3A</strong> is a smart camera built specifically for
+FTC and FRC robotics. It is not just a webcam — it has its own
+processor inside that does all the heavy image processing. Your
+robot's Control Hub does not have to waste any CPU time finding
+AprilTags; the Limelight does all the work and sends back clean,
+ready-to-use results.
+</p>
+<p>
+Think of it like this: a regular webcam sends a stream of raw
+images and says <em>"here, you figure it out."</em> The Limelight sends
+a stream of <strong>results</strong> and says *"I found Tag 13, it is 36
+inches away at 15 degrees to the right."*
+</p>
+<h3>The Hardware</h3>
+<p>
+The Limelight 3A is a compact aluminum camera module (roughly
+the size of a deck of cards). It has:
+</p>
+<ul>
+<li>A wide-angle camera lens on the front</li>
+<li>A built-in processor (Raspberry Pi Compute Module)</li>
+<li>Status LEDs on the front</li>
+<li>A <strong>USB-C port</strong> on the back for connection and power</li>
+</ul>
+<h3>Connecting to the Control Hub</h3>
+<p>
+Unlike the OTOS (which uses I2C), the Limelight connects via
+<strong>USB</strong>. This is because it transfers much more data — full
+images and detection results — which requires the higher
+bandwidth of a USB connection.
+</p>
+<p>
+To install:
+</p>
+<ol>
+<li>Mount the Limelight on your robot, facing forward (or</li>
+</ol>
+<p>
+   wherever you want the camera to look)
+</p>
+<ol>
+<li>Plug a <strong>USB-C cable</strong> from the Limelight directly into</li>
+</ol>
+<p>
+   one of the <strong>USB ports</strong> on the REV Control Hub
+</p>
+<ol>
+<li>That is it — power and data both flow through the single</li>
+</ol>
+<p>
+   USB cable
+</p>
+<p>
+The Limelight powers itself from the USB connection, so there
+are no extra wires to worry about. One cable does everything.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The Limelight 3A connects to the Control Hub via a single
+<p>
+<strong>USB-C cable</strong> that carries both power and data. It has its
+own built-in processor that handles all image processing —
+your robot code just reads the results.</div></div>
+</p>
+<hr>
+<h2>MegaTag vs. MegaTag2</h2>
+<p>
+The Limelight has two different ways to compute your robot's
+position from AprilTag detections. Understanding the difference
+is important.
+</p>
+<h3>MegaTag (Vision Only)</h3>
+<p>
+<strong>MegaTag</strong> uses only the camera image to figure out the
+robot's position and heading. It looks at the shape of the
+tag in the image — how it is tilted, rotated, and scaled —
+and works backward to calculate where the camera must be.
+</p>
+<p>
+The problem: when the robot can only see <strong>one tag</strong>, the
+heading estimate is very noisy. A small change in the tag's
+appearance angle creates a large swing in estimated yaw. With
+<strong>two or more tags</strong>, MegaTag can triangulate and the heading
+becomes much more stable.
+</p>
+<h3>MegaTag2 (Vision + IMU)</h3>
+<p>
+<strong>MegaTag2</strong> solves the heading problem by cheating —
+in a smart way. Instead of guessing the robot's heading from
+the camera image, it asks the robot: *"What does your IMU say
+your heading is?"*
+</p>
+<p>
+You feed the robot's IMU heading to the Limelight each loop
+iteration. The Limelight then locks in that heading and only
+uses the camera to figure out X and Y position. This is much
+more accurate, especially when only one tag is visible.
+</p>
+<p>
+The tradeoff? MegaTag2 is only as good as your IMU heading.
+If the gyroscope has drifted, MegaTag2 will compute the wrong
+position. In practice, IMU heading drift is small enough over
+a 30-second autonomous that MegaTag2 is almost always the
+better choice.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**MegaTag** = vision only (noisy heading with one tag).
+<p>
+<strong>MegaTag2</strong> = vision + IMU heading (more accurate, especially
+with one or two tags). Most teams use MegaTag2.</div></div>
+</p>
+<hr>
+<h2>Tips and Tricks for the Limelight 3A</h2>
+<p>
+Teams who have used the Limelight in competition have learned
+some hard lessons. Here are the most important:
+</p>
+<h3>1. Mount It Rigid</h3>
+<p>
+Any vibration or wobble in the camera mount will blur the image
+and reduce detection range. Use metal brackets and lock-tighten
+all screws. The Limelight should feel rock-solid.
+</p>
+<h3>2. Aim Carefully</h3>
+<p>
+The Limelight has a wide field of view, but tags need to be
+within that cone to be detected. Point the camera toward the
+wall where you expect to see tags during autonomous. Many teams
+angle the camera slightly upward to catch wall-mounted tags at
+longer range.
+</p>
+<h3>3. Check the Pipeline</h3>
+<p>
+Limelight pipelines are numbered 0–9. Each can be configured
+for a different task. Pipeline 0 is typically set up for
+AprilTag detection. Make sure you call <code>pipelineSwitch(0)</code>
+during initialization.
+</p>
+<h3>4. Watch the Distance</h3>
+<p>
+AprilTag detection works best within about <strong>6 feet</strong> (72
+inches). Beyond that, the tags become too small in the image
+for reliable detection. At close range (under 12 inches), the
+tag may fill the entire frame and detection can also fail. The
+sweet spot is <strong>1 to 5 feet</strong>.
+</p>
+<h3>5. Lighting Matters</h3>
+<p>
+Bright, even lighting helps. Shadows across a tag can make
+one half appear darker than the other, confusing the detector.
+At competitions, venue lighting varies — practice under
+different conditions.
+</p>
+<h3>6. Feed the IMU Every Loop</h3>
+<p>
+For MegaTag2, you must call <code>updateRobotOrientation()</code> with
+your current IMU heading <strong>every loop iteration</strong> — not just
+once. The Limelight needs current heading data each time it
+processes a frame.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Key tips:** Mount rigid, aim toward tags, use pipeline 0,
+<p>
+best range is 1–5 feet, call <code>updateRobotOrientation()</code> every
+loop for MegaTag2.</div></div>
+</p>
+<hr>
+<h2>See It on the Whiteboard</h2>
+<p>
+When you open this lesson in Pit Training Mode, you will notice
+something new on the <strong>whiteboard</strong>: a printed AprilTag has
+appeared! This is a real simulated 36h11 tag, just like the
+ones on the FTC field walls.
+</p>
+<p>
+Toggle the <strong>CAMERA</strong> button on the pit table to see the FOV
+(Field of View) cone extending from the robot's camera. This
+cone shows where the camera is looking.
+</p>
+<ul>
+<li><strong>Blue cone</strong> — camera is on, but this is not the AprilTag</li>
+</ul>
+<p>
+  lesson (no detection active)
+</p>
+<ul>
+<li><strong>Red cone</strong> — detection is active, but no tag is in view</li>
+<li><strong>Green cone</strong> — a tag has been <strong>detected</strong>! You will</li>
+</ul>
+<p>
+  also see a dashed line connecting the camera to the tag
+  and hear a sonar ping
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Try it now:
+<ol>
+<li>Make sure you are on the <strong>AprilTag Detection</strong> lesson</li>
+<li>Toggle the <strong>CAMERA</strong> button to show the FOV cone</li>
+<li>Use the <strong>CW / CCW</strong> rotation buttons to rotate the</li>
+</ol>
+<p>
+   turntable
+</p>
+<ol>
+<li>Watch the cone turn <strong>red</strong> when no tag is in view</li>
+<li>Rotate until the cone sweeps across the whiteboard</li>
+</ol>
+<p>
+   AprilTag — it should turn <strong>green</strong> with a ping sound
+</p>
+<ol>
+<li>Notice the dashed detection line from camera to tag</div></div></li>
+</ol>
+<hr>
+<h2>Engineering Notebook Questions</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Write answers to these questions in your engineering notebook.
+<ol>
+<li><strong>What is the difference between MegaTag and MegaTag2?</strong></li>
+</ol>
+<p>
+   Which one is more accurate and why?
+</p>
+<ol>
+<li><strong>Why does the Limelight connect via USB instead of I2C like the OTOS?</strong></li>
+</ol>
+<p>
+   Think about how much data a camera
+   produces versus a simple position sensor.
+</p>
+<ol>
+<li><strong>What happens to AprilTag detection accuracy as the robot gets farther from the tags?</strong></li>
+</ol>
+<p>
+   What is the practical
+   maximum range?
+</p>
+<ol>
+<li><strong>Why does MegaTag2 need the robot's IMU heading?</strong> What</li>
+</ol>
+<p>
+   would happen if you forgot to feed it the heading?
+</p>
+<ol>
+<li><strong>Compare the OTOS and the Limelight. What is each one good at? What is each one bad at?</strong></li>
+</ol>
+<p>
+   Make a short pros/cons
+   list for each.</div></div>
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Hint for question 5:** Think about this —
+<p>
+OTOS: updates 1000 times/second, always available, drifts.
+Limelight: updates ~11 times/second, only works when tags are
+visible, but zero drift.</div></div>
+</p>
+<hr>
+<h2>The Limelight API</h2>
+<p>
+In the simulator, the Limelight is already installed on your
+virtual robot and mapped as <code>&quot;limelight&quot;</code> in the hardware map.
+</p>
+<p>
+Here are the key classes and methods:
+</p>
+<p>
+| Class / Method | What It Does |
+| --- | --- |
+| <code>Limelight3A</code> | The camera object from the hardware map |
+| <code>.start()</code> | Starts the processing pipeline |
+| <code>.pipelineSwitch(0)</code> | Selects pipeline 0 (AprilTag detection) |
+| <code>.updateRobotOrientation(yaw)</code> | Feeds IMU heading (degrees) for MegaTag2 |
+| <code>.getLatestResult()</code> | Returns an <code>LLResult</code> snapshot |
+| <code>LLResult.isValid()</code> | <code>true</code> if any tags were detected |
+| <code>.getFiducialResults()</code> | List of individual tag detections |
+| <code>.getBotpose_MT2()</code> | Robot field position from MegaTag2 |
+| <code>FiducialResult.getFiducialId()</code> | The tag's ID number |
+| <code>BotPose.getX()</code> / <code>.getY()</code> | Robot position on field (inches) |
+| <code>BotPose.getYaw()</code> | Robot heading (degrees) |
+| <code>BotPose.getTagCount()</code> | How many tags were used |
+| <code>BotPose.getAvgDist()</code> | Average distance to detected tags |
+</p>
+<hr>
+<h2>Time to Code!</h2>
+<p>
+Let's add Limelight detection to your robot. When an AprilTag
+comes into view, the Driver Hub will show its ID and the
+robot's estimated field position. When no tags are visible,
+it will show "No tags detected."
+</p>
+<hr>
+<h2>Part 1 — Import the Limelight Classes</h2>
+<p>
+You need import lines for the Limelight classes.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open MecanumDrive.java at the OTOS
+<p>
+import section (you will add the Limelight imports right
+below):</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › AprilTag : Imports ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add these import lines right below your OTOS imports:</div></div>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// ===============================================
+<p>
+// Limelight Imports
+// ===============================================
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+</code></pre></div></div>
+</p>
+<hr>
+<h2>Part 2 — Initialize the Limelight</h2>
+<p>
+Before the main loop, get the Limelight from the hardware map,
+select the AprilTag pipeline, and start it running.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to jump to the Limelight setup section:</div></div>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › AprilTag : Setup ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add this code in the Limelight Setup section:</div></div>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Get the Limelight from the hardware map
+<p>
+Limelight3A limelight = hardwareMap.get(Limelight3A.class, &quot;limelight&quot;);
+</p>
+<p>
+// Select pipeline 0 (AprilTag detection)
+limelight.pipelineSwitch(0);
+</p>
+<p>
+// Start the camera
+limelight.start();
+</p>
+<p>
+telemetry.addData(&quot;Limelight&quot;, &quot;Started!&quot;);
+telemetry.update();
+</code></pre></div></div>
+</p>
+<hr>
+<h2>Part 3 — Read Detections in the Loop</h2>
+<p>
+Now add code inside the loop to check for AprilTag detections
+every frame. This is where MegaTag2 comes in — you will feed
+your OTOS heading to the Limelight and then read the result.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to jump to the Limelight telemetry
+<p>
+section inside the loop:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › AprilTag : Telemetry ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add this code in the Limelight Telemetry section:</div></div>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Feed the OTOS heading to Limelight for MegaTag2
+<p>
+SparkFunOTOS.Pose2D otosForLL = otos.getPosition();
+limelight.updateRobotOrientation(otosForLL.h);
+</p>
+<p>
+// Get the latest detection result
+LLResult llResult = limelight.getLatestResult();
+</p>
+<p>
+if (llResult != null &amp;&amp; llResult.isValid()) {
+    // Tags detected! Show each one
+    telemetry.addData(&quot;Tags&quot;, &quot;%d detected&quot;, llResult.getFiducialResults().size());
+</p>
+<p>
+    for (LLResultTypes.FiducialResult tag : llResult.getFiducialResults()) {
+        telemetry.addData(&quot;  Tag ID&quot;, tag.getFiducialId());
+        telemetry.addData(&quot;  Bearing&quot;, &quot;%.1f°&quot;, tag.getTargetXDegrees());
+    }
+</p>
+<p>
+    // Show MegaTag2 field position (if available)
+    LLResultTypes.BotPose mt2 = llResult.getBotpose_MT2();
+    if (mt2 != null) {
+        telemetry.addData(&quot;MT2 X&quot;, &quot;%.1f in&quot;, mt2.getX());
+        telemetry.addData(&quot;MT2 Y&quot;, &quot;%.1f in&quot;, mt2.getY());
+        telemetry.addData(&quot;MT2 Yaw&quot;, &quot;%.1f°&quot;, mt2.getYaw());
+        telemetry.addData(&quot;MT2 Tags&quot;, mt2.getTagCount());
+        telemetry.addData(&quot;MT2 Dist&quot;, &quot;%.1f in&quot;, mt2.getAvgDist());
+    }
+} else {
+    telemetry.addData(&quot;Tags&quot;, &quot;No tags detected&quot;);
+}
+</code></pre></div></div>
+</p>
+<p>
+Let's trace through what this code does:
+</p>
+<ol>
+<li><strong>Feed heading</strong> — The OTOS gives us the robot's current</li>
+</ol>
+<p>
+   heading. We pass it to the Limelight so MegaTag2 can use
+   it for more accurate localization.
+</p>
+<ol>
+<li><strong>Get result</strong> — <code>getLatestResult()</code> returns the camera's</li>
+</ol>
+<p>
+   most recent frame analysis. It might be <code>null</code> (camera not
+   ready) or invalid (no tags visible).
+</p>
+<ol>
+<li><strong>Check validity</strong> — <code>isValid()</code> tells us whether any tags</li>
+</ol>
+<p>
+   were actually detected in this frame.
+</p>
+<ol>
+<li><strong>Show individual tags</strong> — Each FiducialResult has the tag's</li>
+</ol>
+<p>
+   ID number and its bearing (left/right angle from camera
+   center).
+</p>
+<ol>
+<li><strong>Show MegaTag2</strong> — The robot's estimated field position</li>
+</ol>
+<p>
+   based on the detected tags and the IMU heading. This is the
+   "big picture" answer: where am I on the field?
+</p>
+<hr>
+<h2>Part 4 — Save, Compile, and Test!</h2>
+<p>
+Here is what your complete Limelight code should look like:
+</p>
+<p>
+<strong>Before the loop (Limelight Setup):</strong>
+</p>
+<pre><code class="language-java">Limelight3A limelight = hardwareMap.get(Limelight3A.class, &quot;limelight&quot;);
+<p>
+limelight.pipelineSwitch(0);
+limelight.start();
+telemetry.addData(&quot;Limelight&quot;, &quot;Started!&quot;);
+telemetry.update();
+</code></pre>
+</p>
+<p>
+<strong>Inside the loop (Limelight Telemetry):</strong>
+</p>
+<pre><code class="language-java">SparkFunOTOS.Pose2D otosForLL = otos.getPosition();
+<p>
+limelight.updateRobotOrientation(otosForLL.h);
+</p>
+<p>
+LLResult llResult = limelight.getLatestResult();
+</p>
+<p>
+if (llResult != null &amp;&amp; llResult.isValid()) {
+    telemetry.addData(&quot;Tags&quot;, &quot;%d detected&quot;, llResult.getFiducialResults().size());
+    for (LLResultTypes.FiducialResult tag : llResult.getFiducialResults()) {
+        telemetry.addData(&quot;  Tag ID&quot;, tag.getFiducialId());
+        telemetry.addData(&quot;  Bearing&quot;, &quot;%.1f°&quot;, tag.getTargetXDegrees());
+    }
+    LLResultTypes.BotPose mt2 = llResult.getBotpose_MT2();
+    if (mt2 != null) {
+        telemetry.addData(&quot;MT2 X&quot;, &quot;%.1f in&quot;, mt2.getX());
+        telemetry.addData(&quot;MT2 Y&quot;, &quot;%.1f in&quot;, mt2.getY());
+        telemetry.addData(&quot;MT2 Yaw&quot;, &quot;%.1f°&quot;, mt2.getYaw());
+        telemetry.addData(&quot;MT2 Tags&quot;, mt2.getTagCount());
+        telemetry.addData(&quot;MT2 Dist&quot;, &quot;%.1f in&quot;, mt2.getAvgDist());
+    }
+} else {
+    telemetry.addData(&quot;Tags&quot;, &quot;No tags detected&quot;);
+}
+</code></pre>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save**.
+<ol>
+<li>Click <strong>Recompile</strong> on the Driver Hub.</li>
+<li>Select <strong>MecanumDrive</strong> from TeleOp.</li>
+<li>Click <strong>INIT</strong>, then <strong>START</strong>.</div></div></li>
+</ol>
+<hr>
+<h2>Test Your AprilTag Detection!</h2>
+<h3>On the Bench (Pit Training Mode)</h3>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 1 — Whiteboard Tag:** Make sure you are on the AprilTag
+<p>
+Detection lesson. Toggle the CAMERA button. Rotate the turntable
+until the FOV cone turns green. Check the Driver Hub telemetry.
+You should see a tag ID, the bearing to the tag, and if
+MegaTag2 is working, the MT2 position values.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 2 — No Tag:** Rotate the turntable so the camera points
+<p>
+away from the whiteboard. Telemetry should show
+<strong>"No tags detected"</strong> and the FOV cone should be red.</div></div>
+</p>
+<h3>On the Competition Field</h3>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 3 — Field Tags:** Click **Return to Match** and drive
+<p>
+your robot on the field. Drive toward any wall and look at
+the telemetry. As you approach a wall with AprilTags, the
+"Tags" count should change from "No tags detected" to showing
+tag IDs and MT2 positions.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 4 — Range Test:** Drive slowly toward a wall tag and
+<p>
+watch the <strong>MT2 Dist</strong> value decrease. Notice that detections
+are reliable under 72 inches (6 feet). Try backing up further
+and further — at some point the tags will stop being detected.
+That is the detection range limit.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 5 — Compare OTOS vs Limelight:** Drive to a known
+<p>
+location on the field (like right in front of a wall tag).
+Compare the MT2 position with the OTOS position from the
+previous lesson. Are they close? Drive around for a while and
+come back. The OTOS has probably drifted, but the MT2 position
+will still be accurate (as long as you can see a tag).</div></div>
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">AprilTag detection gives you an **absolute** position on the
+<p>
+field — no drift, no accumulation of errors. But it only works
+when tags are in view. The OTOS gives you <strong>continuous</strong>
+tracking that always works, but drifts. Each sensor complements
+the other's weakness.</div></div>
+</p>
+<hr>
+<h2>What You Learned</h2>
+<ul>
+<li><strong>AprilTags</strong> are coded visual markers (36h11 family) placed</li>
+</ul>
+<p>
+  on FTC field walls at published locations
+</p>
+<ul>
+<li>The <strong>Limelight 3A</strong> is a smart camera with its own processor</li>
+</ul>
+<p>
+  — it handles all image processing internally
+</p>
+<ul>
+<li>It connects via <strong>USB-C</strong> to the Control Hub (one cable for</li>
+</ul>
+<p>
+  power and data)
+</p>
+<ul>
+<li><strong>MegaTag</strong> uses vision only (noisy heading with one tag);</li>
+</ul>
+<p>
+  <strong>MegaTag2</strong> uses vision + IMU heading (much more accurate)
+</p>
+<ul>
+<li>You must call <code>updateRobotOrientation()</code> <strong>every loop</strong></li>
+</ul>
+<p>
+  with the current IMU heading for MegaTag2 to work
+</p>
+<ul>
+<li>Detection range is best within <strong>1 to 5 feet</strong> (12–60</li>
+</ul>
+<p>
+  inches) — reliability drops beyond 6 feet
+</p>
+<ul>
+<li>Tag detections give <strong>absolute</strong> field position with zero</li>
+</ul>
+<p>
+  drift, but only when tags are visible
+</p>
+<ul>
+<li>The OTOS tracks <strong>continuously</strong> but drifts; AprilTags</li>
+</ul>
+<p>
+  give <strong>perfect snapshots</strong> but only intermittently
+</p>
+<p>
+In the next lesson, you will combine these two sensors into
+a single localization system — the OTOS tracks position
+between tag sightings, and AprilTags snap the position back
+to reality whenever they are visible. The best of both
+worlds.
+</p>
+<hr>

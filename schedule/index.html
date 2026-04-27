@@ -1,0 +1,929 @@
+---
+layout: page
+title: "FTC Speed-Run Schedule"
+---
+
+<style>:root {
+            --bg: #1a1a2e;
+            --surface: #16213e;
+            --card: #0f3460;
+            --accent: #e94560;
+            --accent2: #00b4d8;
+            --text: #e0e0e0;
+            --text-dim: #a0a0b8;
+            --border: #2a2a4a;
+            --green: #4caf50;
+            --yellow: #ffc107;
+            --orange: #ff9800;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent);
+            font-size: 2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .config-bar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 2rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        .config-bar span { color: var(--text-dim); }
+        .config-bar strong { color: var(--accent2); }
+
+        /* Meeting Cards */
+        .meeting {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .meeting-header {
+            background: var(--card);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .meeting-header h2 {
+            font-size: 1.15rem;
+            color: var(--text);
+        }
+
+        .meeting-header .date-badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+        }
+
+        .meeting-header .date-badge.star {
+            background: var(--green);
+        }
+
+        .meeting-header .date-badge.buffer {
+            background: var(--orange);
+        }
+
+        .meeting-body {
+            padding: 1rem 1.25rem;
+        }
+
+        .meeting-body h3 {
+            color: var(--accent2);
+            font-size: 0.95rem;
+            margin: 0.75rem 0 0.35rem 0;
+        }
+
+        .meeting-body h3:first-child {
+            margin-top: 0;
+        }
+
+        .meeting-body ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .meeting-body ul li {
+            padding: 0.25rem 0;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .meeting-body ul li::before {
+            content: "▸ ";
+            color: var(--accent2);
+        }
+
+        .milestone {
+            display: inline-block;
+            background: var(--green);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        .milestone.warning {
+            background: var(--orange);
+        }
+
+        /* Mentor Prep */
+        .mentor-prep {
+            background: rgba(0, 180, 216, 0.08);
+            border-left: 3px solid var(--accent2);
+            padding: 0.6rem 1rem;
+            margin-top: 0.75rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .mentor-prep strong {
+            color: var(--accent2);
+            font-size: 0.85rem;
+        }
+
+        .mentor-prep ul li::before {
+            content: "⚙ ";
+            color: var(--accent2);
+        }
+
+        /* Buffer Meetings */
+        .buffer {
+            border: 1px dashed var(--orange);
+        }
+
+        .buffer .meeting-header {
+            border-bottom-color: var(--orange);
+        }
+
+        /* Time blocks */
+        .time-block {
+            display: inline-block;
+            background: rgba(233, 69, 96, 0.15);
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.1rem 0.5rem;
+            border-radius: 3px;
+            margin-left: 0.5rem;
+        }
+
+        /* Summary Section */
+        .summary {
+            background: var(--card);
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+        }
+
+        .summary h2 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .timeline-visual {
+            display: flex;
+            gap: 0;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .timeline-node {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+            position: relative;
+        }
+
+        .timeline-node .dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin: 0 auto 0.5rem;
+        }
+
+        .timeline-node .dot.green { background: var(--green); }
+        .timeline-node .dot.orange { background: var(--orange); }
+
+        .timeline-node .label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .timeline-node .week {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-bar {
+            height: 2px;
+            background: var(--border);
+            flex: 0 0 100%;
+            margin: -2.2rem 0 2.2rem 0;
+            position: relative;
+            z-index: 0;
+        }
+
+        /* Notes */
+        .notes {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .notes h2 {
+            color: var(--accent);
+            font-size: 1.15rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .notes ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .notes ul li {
+            padding: 0.3rem 0;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .notes ul li::before {
+            content: "▸ ";
+            color: var(--accent2);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
+
+        /* Goals & Outcomes */
+        .goals-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .goals-section .goals-header {
+            background: var(--card);
+            padding: 0.75rem 1.25rem;
+            border-bottom: 2px solid var(--green);
+        }
+
+        .goals-section .goals-header h2 {
+            font-size: 1.15rem;
+            color: var(--text);
+        }
+
+        .goals-section .goals-body {
+            padding: 1rem 1.25rem;
+        }
+
+        .goals-section .goals-body p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 700px) {
+            .two-col { grid-template-columns: 1fr; }
+        }
+
+        .two-col .col h3 {
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .two-col .col h3.yes { color: var(--green); }
+        .two-col .col h3.no { color: var(--accent); }
+
+        .two-col .col ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .two-col .col ul li {
+            padding: 0.25rem 0;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .two-col .col.will ul li::before {
+            content: "✓ ";
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .two-col .col.wont ul li::before {
+            content: "✗ ";
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Pipeline callout */
+        .pipeline {
+            background: rgba(0, 180, 216, 0.08);
+            border: 1px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline h2 {
+            color: var(--accent2);
+            font-size: 1.15rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .pipeline p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pipeline-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .pipeline-flow .stage {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem 1.25rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .pipeline-flow .stage.active {
+            border-color: var(--green);
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--green);
+        }
+
+        .pipeline-flow .arrow {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            padding: 0 0.5rem;
+        }</style>
+
+<h1>FTC Speed-Run Schedule</h1>
+    <p class="subtitle">Box of Parts → Kids Driving a Mecanum Robot<br>
+    <em>Spring 2026 Exploratory Program — Building Excitement for Fall Competition Season</em><br>
+    <em>Version 0.2 — February 25, 2026</em></p>
+
+    <div class="config-bar">
+        <span>Team: <strong>5–8 students, Grades 7–8</strong></span>
+        <span>Meetings: <strong>6× Wed (2 hr) + Sun buffers</strong></span>
+        <span>Target: <strong>First drive at Meeting 5</strong></span>
+        <span>Code depth: <strong>Minimal — deploy &amp; drive</strong></span>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- GOALS & OUTCOMES -->
+    <!-- ============================================ -->
+    <div class="goals-section">
+        <div class="goals-header">
+            <h2>Program Goals &amp; Student Outcomes</h2>
+        </div>
+        <div class="goals-body">
+            <p>This is a <strong>spring exploratory program</strong> — not competition season. The purpose is to give students a positive, hands-on introduction to FIRST Tech Challenge so they enter the fall season with confidence, context, and momentum. The emphasis is on <strong>experience and excitement</strong>, not depth.</p>
+
+            <div class="two-col">
+                <div class="col will">
+                    <h3 class="yes">What Students Will Do</h3>
+                    <ul>
+                        <li>Learn what FIRST Tech Challenge is and how a season works</li>
+                        <li>Assemble a competition-legal mecanum drivebase from a kit</li>
+                        <li>Wire motors and electronics to a REV Control Hub</li>
+                        <li>See what Java code looks like and understand what it does at a high level</li>
+                        <li>Compile and deploy code to a robot using Android Studio</li>
+                        <li>Drive a mecanum robot with holonomic movement (strafe, rotate, translate)</li>
+                        <li>Work in pairs, collaborate, problem-solve as a team</li>
+                        <li>Walk away excited to do more in the fall</li>
+                    </ul>
+                </div>
+                <div class="col wont">
+                    <h3 class="no">What This Program Is Not</h3>
+                    <ul>
+                        <li>Not a Java programming course</li>
+                        <li>Not competition prep</li>
+                        <li>Not a deep dive into CAD, 3D printing, or mechanical design</li>
+                        <li>Not a substitute for fall season ramp-up</li>
+                        <li>Not high-pressure</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MENTOR ROLE -->
+    <!-- ============================================ -->
+    <div class="goals-section">
+        <div class="goals-header" style="border-bottom-color: var(--accent2);">
+            <h2>Mentor Prep vs. Student Work &mdash; Division of Responsibility</h2>
+        </div>
+        <div class="goals-body">
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1rem;">Proposed mentor/student work balance, chosen to maximize what the students do hands-on while maintaining a high probability of success within the condensed 6-meeting timeline.</p>
+
+            <div class="two-col">
+                <div class="col will">
+                    <h3 class="yes">What the Mentor Does (Behind the Scenes)</h3>
+                    <ul>
+                        <li>Inventory all parts before Meeting 1</li>
+                        <li>Pre-sort hardware into labeled bags by assembly step</li>
+                        <li>Create simplified build guides and printed cheat sheets</li>
+                        <li>Install &amp; configure Android Studio on all laptops</li>
+                        <li>Clone the FTC SDK, verify it builds, pre-load the TeleOp OpMode</li>
+                        <li>Pre-wire the robot independently to verify cable routing, motor port mapping, and power-on, photograph everything, then disconnect</li>
+                        <li>Update Control Hub and Driver Hub firmware</li>
+                        <li>Pre-configure the hardware map</li>
+                        <li>Charge batteries before every meeting</li>
+                        <li>Troubleshoot any issues between meetings</li>
+                        <li>Have fallback plans for code deploy</li>
+                    </ul>
+                </div>
+                <div class="col wont">
+                    <h3 class="no">What the Mentor Does NOT Do</h3>
+                    <ul>
+                        <li>Assemble any part of the robot chassis</li>
+                        <li>Mount the motors or wheels</li>
+                        <li>Wire the motors or battery during meetings</li>
+                        <li>Mount the Control Hub to the chassis</li>
+                        <li>Press the Build or Deploy buttons</li>
+                        <li>Drive the robot first (except a brief safety check)</li>
+                        <li>Fix problems for students</li>
+                        <li>Lecture for long stretches</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- LOGISTICS -->
+    <!-- ============================================ -->
+    <div class="goals-section">
+        <div class="goals-header" style="border-bottom-color: var(--orange);">
+            <h2>Logistics</h2>
+        </div>
+        <div class="goals-body">
+            <ul>
+                <li><strong>Wednesday meetings</strong> are held at the school, after school, 2 hours each</li>
+                <li><strong>Mentor transports the robot, tools, and supplies</strong> to and from the school each Wednesday via rolling cart</li>
+                <li><strong>Robot and all materials stay with the mentor between meetings</strong> for prep work, troubleshooting, and battery charging</li>
+                <li><strong>Optional Sunday buffer meetings</strong> are held at the FRC team facility, not at the school</li>
+                <li><strong>A second FTC team meets at the FRC facility</strong> &mdash; Sunday sessions are joint meetings so students from both FTC teams can learn from each other and build connections</li>
+                <li><strong>No special facility requirements at the school</strong> &mdash; a classroom table and open floor space for driving is sufficient. No power tools, no soldering, no metal cutting.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- TOOLS & EQUIPMENT -->
+    <!-- ============================================ -->
+    <div class="goals-section">
+        <div class="goals-header" style="border-bottom-color: var(--accent2);">
+            <h2>Tools &amp; Equipment</h2>
+        </div>
+        <div class="goals-body">
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1rem;">Everything needed for assembly and operation. All items are provided by the mentor &mdash; nothing required from the school beyond table space and floor space.</p>
+            <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+                <thead>
+                    <tr>
+                        <th style="text-align:left; padding:0.5rem; color:var(--accent2); border-bottom:1px solid var(--border);">Item</th>
+                        <th style="text-align:left; padding:0.5rem; color:var(--accent2); border-bottom:1px solid var(--border);">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding:0.5rem; border-bottom:1px solid var(--border); white-space:nowrap;">Metric ball-end hex key set</td><td style="padding:0.5rem; border-bottom:1px solid var(--border); color:var(--text-dim);">M2, M2.5, M3, M4. Primary assembly tool for all goBILDA hardware.</td></tr>
+                    <tr><td style="padding:0.5rem; border-bottom:1px solid var(--border); white-space:nowrap;">Small Phillips screwdriver</td><td style="padding:0.5rem; border-bottom:1px solid var(--border); color:var(--text-dim);">For select electronics mounting screws.</td></tr>
+                    <tr><td style="padding:0.5rem; border-bottom:1px solid var(--border); white-space:nowrap;">Zip ties (assorted)</td><td style="padding:0.5rem; border-bottom:1px solid var(--border); color:var(--text-dim);">Cable management &mdash; securing motor and sensor wires to the frame.</td></tr>
+                    <tr><td style="padding:0.5rem; border-bottom:1px solid var(--border); white-space:nowrap;">Scissors / flush cutters</td><td style="padding:0.5rem; border-bottom:1px solid var(--border); color:var(--text-dim);">Trimming zip tie tails.</td></tr>
+                    <tr><td style="padding:0.5rem; border-bottom:1px solid var(--border); white-space:nowrap;">3M Dual Lock / Velcro strips</td><td style="padding:0.5rem; border-bottom:1px solid var(--border); color:var(--text-dim);">Mounting Control Hub and battery to the chassis.</td></tr>
+                    <tr><td style="padding:0.5rem; border-bottom:1px solid var(--border); white-space:nowrap;">Rolling transport cart</td><td style="padding:0.5rem; border-bottom:1px solid var(--border); color:var(--text-dim);">Transporting robot, tools, and supplies to/from the school.</td></tr>
+                    <tr><td style="padding:0.5rem; border-bottom:1px solid var(--border); white-space:nowrap;">Laptop (mentor)</td><td style="padding:0.5rem; border-bottom:1px solid var(--border); color:var(--text-dim);">Android Studio installed, FTC SDK configured, used for code deploy and as backup if student machines have issues.</td></tr>
+                    <tr><td style="padding:0.5rem; border-bottom:1px solid var(--border); white-space:nowrap;">Laptops (student, 2&ndash;4)</td><td style="padding:0.5rem; border-bottom:1px solid var(--border); color:var(--text-dim);">Android Studio pre-installed by mentor. One per pair of students. Used for code review, build, and deploy.</td></tr>
+                    <tr><td style="padding:0.5rem; border-bottom:1px solid var(--border); white-space:nowrap;">USB-C / USB-A cables</td><td style="padding:0.5rem; border-bottom:1px solid var(--border); color:var(--text-dim);">Connecting laptops to Control Hub for code deploy (if not using WiFi).</td></tr>
+                    <tr><td style="padding:0.5rem; white-space:nowrap;">Parts organizer / bins</td><td style="padding:0.5rem; color:var(--text-dim);">Small labeled bins for sorted hardware (bolts, nuts, spacers) to keep workspace organized.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MEETING 1 -->
+    <!-- ============================================ -->
+    <div class="meeting">
+        <div class="meeting-header">
+            <h2>Meeting 1 — Unbox &amp; Start Build</h2>
+            <span class="date-badge">Wed Apr 29</span>
+        </div>
+        <div class="meeting-body">
+            <h3>Kickoff <span class="time-block">20 min</span></h3>
+            <ul>
+                <li>Welcome, team intros, ground rules</li>
+                <li>"What is FTC?" — show a 3-minute highlight reel video</li>
+                <li>Show the goal: "In 5 meetings, you will be driving this robot"</li>
+                <li>Show the parts still in boxes</li>
+            </ul>
+
+            <h3>Inventory &amp; Sort <span class="time-block">20 min</span></h3>
+            <ul>
+                <li>Open the Strafer kit — lay out every bag, identify components</li>
+                <li>Match parts to the build guide (printed copies for each pair)</li>
+                <li>Assign parts to labeled bins or areas on the table</li>
+            </ul>
+
+            <h3>Start Chassis Frame <span class="time-block">70 min</span></h3>
+            <ul>
+                <li>Split into pairs, each pair owns one corner/side of the frame</li>
+                <li>Assemble U-channel rails, cross-members, motor mounts</li>
+                <li>Focus: proper bolt torque (snug, not gorilla-tight), correct orientation</li>
+            </ul>
+
+            <h3>Wrap-Up <span class="time-block">10 min</span></h3>
+            <ul>
+                <li>Photo of progress. Clean up workspace.</li>
+                <li>Preview: "Next week we finish the chassis and it rolls"</li>
+            </ul>
+
+            <span class="milestone">Goal: Frame partially assembled, all parts identified</span>
+
+            <div class="mentor-prep">
+                <strong>Your Prep (Before Meeting 1):</strong>
+                <ul>
+                    <li>Inventory all parts, confirm nothing is missing from kits</li>
+                    <li>Print simplified build guides (condensed from goBILDA docs) — one per pair</li>
+                    <li>Pre-sort hardware into labeled bags if possible (M4×8, M4×12, etc.)</li>
+                    <li>Set up all laptops with Android Studio + FtcRobotController project (verified building)</li>
+                    <li>Write step-by-step "Deploy Code" cheat sheet for Meeting 3–4</li>
+                    <li>Pre-wire the robot yourself to confirm motor ports, cable routing — take photos — then disconnect</li>
+                    <li>Charge both batteries</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- BUFFER: Sunday May 4 -->
+    <!-- ============================================ -->
+    <div class="meeting buffer">
+        <div class="meeting-header">
+            <h2>Buffer — Finish Chassis (if needed)</h2>
+            <span class="date-badge buffer">Sun May 4 (optional)</span>
+        </div>
+        <div class="meeting-body">
+            <ul>
+                <li>Only use if chassis frame is not complete after Meeting 1</li>
+                <li>Continue frame assembly, mount motors, start wheel attachment</li>
+                <li>If not needed, skip — give the kids a break</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MEETING 2 -->
+    <!-- ============================================ -->
+    <div class="meeting">
+        <div class="meeting-header">
+            <h2>Meeting 2 — Finish Chassis &amp; Wheels</h2>
+            <span class="date-badge">Wed May 6</span>
+        </div>
+        <div class="meeting-body">
+            <h3>Complete Frame Assembly <span class="time-block">40 min</span></h3>
+            <ul>
+                <li>Finish any remaining frame bolting</li>
+                <li>Mount all 4 motors into motor mounts</li>
+                <li>Verify motor orientation (shaft side facing out toward wheels)</li>
+            </ul>
+
+            <h3>Attach Mecanum Wheels <span class="time-block">40 min</span></h3>
+            <ul>
+                <li>Mount all 4 mecanum wheels onto motor shafts</li>
+                <li><strong>Critical:</strong> Correct wheel orientation! Top rollers form an "X" pattern when viewed from above. Get this wrong and strafing breaks.</li>
+                <li>Tighten set screws. Spin each wheel by hand — should rotate freely.</li>
+            </ul>
+
+            <h3>Rolling Chassis Celebration <span class="time-block">10 min</span></h3>
+            <ul>
+                <li>Flip it over. Push it around the room. It rolls!</li>
+                <li>This is a real milestone — take a team photo</li>
+            </ul>
+
+            <h3>Intro to Control Electronics <span class="time-block">20 min</span></h3>
+            <ul>
+                <li>Show the REV Control Hub, battery, cables — don't install yet</li>
+                <li>Explain: "This is the brain. Next meeting we wire it up."</li>
+                <li>Show your pre-wiring photos: "Here's where everything plugs in"</li>
+            </ul>
+
+            <h3>Wrap-Up <span class="time-block">10 min</span></h3>
+            <ul>
+                <li>Clean up. Preview next meeting.</li>
+            </ul>
+
+            <span class="milestone">Goal: Rolling chassis — 4 wheels, 4 motors, complete frame</span>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MEETING 3 -->
+    <!-- ============================================ -->
+    <div class="meeting">
+        <div class="meeting-header">
+            <h2>Meeting 3 — Electronics &amp; Wiring</h2>
+            <span class="date-badge">Wed May 13</span>
+        </div>
+        <div class="meeting-body">
+            <h3>Mount Control Hub <span class="time-block">20 min</span></h3>
+            <ul>
+                <li>Attach Control Hub to chassis using Dual Lock or standoffs</li>
+                <li>Position for easy access to ports and power switch</li>
+            </ul>
+
+            <h3>Wire Motors <span class="time-block">40 min</span></h3>
+            <ul>
+                <li>Connect all 4 motor cables from motors to Control Hub motor ports</li>
+                <li>Use your pre-wiring photos as the guide</li>
+                <li>Label each cable (FL, FR, BL, BR) — this must match the hardware map in code</li>
+                <li>Route cables cleanly along the frame. Zip-tie to prevent snagging.</li>
+            </ul>
+
+            <h3>Battery &amp; Power-On <span class="time-block">20 min</span></h3>
+            <ul>
+                <li>Mount battery with Velcro/Dual Lock</li>
+                <li>Connect XT30 power cable from battery to Control Hub</li>
+                <li>Power on. Green LEDs on Control Hub = success.</li>
+                <li>Connect a laptop to Control Hub WiFi — see the dashboard</li>
+            </ul>
+
+            <h3>Intro to the Code <span class="time-block">30 min</span></h3>
+            <ul>
+                <li>Everyone on laptops. Open the FtcRobotController project in Android Studio.</li>
+                <li>Show them the one file they care about: the TeleOp OpMode</li>
+                <li>"This is Java. These lines read the gamepad. These lines set motor power."</li>
+                <li>Show the Build button (green hammer). Show the Deploy button (green play).</li>
+                <li>Do NOT deploy yet — just orientation</li>
+            </ul>
+
+            <h3>Wrap-Up <span class="time-block">10 min</span></h3>
+            <ul>
+                <li>Robot is wired and powered. Code is on laptops. Next: connect the two.</li>
+            </ul>
+
+            <span class="milestone">Goal: Robot powered on, green LEDs, all motors wired</span>
+            <br>
+            <span class="milestone warning">Risk: Wiring usually takes longer than expected — Sunday buffer exists</span>
+
+            <div class="mentor-prep">
+                <strong>Your Prep (Before Meeting 3):</strong>
+                <ul>
+                    <li>Update Control Hub firmware using REV Hardware Client</li>
+                    <li>Update Driver Hub firmware</li>
+                    <li>Pre-configure the hardware map on the Control Hub (motor names: frontLeft, frontRight, backLeft, backRight)</li>
+                    <li>Have the TeleOp OpMode ready in the project on all laptops</li>
+                    <li>Test WiFi connection from a laptop to Control Hub</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- BUFFER: Sunday May 18 -->
+    <!-- ============================================ -->
+    <div class="meeting buffer">
+        <div class="meeting-header">
+            <h2>Buffer — Wiring Debug &amp; Code Deploy Prep</h2>
+            <span class="date-badge buffer">Sun May 18 (recommended)</span>
+        </div>
+        <div class="meeting-body">
+            <ul>
+                <li><strong>Plan on using this one.</strong> Wiring + first deploy is where things bog down.</li>
+                <li>Finish any incomplete wiring from Meeting 3</li>
+                <li>Practice the deploy workflow with 1–2 kids: Build → Connect → Deploy → Run OpMode</li>
+                <li>Bench-test: spin each motor from the Driver Station to verify correct port mapping</li>
+                <li>Confirm motor directions — some may need to be reversed in code or hardware map</li>
+                <li>This de-risks Meeting 4 so it goes smoothly</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MEETING 4 -->
+    <!-- ============================================ -->
+    <div class="meeting">
+        <div class="meeting-header">
+            <h2>Meeting 4 — Code Deploy &amp; Bench Test</h2>
+            <span class="date-badge">Wed May 20</span>
+        </div>
+        <div class="meeting-body">
+            <h3>Deploy Code to Robot <span class="time-block">40 min</span></h3>
+            <ul>
+                <li>Walk everyone through: Connect laptop to Control Hub WiFi → Build → Deploy</li>
+                <li>Each pair deploys from their laptop (or watch and follow along)</li>
+                <li>Select the TeleOp OpMode on the Driver Hub</li>
+                <li>Connect gamepads to Driver Hub</li>
+            </ul>
+
+            <h3>Bench Test <span class="time-block">30 min</span></h3>
+            <ul>
+                <li><strong>Robot on blocks / lifted off table</strong> — wheels spin freely</li>
+                <li>Press each gamepad stick direction, verify correct wheel response:</li>
+                <li>Left stick forward = all 4 wheels forward</li>
+                <li>Left stick sideways = mecanum strafe pattern (diagonal pairs)</li>
+                <li>Right stick left/right = tank turn</li>
+                <li>If a motor spins wrong direction → fix in code (motor.setDirection) or hardware map</li>
+            </ul>
+
+            <h3>Cable Management &amp; Cleanup <span class="time-block">20 min</span></h3>
+            <ul>
+                <li>Final zip-tie pass on all cables</li>
+                <li>Secure battery mount</li>
+                <li>Verify nothing dangles near wheels</li>
+            </ul>
+
+            <h3>Quick Floor Test <span class="time-block">20 min</span></h3>
+            <ul>
+                <li>If bench test passes: set robot on floor, careful slow drive in a small area</li>
+                <li>Mentor drives first to verify behavior, then let 1–2 kids try</li>
+                <li>If something is wrong: note it, don't panic, fix before Meeting 5</li>
+            </ul>
+
+            <h3>Wrap-Up <span class="time-block">10 min</span></h3>
+            <ul>
+                <li>"Next meeting: everyone drives. Bring your game face."</li>
+            </ul>
+
+            <span class="milestone">Goal: Code deployed, motors verified, robot moves on command</span>
+
+            <div class="mentor-prep">
+                <strong>Your Prep (Before Meeting 4):</strong>
+                <ul>
+                    <li>If Sunday buffer was used: verify everything still works, batteries charged</li>
+                    <li>Have a backup plan: your laptop can deploy code if student laptops have issues</li>
+                    <li>Print the "Deploy Cheat Sheet" for each pair</li>
+                    <li>Prepare a "motor direction fix" cheat sheet (which line to change, what values)</li>
+                    <li>Charge both batteries</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MEETING 5 -->
+    <!-- ============================================ -->
+    <div class="meeting">
+        <div class="meeting-header">
+            <h2>Meeting 5 — FIRST DRIVE 🏁</h2>
+            <span class="date-badge star">Wed May 27</span>
+        </div>
+        <div class="meeting-body">
+            <h3>Pre-Flight Check <span class="time-block">15 min</span></h3>
+            <ul>
+                <li>Power on, connect, select OpMode, verify gamepad</li>
+                <li>Quick bench test — still works? Go.</li>
+            </ul>
+
+            <h3>Everyone Drives <span class="time-block">60 min</span></h3>
+            <ul>
+                <li>Set up a large open area (gym, hallway, cafeteria)</li>
+                <li>Each student gets 5–8 minutes of drive time</li>
+                <li>Start simple: forward, backward, turn</li>
+                <li>Then: strafe left, strafe right — this is the "whoa" moment for mecanum</li>
+                <li>Then: diagonal movement, combined translate + rotate</li>
+                <li>Non-driving students watch, coach, and swap in</li>
+            </ul>
+
+            <h3>Mini Challenge <span class="time-block">30 min</span></h3>
+            <ul>
+                <li>Set up a simple obstacle course with cones, boxes, tape lines</li>
+                <li>Timed runs — who can navigate it fastest?</li>
+                <li>Emphasizes precision driving and mecanum advantages</li>
+            </ul>
+
+            <h3>Debrief <span class="time-block">15 min</span></h3>
+            <ul>
+                <li>What surprised you? What was hard? What do you want to add?</li>
+                <li>Preview: "You built this. Next: what can it DO?"</li>
+                <li>Team photo with the robot they built and drove</li>
+            </ul>
+
+            <span class="milestone">Goal: Every student drives the robot. This is the payoff.</span>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MEETING 6 -->
+    <!-- ============================================ -->
+    <div class="meeting">
+        <div class="meeting-header">
+            <h2>Meeting 6 — Obstacle Course Competition &amp; What's Next</h2>
+            <span class="date-badge star">Wed Jun 3</span>
+        </div>
+        <div class="meeting-body">
+            <h3>Warm-Up Driving <span class="time-block">15 min</span></h3>
+            <ul>
+                <li>Free drive time — shake off the rust, practice strafing and rotating</li>
+            </ul>
+
+            <h3>Obstacle Course Competition <span class="time-block">50 min</span></h3>
+            <ul>
+                <li>Set up an obstacle course using cones, boxes, tape lines, and narrow gates</li>
+                <li>Course should require forward driving, strafing, precision turns, and parking in a target zone</li>
+                <li>Timed individual runs — each student gets 2&ndash;3 attempts</li>
+                <li>Track best times on a whiteboard or projected screen</li>
+                <li>Final bracket round with the top times</li>
+                <li>Award bragging rights (and maybe snacks) to the winner</li>
+            </ul>
+
+            <h3>What's Next: Season Preview <span class="time-block">30 min</span></h3>
+            <ul>
+                <li>FTC game reveal happens ~September &mdash; that tells us what the robot needs to do</li>
+                <li>Show examples: arms, intakes, lifts, launchers from past seasons</li>
+                <li>Intro to sensors: distance, color, touch &mdash; the IMU they already have</li>
+                <li>Intro to autonomous: "The robot drives itself for 30 seconds"</li>
+                <li>Discuss summer plans: watch past game reveals, learn more Java, design mechanisms</li>
+            </ul>
+
+            <h3>Wrap-Up <span class="time-block">10 min</span></h3>
+            <ul>
+                <li>Team discussion: who wants to focus on what? (driving, building, coding)</li>
+                <li>Set expectations for the season: registration, schedule, competitions</li>
+                <li>Celebrate &mdash; you went from a box of parts to a driving robot in 6 meetings</li>
+            </ul>
+
+            <span class="milestone">Goal: Fun competition, confident drivers, excited for the season</span>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SUMMARY -->
+    <!-- ============================================ -->
+    <div class="summary">
+        <h2>Schedule Overview</h2>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+                <tr>
+                    <th style="text-align:left; padding: 0.5rem; color: var(--accent2); border-bottom: 1px solid var(--border);">Meeting</th>
+                    <th style="text-align:left; padding: 0.5rem; color: var(--accent2); border-bottom: 1px solid var(--border);">Date</th>
+                    <th style="text-align:left; padding: 0.5rem; color: var(--accent2); border-bottom: 1px solid var(--border);">Theme</th>
+                    <th style="text-align:left; padding: 0.5rem; color: var(--accent2); border-bottom: 1px solid var(--border);">Exit Milestone</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td style="padding:0.4rem;">1</td><td style="padding:0.4rem;">Wed Apr 29</td><td style="padding:0.4rem;">Unbox &amp; Start Build</td><td style="padding:0.4rem; color: var(--green);">Frame partially assembled</td></tr>
+                <tr style="color: var(--orange);"><td style="padding:0.4rem;">—</td><td style="padding:0.4rem;">Sun May 4</td><td style="padding:0.4rem; font-style: italic;">Buffer (if behind)</td><td style="padding:0.4rem; font-style: italic;">Catch up on frame</td></tr>
+                <tr><td style="padding:0.4rem;">2</td><td style="padding:0.4rem;">Wed May 6</td><td style="padding:0.4rem;">Finish Chassis &amp; Wheels</td><td style="padding:0.4rem; color: var(--green);">Rolling chassis</td></tr>
+                <tr><td style="padding:0.4rem;">3</td><td style="padding:0.4rem;">Wed May 13</td><td style="padding:0.4rem;">Electronics &amp; Wiring</td><td style="padding:0.4rem; color: var(--green);">Powered on, LEDs green</td></tr>
+                <tr style="color: var(--orange);"><td style="padding:0.4rem;">—</td><td style="padding:0.4rem;">Sun May 18</td><td style="padding:0.4rem; font-style: italic;">Buffer (recommended)</td><td style="padding:0.4rem; font-style: italic;">Wiring verified, motors bench-tested</td></tr>
+                <tr><td style="padding:0.4rem;">4</td><td style="padding:0.4rem;">Wed May 20</td><td style="padding:0.4rem;">Code Deploy &amp; Bench Test</td><td style="padding:0.4rem; color: var(--green);">Robot moves on command</td></tr>
+                <tr><td style="padding:0.4rem; font-weight:700;">5</td><td style="padding:0.4rem; font-weight:700;">Wed May 27</td><td style="padding:0.4rem; font-weight:700; color: var(--green);">FIRST DRIVE 🏁</td><td style="padding:0.4rem; color: var(--green); font-weight:700;">Everyone drives!</td></tr>
+                <tr><td style="padding:0.4rem;">6</td><td style="padding:0.4rem;">Wed Jun 3</td><td style="padding:0.4rem;">Drive More &amp; What's Next</td><td style="padding:0.4rem; color: var(--green);">Ready for the season</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>Schedule assumes MA school calendar — first meeting after April vacation 2026.</p>
+        <p>Adjust dates if school schedule shifts. Buffer Sundays are optional but strongly recommended.</p>
+    </footer>

@@ -1,0 +1,525 @@
+---
+layout: page
+title: "FTC Robot Basics"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-easier">Easier</span>
+
+<h1>FTC Robot Basics</h1>
+<p>
+Before you write a single line of code, it helps to understand
+what you are actually building. An FTC robot is not one thing --
+it is a system of parts that work together. This lesson walks
+you through every major piece, how a match works, and where
+<strong>you</strong> fit in as the programmer.
+</p>
+<p>
+No coding in this lesson -- just read, explore, and take notes.
+By the end, you will understand what is inside the robot, what
+the driver sees, how a match is structured, and why your code
+matters.
+</p>
+<hr>
+<h2>The Big Picture</h2>
+<p>
+An FTC robot is roughly the size of a milk crate -- the maximum
+allowed dimensions are <strong>18 × 18 × 18 inches</strong> at the start of
+a match. That is small! Teams have to be creative about fitting
+everything into that space. Some robots expand after the match
+begins, but they all start inside that cube.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">FTC robots must fit inside an **18 × 18 × 18 inch** cube at the
+<p>
+start of every match. Planning how everything fits is a big part
+of the design challenge.</div></div>
+</p>
+<p>
+<img src="ftc_robot.jpg" alt="FTC Robot" class="lesson-img">
+</p>
+<p>
+Most FTC teams do not machine their own parts from raw metal.
+Instead, they use <strong>pre-fabricated building systems</strong> -- kits
+of aluminum channels, brackets, gears, and plates that bolt
+together like high-tech building blocks. Popular systems include
+goBILDA, REV Robotics, Actobotics, and Tetrix.
+</p>
+<p>
+<img src="prefab_parts.jpg" alt="Pre-fabricated parts" class="lesson-img">
+</p>
+<p>
+Students use wrenches, hex keys, and screwdrivers to bolt these
+parts into a custom robot. You pick the channels, cut them to
+length if needed, and assemble the frame, drivetrain, and
+mechanisms. It is hands-on engineering -- no welding or machining
+required.
+</p>
+<p>
+<img src="common_tools.jpg" alt="Common tools" class="lesson-img">
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">If you have ever built something from LEGO Technic or an Erector
+<p>
+set, FTC building systems work on the same idea -- just bigger,
+stronger, and made of aluminum.</div></div>
+</p>
+<hr>
+<h2>Inside the Robot -- The Electronics</h2>
+<p>
+Open up any FTC robot and you will find a handful of key
+electronics. Think of these as the robot's <strong>brain</strong>,
+<strong>nervous system</strong>, and <strong>power supply</strong>.
+</p>
+<h3>The Control Hub</h3>
+<p>
+The <strong>Control Hub</strong> is the brain of the robot. It is a small
+rectangular box (made by REV Robotics) that runs the Android
+operating system and executes your Java code. It has:
+</p>
+<ul>
+<li>A <strong>processor</strong> that runs your program</li>
+<li><strong>Wi-Fi</strong> to communicate with the Driver Hub</li>
+<li><strong>Motor ports</strong> (4 ports) to control DC motors</li>
+<li><strong>Servo ports</strong> (6 ports) to control servos</li>
+<li><strong>Sensor ports</strong> (I2C, digital, analog) for sensors</li>
+<li>A built-in <strong>IMU</strong> (gyroscope + accelerometer)</li>
+</ul>
+<p>
+When you click <strong>START</strong> on the Driver Hub, the Control Hub
+begins running your code. Every motor command, every sensor
+reading, every decision your robot makes -- it all happens
+here.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The **Control Hub** is the robot's brain. It runs your Java
+<p>
+code, reads sensors, and controls motors and servos.</div></div>
+</p>
+<p>
+<img src="controller_hub.jpg" alt="Control Hub" class="lesson-img">
+</p>
+<h3>The Expansion Hub</h3>
+<p>
+Four motor ports is often not enough. A typical FTC robot might
+have four drive motors, an intake motor, a shooter motor, a
+lift motor -- that is already seven. The <strong>Expansion Hub</strong> gives
+you four more motor ports, six more servo ports, and additional
+sensor ports.
+</p>
+<p>
+The Expansion Hub connects to the Control Hub with a short
+cable. From your code's perspective, it is seamless -- you
+access motors on the Expansion Hub exactly the same way as
+motors on the Control Hub. The hardware map takes care of
+routing commands to the right place.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The **Expansion Hub** adds extra motor, servo, and sensor ports.
+<p>
+Your code talks to it the same way as the Control Hub -- no
+extra work needed.</div></div>
+</p>
+<h3>The Battery and Power Switch</h3>
+<p>
+Everything runs on a single <strong>12-volt rechargeable battery</strong>.
+It is a chunky rectangle that straps onto the robot. A fully
+charged battery can power a robot through several matches, but
+teams usually swap in a fresh one between matches to stay safe.
+</p>
+<p>
+The <strong>main power switch</strong> sits between the battery and the
+hubs. It is a big, easy-to-reach toggle -- referees require
+that you can power off the robot quickly if something goes
+wrong. When you flip the switch, everything powers up: the
+Control Hub boots, the Expansion Hub comes online, and the
+robot is ready to connect.
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">At competitions, teams keep multiple batteries charged and
+<p>
+ready. A dying battery mid-match means a robot that slows
+down or stops entirely. Battery management is a real part
+of competition strategy.</div></div>
+</p>
+<p>
+The diagram below shows exactly how the simulator's robot is
+wired. Each motor and sensor has a name (like <code>frontLeft</code> or
+<code>imu</code>) -- these are the names your code uses to talk to the
+hardware. The diagram also shows which hub port each device
+plugs into. If you ever build a real robot to match the
+simulator code, this is the wiring map you would follow to
+configure your Driver Hub's hardware map.
+</p>
+<p>
+<img src="impulse_3dsim_wiring_blockdiagram.jpg" alt="Wiring block diagram" class="lesson-img">
+</p>
+<hr>
+<h2>Outside the Robot -- The Driver Station</h2>
+<p>
+The robot is only half the system. The other half is in the
+drivers' hands.
+</p>
+<h3>The Driver Hub</h3>
+<p>
+The <strong>Driver Hub</strong> is a dedicated device (also made by REV
+Robotics) that acts as the driver's control center. It has a
+touchscreen that shows:
+</p>
+<ul>
+<li>Which program (OpMode) is loaded</li>
+<li><strong>INIT</strong> and <strong>START</strong> buttons to control the program</li>
+<li><strong>Telemetry</strong> messages from your code</li>
+<li>Connection status and warnings</li>
+</ul>
+<p>
+The Driver Hub communicates with the Control Hub over
+<strong>Wi-Fi Direct</strong> -- a peer-to-peer wireless connection that does not
+need a router or internet. It pairs automatically once
+configured.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The **Driver Hub** is the touchscreen device that drivers
+<p>
+use to select programs, start matches, and see telemetry.
+It talks to the robot over Wi-Fi Direct.</div></div>
+</p>
+<p>
+<img src="rev_driver_hub.jpg" alt="Driver Hub" class="lesson-img">
+</p>
+<p>
+<img src="driver_hub.jpg" alt="Driver Hub screen" class="lesson-img">
+</p>
+<h3>The Game Controllers</h3>
+<p>
+Plugged into the Driver Hub's USB ports are standard
+<strong>game controllers</strong> -- the same kind you would use with an
+Xbox or PlayStation. FTC allows <strong>up to two controllers</strong> per
+team.
+</p>
+<p>
+The first controller is <code>gamepad1</code> in your code. The second
+is <code>gamepad2</code>. Every button, joystick, and trigger on both
+controllers is available to your program.
+</p>
+<p>
+Why two controllers? Because driving a competitive robot is
+a lot to handle. Most teams split the work:
+</p>
+<ul>
+<li><strong>Driver 1 (gamepad1)</strong> -- Controls movement. Left stick</li>
+</ul>
+<p>
+  for driving, right stick for turning or strafing.
+</p>
+<ul>
+<li><strong>Driver 2 (gamepad2)</strong> -- Controls mechanisms. Buttons</li>
+</ul>
+<p>
+  for the intake, shooter, lift, claw, or whatever the
+  robot has.
+</p>
+<p>
+This lets each person focus on their job. The driver watches
+the field and navigates. The operator watches the mechanisms
+and scores. Coordination between them wins matches.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Teams can use **two controllers** -- typically one for driving
+<p>
+and one for operating mechanisms. In your code, they are
+<code>gamepad1</code> and <code>gamepad2</code>.</div></div>
+</p>
+<p>
+<img src="controller.jpg" alt="Game controller" class="lesson-img">
+</p>
+<p>
+<img src="controllers_driverhub_wifi_controlhub.jpg" alt="Controllers, Driver Hub, and Control Hub" class="lesson-img">
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">Some teams use just one controller with clever button bindings.
+<p>
+Others use two controllers with completely different layouts.
+There is no single right answer -- it depends on the robot
+and the team's preference. As the programmer, <strong>you</strong> decide
+what each button does.</div></div>
+</p>
+<hr>
+<h2>Your Role as the Programmer</h2>
+<p>
+Here is where it gets exciting. The robot hardware can do a
+lot of things -- but it does <strong>nothing</strong> until you tell it
+what to do. That is your job.
+</p>
+<p>
+You write Java code that:
+</p>
+<ul>
+<li>Reads the joysticks and buttons from the controllers</li>
+<li>Converts those inputs into motor commands</li>
+<li>Decides what each button does (toggle intake? fire shooter?</li>
+</ul>
+<p>
+  raise lift?)
+</p>
+<ul>
+<li>Reads sensors and reacts (avoid walls? align to a target?)</li>
+<li>Displays telemetry so the drivers know what is happening</li>
+</ul>
+<p>
+The robot is a blank canvas. Your code is the paint. Two
+teams with identical hardware can have completely different
+robots depending on how they are programmed. One team's A
+button might toggle an intake. Another team's A button might
+deploy a claw. It is entirely up to you.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The programmer decides what every button, joystick, and
+<p>
+sensor does. The same hardware can behave completely
+differently depending on the code running on it.</div></div>
+</p>
+<hr>
+<h2>How an FTC Match Works</h2>
+<p>
+Now that you know the pieces, let's talk about what happens
+when you actually compete.
+</p>
+<h3>The Field</h3>
+<p>
+An FTC field is a <strong>12 × 12 foot</strong> square made of interlocking
+foam tiles. It is surrounded by walls and has game-specific
+elements -- goals, scoring zones, markers, and obstacles that
+change every season. Two <strong>alliances</strong> compete on the field
+at the same time.
+</p>
+<h3>Alliances</h3>
+<p>
+Each match has <strong>four robots</strong> -- two on the <strong>Red Alliance</strong>
+and two on the <strong>Blue Alliance</strong>. You and your alliance
+partner work together to score more points than the other
+alliance. Communication and teamwork between alliance
+partners is a big part of FTC.
+</p>
+<p>
+At a tournament, you will be paired with different partners
+for different matches. You might be with a strong team one
+match and a brand-new team the next. Adaptability matters.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Each FTC match has **4 robots** -- 2 per alliance (Red vs.
+<p>
+Blue). You and your alliance partner cooperate to outscore
+the opposing alliance.</div></div>
+</p>
+<p>
+<img src="ftc_match.jpg" alt="FTC match" class="lesson-img">
+</p>
+<h3>Match Phases</h3>
+<p>
+Every FTC match has two phases, and they are <strong>very</strong>
+different:
+</p>
+<p>
+<strong>1. Autonomous Period (30 seconds)</strong>
+</p>
+<p>
+The match begins with autonomous mode. During this phase,
+<strong>no human touches the controllers</strong>. The robot runs
+entirely on pre-programmed instructions. It might drive
+forward, read a sensor, score a game piece, or park in a
+specific zone -- all without any human input.
+</p>
+<p>
+Autonomous points are often worth more than tele-op points,
+so a good autonomous program can decide a match before the
+drivers even pick up their controllers.
+</p>
+<p>
+<strong>2. Tele-Op Period (2 minutes)</strong>
+</p>
+<p>
+After autonomous ends, the drivers grab their controllers
+and take over. This is tele-op (short for tele-operated) --
+the human-controlled phase. For two minutes, the drivers
+maneuver the robot around the field, scoring as many points
+as possible.
+</p>
+<p>
+Tele-op is where your button assignments, control schemes,
+and telemetry feedback really matter. Smooth driving, quick
+mechanism control, and good operator coordination are the
+difference between a mediocre match and a great one.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">FTC matches have two phases: **Autonomous** (30 seconds,
+<p>
+no human control) and <strong>Tele-Op</strong> (2 minutes, driver
+controlled). Different code runs in each phase.</div></div>
+</p>
+<h3>Why Two Modes?</h3>
+<p>
+The two-phase structure tests different skills:
+</p>
+<ul>
+<li><strong>Autonomous</strong> tests your programming. Can you write code</li>
+</ul>
+<p>
+  that navigates the field, reads sensors, and scores
+  reliably -- with zero human help?
+</p>
+<ul>
+<li><strong>Tele-Op</strong> tests your driving, operating, and teamwork.</li>
+</ul>
+<p>
+  Can the drivers and the code work together smoothly under
+  pressure?
+</p>
+<p>
+In your code, you will write separate programs (called
+<strong>OpModes</strong>) for each phase. The autonomous OpMode runs
+first, then the drivers switch to the tele-op OpMode for
+the rest of the match. The simulator lets you practice both.
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">Teams that invest in a strong autonomous program often win
+<p>
+tournaments -- even if their tele-op is average. Those free
+30 seconds of scoring with no opponent interference are
+incredibly valuable.</div></div>
+</p>
+<hr>
+<h2>Putting It All Together</h2>
+<p>
+Let's trace the path of a single action to see how everything
+connects:
+</p>
+<ol>
+<li>The driver pushes the <strong>A button</strong> on their controller</li>
+<li>The controller sends the signal through USB to the</li>
+</ol>
+<p>
+   <strong>Driver Hub</strong>
+</p>
+<ol>
+<li>The Driver Hub transmits it over <strong>Wi-Fi Direct</strong> to the</li>
+</ol>
+<p>
+   <strong>Control Hub</strong>
+</p>
+<ol>
+<li>Your <strong>Java code</strong> sees <code>gamepad1.a == true</code></li>
+<li>Your code tells the <strong>intake motor</strong> to spin at full power</li>
+<li>The Control Hub sends current through the <strong>motor port</strong></li>
+<li>The motor spins, pulling game pieces into the robot</li>
+</ol>
+<p>
+All of that happens in a fraction of a second, dozens of times
+per second. The loop runs so fast that the robot feels instantly
+responsive to the driver.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A button press travels from the controller → Driver Hub →
+<p>
+Control Hub → your code → motor. This loop runs many times
+per second, making the robot feel responsive in real time.</div></div>
+</p>
+<hr>
+<h2>Quick Reference</h2>
+<p>
+Here is a summary of every major component:
+</p>
+<p>
+| Component | What It Does |
+|-----------|-------------|
+| <strong>Control Hub</strong> | Robot's brain -- runs your code, controls motors/servos/sensors |
+| <strong>Expansion Hub</strong> | Extra motor, servo, and sensor ports |
+| <strong>Battery (12V)</strong> | Powers everything on the robot |
+| <strong>Power Switch</strong> | Turns the robot on and off (must be accessible) |
+| <strong>Driver Hub</strong> | Touchscreen for selecting programs and viewing telemetry |
+| <strong>Controllers</strong> | USB gamepads (up to 2) plugged into the Driver Hub |
+| <strong>Motors</strong> | Spin wheels, intakes, shooters, lifts |
+| <strong>Servos</strong> | Move claws, flippers, and other small mechanisms |
+| <strong>Sensors</strong> | Detect distance, color, orientation, and more |
+</p>
+<hr>
+<h2>What You Learned</h2>
+<ul>
+<li>FTC robots must fit in an <strong>18 × 18 × 18 inch</strong> cube</li>
+<li>Robots are built from <strong>pre-fabricated parts</strong> that bolt</li>
+</ul>
+<p>
+  together -- no welding or machining needed
+</p>
+<ul>
+<li>The <strong>Control Hub</strong> runs your Java code and controls</li>
+</ul>
+<p>
+  everything on the robot
+</p>
+<ul>
+<li>The <strong>Expansion Hub</strong> adds more ports when four motors</li>
+</ul>
+<p>
+  are not enough
+</p>
+<ul>
+<li>A <strong>12V battery</strong> and <strong>power switch</strong> supply all the power</li>
+<li>The <strong>Driver Hub</strong> is the touchscreen that drivers use to</li>
+</ul>
+<p>
+  start programs and see telemetry
+</p>
+<ul>
+<li><strong>Two controllers</strong> can plug into the Driver Hub -- typically</li>
+</ul>
+<p>
+  one for driving and one for mechanisms
+</p>
+<ul>
+<li><strong>You</strong> decide what every button does -- the robot is a</li>
+</ul>
+<p>
+  blank canvas
+</p>
+<ul>
+<li>Matches have <strong>4 robots</strong> (2 per alliance) competing on a</li>
+</ul>
+<p>
+  <strong>12 × 12 foot</strong> field
+</p>
+<ul>
+<li><strong>Autonomous</strong> (30 seconds) runs without human input;</li>
+</ul>
+<p>
+  <strong>Tele-Op</strong> (2 minutes) is human-controlled
+</p>
+<ul>
+<li>A button press travels from controller to Driver Hub to</li>
+</ul>
+<p>
+  Control Hub to your code to motors -- many times per second
+</p>
+<hr>
+<h2>Ready for Code</h2>
+<p>
+Now you know what is inside the robot, what the driver sees,
+and how a match works. Next up: you will write your first
+line of code and see it appear on the Driver Hub.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click **Mark Complete** below, then select the next lesson
+<p>
+to continue!</div></div>
+</p>
+<hr>

@@ -1,0 +1,467 @@
+---
+layout: page
+title: "IMU Heading"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-intermediate">Intermediate</span>
+
+<h1>IMU Heading</h1>
+<h2>What is an IMU?</h2>
+<p>
+Your robot has a tiny sensor called an <strong>IMU</strong> — an Inertial
+Measurement Unit. It contains a <strong>gyroscope</strong> that measures how
+fast and how far the robot has rotated. By tracking rotation over
+time, it can tell you the robot's <strong>heading</strong> — the direction it
+is currently facing.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">An **IMU** (Inertial Measurement Unit) uses a gyroscope to track
+<p>
+how far your robot has rotated. Its main output is <strong>heading</strong> —
+the angle the robot is facing.</div></div>
+</p>
+<p>
+Think of heading like a compass. When the robot starts, its
+heading is <strong>0°</strong>. Turn it counter-clockwise (to the left) and
+the heading increases toward <strong>+180°</strong>. Turn it clockwise (to
+the right) and the heading decreases toward <strong>-180°</strong>.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The FTC IMU reports heading from **0° to +180°** (counter-clockwise)
+<p>
+and <strong>0° to -180°</strong> (clockwise). It does <strong>not</strong> go from 0 to 360.</div></div>
+</p>
+<p>
+Heading is measured in either <strong>degrees</strong> or <strong>radians</strong>. Both
+describe the same thing — angles around a circle — just with
+different numbers:
+</p>
+<ul>
+<li><strong>+90°</strong> = <strong>π/2</strong> radians ≈ 1.571 (quarter turn left)</li>
+<li><strong>+180°</strong> = <strong>π</strong> radians ≈ 3.14159 (half turn)</li>
+<li><strong>-90°</strong> = <strong>-π/2</strong> radians ≈ -1.571 (quarter turn right)</li>
+</ul>
+<p>
+Most FTC code uses <strong>radians</strong> because the math library
+functions (<code>Math.cos</code>, <code>Math.sin</code>) expect radians.
+</p>
+<hr>
+<h2>Why Does Heading Matter?</h2>
+<p>
+Without an IMU, your robot drives relative to <strong>itself</strong>. Push
+the stick forward and it goes wherever the front is pointing.
+That works fine until the robot gets bumped, or the driver loses
+track of which way is "forward."
+</p>
+<p>
+With an IMU, you can do <strong>field-centric driving</strong>. The joystick
+directions stay fixed relative to the field — push forward and
+the robot goes away from you, no matter which way it is facing.
+The competition code already uses this technique.
+</p>
+<p>
+You can also use heading in autonomous mode to drive straight
+lines, make precise turns, and correct for drift.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Field-centric driving** uses the IMU heading to keep joystick
+<p>
+directions fixed relative to the field, not the robot.</div></div>
+</p>
+<hr>
+<h2>The Turntable and Compass Rose</h2>
+<p>
+Look at the shiny metal disc on the test stand — that is a
+<strong>turntable</strong>. The robot sits on top of it.
+</p>
+<p>
+Around the turntable you will see a <strong>compass rose</strong> — degree
+and radian markings printed on the table surface. Notice the
+labels: <strong>0°</strong>, <strong>90°</strong>, <strong>180°</strong>, and <strong>-90°</strong>. There is a small
+<strong>red chevron</strong> pointing at the <strong>0°</strong> position, and a <strong>red ring</strong>
+around the turntable marking its edge.
+</p>
+<p>
+You will also notice a <strong>green line</strong> extending from the center of
+the turntable. This is the <strong>heading indicator</strong> — it points in
+the direction the robot is currently facing. Floating above its
+tip is a <strong>glowing green number</strong> — that is the live IMU heading
+readout in degrees, just like what your code will see.
+</p>
+<p>
+On the right side of the table you will see a dark control box
+with two buttons labeled <strong>ROTATE</strong>:
+</p>
+<ul>
+<li><strong>+ (left button)</strong> — rotates counter-clockwise (positive heading)</li>
+<li><strong>– (right button)</strong> — rotates clockwise (negative heading)</li>
+</ul>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Counter-clockwise rotation gives **positive** heading values.
+<p>
+Clockwise rotation gives <strong>negative</strong> heading values. The green
+floating number shows the current IMU heading in real time.</div></div>
+</p>
+<hr>
+<h2>Part 0 — Explore the Table (No Code Yet!)</h2>
+<p>
+Before writing any code, take a minute to explore the turntable
+and understand how the IMU works.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click and hold the **+ (CCW)** button on the ROTATE control
+<p>
+   box. Watch the robot spin and the green heading indicator
+   move. The glowing green number should increase toward +180°.
+</p>
+<ol>
+<li>Now click and hold the <strong>– (CW)</strong> button. The heading goes</li>
+</ol>
+<p>
+   in the negative direction, toward -180°.
+</p>
+<ol>
+<li>Rotate the robot about <strong>90° counter-clockwise</strong> (the green</li>
+</ol>
+<p>
+   number should read roughly <strong>+90°</strong>). Notice the green line
+   pointing to the left — that is the robot's forward direction
+   as seen from above.
+</p>
+<ol>
+<li>Now rotate the robot <strong>90° clockwise</strong> back to roughly</li>
+</ol>
+<p>
+   <strong>0°</strong>. The green line should point straight ahead again.</div></div>
+</p>
+<p>
+The compass rose, green heading indicator, and floating degree
+readout all work <strong>before</strong> you add any code — they are built
+into the simulator's test stand. Your code will read the same
+heading value and display it on the Driver Hub.
+</p>
+<hr>
+<h2>Talking to the IMU in Code</h2>
+<p>
+An <strong>API</strong> (Application Programming Interface) is a set of
+ready-made commands that let your code talk to a piece of
+hardware without worrying about the details inside. Think of
+it like a TV remote: you press "volume up" without knowing
+how the electronics work. The FTC SDK gives you an API for
+the IMU so you can read the heading with just a few lines.
+</p>
+<p>
+You access the IMU through the hardware map, just like
+motors and servos. Here is the basic pattern:
+</p>
+<pre><code class="language-java">// Get the IMU from the hardware map
+<p>
+IMU imu = hardwareMap.get(IMU.class, &quot;imu&quot;);
+</p>
+<p>
+// Initialize it with default parameters
+imu.initialize(new IMU.Parameters());
+</code></pre>
+</p>
+<p>
+Once initialized, you read the current heading like this:
+</p>
+<pre><code class="language-java">double heading = imu.getRobotYawPitchRollAngles()
+<p>
+                    .getYaw(AngleUnit.RADIANS);
+</code></pre>
+</p>
+<p>
+That looks like a lot of chained method calls, but it breaks
+down simply:
+</p>
+<ol>
+<li><code>getRobotYawPitchRollAngles()</code> — returns an object with</li>
+</ol>
+<p>
+   yaw, pitch, and roll
+</p>
+<ol>
+<li><code>.getYaw(AngleUnit.RADIANS)</code> — extracts just the yaw</li>
+</ol>
+<p>
+   (heading) in radians
+</p>
+<p>
+You can also reset the heading back to zero at any time:
+</p>
+<pre><code class="language-java">imu.resetYaw();
+<p>
+</code></pre>
+</p>
+<p>
+This is useful when the robot drifts over time or you want to
+re-zero the heading at the start of a match. We will explore
+what reset does shortly.
+</p>
+<hr>
+<h2>Part 1 — Add the IMU Import</h2>
+<p>
+Before you can use the IMU, you need to import the classes.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open MecanumDrive.java:</div></div>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › import com.qualcomm ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Find the IMU imports comment block (below the FTC SDK imports).
+<p>
+Add these three lines:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+<p>
+import com.qualcomm.robotcore.hardware.IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+</code></pre></div></div>
+</p>
+<p>
+These imports give you access to:
+</p>
+<ul>
+<li><code>RevHubOrientationOnRobot</code> — describes how the Control Hub</li>
+</ul>
+<p>
+  is physically mounted on the robot (logo direction, USB direction)
+</p>
+<ul>
+<li><code>IMU</code> — the IMU sensor interface</li>
+<li><code>AngleUnit.RADIANS</code> — tells the IMU to return values in radians</li>
+</ul>
+<hr>
+<h2>Part 2 — Initialize the IMU</h2>
+<p>
+Now add the IMU initialization code. This goes <strong>before</strong>
+<code>waitForStart()</code>, alongside the motor setup.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to jump to the right spot:</div></div>
+<span class="sim-action" title="Simulator action only">[ Button Actions : Variables ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Right below the button action variables section, add the
+<p>
+IMU setup code from the green block:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// ===============================================
+<p>
+// IMU Heading
+// Do not remove this comment
+// Add your IMU setup code below
+// ===============================================
+IMU imu = hardwareMap.get(IMU.class, &quot;imu&quot;);
+imu.initialize(new IMU.Parameters(
+    new RevHubOrientationOnRobot(
+        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+    )
+));
+</code></pre></div></div>
+</p>
+<p>
+This gets the IMU from the hardware map and initializes it.
+<code>RevHubOrientationOnRobot</code> tells the IMU how the Control Hub is
+mounted — logo facing <strong>UP</strong> and USB ports facing <strong>FORWARD</strong>.
+This matches our simulator robot, and it is the most common
+mounting on real robots too. If your real robot has the Hub
+mounted differently, you would change these two directions to
+match.
+</p>
+<hr>
+<h2>Part 3 — Read and Display the Heading</h2>
+<p>
+Now let's read the heading inside the main loop and display it
+on the Driver Hub telemetry.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Scroll down to the main loop. Find the Telemetry : Debug Output
+<p>
+section and click the link to jump there:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ Telemetry : Debug Output ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add the heading telemetry code from the green block **below**
+<p>
+your existing telemetry lines (before <code>telemetry.update()</code>).
+If you already have a <code>telemetry.update()</code> call, put this
+<strong>before</strong> it:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">double heading = imu.getRobotYawPitchRollAngles()
+<p>
+                    .getYaw(AngleUnit.RADIANS);
+telemetry.addData(&quot;Heading (rad)&quot;, &quot;%.3f&quot;, heading);
+telemetry.addData(&quot;Heading (deg)&quot;, &quot;%.1f&quot;, Math.toDegrees(heading));
+</code></pre></div></div>
+</p>
+<p>
+This reads the current heading in radians and displays it in
+both radians and degrees. <code>Math.toDegrees()</code> converts radians
+to degrees for easier reading.
+</p>
+<hr>
+<h2>Part 4 — Add a Reset Button</h2>
+<p>
+Sometimes the heading drifts, or you want to re-zero it. Let's
+bind <code>imu.resetYaw()</code> to the <strong>right bumper</strong> button, just like
+the competition code.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Find the Button Actions loop section and click the link:</div></div>
+<span class="sim-action" title="Simulator action only">[ Button Actions : Loop ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add the reset code from the green block in the button actions
+<p>
+area. If you already have intake code there, add it right
+after:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Reset IMU heading when right bumper is pressed
+<p>
+if (gamepad1.right_bumper) {
+    imu.resetYaw();
+}
+</code></pre></div></div>
+</p>
+<p>
+This is simpler than button A's rising-edge detection because
+holding the bumper just keeps resetting to zero — no toggle
+needed.
+</p>
+<hr>
+<h2>Part 5 — Save, Compile, and Test!</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save** in the code editor.
+<ol>
+<li>Click <strong>Recompile</strong> on the Driver Hub.</li>
+<li>Select <strong>MecanumDrive</strong> from TeleOp.</li>
+<li>Click <strong>INIT</strong>, then <strong>START</strong>.</div></div></li>
+</ol>
+<p>
+Now use the turntable to verify everything works!
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 1 — Counter-clockwise:**
+<p>
+Click and hold the <strong>+ (CCW)</strong> button on the ROTATE control box
+and rotate the robot about <strong>90° counter-clockwise</strong>. Watch:
+</p>
+<ul>
+<li>The green heading indicator swings left</li>
+<li>The floating green number reads roughly <strong>+90°</strong></li>
+<li>The Driver Hub shows <strong>Heading (deg) ≈ +90</strong></li>
+<li>The Driver Hub shows <strong>Heading (rad) ≈ +1.571</strong> (π/2)</div></div></li>
+</ul>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 2 — Clockwise:**
+<p>
+Now rotate the robot back, then keep going about <strong>90° clockwise</strong>
+past the starting point. Watch:
+</p>
+<ul>
+<li>The green number reads roughly <strong>-90°</strong></li>
+<li>The Driver Hub shows <strong>Heading (deg) ≈ -90</strong></li>
+<li>The Driver Hub shows <strong>Heading (rad) ≈ -1.571</strong></div></div></li>
+</ul>
+<p>
+Notice how the green floating number matches the telemetry on
+the Driver Hub — they are reading the same IMU data.
+</p>
+<hr>
+<h2>Part 6 — Understanding IMU Reset</h2>
+<p>
+Now let's see what <code>resetYaw()</code> actually does. This is an
+important concept to understand.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Rotate the robot about **90° clockwise** so the heading reads
+<p>
+   roughly <strong>-90°</strong>. Look at the compass rose — the green
+   heading indicator points to the right.
+</p>
+<ol>
+<li>Now press the <strong>right bumper</strong> on the gamepad.</div></div></li>
+</ol>
+<p>
+Watch what happens:
+</p>
+<ul>
+<li>The green heading number snaps back to <strong>0°</strong></li>
+<li>The <strong>compass rose rotates</strong> — its 0° mark and red chevron</li>
+</ul>
+<p>
+  shift to match the robot's new "forward" direction
+</p>
+<ul>
+<li>The green line <strong>stays pointing the same direction</strong> — the</li>
+</ul>
+<p>
+  robot didn't physically move
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">`resetYaw()` does **not** move the robot. It tells the IMU
+<p>
+"wherever I am pointing right now is the new 0°." The compass
+rose shifts to show this — its 0° mark moves to the robot's
+current direction.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Now spin the turntable again. Notice that the heading counts
+<p>
+from the <strong>new</strong> zero point, not the original one. The compass
+rose markings show the updated reference frame.</div></div>
+</p>
+<p>
+This is how the competition code uses <code>resetYaw()</code> — at the
+start of a match, the driver presses the right bumper so that
+the robot's current facing direction becomes 0°, no matter how
+it was placed on the field.
+</p>
+<hr>
+<h2>What You Learned</h2>
+<ul>
+<li>The <strong>IMU</strong> measures rotation using a gyroscope</li>
+<li><strong>Heading</strong> is the angle the robot is facing (yaw)</li>
+<li>The IMU reports <strong>0° to +180°</strong> counter-clockwise and</li>
+</ul>
+<p>
+  <strong>0° to -180°</strong> clockwise — not 0° to 360°
+</p>
+<ul>
+<li>FTC code typically uses <strong>radians</strong> (the math functions</li>
+</ul>
+<p>
+  expect them)
+</p>
+<ul>
+<li><code>hardwareMap.get(IMU.class, &quot;imu&quot;)</code> gets the sensor</li>
+<li><code>imu.getRobotYawPitchRollAngles().getYaw()</code> reads the heading</li>
+<li><code>imu.resetYaw()</code> makes the current direction the new 0°</li>
+<li>The <strong>green heading indicator</strong> and <strong>floating green number</strong></li>
+</ul>
+<p>
+  show the IMU output in real time
+</p>
+<ul>
+<li>The <strong>compass rose</strong> shifts when you reset the IMU to show</li>
+</ul>
+<p>
+  the new reference frame
+</p>
+<ul>
+<li>The <strong>turntable</strong> lets you test the IMU without driving</li>
+</ul>
+<p>
+<strong>What's next?</strong> With heading working, you're ready to explore
+field-centric driving — where the joystick directions stay
+fixed no matter which way the robot faces. Check out the
+competition code package to see how heading is used with
+<code>Math.cos</code> and <code>Math.sin</code> to transform drive inputs.
+</p>
+<hr>

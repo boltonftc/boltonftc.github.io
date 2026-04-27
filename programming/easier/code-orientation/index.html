@@ -1,0 +1,401 @@
+---
+layout: page
+title: "Your Code Package"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-easier">Easier</span>
+
+<h1>Your Code Package</h1>
+<h2>The Robot's Brain — Written by You</h2>
+<p>
+In a previous lesson, you learned what the parts of an FTC robot
+are — motors, sensors, the Control Hub, and so on. But all of
+that hardware is useless without <strong>code</strong>. The code is the
+robot's brain. It decides when to spin a motor, what to do when
+a button is pressed, and how to navigate the field during
+autonomous mode.
+</p>
+<p>
+When you created your code package, the system gave you a set
+of <strong>Java files</strong> — your personal copy of the robot's brain.
+Java is a programming language, similar to Python or JavaScript,
+that is used to tell computers exactly what to do step by step.
+It is the official language for FTC robot programming.
+</p>
+<p>
+Think of your code package like a notebook that already has the
+chapter headings printed in. The structure is there — the files,
+the sections, the comments that mark where code belongs — but
+the pages are blank. Your job over the next several lessons is
+to fill them in, one chapter at a time.
+</p>
+<p>
+Before we start writing real code, let's take a tour of those
+files so you know what each one is for and how they fit
+together.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Your **code package** is a set of Java files that control the
+<p>
+robot. Each file has a specific job — driving, button actions,
+sensors, navigation. You will add code to these files as you
+complete lessons.</div></div>
+</p>
+<hr>
+<h2>Opening Files in the Code Editor</h2>
+<p>
+The <strong>Code Editor</strong> is the panel on the right side of your
+screen. Right now it probably shows MecanumDrive.java — the
+main file you will work in most often.
+</p>
+<p>
+But you have more than one file! To see all of them, look for
+the <strong>file menu</strong> at the top of the Code Editor. Click it and
+you will see a list of every Java file in your package.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the file menu at the top of the Code Editor. You should
+<p>
+see a list of files. Take a moment to read the names — you do
+not need to open them all yet, just notice they are there.</div></div>
+</p>
+<p>
+Let's go through each file and what it does.
+</p>
+<hr>
+<h2>The Files in Your Package</h2>
+<h3>MecanumDrive.java — The Main Program</h3>
+<p>
+This is the <strong>big one</strong>. MecanumDrive.java is the main program
+that runs when you press START on the Driver Hub. It is where
+you will write the majority of your code across these lessons.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open MecanumDrive.java:</div></div>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › MecanumDrive : Starter TeleOp ]</span>
+<p>
+Scroll through it slowly. You will notice two things:
+</p>
+<ol>
+<li><strong>It is mostly comments.</strong> The gray lines starting with</li>
+</ol>
+<p>
+   <code>//</code> are instructions and placeholders. They do not run --
+   they are notes for you.
+</p>
+<ol>
+<li><strong>It has labeled sections.</strong> Each section has a comment</li>
+</ol>
+<p>
+   block marking where you will add code as you complete
+   lessons. You will fill in these sections one by one.
+</p>
+<p>
+Right now, this file does almost nothing — it sets up the
+motors, shows a "Ready" message, and then sits in an empty
+loop waiting for you to add code. That is by design. <strong>You</strong>
+will bring it to life.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**MecanumDrive.java** is your main program. It runs when you
+<p>
+press START. Right now it is mostly empty placeholders — you
+will add code to it in every lesson.</div></div>
+</p>
+<hr>
+<h3>ButtonA_Action.java — What Happens When You Press A</h3>
+<p>
+This file controls what the robot does when the <strong>A button</strong> on
+the gamepad is pressed. Right now it does nothing — the
+<code>execute()</code> method is empty.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Open **ButtonA_Action.java** from the file menu in the Code
+<p>
+Editor. Look for the <code>execute()</code> method — that is where you
+will eventually put code to control the intake.</div></div>
+</p>
+<h3>ButtonB_Action.java — What Happens When You Press B</h3>
+<p>
+Same idea, different button. This file will eventually control
+the <strong>shooter motor</strong> — spinning up a flywheel to launch game
+pieces.
+</p>
+<h3>ButtonX_Action.java and ButtonY_Action.java</h3>
+<p>
+Two more button files. Each one is a blank canvas for a
+different robot action. You might use these for servo movements,
+special sequences, or anything you want to trigger with a
+button press.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The **Button Action** files (A, B, X, Y) each control what
+<p>
+happens when a specific gamepad button is pressed. Each has
+an <code>execute()</code> method where you add your code.</div></div>
+</p>
+<hr>
+<h3>MecanumDrivetrainSubsystem.java -- The Drivetrain Library</h3>
+<p>
+This file will eventually handle the math behind **mecanum
+drive** -- the type of movement system that lets the robot
+drive in any direction. It will calculate how much power each
+of the four wheels needs based on the joystick inputs.
+</p>
+<p>
+You will not edit this file in the early lessons. Later, you
+will learn exactly how the mecanum math works and build the
+drive code yourself.
+</p>
+<h3>FusedOTOSLocalizer.java — Where Am I?</h3>
+<p>
+This file is the robot's <strong>navigation system</strong>. It combines data
+from two sensors — an optical tracker (OTOS) and a camera
+(Limelight) — to figure out where the robot is on the field.
+</p>
+<p>
+You will not touch this file for a while. It is advanced code
+that builds on concepts from later lessons about sensors and
+localization. For now, just know it exists and that it is
+responsible for answering the question: *"Where am I right
+now?"*
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**MecanumDrivetrainSubsystem.java** is where the drive math
+<p>
+will live. <strong>FusedOTOSLocalizer.java</strong> is where navigation
+code will go. Both are empty for now -- you will build them
+up in later lessons.</div></div>
+</p>
+<hr>
+<h2>The Two Halves of Every Robot Program</h2>
+<p>
+Before we go any further, there is one concept you need to
+understand about how robot programs are structured. Every FTC
+program has <strong>two halves</strong>:
+</p>
+<h3>1. Initialization (Before the Match)</h3>
+<p>
+The first half runs <strong>before</strong> the driver presses START. This
+is the <strong>init</strong> phase. During init, your code:
+</p>
+<ul>
+<li>Connects to hardware (motors, sensors, cameras)</li>
+<li>Sets up starting values (which direction motors spin, what</li>
+</ul>
+<p>
+  units sensors use)
+</p>
+<ul>
+<li>Shows a "Ready" message on the Driver Hub</li>
+<li>Basically says: *"I am preparing everything. Do not move</li>
+</ul>
+<p>
+  yet."*
+</p>
+<p>
+In MecanumDrive.java, this is everything <strong>above</strong> the
+<code>waitForStart()</code> line. That line is the dividing point — it
+pauses your program and waits for the driver to press START.
+</p>
+<h3>2. The Operational Loop (During the Match)</h3>
+<p>
+The second half runs <strong>after</strong> START is pressed. This is the
+<strong>loop</strong> — a <code>while (opModeIsActive())</code> block that repeats
+over and over, roughly 60 times per second, for the entire
+match.
+</p>
+<p>
+Each time through the loop, your code:
+</p>
+<ul>
+<li>Reads the gamepad inputs (which buttons are pressed, where</li>
+</ul>
+<p>
+  the joystick is)
+</p>
+<ul>
+<li>Reads sensor values (heading, position, distance)</li>
+<li>Decides what to do (how fast to spin each motor)</li>
+<li>Sends commands to the hardware</li>
+<li>Updates the telemetry display</li>
+</ul>
+<p>
+When the match ends (or the driver presses STOP), the loop
+exits and the program shuts down.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Every FTC program has two phases:
+<p>
+<strong>Init</strong> (before START) — set up hardware, configure settings.
+<strong>Loop</strong> (after START) — read inputs, make decisions, control
+motors. The loop repeats ~60 times per second until STOP.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Open MecanumDrive.java and find the line that says
+<p>
+<code>waitForStart();</code> — this is the wall between init and loop.
+Everything above it is init. Everything inside the <code>while</code>
+block below it is the loop.</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › waitForStart ]</span>
+<hr>
+<h2>Your First Code Change — Leave Your Mark</h2>
+<p>
+You have toured the files and understand the structure. Now
+let's make your first edit — something small to prove that
+the whole save-and-compile cycle works. Nothing flashy. Just
+a <strong>comment</strong>.
+</p>
+<p>
+A <strong>comment</strong> in Java is a line that starts with <code>//</code>. The
+computer completely ignores it — comments are notes for humans
+only. Programmers use comments to explain what their code does,
+leave reminders, or mark sections.
+</p>
+<p>
+You are going to add a comment with your name at the top of
+MecanumDrive.java. It will not change how the robot behaves
+at all — but it will prove you can edit code, save it, and
+compile it without errors. That is the foundation for
+everything that comes next.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open MecanumDrive.java at the very
+<p>
+top:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › MecanumDrive : Starter TeleOp ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Find the comment block at the very top of the file (the lines
+<p>
+between <code>/<em></code> and <code></em>/</code>). Right below the line that says
+<code>Port 3 -&gt; back_right_motor</code>, add a blank line and then type
+your comment using the code from the green block — but replace
+"YOUR NAME" with your actual name:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// My first edit! -- YOUR NAME was here
+<p>
+</code></pre></div></div>
+</p>
+<p>
+The top of your file should now look something like this:
+</p>
+<pre><code class="language-java">/*
+<p>
+ * MecanumDrive : Starter TeleOp
+ *
+ * This is your first OpMode! Right now the robot does not move.
+ * You will add driving code as you complete lessons.
+ *
+ * MOTOR MAP:
+ *   Port 0 -&gt; back_left_motor
+ *   Port 1 -&gt; front_left_motor
+ *   Port 2 -&gt; front_right_motor
+ *   Port 3 -&gt; back_right_motor
+ */
+// My first edit! -- Alex was here
+</code></pre>
+</p>
+<hr>
+<h2>Save and Compile</h2>
+<p>
+Now let's confirm the computer accepts your change.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save** in the Code Editor (or press Ctrl+S).
+<ol>
+<li>On the Driver Hub, click <strong>Recompile</strong>.</li>
+<li>Wait for the compile to finish. You should see a green</li>
+</ol>
+<p>
+   <strong>"BUILD SUCCESSFUL"</strong> message.</div></div>
+</p>
+<p>
+If you see a red error instead, double-check that you started
+your comment with <code>//</code> and that you did not accidentally delete
+any of the surrounding code. Comments are forgiving — as long
+as the line starts with <code>//</code>, Java will ignore everything after
+it.
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**What if I get an error?** Errors usually mean you accidentally
+<p>
+changed a line of real code. Look at the error message — it
+will give you a line number. Go to that line and make sure
+it matches the original. Your comment line starting with <code>//</code>
+should not cause any errors.</div></div>
+</p>
+<p>
+Congratulations — you just made your first code change, saved,
+and compiled. That is the same cycle you will use for every
+lesson going forward:
+</p>
+<ol>
+<li><strong>Read</strong> the lesson instructions</li>
+<li><strong>Type</strong> code in the editor</li>
+<li><strong>Save</strong> and <strong>Recompile</strong></li>
+<li><strong>Test</strong> on the robot</li>
+</ol>
+<p>
+The cool stuff is coming soon -- you will make text
+appear on the Driver Hub screen. But every program you ever
+write on this robot begins the same way: edit, save, compile,
+test.
+</p>
+<hr>
+<h2>What You Learned</h2>
+<ul>
+<li>Your code package has <strong>7 Java files</strong>, each with a specific</li>
+</ul>
+<p>
+  job
+</p>
+<ul>
+<li><strong>MecanumDrive.java</strong> is the main program — most of your</li>
+</ul>
+<p>
+  code goes here
+</p>
+<ul>
+<li><strong>Button Action files</strong> (A, B, X, Y) control what happens</li>
+</ul>
+<p>
+  when gamepad buttons are pressed
+</p>
+<ul>
+<li><strong>MecanumDrivetrainSubsystem.java</strong> will handle mecanum</li>
+</ul>
+<p>
+  drive math (you will build it in a later lesson)
+</p>
+<ul>
+<li><strong>FusedOTOSLocalizer.java</strong> will handle robot navigation</li>
+</ul>
+<p>
+  using sensors (advanced -- covered in later lessons)
+</p>
+<ul>
+<li>Every FTC program has two phases: <strong>init</strong> (set up hardware)</li>
+</ul>
+<p>
+  and <strong>loop</strong> (read inputs, control motors, repeat 60x/sec)
+</p>
+<ul>
+<li><code>waitForStart()</code> is the dividing line between init and loop</li>
+<li>A <strong>comment</strong> (<code>//</code>) is a note for humans — Java ignores it</li>
+<li>The workflow is: <strong>edit → save → compile → test</strong></li>
+</ul>
+<hr>

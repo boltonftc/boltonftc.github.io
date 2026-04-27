@@ -1,0 +1,212 @@
+---
+layout: page
+title: "Flywheel Shooter"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-intermediate">Intermediate</span>
+
+<h1>Flywheel Shooter</h1>
+<h2>The Flywheel Shooter</h2>
+<p>
+Your robot has a mechanism for scoring — a <strong>flywheel shooter</strong>.
+It works the same way a baseball pitching machine does: a heavy
+wheel spins up to high speed, and when a ball is pushed against
+it, the wheel's energy transfers to the ball and launches it
+toward the goal.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A **flywheel shooter** stores rotational energy in a spinning
+<p>
+wheel. When a ball contacts the spinning surface, friction
+transfers energy to the ball and launches it.</div></div>
+</p>
+<h3>How Flywheels Work</h3>
+<p>
+A flywheel is just a motor with a heavy wheel attached. When you
+apply power, the wheel slowly accelerates. Once it reaches full
+speed, all that spinning mass holds a large amount of
+<strong>kinetic energy</strong> — energy stored in motion.
+</p>
+<p>
+The key physics concept here is <strong>inertia</strong> — an object's
+resistance to changes in its motion. A lightweight wheel has low
+inertia and spins up quickly, but it also <strong>loses speed quickly</strong>
+when a ball hits it. A heavier wheel has more inertia — it takes
+longer to spin up, but it barely slows down when launching a
+ball. That stability is what you want.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Inertia** is an object's resistance to changes in motion.
+<p>
+A heavier flywheel takes longer to spin up, but maintains speed
+better through each shot — giving you more consistent launches.</div></div>
+</p>
+<p>
+Think about a merry-go-round. A small, light one speeds up when
+you push it but slows down fast. A massive steel one is hard to
+get moving, but once spinning, even pushing against it barely
+changes its speed. That is high inertia — exactly what makes a
+good flywheel.
+</p>
+<h3>Why Inertia Matters for Shooters</h3>
+<p>
+When a ball contacts the spinning flywheel, friction grabs the
+ball and accelerates it. But physics says energy is conserved —
+the energy that goes into the ball has to come from somewhere.
+It comes from the flywheel slowing down.
+</p>
+<p>
+If the flywheel is light (low inertia), it loses a lot of speed
+on each shot. Your first ball flies fast, but the second and
+third are slower because the wheel has not recovered yet. If the
+flywheel is heavy (high inertia), it barely notices the ball.
+Every shot comes out at nearly the same speed.
+</p>
+<p>
+On a real FTC robot, teams add <strong>extra mass</strong> to the flywheel to
+increase inertia. Metal discs, steel rings, or weighted hubs
+bolted to the flywheel all work. More mass = more inertia =
+more consistent shots. The tradeoff is spin-up time — heavier
+flywheels take longer to reach full speed, so you need to plan
+when to start spinning.
+</p>
+<hr>
+<h2>Part 1 — Code the Flywheel Toggle (Button B)</h2>
+<p>
+The shooter flywheel uses the same toggle pattern you learned
+in the intake lesson — press once to start, press again to stop.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open ButtonB_Action.java:</div></div>
+<span class="sim-action" title="Simulator action only">[ ButtonB_Action.java › YOUR CODE HERE ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Replace the `YOUR CODE HERE` comment block inside `execute()`
+<p>
+with the code from the green block:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// ── Flywheel Toggle ──────────────────────────────
+<p>
+// Get the shooter motor from the hardware map.
+// This is the motor that spins the flywheel.
+DcMotor shooterMotor = hardwareMap.dcMotor.get(&quot;shooter_motor&quot;);
+</p>
+<p>
+// The base power level for the flywheel.
+// 0.65 = 65% power. This is a good starting point
+// that gives enough speed to score without wasting
+// energy. You can adjust this later.
+final double FLYWHEEL_BASE_POWER = 0.65;
+</p>
+<p>
+// Check if the flywheel is currently spinning.
+// If power is above 0.01, it is ON.
+boolean isRunning = Math.abs(shooterMotor.getPower()) &gt; 0.01;
+</p>
+<p>
+// Toggle: if running, stop it. If stopped, start it.
+shooterMotor.setPower(isRunning ? 0.0 : FLYWHEEL_BASE_POWER);
+</code></pre></div></div>
+</p>
+<p>
+This is the same toggle pattern from the intake lesson:
+</p>
+<ol>
+<li>Get the motor from the hardware map</li>
+<li>Check if it is currently running (power > 0.01)</li>
+<li>If running, stop it; if stopped, start it at 65% power</li>
+</ol>
+<p>
+Why 65% and not 100%? Full power on a flywheel is often too
+fast — balls can overshoot the target. 65% is a reasonable
+baseline that you can fine-tune later.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click **Save** in the code editor.</div></div>
+<hr>
+<h2>Part 2 — Wire Up Button B</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open MecanumDrive.java and jump to the
+<p>
+flywheel variables section:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Flywheel Shooter : Variables ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Type the line from the green block right below the
+<p>
+<code>Add your flywheel variables below</code> comment:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Track previous B button state for rising edge detection
+<p>
+boolean prevB = false;
+</code></pre></div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Now click the link to jump to the flywheel loop section:</div></div>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Flywheel Shooter : Loop ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Type the code from the green block right below the
+<p>
+<code>Add your flywheel code below</code> comment:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// B button: toggle flywheel on/off (rising edge detection)
+<p>
+if (gamepad1.b &amp;&amp; !prevB) {
+    new ButtonB_Action(this).execute();
+}
+prevB = gamepad1.b;
+</p>
+<p>
+// Show flywheel status on Driver Hub every frame
+DcMotor shooterMotor = hardwareMap.dcMotor.get(&quot;shooter_motor&quot;);
+telemetry.addData(&quot;Flywheel&quot;,
+    Math.abs(shooterMotor.getPower()) &gt; 0.01 ? &quot;ON&quot; : &quot;off&quot;);
+</code></pre></div></div>
+</p>
+<hr>
+<h2>Part 3 — Save, Compile, and Test the Flywheel!</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save**.
+<ol>
+<li>Click <strong>Recompile</strong> on the Driver Hub.</li>
+<li>Select <strong>MecanumDrive</strong> from TeleOp.</li>
+<li>Click <strong>INIT</strong>, then <strong>START</strong>.</div></div></li>
+</ol>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Press **B** on the gamepad. You should see:
+<ul>
+<li>The flywheel spinning up on the robot</li>
+<li>"Flywheel: ON" on the Driver Hub telemetry</li>
+<li>Press <strong>B</strong> again — the flywheel stops, telemetry shows "off"</div></div></li>
+</ul>
+<p>
+Notice the flywheel takes a moment to reach full speed. That is
+inertia at work! The motor is accelerating a heavy spinning mass.
+Once it is at speed, try pressing <strong>B</strong> twice quickly — you will
+see it spins down slowly too. All that stored energy has to
+dissipate.
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Pro tip:** On a real robot, spin up the flywheel a few seconds
+<p>
+<strong>before</strong> you plan to shoot. Do not wait until you are at the
+scoring position — the flywheel needs time to reach full speed.
+Many teams bind the flywheel toggle to a bumper so the operator
+can start it during approach.</div></div>
+</p>
+<p>
+The next lesson will wire up the <strong>indexer servo</strong> to actually
+fire balls into the spinning flywheel.
+</p>

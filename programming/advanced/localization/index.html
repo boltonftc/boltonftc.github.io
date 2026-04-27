@@ -1,0 +1,528 @@
+---
+layout: page
+title: "Localization"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-advanced">Advanced</span>
+
+<h1>Localization</h1>
+<h2>The Best of Both Worlds</h2>
+<p>
+You now have two sensors that can tell the robot where it is:
+</p>
+<ul>
+<li><strong>OTOS</strong> — tracks position continuously by watching the</li>
+</ul>
+<p>
+  ground. Always available, updates 1000 times per second.
+  But it <strong>drifts</strong> — small errors pile up and the reported
+  position slowly wanders away from reality.
+</p>
+<ul>
+<li><strong>Limelight + AprilTags</strong> — calculates position by seeing</li>
+</ul>
+<p>
+  field landmarks. Zero drift — every detection is perfectly
+  fresh. But it only works when tags are <strong>visible</strong>, and it
+  only updates about 11 times per second.
+</p>
+<p>
+Each sensor is strong where the other is weak. What if you
+could combine them?
+</p>
+<p>
+That is <strong>localization</strong> — the art of knowing exactly where you
+are, all the time, by fusing multiple sources of information
+into one reliable answer.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Localization** combines multiple sensors to get a better
+<p>
+position estimate than any single sensor alone. The OTOS
+provides continuous tracking, and AprilTags provide drift-free
+corrections whenever visible.</div></div>
+</p>
+<hr>
+<h2>What Is Localization?</h2>
+<p>
+The word <strong>localization</strong> comes from "locale" — to figure out
+your <strong>location</strong>. In robotics, it answers the most fundamental
+question: <em>"Where am I right now?"</em>
+</p>
+<p>
+This sounds simple, but it is surprisingly hard. No single
+sensor gives a perfect answer:
+</p>
+<p>
+| Sensor | Strength | Weakness |
+| --- | --- | --- |
+| <strong>Motor Encoders</strong> | Cheap, always available | Wheel slip ruins everything |
+| <strong>IMU (Gyroscope)</strong> | Great for rotation | No position info, drifts over time |
+| <strong>OTOS</strong> | X, Y, heading — all in one | Accumulates drift |
+| <strong>AprilTags</strong> | Zero drift, absolute position | Only works when tags are visible |
+</p>
+<p>
+The solution used by virtually every competitive FTC team is
+<strong>sensor fusion</strong> — combining the best qualities of each
+sensor into a single, continuously updated position estimate.
+</p>
+<h3>The Fusion Strategy</h3>
+<p>
+The strategy we will implement is simple but effective:
+</p>
+<ol>
+<li><strong>Use the OTOS as the primary tracker.</strong> It runs at high</li>
+</ol>
+<p>
+   speed and always has a position to report. Between AprilTag
+   sightings, the OTOS is your only source of truth.
+</p>
+<ol>
+<li><strong>When the Limelight sees an AprilTag, snap the position back to reality.</strong></li>
+</ol>
+<p>
+   The MegaTag2 position is more accurate
+   than the drifted OTOS, so we reset the OTOS's X and Y to
+   match what Limelight reports.
+</p>
+<ol>
+<li><strong>Keep the OTOS heading.</strong> The OTOS has a built-in IMU that</li>
+</ol>
+<p>
+   tracks rotation very accurately. The Limelight's heading
+   estimate is noisier. So we trust the OTOS for heading and
+   only correct X and Y from AprilTags.
+</p>
+<p>
+Think of it like navigating a hike with a compass and a map.
+The compass (OTOS) tells you your direction continuously, and
+the map landmarks (AprilTags) tell you your exact position
+whenever you spot one. Between landmarks, you dead-reckon
+with the compass. At each landmark, you update your position.
+The result is much more accurate than either tool alone.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Fusion strategy:** OTOS tracks continuously (with drift).
+<p>
+When AprilTags are visible, reset OTOS X/Y position to the
+Limelight's reading. Keep OTOS heading (more stable than
+vision heading). This eliminates drift while maintaining
+continuous tracking.</div></div>
+</p>
+<hr>
+<h2>Why Not Just Use AprilTags for Everything?</h2>
+<p>
+Good question. If AprilTags give perfect position, why bother
+with the OTOS at all?
+</p>
+<p>
+Because AprilTags are <strong>intermittent</strong>. During a 30-second
+autonomous routine, the robot might only see tags for a few
+seconds total — when it is facing a wall at the right distance.
+The rest of the time, it is driving across the field with no
+tags in view. During those blind periods, the OTOS is the only
+thing keeping track of where the robot is.
+</p>
+<p>
+And 11 frames per second is too slow for precise driving
+control. The OTOS updates at 1000 Hz — nearly 100 times faster.
+Your motion code needs that high-speed feedback to make smooth,
+accurate movements. The AprilTag corrections are like periodic
+GPS fixes — they keep the OTOS from wandering too far off
+course.
+</p>
+<hr>
+<h2>When to Trust (and Distrust) a Correction</h2>
+<p>
+Not every AprilTag detection is worth trusting. There are
+situations where the Limelight's position estimate might be
+wrong:
+</p>
+<h3>Distance Matters</h3>
+<p>
+At long range (beyond 6 feet), the tag is small in the image
+and the position estimate becomes noisy. A good rule: only
+accept corrections when the average tag distance is under
+<strong>72 inches</strong> (6 feet).
+</p>
+<h3>Tag Count Matters</h3>
+<p>
+Seeing two or more tags is much more reliable than one. With
+two tags, MegaTag2 can cross-check the position from multiple
+angles. With one tag, there is only one measurement to work
+with.
+</p>
+<h3>Heading Quality Matters</h3>
+<p>
+Remember, MegaTag2 uses your IMU heading. If the heading has
+drifted badly (which is rare in 30 seconds but possible after
+many minutes), the MegaTag2 position will be wrong too. This
+is another reason to keep autonomous routines short and
+efficient.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Only trust AprilTag corrections when:** the tags are within
+<p>
+range (under 72 inches), the heading is fresh, and ideally
+more than one tag is visible. Filter out unreliable detections
+to avoid making the position estimate worse.</div></div>
+</p>
+<hr>
+<h2>Engineering Notebook Questions</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Write answers to these questions in your engineering notebook.
+<ol>
+<li><strong>Why do we keep the OTOS heading instead of using the Limelight heading?</strong></li>
+</ol>
+<p>
+   What makes the OTOS heading more
+   reliable?
+</p>
+<ol>
+<li><strong>What happens during the parts of autonomous when no AprilTags are visible?</strong></li>
+</ol>
+<p>
+   How does the robot know where it
+   is during those periods?
+</p>
+<ol>
+<li><strong>Why do we only accept corrections when tags are within 72 inches?</strong></li>
+</ol>
+<p>
+   What goes wrong at longer distances?
+</p>
+<ol>
+<li><strong>Imagine the OTOS drifts 3 inches to the right over 10 seconds. Then the robot sees an AprilTag. Describe what happens to the position estimate at that moment.</strong></li>
+</ol>
+<ol>
+<li><strong>Could you run localization with ONLY AprilTags and no OTOS?</strong></li>
+</ol>
+<p>
+   What problems would you run into?</div></div>
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Hint for question 5:** Think about what happens between tag
+<p>
+sightings. If the robot moves 24 inches but sees no tags during
+that movement, what position does it report? And what about the
+11 Hz update rate — is that fast enough for smooth driving?</div></div>
+</p>
+<hr>
+<h2>Time to Code!</h2>
+<p>
+You already have OTOS and Limelight telemetry from the previous
+two lessons. Now you will add the fusion logic that ties them
+together — the OTOS tracks continuously, and AprilTag
+detections snap the position back to reality.
+</p>
+<p>
+The key change is simple: when MegaTag2 gives us a valid
+position, we call <code>otos.setPosition()</code> to reset the OTOS's
+X and Y. The OTOS will continue tracking from that corrected
+position, and the drift clock starts over from zero.
+</p>
+<hr>
+<h2>Part 1 — Add the Fusion Logic</h2>
+<p>
+The fusion code replaces your existing Limelight telemetry
+section. Instead of just displaying detection data, it now
+<strong>acts on it</strong> by correcting the OTOS position.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open your Limelight Telemetry section:</div></div>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › AprilTag : Telemetry ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Replace** all of your existing Limelight telemetry code with
+<p>
+the code from the green block below. This keeps the telemetry
+display but adds the fusion correction logic:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// === Fused Localization ===
+<p>
+// Feed the OTOS heading to Limelight for MegaTag2
+SparkFunOTOS.Pose2D currentPos = otos.getPosition();
+limelight.updateRobotOrientation(currentPos.h);
+</p>
+<p>
+// Check for AprilTag correction
+LLResult llResult = limelight.getLatestResult();
+boolean corrected = false;
+</p>
+<p>
+if (llResult != null &amp;&amp; llResult.isValid()) {
+    LLResultTypes.BotPose mt2 = llResult.getBotpose_MT2();
+</p>
+<p>
+    // Only trust corrections within 72 inches
+    if (mt2 != null &amp;&amp; mt2.getTagCount() &gt; 0
+            &amp;&amp; mt2.getAvgDist() &lt;= 72.0) {
+        // Reset OTOS X/Y to Limelight position
+        // Keep OTOS heading (more stable than vision)
+        otos.setPosition(new SparkFunOTOS.Pose2D(
+                mt2.getX(), mt2.getY(), currentPos.h));
+        corrected = true;
+    }
+}
+</p>
+<p>
+// Re-read position (may have been corrected)
+SparkFunOTOS.Pose2D fused = otos.getPosition();
+</p>
+<p>
+// Display fused position
+telemetry.addData(&quot;Pos X&quot;, &quot;%.1f in&quot;, fused.x);
+telemetry.addData(&quot;Pos Y&quot;, &quot;%.1f in&quot;, fused.y);
+telemetry.addData(&quot;Heading&quot;, &quot;%.1f°&quot;, fused.h);
+telemetry.addData(&quot;Source&quot;, corrected ? &quot;OTOS + AprilTag&quot; : &quot;OTOS only&quot;);
+</p>
+<p>
+// Show tag info when available
+if (llResult != null &amp;&amp; llResult.isValid()) {
+    telemetry.addData(&quot;Tags&quot;, &quot;%d&quot;, llResult.getFiducialResults().size());
+    for (LLResultTypes.FiducialResult tag : llResult.getFiducialResults()) {
+        telemetry.addData(&quot;  Tag&quot;, &quot;#%d  %.1f°&quot;, tag.getFiducialId(),
+                tag.getTargetXDegrees());
+    }
+} else {
+    telemetry.addData(&quot;Tags&quot;, &quot;none&quot;);
+}
+</code></pre></div></div>
+</p>
+<p>
+Let's walk through the fusion logic step by step:
+</p>
+<ol>
+<li><strong>Read OTOS</strong> — Get the current (possibly drifted) position</li>
+</ol>
+<p>
+   from the OTOS.
+</p>
+<ol>
+<li><strong>Feed heading</strong> — Send the OTOS heading to the Limelight</li>
+</ol>
+<p>
+   so MegaTag2 can use it.
+</p>
+<ol>
+<li><strong>Check for correction</strong> — If the Limelight sees tags within</li>
+</ol>
+<p>
+   72 inches, it has a trustworthy MegaTag2 position.
+</p>
+<ol>
+<li><strong>Apply correction</strong> — Call <code>otos.setPosition()</code> with the</li>
+</ol>
+<p>
+   Limelight's X and Y but the OTOS's heading. This "snaps"
+   the OTOS back to the correct position.
+</p>
+<ol>
+<li><strong>Re-read</strong> — Read the OTOS again (now corrected) and</li>
+</ol>
+<p>
+   display the fused result.
+</p>
+<ol>
+<li><strong>Show source</strong> — The telemetry shows whether the current</li>
+</ol>
+<p>
+   reading was corrected by AprilTags or is OTOS-only. This
+   helps you see the fusion in action.
+</p>
+<hr>
+<h2>Part 2 — Save, Compile, and Test!</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save**.
+<ol>
+<li>Click <strong>Recompile</strong> on the Driver Hub.</li>
+<li>Select <strong>MecanumDrive</strong> from TeleOp.</li>
+<li>Click <strong>INIT</strong>, then <strong>START</strong>.</div></div></li>
+</ol>
+<hr>
+<h2>Test Your Localization!</h2>
+<h3>The Drift Correction Test</h3>
+<p>
+This is the most satisfying test — you will see the OTOS drift
+and then watch it snap back to the correct position.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 1 — Watch the Snap:**
+<ol>
+<li>Drive to the competition field</li>
+<li>Drive the robot to a spot near a wall with AprilTags.</li>
+</ol>
+<p>
+   Watch the telemetry — <strong>Source</strong> should say "OTOS +
+   AprilTag" and you should see tag detections
+</p>
+<ol>
+<li>Note the <strong>Pos X</strong> and <strong>Pos Y</strong> values</li>
+<li>Now drive away from the wall, across the field, and back.</li>
+</ol>
+<p>
+   This builds up some OTOS drift
+</p>
+<ol>
+<li>Drive back to the same wall. Watch the position numbers —</li>
+</ol>
+<p>
+   when the tags come into view, the position should <strong>snap</strong>
+   back to accurate values. The "Source" switches from "OTOS
+   only" to "OTOS + AprilTag" and the numbers jump
+</p>
+<ol>
+<li>That jump is the correction — the drift was just eliminated</div></div></li>
+</ol>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 2 — Continuous Driving:**
+<ol>
+<li>Drive around the field in a big loop</li>
+<li>Every time you pass near a wall with tags, watch the</li>
+</ol>
+<p>
+   <strong>Source</strong> field toggle between "OTOS only" and "OTOS +
+   AprilTag"
+</p>
+<ol>
+<li>Notice that the position stays more accurate over time</li>
+</ol>
+<p>
+   compared to OTOS alone — every tag sighting resets the
+   drift accumulation</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Test 3 — The Square Test (Improved):**
+<ol>
+<li>Drive the robot to a starting position near a tagged wall</li>
+<li>Note the position values</li>
+<li>Drive a big square (forward, right, backward, left) and</li>
+</ol>
+<p>
+   return to the start
+</p>
+<ol>
+<li>Compare the position now to where you started. With</li>
+</ol>
+<p>
+   localization fusion, the error should be much smaller
+   than it was with OTOS alone (from the OTOS lesson's drift
+   test)</div></div>
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">When the fusion is working, you will see the position
+<p>
+<strong>snap</strong> to the correct value every time AprilTags come into
+view. Between sightings, the OTOS keeps tracking. The result
+is a position estimate that stays accurate throughout the
+entire match.</div></div>
+</p>
+<hr>
+<h2>How the Pros Do It</h2>
+<p>
+The localization code you just wrote follows the same
+architecture used by top-performing FTC teams:
+</p>
+<ol>
+<li><strong>OTOS at the core</strong> — continuous, high-speed position</li>
+</ol>
+<p>
+   tracking as the primary source
+</p>
+<ol>
+<li><strong>Limelight MegaTag2 corrections</strong> — when tags are visible</li>
+</ol>
+<p>
+   and within range, snap the position to the camera-derived
+   estimate
+</p>
+<ol>
+<li><strong>OTOS heading trusted</strong> — the built-in IMU provides stable</li>
+</ol>
+<p>
+   heading that MegaTag2 relies on
+</p>
+<p>
+This is the same strategy implemented in the competition-ready
+<code>FusedOTOSLocalizer</code> class that powers autonomous path
+following. The telemetry version you built today is simpler
+(it does not integrate with a path planner), but the core
+fusion logic is identical.
+</p>
+<p>
+In future lessons, you will learn about <strong>pose estimation</strong>
+(where the robot plans to go, not just where it is) and
+<strong>path following</strong> (making the robot drive precise autonomous
+routes). Those systems will plug directly into this
+localization foundation.
+</p>
+<hr>
+<h2>What You Learned</h2>
+<ul>
+<li><strong>Localization</strong> is the process of combining multiple sensors</li>
+</ul>
+<p>
+  to determine the robot's position on the field
+</p>
+<ul>
+<li><strong>Sensor fusion</strong> combines the OTOS (continuous but drifty)</li>
+</ul>
+<p>
+  with AprilTags (intermittent but drift-free) for the best
+  of both worlds
+</p>
+<ul>
+<li>The fusion strategy: OTOS tracks continuously, AprilTags</li>
+</ul>
+<p>
+  <strong>snap</strong> the position back to reality when visible
+</p>
+<ul>
+<li>OTOS <strong>heading</strong> is trusted over vision heading because the</li>
+</ul>
+<p>
+  IMU is more stable
+</p>
+<ul>
+<li>Corrections are filtered by <strong>distance</strong> — only accept</li>
+</ul>
+<p>
+  MegaTag2 results when tags are within 72 inches
+</p>
+<ul>
+<li>The fused position stays accurate over long periods, even as</li>
+</ul>
+<p>
+  the OTOS would normally drift
+</p>
+<ul>
+<li>This is the same architecture used by top FTC teams in their</li>
+</ul>
+<p>
+  competition code
+</p>
+<ul>
+<li>Future lessons will build on this foundation with pose</li>
+</ul>
+<p>
+  estimation and path following
+</p>
+<p>
+You have given your robot a complete navigation system — it
+always knows where it is, corrects for drift automatically,
+and works whether or not AprilTags are in view. That is the
+foundation of everything that comes next.
+</p>
+<hr>
