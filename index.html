@@ -5,16 +5,38 @@ subtitle: "Spring 2026 Exploratory Program"
 ---
 
 <style>
+/* Hero / logos */
+.hero-logos { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 1.2em; }
+.hero-logos img { height: 80px; width: auto; object-fit: contain; }
+.hero-logos .divider { width: 1px; height: 60px; background: #ddd; }
+
+/* Intro */
+.intro-text { font-size: 1.05em; color: #444; line-height: 1.7; margin-bottom: 1.5em; }
+
+/* Simulator section */
+.sim-section { background: #f0f4ff; border: 1px solid #c5cfe8; border-radius: 10px; padding: 20px 24px; margin-bottom: 2em; }
+.sim-section h2 { margin: 0 0 10px; font-size: 1.2em; color: #1a3a7a; }
+.sim-section p { margin: 0 0 12px; color: #333; line-height: 1.65; }
+.sim-video-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin: 14px 0; }
+.sim-video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+.sim-features { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin: 14px 0; }
+.sim-feature { background: #fff; border-radius: 6px; padding: 10px 14px; border-left: 3px solid #1565c0; font-size: 0.9em; color: #333; }
+.sim-feature strong { display: block; color: #1a3a7a; margin-bottom: 2px; }
+.sim-cta { display: inline-block; margin-top: 6px; padding: 8px 18px; background: #1565c0; color: #fff !important; border-radius: 6px; font-weight: 600; text-decoration: none; }
+.sim-cta:hover { background: #0d47a1; text-decoration: none; }
+
+/* Quick links */
 .quick-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin: 1.5em 0 2em; }
 .quick-card { border-radius: 10px; padding: 20px 18px; text-decoration: none; color: #fff; display: block; transition: opacity 0.15s, transform 0.15s; }
 .quick-card:hover { opacity: 0.9; text-decoration: none; transform: translateY(-2px); }
 .quick-card h3 { margin: 0 0 6px; font-size: 1.1em; color: #fff; }
-.quick-card p { margin: 0; font-size: 0.85em; opacity: 0.88; color: #fff; }
-.card-prog   { background: linear-gradient(135deg, #1565c0, #0288d1); }
-.card-elec   { background: linear-gradient(135deg, #c62828, #e53935); }
-.card-mech   { background: linear-gradient(135deg, #2e7d32, #43a047); }
-.card-sched  { background: linear-gradient(135deg, #6a1b9a, #8e24aa); }
+.quick-card p  { margin: 0; font-size: 0.85em; opacity: 0.88; color: #fff; }
+.card-prog  { background: linear-gradient(135deg, #1565c0, #0288d1); }
+.card-elec  { background: linear-gradient(135deg, #c62828, #e53935); }
+.card-mech  { background: linear-gradient(135deg, #2e7d32, #43a047); }
+.card-sched { background: linear-gradient(135deg, #6a1b9a, #8e24aa); }
 
+/* Resources */
 .resource-section { margin-top: 2em; }
 .resource-section h2 { border-bottom: 2px solid #eee; padding-bottom: 6px; }
 .resource-list { list-style: none; padding: 0; margin: 1em 0 0; }
@@ -22,15 +44,55 @@ subtitle: "Spring 2026 Exploratory Program"
 .resource-list li:last-child { border-bottom: none; }
 .resource-list a { font-weight: 600; }
 .resource-list span { color: #666; font-size: 0.9em; margin-left: 8px; }
-
-.intro-text { font-size: 1.05em; color: #444; line-height: 1.7; margin-bottom: 1.5em; }
 </style>
+
+<div class="hero-logos">
+  <img src="/assets/img/br_logo.jpg" alt="Bolton Robotics FTC logo">
+  <div class="divider"></div>
+  <img src="/assets/img/ftc_logo.png" alt="FIRST Tech Challenge logo">
+</div>
 
 <p class="intro-text">
 Welcome to <strong>Bolton Robotics FTC</strong> — a hands-on FIRST Tech Challenge program
-where students go from a box of parts to a driving mecanum robot in six meetings.
+where students go from a box of parts to a driving mecanum robot in six sessions.
 Use the navigation above or the quick links below to get started.
 </p>
+
+<!-- SIMULATOR SECTION -->
+<div class="sim-section">
+  <h2>🤖 PIT Mode — Learn to Code Without a Robot</h2>
+  <p>
+    The <strong>FTC 3D Simulator (PIT Mode)</strong> is a custom Godot-based simulator
+    that lets students learn to program an FTC robot before ever touching the real hardware.
+    The PIT (Programming &amp; Integration Terminal) puts you in a virtual workshop with a
+    3D robot, a Driver Hub, and a full Java code editor — all in one window.
+  </p>
+  <p>
+    Lessons in the simulator guide students through writing real Java code step by step.
+    That same code compiles and runs in the simulator, and when you're ready,
+    <strong>it transfers directly to your real robot</strong> — no rewriting required.
+  </p>
+
+  <div class="sim-features">
+    <div class="sim-feature"><strong>3D Robot Preview</strong>Orbit a real-time 3D model of the robot on a virtual pit table.</div>
+    <div class="sim-feature"><strong>Live Code Editor</strong>Write Java right in the browser — syntax highlighting, line numbers, instant feedback.</div>
+    <div class="sim-feature"><strong>Real Telemetry</strong>See your <code>telemetry.addData()</code> output on the virtual Driver Hub, just like the real thing.</div>
+    <div class="sim-feature"><strong>Motor &amp; Servo Simulation</strong>Flywheels spin up with inertia, servos sweep to position — physics you can see.</div>
+    <div class="sim-feature"><strong>Encoder &amp; IMU Sensors</strong>Read RPM from the flywheel encoder, heading from the IMU — real sensor data from virtual hardware.</div>
+    <div class="sim-feature"><strong>Full Match Simulation</strong>Run TeleOp and Autonomous OpModes through a simulated FTC match sequence.</div>
+  </div>
+
+  <p>Watch the tutorial below to see PIT Mode in action, then download the simulator and open the lessons in the Programming section.</p>
+
+  <div class="sim-video-wrap">
+    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+      title="PIT Mode Tutorial"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+  </div>
+
+  <a class="sim-cta" href="https://drive.google.com/file/d/1azJ_-Rywqo-oKbPyvgu_tLojlprJoeoD/view?usp=drive_link" target="_blank" rel="noopener">⬇ Download the FTC Simulator</a>
+</div>
 
 <div class="quick-links">
   <a class="quick-card card-prog" href="programming/">
@@ -47,22 +109,16 @@ Use the navigation above or the quick links below to get started.
   </a>
   <a class="quick-card card-sched" href="schedule/">
     <h3>Schedule</h3>
-    <p>Box → driving in 6 meetings</p>
+    <p>Box → driving in 6 sessions</p>
   </a>
 </div>
-
----
 
 <div class="resource-section">
   <h2>Resources</h2>
   <ul class="resource-list">
     <li>
-      <a href="https://drive.google.com/drive/folders/1Yp8m1WqQJ_oVX7d9Z3LWpRQJ-KjgW-Gf" target="_blank" rel="noopener">FTC 3D Simulator (PIT Mode)</a>
+      <a href="https://drive.google.com/file/d/1azJ_-Rywqo-oKbPyvgu_tLojlprJoeoD/view?usp=drive_link" target="_blank" rel="noopener">FTC 3D Simulator (PIT Mode)</a>
       <span>Google Drive — Godot-based simulator for learning to program off-robot</span>
-    </li>
-    <li>
-      <a href="https://www.youtube.com/results?search_query=ftc+pit+mode+tutorial" target="_blank" rel="noopener">Pit Mode Tutorial Video</a>
-      <span>YouTube — getting started with the simulator</span>
     </li>
     <li>
       <a href="https://www.firstinspires.org/resource-library/ftc/game-and-season-info" target="_blank" rel="noopener">FTC Game Manual</a>
