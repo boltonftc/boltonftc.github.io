@@ -21,10 +21,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: false
+
       - name: Install dependencies
-        run: |
-          gem install bundler --no-document
-          bundle install --no-cache
+        run: bundle install --no-cache
 
       - name: Setup Pages
         id: pages
