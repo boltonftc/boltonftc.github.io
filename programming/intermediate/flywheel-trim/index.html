@@ -1,0 +1,490 @@
+---
+layout: page
+title: "Flywheel Trim"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-intermediate">Intermediate</span>
+
+<h1>Flywheel Trim: Dialing In Your Shot</h1>
+<h2>The Volume Knob Problem</h2>
+<p>
+You have a flywheel shooter that works. Press B, it spins up.
+Fire a ball, it launches. But here is the thing — you set the
+power to <strong>1.0</strong> (full blast) and that is the only option.
+</p>
+<p>
+Imagine a speaker with no volume knob. It is either <strong>off</strong> or
+<strong>maximum</strong>. Want to have a quiet conversation? Too bad — full
+volume. Want to listen to music while studying? Full volume.
+That is what your shooter is right now: all or nothing.
+</p>
+<p>
+In a real match, full power is not always what you want:
+</p>
+<ul>
+<li><strong>Close to the basket?</strong> Full power overshoots — the ball</li>
+</ul>
+<p>
+  hits the backboard and bounces out
+</p>
+<ul>
+<li><strong>Far from the basket?</strong> Full power might not be enough arc</li>
+</ul>
+<p>
+  — the ball flies flat and misses
+</p>
+<ul>
+<li><strong>Ball is lighter than expected?</strong> It launches too far</li>
+<li><strong>Battery is at 11V instead of 13V?</strong> Motor has less power</li>
+</ul>
+<p>
+  — your shots fall short
+</p>
+<p>
+You need a way to <strong>adjust on the fly</strong>, without stopping the
+code and recompiling.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Real FTC teams tune their shooters mid-match.** A driver or
+<p>
+operator uses a stick or button to trim the flywheel power up
+or down. This is faster than guessing a hardcoded value and
+lets you adapt to changing conditions on the field.</div></div>
+</p>
+<hr>
+<h2>What Is "Trim"?</h2>
+<p>
+Trim is a concept borrowed from aviation. When a pilot sets
+cruise altitude, they do not hold the control stick in one
+position the entire flight. They set a <strong>trim tab</strong> — a small
+adjustment that holds the plane's nose at the right angle
+without constant effort.
+</p>
+<p>
+Your flywheel trim works the same way:
+</p>
+<ul>
+<li>There is a <strong>base power</strong> (like cruise speed) — a reasonable</li>
+</ul>
+<p>
+  default that works for most shots
+</p>
+<ul>
+<li>The right stick <strong>trims</strong> that power up or down — a</li>
+</ul>
+<p>
+  multiplier that stays where you put it
+</p>
+<ul>
+<li>Let go of the stick, the trim <strong>stays</strong> — you do not have to</li>
+</ul>
+<p>
+  hold it
+</p>
+<p>
+Think of it like this:
+</p>
+<pre><code class="language-">actual power = base power × trim multiplier
+<p>
+</code></pre>
+</p>
+<p>
+| Trim | Effect | When to use |
+|------|--------|-------------|
+| 1.0× | Normal — base power | Most shots |
+| 0.7× | Softer — 70% of base | Close range, lighter balls |
+| 1.5× | Harder — 150% of base | Long range, low battery |
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Trim is a multiplier, not an absolute value.** A trim of
+<p>
+1.0× means "use the base power as-is." Pushing the stick up
+slowly increases the multiplier. Pushing down decreases it.
+The multiplier is <strong>sticky</strong> — it stays where you leave it.</div></div>
+</p>
+<hr>
+<h2>The Constants</h2>
+<p>
+Before we write the loop code, let's set up the numbers. You
+will declare these as variables at the top of your OpMode,
+before the <code>waitForStart()</code> line.
+</p>
+<p>
+| Constant | Value | What It Means |
+|----------|-------|---------------|
+| <code>FLYWHEEL_BASE_POWER</code> | 0.65 | 65% motor power — a good default for mid-range shots |
+| <code>flywheelTrim</code> | 1.0 | Starting multiplier (no adjustment yet) |
+| <code>TRIM_RATE</code> | 0.4 | How fast the trim changes per second at full stick |
+| <code>TRIM_DEADZONE</code> | 0.15 | Ignore stick inputs smaller than 15% (prevents drift) |
+| <code>TRIM_MIN</code> | 0.5 | Lowest trim allowed (50% of base = very soft shot) |
+| <code>TRIM_MAX</code> | 2.0 | Highest trim allowed (200% of base = maximum power) |
+</p>
+<p>
+Why 0.65 for the base? Because it gives you room to go both
+<strong>up</strong> (for long-range shots) and <strong>down</strong> (for close range).
+If the base were 1.0, you could only trim down. If it were
+0.3, normal shots would be too weak.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Why a deadzone?** Joysticks are not perfect. Even when you
+<p>
+are not touching the stick, it might report 0.02 or -0.05
+instead of exactly 0.0. The deadzone ignores these tiny ghost
+inputs so your trim does not slowly drift while your hands are
+on the driving sticks.</div></div>
+</p>
+<hr>
+<h2>How the Loop Code Works</h2>
+<p>
+Here is the flow that runs every <strong>loop iteration</strong>:
+</p>
+<ol>
+<li><strong>Is the flywheel on?</strong> Check if the motor power is above</li>
+</ol>
+<p>
+   0.01. If not, skip trim — there is nothing to trim.
+</p>
+<ol>
+<li><strong>How much time passed?</strong> Calculate <code>dtSec</code> (delta time in</li>
+</ol>
+<p>
+   seconds) since the last loop. This makes the trim rate
+   consistent regardless of how fast the loop runs.
+</p>
+<ol>
+<li><strong>Read the stick.</strong> <code>gamepad1.right_stick_y</code> gives a value</li>
+</ol>
+<p>
+   from -1.0 (pushed up) to +1.0 (pushed down). We negate it
+   so that pushing <strong>up</strong> increases the trim (feels natural).
+</p>
+<ol>
+<li><strong>Apply the deadzone.</strong> If the stick is barely moved (less</li>
+</ol>
+<p>
+   than 15%), ignore it.
+</p>
+<ol>
+<li><strong>Update the trim multiplier.</strong> Add `stickInput × TRIM_RATE</li>
+</ol>
+<p>
+   × dtSec<code> to </code>flywheelTrim<code>. Clamp it between </code>TRIM_MIN` and
+   <code>TRIM_MAX</code> so it never goes to crazy values.
+</p>
+<ol>
+<li><strong>Calculate final power.</strong> <code>FLYWHEEL_BASE_POWER × flywheelTrim</code>,</li>
+</ol>
+<p>
+   clamped to [0.0, 1.0].
+</p>
+<ol>
+<li><strong>Apply it.</strong> <code>shooterMotor.setPower(flywheelPower)</code>.</li>
+</ol>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Delta time (`dtSec`)** makes the trim rate independent of
+<p>
+how fast the control loop runs. On a real robot, the loop might
+run 100 times per second when the CPU is free, or 50 times when
+it is busy reading sensors. By multiplying by <code>dtSec</code> — the
+actual <em>seconds</em> the last loop took — the trim changes at the
+same real-world speed no matter what. Push the stick up for one
+second and you get the same trim change whether the loop ran
+fast or slow. This is the standard approach used on real FTC
+robots and in professional robotics systems.</div></div>
+</p>
+<hr>
+<h2>Part 1 — Add the Variables</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Open MecanumDrive.java and find the Flywheel Trim variables
+<p>
+section:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Flywheel Trim : Variables ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Type the code from the green block right below the
+<p>
+<code>Add your flywheel trim variables below</code> comment:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">final double FLYWHEEL_BASE_POWER = 0.65;
+<p>
+double flywheelTrim = 1.0;
+final double TRIM_RATE = 0.4;
+final double TRIM_DEADZONE = 0.15;
+final double TRIM_MIN = 0.5;
+final double TRIM_MAX = 2.0;
+long lastTrimTime = System.nanoTime();
+</code></pre></div></div>
+</p>
+<p>
+Let's break it down:
+</p>
+<ul>
+<li><strong><code>FLYWHEEL_BASE_POWER</code></strong> — the "normal" power level. Marked</li>
+</ul>
+<p>
+  <code>final</code> because it should never change at runtime.
+</p>
+<ul>
+<li><strong><code>flywheelTrim</code></strong> — the multiplier that the stick adjusts.</li>
+</ul>
+<p>
+  Starts at 1.0 (no change). Not <code>final</code> — this one changes!
+</p>
+<ul>
+<li><strong><code>TRIM_RATE</code></strong> — how fast the multiplier moves per second at</li>
+</ul>
+<p>
+  full stick deflection (0.4 means it takes ~2.5 seconds to go
+  from 1.0 to 2.0 at full stick).
+</p>
+<ul>
+<li><strong><code>TRIM_DEADZONE</code></strong> — the "ignore below this" threshold.</li>
+<li><strong><code>TRIM_MIN</code> / <code>TRIM_MAX</code></strong> — the multiplier limits.</li>
+<li><strong><code>lastTrimTime</code></strong> — timestamp for calculating <code>dtSec</code>.</li>
+</ul>
+<p>
+  <code>System.nanoTime()</code> gives nanoseconds (billionths of a
+  second) — we will convert to seconds in the loop.
+</p>
+<hr>
+<h2>Part 2 — Add the Loop Code</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Now find the Flywheel Trim loop section:</div></div>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Flywheel Trim : Loop ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Type the code from the green block right below the
+<p>
+<code>Add your flywheel trim code below</code> comment:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Right stick Y trims flywheel power (sticky).
+<p>
+// Stick centered = keep current trim. Up = increase, down = decrease.
+double flywheelPower = 0.0;
+boolean flywheelOn = Math.abs(shooterMotor.getPower()) &gt; 0.01;
+if (flywheelOn) {
+    long now = System.nanoTime();
+    double dtSec = (now - lastTrimTime) / 1_000_000_000.0;
+    lastTrimTime = now;
+    double stickInput = -gamepad1.right_stick_y;
+    if (Math.abs(stickInput) &gt; TRIM_DEADZONE) {
+        flywheelTrim += stickInput <em> TRIM_RATE </em> dtSec;
+        flywheelTrim = Math.max(TRIM_MIN, Math.min(TRIM_MAX, flywheelTrim));
+    }
+    flywheelPower = FLYWHEEL_BASE_POWER * flywheelTrim;
+    flywheelPower = Math.max(0.0, Math.min(1.0, flywheelPower));
+} else {
+    lastTrimTime = System.nanoTime();
+}
+shooterMotor.setPower(flywheelPower);
+</p>
+<p>
+// Show flywheel status with trim info
+telemetry.addData(&quot;Flywheel&quot;, flywheelOn
+    ? String.format(&quot;ON (%.0f%% | trim %.1fx)&quot;, flywheelPower * 100, flywheelTrim)
+    : &quot;off&quot;);
+</code></pre></div></div>
+</p>
+<p>
+Walk through the code line by line:
+</p>
+<ol>
+<li><strong><code>flywheelPower = 0.0</code></strong> — start at zero. If the flywheel</li>
+</ol>
+<p>
+   is off, it stays zero.
+</p>
+<ol>
+<li><strong><code>flywheelOn</code></strong> — checks if the flywheel is currently</li>
+</ol>
+<p>
+   spinning (from the B-toggle you wrote earlier).
+</p>
+<ol>
+<li><strong>If on:</strong> calculate time delta, read the stick, apply</li>
+</ol>
+<p>
+   deadzone, update the trim multiplier, compute final power.
+</p>
+<ol>
+<li><strong>If off:</strong> just reset the timestamp so the first loop</li>
+</ol>
+<p>
+   after turning on does not get a huge <code>dtSec</code> spike.
+</p>
+<ol>
+<li><strong><code>shooterMotor.setPower(flywheelPower)</code></strong> — applies the</li>
+</ol>
+<p>
+   trimmed power (or 0 if the flywheel is off).
+</p>
+<ol>
+<li><strong>Telemetry</strong> — now shows power percentage AND the trim</li>
+</ol>
+<p>
+   multiplier, so you can see exactly what is happening.
+</p>
+<hr>
+<h2>Part 3 — Save, Compile, and Test!</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save**.
+<ol>
+<li>Click <strong>Recompile</strong> on the Driver Hub.</li>
+<li>Select <strong>MecanumDrive</strong> from TeleOp.</li>
+<li>Click <strong>INIT</strong>, then <strong>START</strong>.</div></div></li>
+</ol>
+<h3>Test 1 — Basic Trim</h3>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Press **B** to turn on the flywheel.
+<ol>
+<li>Watch the telemetry: <code>Flywheel: ON (65% | trim 1.0x)</code></li>
+<li>Push the <strong>right stick up</strong> slowly. Watch the trim climb:</li>
+</ol>
+<p>
+   <code>trim 1.1x</code>, <code>trim 1.2x</code>...
+</p>
+<ol>
+<li>Let go of the stick — the trim stays where you left it!</li>
+<li>Push the <strong>right stick down</strong> — trim decreases.</li>
+<li>Press <strong>B</strong> again to turn off. Telemetry shows <code>off</code>.</div></div></li>
+</ol>
+<h3>Test 2 — RPM Feedback</h3>
+<p>
+Watch the <strong>Flywheel RPM</strong> telemetry (from the encoder lesson)
+while you trim:
+</p>
+<ul>
+<li>At trim 1.0× (65% power): RPM should be around 200</li>
+<li>Push trim up to 1.5× (97% power): RPM climbs toward 300</li>
+<li>Push trim down to 0.7× (45% power): RPM drops to around 140</li>
+</ul>
+<p>
+The RPM changes smoothly because you are adjusting power
+gradually, not jumping between fixed values.
+</p>
+<h3>Test 3 — Fire at Different Trims</h3>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Set trim to **0.7×** (push stick down). Fire with **X**.
+<p>
+   The ball launches softly.
+</p>
+<ol>
+<li>Set trim to <strong>1.5×</strong> (push stick up). Fire with <strong>X</strong>.</li>
+</ol>
+<p>
+   The ball launches hard.
+</p>
+<ol>
+<li>Try to find the trim that lands the ball <strong>exactly</strong> in the</li>
+</ol>
+<p>
+   high basket. Write that number down — that is your
+   competition setting!</div></div>
+</p>
+<h3>Test 4 — Limits</h3>
+<p>
+Push the right stick all the way up and hold it. The trim
+climbs to <strong>2.0×</strong> and stops — that is <code>TRIM_MAX</code>. Push all
+the way down — it floors at <strong>0.5×</strong> (<code>TRIM_MIN</code>). The clamps
+prevent you from accidentally setting crazy values.
+</p>
+<hr>
+<h2>Why This Matters on a Real Robot</h2>
+<p>
+On a real FTC robot, the flywheel trim is one of the most
+important driver controls. Here is why:
+</p>
+<ul>
+<li><strong>Battery voltage drops</strong> during a match. A freshly charged</li>
+</ul>
+<p>
+  13V battery delivers more power than a tired 11V battery.
+  Trim up to compensate.
+</p>
+<ul>
+<li><strong>Balls vary.</strong> Foam balls from different manufacturers have</li>
+</ul>
+<p>
+  slightly different density and grip. One ball flies farther
+  than another at the same power. Trim adjusts for this.
+</p>
+<ul>
+<li><strong>Position changes.</strong> When you are closer to the basket,</li>
+</ul>
+<p>
+  trim down. When you are farther, trim up. Good drivers
+  learn the trim settings for each scoring position.
+</p>
+<ul>
+<li><strong>Warming up.</strong> Motor friction changes as the motor heats up</li>
+</ul>
+<p>
+  during a match. A cold flywheel may need more power than a
+  warm one.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**The best FTC shooters are not the most powerful — they are
+<p>
+the most consistent.** Trim gives the driver real-time control
+over consistency. A team with trim can adapt in seconds. A team
+without trim has to hope their hardcoded power works for every
+situation.</div></div>
+</p>
+<hr>
+<h2>What You Learned</h2>
+<ul>
+<li><strong>Trim</strong> is a sticky multiplier that adjusts a base power</li>
+</ul>
+<p>
+  level — the driver changes it with the right stick
+</p>
+<ul>
+<li><strong>Delta time (<code>dtSec</code>)</strong> makes the rate loop-speed</li>
+</ul>
+<p>
+  independent — a standard technique used on real FTC robots
+  and in professional robotics systems
+</p>
+<ul>
+<li><strong>Deadzones</strong> prevent ghost stick inputs from causing drift</li>
+<li><strong>Clamping</strong> (min/max) keeps values in a safe range</li>
+<li><strong><code>System.nanoTime()</code></strong> provides high-resolution timestamps</li>
+</ul>
+<p>
+  for time-based calculations
+</p>
+<ul>
+<li>This coding pattern — read input, apply rate × time, clamp —</li>
+</ul>
+<p>
+  appears everywhere: camera smoothing, motor ramping, PID
+  controllers, animation systems
+</p>
+<hr>
+<h2>What Is Next?</h2>
+<p>
+In the <strong>Flywheel Control</strong> lesson, you will replace this
+manual trim with an <strong>automatic</strong> controller that uses math
+(feedforward + proportional feedback) to hold an exact target
+RPM. The trim is like cruise control where you adjust the
+speed yourself. Flywheel Control is like cruise control that
+<em>maintains</em> the speed for you, even when a ball hits the
+flywheel and slows it down.
+</p>
+<p>
+But first — enjoy your new volume knob. Go score some baskets
+at different trim levels!
+</p>
+<hr>

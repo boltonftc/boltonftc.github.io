@@ -1,0 +1,264 @@
+---
+layout: page
+title: "Tank Drive"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-easier">Easier</span>
+
+<h1>Tank Drive</h1>
+<h2>What Is Tank Drive?</h2>
+<p>
+Think about how a bulldozer or a military tank turns. It does not
+have a steering wheel. Instead it has two tracks -- one on the
+left and one on the right. To go straight, both tracks move at
+the same speed. To turn, one track moves faster than the other.
+To spin in place, the tracks move in opposite directions.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Tank drive** steers by running the left and right sides at
+<p>
+different speeds. Same speed = straight. Different speeds = turn.</div></div>
+</p>
+<p>
+Our FTC robot has four mecanum wheels, but for now we are going
+to ignore the fancy stuff and drive it like a tank. The left
+stick will control everything: push forward to go forward, push
+sideways to spin.
+</p>
+<hr>
+<h2>How This Maps to Our Robot</h2>
+<p>
+The robot has four motors -- one at each corner:
+</p>
+<ul>
+<li><code>frontLeft</code> and <code>backLeft</code> on the left side</li>
+<li><code>frontRight</code> and <code>backRight</code> on the right side</li>
+</ul>
+<p>
+For tank drive, both left motors always get the same power, and
+both right motors always get the same power. The two sides act
+like the two tracks on a tank.
+</p>
+<p>
+If you look at the code above the <code>while</code> loop, you will see
+that these motors are already set up for you:
+</p>
+<pre><code class="language-java">DcMotor backLeft  = hardwareMap.dcMotor.get(&quot;back_left_motor&quot;);
+<p>
+DcMotor frontLeft = hardwareMap.dcMotor.get(&quot;front_left_motor&quot;);
+// ... and two more for the right side
+</code></pre>
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The **hardware map** connects code names to physical motors.
+<p>
+Each motor has a name like <code>&quot;back_left_motor&quot;</code> that matches
+the robot's wiring configuration.</div></div>
+</p>
+<p>
+You will also see that the left motors are reversed:
+</p>
+<pre><code class="language-java">backLeft.setDirection(DcMotor.Direction.REVERSE);
+<p>
+frontLeft.setDirection(DcMotor.Direction.REVERSE);
+</code></pre>
+</p>
+<p>
+Why? The left motors are mounted as a mirror image of the right
+motors. Without reversing, sending positive power would spin the
+left side backward and the right side forward -- the robot would
+spin instead of driving straight. Reversing the left side fixes
+this so that positive power always means forward for every motor.
+</p>
+<p>
+<img src="drivebase_mirror_image.jpg" alt="Drivebase mirror image" class="lesson-img">
+</p>
+<p>
+You do not need to type any of this. It is already in the code.
+But understanding it will help you debug problems later.
+</p>
+<hr>
+<h2>Part 1 -- Reading the Joystick</h2>
+<p>
+Time to write some code. The joystick gives us two values we
+care about:
+</p>
+<ul>
+<li><strong>Y axis</strong> (up/down) -- how much forward or backward</li>
+<li><strong>X axis</strong> (left/right) -- how much spinning</li>
+</ul>
+<p>
+These values are <strong>doubles</strong> -- numbers with decimal points like
+<code>0.5</code> or <code>-0.73</code>. The joystick outputs doubles between <code>-1.0</code>
+(full one direction) and <code>1.0</code> (full the other direction). A
+gentle push might give <code>0.2</code>. Letting go gives <code>0.0</code>.
+</p>
+<p>
+<img src="controller_x_y_axis.jpg" alt="Controller X and Y axis" class="lesson-img">
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A **double** is a decimal number. The joystick gives doubles
+<p>
+from <code>-1.0</code> to <code>1.0</code>. This is called <strong>proportional control</strong> --
+small push = slow, big push = fast.</div></div>
+</p>
+<p>
+There is one catch: the Y axis is inverted. Pushing the stick
+<strong>up</strong> gives <code>-1.0</code>, and pushing it <strong>down</strong> gives <code>+1.0</code>. That
+feels backward, so we negate it with a minus sign.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to jump to the right spot in the code.
+<p>
+Then type the code from the green block right below the
+<code>Add your tank drive code below</code> comment:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ Tank Drive : Loop ]</span>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">double drive = -gamepad1.left_stick_y;
+<p>
+double spin  =  gamepad1.left_stick_x;
+</code></pre></div></div>
+</p>
+<p>
+Now <code>drive</code> is positive when you push forward (natural) and
+<code>spin</code> is positive when you push right.
+</p>
+<hr>
+<h2>Part 2 -- The Tank Drive Math</h2>
+<p>
+Here is where the tank logic happens. We need to combine <code>drive</code>
+and <code>spin</code> into two power values -- one for the left side and
+one for the right side.
+</p>
+<p>
+The formula is simple:
+</p>
+<ul>
+<li><strong>Left power</strong> = drive + spin</li>
+<li><strong>Right power</strong> = drive - spin</li>
+</ul>
+<p>
+Let's walk through some examples to see why this works:
+</p>
+<p>
+<strong>Going straight forward</strong> -- you push the stick straight up.
+<code>drive = 1.0</code>, <code>spin = 0</code>.
+Left = <code>1.0 + 0 = 1.0</code>. Right = <code>1.0 - 0 = 1.0</code>.
+Both sides get the same power. The robot drives straight.
+</p>
+<p>
+<strong>Spinning right</strong> -- you push the stick to the right.
+<code>drive = 0</code>, <code>spin = 1.0</code>.
+Left = <code>0 + 1.0 = 1.0</code>. Right = <code>0 - 1.0 = -1.0</code>.
+Left goes forward, right goes backward. The robot spins clockwise.
+</p>
+<p>
+<strong>Curving forward-right</strong> -- you push the stick up and to the right.
+<code>drive = 0.8</code>, <code>spin = 0.3</code>.
+Left = <code>0.8 + 0.3 = 1.1</code>. Right = <code>0.8 - 0.3 = 0.5</code>.
+Left goes faster than right. The robot curves to the right.
+</p>
+<p>
+We also multiply by <code>0.5</code> to keep things at half speed while
+you are learning. You can change this to <code>1.0</code> for full speed
+once you are comfortable.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add these two lines right below your `drive` and `spin` lines:</div></div>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">double leftPower  = (drive + spin) * 0.5;
+<p>
+double rightPower = (drive - spin) * 0.5;
+</code></pre></div></div>
+</p>
+<hr>
+<h2>Part 3 -- Sending Power to the Motors</h2>
+<p>
+The last step is telling the motors to actually spin. The method
+<code>setPower()</code> takes a value from <code>-1.0</code> (full reverse) to <code>1.0</code>
+(full forward). Zero means stop.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">`setPower()` sets motor speed. Range: `-1.0` to `1.0`.
+<p>
+Both left motors get <code>leftPower</code>. Both right motors get
+<code>rightPower</code>. That is what makes it tank drive.</div></div>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Add these four lines right after `leftPower` and `rightPower`:</div></div>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">backLeft.setPower(leftPower);
+<p>
+frontLeft.setPower(leftPower);
+frontRight.setPower(rightPower);
+backRight.setPower(rightPower);
+</code></pre></div></div>
+</p>
+<hr>
+<h2>Part 4 -- Save, Compile, and Drive!</h2>
+<p>
+That is everything. Your complete Tank Drive code should look
+like this:
+</p>
+<span class="sim-action" title="Simulator action only">[ Tank Drive : Loop ]</span>
+<pre><code class="language-java">double drive = -gamepad1.left_stick_y;
+<p>
+double spin  =  gamepad1.left_stick_x;
+</p>
+<p>
+double leftPower  = (drive + spin) * 0.5;
+double rightPower = (drive - spin) * 0.5;
+</p>
+<p>
+backLeft.setPower(leftPower);
+frontLeft.setPower(leftPower);
+frontRight.setPower(rightPower);
+backRight.setPower(rightPower);
+</code></pre>
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save**.
+<ol>
+<li>Click <strong>Recompile</strong> on the Driver Hub.</li>
+<li>Select <strong>MecanumDrive</strong> from TeleOp.</li>
+<li>Click <strong>INIT</strong>, then <strong>START</strong>.</div></div></li>
+</ol>
+<p>
+Push the left stick forward -- you should see the wheels on the
+bench robot start spinning! Push sideways and watch the left and
+right wheels spin in opposite directions -- that is a tank spin.
+Push diagonally and one side spins faster than the other.
+</p>
+<p>
+The robot is on jack stands so it will not move, but you can see
+the direction and speed of every wheel. Notice that pushing the
+stick halfway gives half speed. That is proportional control at
+work -- the further you push, the faster the wheels go.
+</p>
+<p>
+Now try it on the competition field! Click <strong>Return to Match</strong> at
+the bottom of the screen, load your code package on the red or
+blue Driver Hub, compile, and drive your robot around the arena.
+</p>
+<p>
+<strong>What's next?</strong> Right now the robot can only go forward, backward,
+and spin. It cannot strafe sideways even though it has mecanum
+wheels. A future lesson will unlock that ability by using all
+four wheels independently instead of pairing them as left and right.
+</p>
+<hr>

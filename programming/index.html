@@ -1,0 +1,116 @@
+---
+layout: page
+title: "Programming Lessons"
+---
+
+<style>
+.tier-section h2 { margin-top: 1.5em; border-bottom: 2px solid #eee; padding-bottom: 4px; }
+.lesson-card { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+.lesson-card:last-child { border-bottom: none; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; white-space: nowrap; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+.lesson-card a { font-weight: bold; font-size: 1.05em; }
+.lesson-card p { margin: 2px 0 0; color: #555; font-size: 0.92em; }
+</style>
+
+Learn to program your FTC robot — from your first telemetry line to full autonomous navigation.
+Lessons are grouped by difficulty. Start at the top and work your way down.
+
+---
+
+## Easier
+
+<div class="tier-section">
+  <div class="lesson-card">
+    <span class="tier-badge tier-easier">Easier</span>
+    <div><a href="easier/welcome-to-pit/">Welcome to the PIT</a><p>A quick tour of the PIT training station and how everything works.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-easier">Easier</span>
+    <div><a href="easier/robot-basics/">FTC Robot Basics</a><p>What is inside an FTC robot, how matches work, and where you fit in as the programmer.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-easier">Easier</span>
+    <div><a href="easier/code-orientation/">Your Code Package</a><p>Tour the Java files in your package, understand init vs loop, and make your first code change.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-easier">Easier</span>
+    <div><a href="easier/java-tour/">A Tour of Your Code</a><p>Walk through MecanumDrive.java line by line and learn the Java building blocks.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-easier">Easier</span>
+    <div><a href="easier/telemetry/">Telemetry</a><p>Send debug messages to the Driver Hub so you can see what your code is doing.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-easier">Easier</span>
+    <div><a href="easier/tank-drive/">Tank Drive</a><p>Wire up the joystick to the motors and make the robot drive like a tank.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-easier">Easier</span>
+    <div><a href="easier/button-actions/">Button Actions: Intake</a><p>Make the A button toggle the intake on and off using a state machine.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-easier">Easier</span>
+    <div><a href="easier/auto-vs-teleop/">Auto vs TeleOp</a><p>Understand match phases, create your first Autonomous OpMode, and run a full match.</p></div>
+  </div>
+</div>
+
+---
+
+## Intermediate
+
+<div class="tier-section">
+  <div class="lesson-card">
+    <span class="tier-badge tier-intermediate">Intermediate</span>
+    <div><a href="intermediate/imu-heading/">IMU Heading</a><p>Read the gyroscope heading and test it on the turntable.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-intermediate">Intermediate</span>
+    <div><a href="intermediate/shooter-flywheel/">Flywheel Shooter</a><p>Spin up the flywheel shooter and understand how inertia affects your shots.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-intermediate">Intermediate</span>
+    <div><a href="intermediate/indexer-servo/">Indexer Servo</a><p>Wire up the CR servo indexer and fire balls into the spinning flywheel.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-intermediate">Intermediate</span>
+    <div><a href="intermediate/encoder-rpm/">Encoder: Flywheel RPM</a><p>Read the flywheel encoder to measure real-time RPM and watch the spin-up curve.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-intermediate">Intermediate</span>
+    <div><a href="intermediate/flywheel-trim/">Flywheel Trim</a><p>Use the right stick to adjust flywheel speed on the fly — your first taste of real-time tuning.</p></div>
+  </div>
+</div>
+
+---
+
+## Advanced
+
+<div class="tier-section">
+  <div class="lesson-card">
+    <span class="tier-badge tier-advanced">Advanced</span>
+    <div><a href="advanced/mecanum-drive/">Mecanum Drive</a><p>Replace tank drive with full mecanum holonomic movement — strafe, rotate, and drive in any direction.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-advanced">Advanced</span>
+    <div><a href="advanced/otos/">SparkFun OTOS</a><p>Track your robot's position with the Optical Tracking Odometry Sensor.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-advanced">Advanced</span>
+    <div><a href="advanced/apriltag/">AprilTag Detection</a><p>Use the robot camera to detect AprilTags and read position data for autonomous alignment.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-advanced">Advanced</span>
+    <div><a href="advanced/localization/">Localization</a><p>Fuse OTOS and AprilTag data into a single drift-free position estimate.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-advanced">Advanced</span>
+    <div><a href="advanced/pedro-pathing/">Pedro Pathing: Capture Mode</a><p>Record a path and run a full autonomous using Pedro Pathing.</p></div>
+  </div>
+  <div class="lesson-card">
+    <span class="tier-badge tier-advanced">Advanced</span>
+    <div><a href="advanced/flywheel-control/">Flywheel Control</a><p>Use feedforward and proportional feedback to hold the flywheel at a target RPM.</p></div>
+  </div>
+</div>

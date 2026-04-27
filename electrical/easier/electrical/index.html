@@ -1,0 +1,454 @@
+---
+layout: page
+title: "Electrical Systems"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-easier">Easier</span>
+
+<h1>Robot Electrical Systems</h1>
+<p>
+Every FTC robot is an electrical system before it is anything else.
+Power flows from the battery through wires, switches, and connectors
+to motors, servos, and sensors. Understanding that flow -- even at a
+basic level -- means you will wire things correctly, diagnose problems
+faster, and understand exactly what happens when your robot starts to
+slow down at the end of a match.
+</p>
+<p>
+This lesson covers the fundamentals. No coding required -- just read,
+look at the diagrams, and take notes.
+</p>
+<hr>
+<h2>Voltage and Current</h2>
+<p>
+Electricity has two properties you need to understand: <strong>voltage</strong> and
+<strong>current</strong>. The classic way to think about them is a water system.
+</p>
+<p>
+<img src="water_current_voltage_analogy.jpg" alt="Voltage is pressure, current is flow rate" class="lesson-img">
+</p>
+<p>
+<strong>Voltage</strong> is the electrical "pressure" pushing electrons through a
+wire. It is measured in <strong>volts (V)</strong>. The higher the voltage, the
+harder the electrons are being pushed. Your FTC battery supplies
+<strong>12 volts</strong>.
+</p>
+<p>
+<strong>Current</strong> is the rate at which electrons actually flow through the
+wire -- how much electricity is moving at any moment. It is measured
+in <strong>amps (A)</strong>. A small LED might draw 0.02 amps. A drive motor
+under load can pull 5–10 amps. When all four drive motors are stalled
+at the same time, the whole drivetrain can demand 40+ amps from the
+battery at once.
+</p>
+<p>
+<strong>Power</strong> is voltage multiplied by current: <strong>Power (watts) = Volts × Amps</strong>.
+A motor drawing 5 amps at 12 volts is consuming 60 watts -- about
+the same as a bright light bulb.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Voltage** (volts) is the pressure pushing electricity through the
+<p>
+circuit. <strong>Current</strong> (amps) is the flow rate of electricity. Power
+equals volts × amps. Your FTC battery is 12V, and motors can draw
+many amps under load.</div></div>
+</p>
+<hr>
+<h2>Wire Gauge</h2>
+<p>
+Not all wire is the same. Wire thickness is described by a number
+called its <strong>gauge</strong> (AWG -- American Wire Gauge). Here is the
+counterintuitive part: <strong>a lower gauge number means a thicker wire</strong>.
+18 AWG wire is thicker than 22 AWG wire.
+</p>
+<p>
+Why does thickness matter? A thicker wire can carry more current
+without getting hot. If you run too much current through a wire
+that is too thin, it acts like a resistor -- it heats up, the
+voltage drops, and in extreme cases it can melt the insulation or
+start a fire.
+</p>
+<p>
+On an FTC robot you will typically see two gauges:
+</p>
+<ul>
+<li><strong>18 AWG</strong> (thick, red/black) -- the main power wires from the</li>
+</ul>
+<p>
+  battery to the Control Hub. These carry the high current that
+  motors demand.
+</p>
+<ul>
+<li><strong>22 AWG</strong> (thinner, various colors) -- data wires for sensors</li>
+</ul>
+<p>
+  and encoder cables. These carry tiny currents and only need to
+  transmit signals.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Wire **gauge** (AWG) describes wire thickness -- lower number means
+<p>
+thicker. Use <strong>18 AWG</strong> for main power lines that carry motor
+current. Use <strong>22 AWG</strong> for sensor and signal wires.</div></div>
+</p>
+<hr>
+<h2>The Battery</h2>
+<p>
+The FTC-legal battery is a <strong>12V NiMH (Nickel-Metal Hydride)</strong>
+rechargeable pack. It is the single power source for everything on
+the robot -- the Control Hub, the Expansion Hub, all motors, all
+servos, and all sensors.
+</p>
+<p>
+<img src="battery_discharge_graph.jpeg" alt="Battery discharge curve measured by West Mountain Radio CBA" class="lesson-img">
+</p>
+<p>
+Look at that graph carefully. It is a real battery discharge curve
+measured on FTC NiMH batteries. Each line represents a different
+brand tested under load. Notice several things:
+</p>
+<p>
+<strong>The battery does not just die.</strong> A fresh battery starts around
+11.75–11.8 volts. As the match progresses, voltage slowly sags.
+Near the end, the curve gets steeper and the battery voltage drops
+faster. The battery does not give you 12V for two minutes and then
+instantly stop -- it gives you gradually less and less, and then
+at some point it can no longer supply the current your motors need
+and the robot shuts down or the Control Hub reboots.
+</p>
+<p>
+<strong>This has real consequences for your robot's behavior.</strong> A drive
+motor told to go at "50% power" is actually getting 50% of whatever
+voltage the battery currently supplies. At the start of a match
+(11.8V) that is about 5.9V to the motor. Near the end (10.8V) that
+same "50%" command only delivers 5.4V -- the robot is physically
+slower, even though the code has not changed.
+</p>
+<p>
+<strong>Battery brand matters.</strong> Some batteries (like the blue mk1/mk2
+lines in the graph) hold voltage better than others under sustained
+load. Teams that use high-quality batteries will have more
+consistent robot behavior throughout a match.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The FTC battery does not supply a constant 12V -- it **gradually
+<p>
+sags** as it discharges. Your robot will be slightly slower and
+weaker at the end of a match than at the beginning. Knowing this
+helps you explain why the robot "feels different" late in a match.</div></div>
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">Always start a match with a fully charged battery. Competing with
+<p>
+a partially discharged battery is one of the most common causes of
+poor or inconsistent robot performance at tournaments.</div></div>
+</p>
+<hr>
+<h2>Fuses and the Power Switch</h2>
+<p>
+Between the battery and the Control Hub sit two protective
+components: the <strong>fuse</strong> and the <strong>power switch</strong>.
+</p>
+<p>
+<img src="power_wiring.jpg" alt="Robot power wiring: battery, fuse, power switch, Control Hub, Expansion Hub" class="lesson-img">
+</p>
+<h3>The Fuse</h3>
+<p>
+A fuse is a deliberate weak link in the circuit. It contains a thin
+metal strip that melts -- and cuts the circuit open -- if too much
+current flows through it. FTC robots use a <strong>20A fuse</strong> in the main
+power line.
+</p>
+<p>
+If a motor stalls hard, a wire shorts, or something goes badly wrong,
+the fuse blows before the wiring, the battery, or the Control Hub
+can be damaged. A blown fuse is cheap and easy to replace. A melted
+wire harness or a damaged Control Hub is not.
+</p>
+<h3>The Power Switch</h3>
+<p>
+The <strong>Floodgate power switch</strong> (you can see it between the fuse and
+the Control Hub in the diagram above) is an on/off switch required
+by FTC rules. It must be mounted somewhere accessible on the robot
+so that a referee can cut power in an emergency. Pressing the switch
+cuts all power instantly -- motors stop, the Control Hub shuts down.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The **fuse** protects the robot's wiring from excessive current.
+<p>
+The <strong>power switch</strong> is required by FTC rules and lets a referee
+immediately cut all power. Both live in the main power line between
+the battery and the Control Hub.</div></div>
+</p>
+<hr>
+<h2>Connectors</h2>
+<p>
+Different parts of the robot use different types of connectors,
+each chosen for the current they carry and the connection they need
+to make.
+</p>
+<h3>XT30 -- Main Power</h3>
+<p>
+<img src="xt30_wire_extension.jpg" alt="XT30 power extension cable" class="lesson-img">
+</p>
+<p>
+The large yellow connectors on the battery and the main power wires
+are <strong>XT30 connectors</strong>. They are rated for 30 amps continuous and
+are the standard high-current connector in FTC. The battery cable,
+the wires going into the Control Hub and Expansion Hub, and jumpers
+between hubs all use XT30 connectors.
+</p>
+<p>
+You can identify them by their shape: two round gold pins, with one
+larger than the other so they are impossible to plug in backwards.
+</p>
+<h3>JST-PH -- Motor Encoders and Sensors</h3>
+<p>
+<img src="4pos_jst_ph_motor_encode_cable.jpg" alt="4-position JST PH motor encoder cable" class="lesson-img">
+</p>
+<p>
+The small multi-wire connector with a locking white housing is a
+<strong>JST-PH connector</strong>. This is the data connector used for motor
+encoder cables and most sensors on the Control Hub. The 4-position
+version carries the encoder signals (two channels, ground, and
+power) from the motor back to the hub.
+</p>
+<p>
+Because these connectors are small, they carry low current. They
+are for <strong>signals only</strong> -- never try to run motor power through
+a JST-PH connector.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**XT30 connectors** (gold, large) carry main power -- rated to
+<p>
+30A. <strong>JST-PH connectors</strong> (white, small) carry sensor and
+encoder signals only -- low current, do not use them for motor
+power.</div></div>
+</p>
+<hr>
+<h2>Motors and Motor Controllers</h2>
+<p>
+An FTC <strong>DC motor</strong> converts electrical energy into mechanical
+rotation. When you call <code>motor.setPower(1.0)</code> in your code, the
+Control Hub applies the battery voltage across the motor's
+terminals. Current flows, the motor spins.
+</p>
+<p>
+The Control Hub is both the computer <strong>and</strong> the motor controller.
+Inside the hub, there are four built-in <strong>motor controller</strong> circuits
+-- one per motor port. Each controller takes your software command
+(a number from -1.0 to +1.0) and uses it to control the fraction
+of battery voltage it applies to that motor. This is done with
+a technique called <strong>PWM (Pulse Width Modulation)</strong>: the controller
+rapidly switches the motor's power on and off, and the ratio of
+on-time to off-time determines the effective voltage.
+</p>
+<p>
+<img src="motor_and_power_wiring.jpg" alt="Motor and power wiring schematic for the Impulse robot" class="lesson-img">
+</p>
+<p>
+The diagram above shows all six motors on the Impulse robot (four
+drive motors and two mechanism motors) wired into the Control Hub
+and Expansion Hub motor ports. Notice how two separate cables go to
+each motor: the thick power wires and the thin encoder cable.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The Control Hub has **four built-in motor controllers**. They
+<p>
+translate your code commands (-1.0 to +1.0) into actual voltage
+at the motor terminals using PWM. The Expansion Hub adds four more
+motor controllers when you need extra motors.</div></div>
+</p>
+<hr>
+<h2>Servos</h2>
+<p>
+A <strong>servo</strong> is different from a DC motor. A standard servo moves to
+a specific angular position and holds it there. You give it a target
+position (0.0 to 1.0 in FTC code) and it drives itself to that
+angle. A <strong>continuous rotation servo</strong> works like a motor -- you
+give it a speed, not a position.
+</p>
+<p>
+<img src="dual_mode_servo.jpg" alt="goBILDA Dual Mode Servo -- can run in position or continuous mode" class="lesson-img">
+</p>
+<p>
+Servos are plugged into the servo ports along the bottom of the
+Control Hub (numbered 0–5). Unlike motor ports, servos draw power
+from a separate <strong>5V regulated supply</strong> inside the hub, not directly
+from the 12V battery. This means servos always receive a consistent
+voltage regardless of battery state -- one reason they position so
+precisely.
+</p>
+<p>
+The trade-off is that servo ports are current-limited. If a servo
+is heavily loaded and stalling, it can trip the 5V supply's
+protection circuitry and temporarily disable all servo ports. Watch
+for mechanisms that bind or jam.
+</p>
+<hr>
+<h2>Sensors</h2>
+<p>
+Sensors are how the robot perceives the world. A sensor measures
+something -- distance, color, orientation, position -- and sends a
+number back to the Control Hub over a data wire. Your code reads
+that number and makes decisions based on it.
+</p>
+<p>
+<img src="sparkfun_otos_circuit_board.jpg" alt="SparkFun OTOS -- an odometry sensor used on the Impulse robot" class="lesson-img">
+</p>
+<p>
+The SparkFun OTOS (Optical Tracking Odometry Sensor) shown here is
+a good example. It has a tiny optical mouse sensor pointed at the
+floor to track the robot's exact position and heading. It connects
+to the Control Hub's I2C port with a thin 4-wire JST cable.
+</p>
+<p>
+Sensors consume very little current -- a few milliamps. The Control
+Hub provides regulated 3.3V or 5V power to sensors through their
+connector, so sensor power is also isolated from the noisy 12V
+motor supply.
+</p>
+<p>
+<img src="power_motor_servo_sensor_wiring.jpg" alt="Full wiring schematic with sensors, motors, and servos" class="lesson-img">
+</p>
+<p>
+The full schematic above shows how everything connects together on
+the Impulse robot: battery → fuse/switch → Control Hub → motor ports,
+servo ports, and sensor ports. The Expansion Hub adds more capacity
+on the right side.
+</p>
+<hr>
+<h2>The Control Hub LED</h2>
+<p>
+The Control Hub has a <strong>status LED</strong> on its face that tells you what
+the hub is doing at a glance. Learning to read it will save you
+minutes of confusion at a competition.
+</p>
+<p>
+<img src="control_hub_led_indicators.jpg" alt="REV FTC Control Hub LED Status Indicator chart" class="lesson-img">
+</p>
+<p>
+| Color | Pattern | Meaning |
+|-------|---------|---------|
+| <strong>Blue</strong> | Constant | Powered on, waiting to connect to Driver Station |
+| <strong>Green</strong> | Constant | Connected to Driver Station -- ready to run |
+| <strong>Blue</strong> | Flashing | Lost connection with Driver Station |
+| <strong>Orange</strong> | Flashing | Low battery |
+| <strong>Purple/Turquoise</strong> | Flashing | Hub is being configured |
+| <strong>Magenta</strong> | Flashing | Hub switched to 5 GHz Wi-Fi |
+| <strong>Yellow</strong> | Flashing | Hub switched to 2.4 GHz Wi-Fi |
+</p>
+<p>
+In normal operation, you want to see <strong>solid green</strong> before you
+start a match. If you see solid blue it means the Driver Hub has
+not connected yet -- check that the Driver Hub's Wi-Fi is pointed
+at the right network. If you see flashing orange mid-match, the
+battery is running very low and performance will degrade quickly.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A **solid green LED** means the Control Hub is connected and ready
+<p>
+to run. <strong>Flashing orange</strong> means low battery. <strong>Solid blue</strong> means
+the hub is waiting for the Driver Station to connect.</div></div>
+</p>
+<hr>
+<h2>The Whole Picture</h2>
+<p>
+Now you can trace the full electrical path on your robot:
+</p>
+<p>
+<strong>Battery</strong> → fuse → power switch → <strong>Control Hub</strong> (and Expansion Hub) → motor controllers → <strong>motors</strong>
+</p>
+<p>
+Separately: <strong>Control Hub</strong> → 5V regulator → servo power supply → <strong>servos</strong>
+</p>
+<p>
+And: <strong>Control Hub</strong> → 3.3V/5V regulated → sensor ports → <strong>sensors</strong>
+</p>
+<p>
+Everything starts with that one battery. Every motor, every servo,
+every sensor, and the Control Hub itself all draw from the same
+source. When you stall four drive motors at once, all that current
+is coming from one pack of NiMH cells. If you are wondering why the
+robot suddenly slows down in the middle of a match, now you know
+where to look.
+</p>
+<hr>
+<h2>What You Learned</h2>
+<ul>
+<li><strong>Voltage</strong> (volts) is electrical pressure; <strong>current</strong> (amps) is</li>
+</ul>
+<p>
+  flow rate. Power = volts × amps.
+</p>
+<ul>
+<li><strong>Lower AWG</strong> = thicker wire. Use 18 AWG for power, 22 AWG for</li>
+</ul>
+<p>
+  signals.
+</p>
+<ul>
+<li>The <strong>FTC battery is 12V NiMH</strong> and voltage gradually sags across</li>
+</ul>
+<p>
+  a match -- the robot is slightly weaker at the end than the start.
+</p>
+<ul>
+<li>A <strong>fuse</strong> protects the wiring by blowing if current gets too high.</li>
+</ul>
+<p>
+  The <strong>power switch</strong> lets a referee cut all power instantly.
+</p>
+<ul>
+<li><strong>XT30 connectors</strong> carry main power (rated 30A); **JST-PH</li>
+</ul>
+<p>
+  connectors** carry sensor and encoder signals only.
+</p>
+<ul>
+<li>The Control Hub has <strong>four built-in motor controllers</strong> that</li>
+</ul>
+<p>
+  translate code commands into motor voltage via PWM.
+</p>
+<ul>
+<li><strong>Servos</strong> run from a separate 5V regulated supply and position</li>
+</ul>
+<p>
+  precisely, but servo ports are current-limited.
+</p>
+<ul>
+<li><strong>Sensors</strong> draw very little current and connect to regulated</li>
+</ul>
+<p>
+  low-voltage ports.
+</p>
+<ul>
+<li>The <strong>Control Hub LED</strong> tells you connection and battery status</li>
+</ul>
+<p>
+  at a glance -- solid green is good.
+</p>
+<hr>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click **Mark Complete** below, then head to the next electrical
+<p>
+lesson!</div></div>
+</p>
+<hr>

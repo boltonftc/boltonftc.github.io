@@ -1,0 +1,322 @@
+---
+layout: page
+title: "Pedro Pathing: Capture Mode"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-advanced">Advanced</span>
+
+<h1>Pedro Pathing: Capture Mode</h1>
+<h2>From Sleep-Based Auto to Path Following</h2>
+<p>
+In the Auto vs TeleOp lesson, you wrote a simple autonomous routine that
+used <code>sleep()</code> to time motor commands. That works, but it is
+<strong>blind</strong> — the robot has no idea where it is. If it bumps a wall
+or another robot, it drifts off course with no way to recover.
+</p>
+<p>
+<strong>Pedro Pathing</strong> is a path-following library that solves this
+problem. It uses your robot's localizer (the OTOS sensor and
+AprilTag data you set up in earlier lessons) to know exactly
+where the robot is at all times. You define a path — a series of
+waypoints — and Pedro drives the robot along that path, correcting
+for drift as it goes.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Pedro Pathing** = real-time path following with drift correction.
+<p>
+You define where the robot should go; Pedro drives it there using
+sensor feedback from the localizer.</div></div>
+</p>
+<hr>
+<h2>The Capture Panel (Teach Pendant)</h2>
+<p>
+Writing Pedro Pathing code by hand means typing exact coordinates
+and headings for every waypoint. That is tedious and error-prone.
+Instead, the simulator has a <strong>Capture Panel</strong> — a
+teach-pendant-style tool that lets you drive the robot to each
+position and record it with a button press.
+</p>
+<p>
+Here is how it works:
+</p>
+<ol>
+<li>You <strong>drive</strong> the robot around the field with the gamepad.</li>
+<li>At each important position, you press <strong>LB (Left Bumper)</strong> to</li>
+</ol>
+<p>
+   record the robot's pose (X, Y, heading).
+</p>
+<ol>
+<li>At positions where the robot should perform an action, you</li>
+</ol>
+<p>
+   press <strong>A</strong>, <strong>B</strong>, <strong>X</strong>, or <strong>Y</strong> to record that action.
+</p>
+<ol>
+<li>When you are done, you press <strong>Export</strong> and the simulator</li>
+</ol>
+<p>
+   writes a complete Java file with all the Pedro Pathing code.
+</p>
+<p>
+No typing coordinates. No guessing headings. You drive the path
+you want, and the tool generates the code.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The **Capture Panel** is a teach pendant: you drive the robot,
+<p>
+record poses with LB, record actions with A/B/X/Y, and export
+a ready-to-run Java autonomous file.</div></div>
+</p>
+<hr>
+<h2>Part 1 — Enter Capture Mode</h2>
+<p>
+Capture mode is available from the field (not the PIT).
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Press Escape to go to the field if you are in the PIT.
+<ol>
+<li>On the Driver Hub panel, find and press the <strong>Capture</strong> button.</li>
+<li>The Capture Panel will appear on screen with a list of</li>
+</ol>
+<p>
+   recorded poses (currently empty) and control buttons.</div></div>
+</p>
+<p>
+The panel shows:
+</p>
+<ul>
+<li><strong>Pose list</strong> — each recorded waypoint appears here</li>
+<li><strong>LB / A / B / X / Y</strong> indicators — show what each button</li>
+</ul>
+<p>
+  records
+</p>
+<ul>
+<li><strong>Clear</strong> — erase all recorded poses and start over</li>
+<li><strong>Export</strong> — generate the Java file</li>
+</ul>
+<hr>
+<h2>Part 2 — Record a Path</h2>
+<p>
+Now drive a path around the field. A good first path might be:
+</p>
+<ol>
+<li>Drive forward about 3 feet</li>
+<li>Turn 90 degrees left</li>
+<li>Drive forward to a game element</li>
+<li>Fire the intake (Button A action)</li>
+<li>Drive to the scoring zone</li>
+</ol>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Use the left stick to drive the robot to your first waypoint.
+<ol>
+<li>Press <strong>LB</strong> to record the pose. You will see it appear in</li>
+</ol>
+<p>
+   the Capture Panel's pose list.
+</p>
+<ol>
+<li>Drive to the next position and press <strong>LB</strong> again.</li>
+<li>When you reach a spot where the robot should run an action,</li>
+</ol>
+<p>
+   press the corresponding button:
+   - <strong>A</strong> = intake toggle (ButtonA_Action)
+   - <strong>B</strong> = flywheel toggle (ButtonB_Action)
+   - <strong>X</strong> = indexer fire (ButtonX_Action)
+   - <strong>Y</strong> = ButtonY_Action
+</p>
+<ol>
+<li>Record at least <strong>4-5 poses</strong> to make an interesting path.</div></div></li>
+</ol>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">You do not need dozens of waypoints. Pedro Pathing draws smooth
+<p>
+lines between poses. 4-6 well-placed poses make a clean path.
+More poses = more precise control, but also more complexity.</div></div>
+</p>
+<p>
+The Capture Panel shows each entry as either a <strong>Pose</strong> (position
+waypoint) or an <strong>Action</strong> (button press at that location). You
+can see the coordinates update as you add entries.
+</p>
+<hr>
+<h2>Part 3 — Export the Auto File</h2>
+<p>
+Now export your recorded path as a Java autonomous file.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. In the Capture Panel, find the **class name** text field.
+<p>
+   Type a name for your auto — for example <code>MyFirstAuto</code>.
+</p>
+<ol>
+<li>Press the <strong>Export</strong> button.</li>
+<li>The simulator writes a new <code>.java</code> file into your code package</li>
+</ol>
+<p>
+   with the Pedro Pathing path you recorded.</div></div>
+</p>
+<p>
+The exported file is a complete, compilable Java class with:
+</p>
+<ul>
+<li><code>@Autonomous</code> annotation</li>
+<li>Pedro Pathing Follower setup with tuned PID constants</li>
+<li>Pose objects for every waypoint you recorded</li>
+<li>PathChain connecting all the poses with Bezier curves</li>
+<li>Button actions inserted at the right points</li>
+<li>A <code>while (opModeIsActive() &amp;&amp; follower.isBusy())</code> loop that</li>
+</ul>
+<p>
+  follows the path
+</p>
+<p>
+You did not have to write any of that — the Capture Panel
+generated it all from your drive session.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">The **Export** button generates a full Pedro Pathing Java file.
+<p>
+All the path math, PID setup, and action triggers are created
+automatically from the poses you recorded.</div></div>
+</p>
+<hr>
+<h2>Part 4 — Run Your Auto</h2>
+<p>
+Test the exported autonomous path.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Press Escape to close the Capture Panel if it is still open.
+<ol>
+<li>On the Driver Hub, switch to the <strong>Autonomous</strong> menu.</li>
+<li>Select the auto file you just exported (the class name you</li>
+</ol>
+<p>
+   typed).
+</p>
+<ol>
+<li>Press START and watch the robot follow your recorded path.</div></div></li>
+</ol>
+<p>
+The robot should follow the same route you drove, hitting each
+waypoint and performing each action at the right spot. Watch the
+telemetry — it shows the current path phase and the robot's
+real-time position.
+</p>
+<p>
+If the path looks wrong:
+</p>
+<ul>
+<li>Go back into Capture mode and re-record</li>
+<li>Make sure you pressed LB at each key position</li>
+<li>Try fewer poses for simpler paths</li>
+</ul>
+<hr>
+<h2>Reading the Generated Code</h2>
+<p>
+Open the exported Java file in the code editor to see what Pedro
+Pathing code looks like. Here are the key pieces:
+</p>
+<h3>Poses</h3>
+<pre><code class="language-java">Pose pose1 = new Pose(-0.1, -3.5, Math.toRadians(91.4));
+<p>
+Pose pose2 = new Pose(-32.9, -3.5, Math.toRadians(91.4));
+</code></pre>
+</p>
+<p>
+Each Pose has three values: <strong>X</strong> (inches from field center),
+<strong>Y</strong> (inches from field center), and <strong>heading</strong> (direction the
+robot faces, in radians). These were captured from the exact
+positions you drove to.
+</p>
+<h3>Path Chains</h3>
+<pre><code class="language-java">PathChain chain1 = follower.pathBuilder()
+<p>
+    .addPath(new BezierLine(pose1, pose2))
+    .setLinearHeadingInterpolation(
+        Math.toRadians(91.4), Math.toRadians(91.4))
+    .build();
+</code></pre>
+</p>
+<p>
+A PathChain connects poses with smooth Bezier curves. The heading
+interpolation controls how the robot rotates between waypoints —
+<code>setConstantHeadingInterpolation</code> keeps the same heading,
+<code>setLinearHeadingInterpolation</code> smoothly rotates between two
+headings.
+</p>
+<h3>The Follower Loop</h3>
+<pre><code class="language-java">follower.followPath(chain1);
+<p>
+while (opModeIsActive() &amp;&amp; follower.isBusy()) {
+    follower.update();
+    telemetry.addData(&quot;Phase&quot;, &quot;Chain 1&quot;);
+    telemetry.update();
+    idle();
+}
+</code></pre>
+</p>
+<p>
+<code>follower.followPath()</code> starts path execution. The while loop
+calls <code>follower.update()</code> every cycle, which reads the localizer,
+calculates motor powers, and drives toward the next waypoint.
+When the robot reaches the end, <code>isBusy()</code> returns false and the
+loop exits.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Pedro Pathing code has three main parts: **Poses** (where to go),
+<p>
+<strong>PathChains</strong> (how to connect them), and the <strong>Follower loop</strong>
+(drive and correct until you arrive).</div></div>
+</p>
+<hr>
+<h2>What Happens on a Real Robot?</h2>
+<p>
+Everything you just did works exactly the same on a real FTC
+robot with two small differences:
+</p>
+<ol>
+<li><strong>Localizer hardware</strong> — instead of a simulated OTOS sensor,</li>
+</ol>
+<p>
+   you wire a real SparkFun OTOS to the Control Hub.
+</p>
+<ol>
+<li><strong>PID tuning</strong> — the PID constants in the generated file may</li>
+</ol>
+<p>
+   need adjustment for your real robot's weight and wheel grip.
+</p>
+<p>
+The Pedro Pathing library, the Follower class, the PathChain
+system — all of that is the same code running on the real robot's
+Control Hub. That is why teams prototype autonomous paths in the
+simulator first: it is much faster to iterate than driving a
+physical robot back and forth across a field.
+</p>
+<hr>
+<h2>Mark Complete</h2>
+<p>
+You used the Capture Panel to drive a path, recorded poses and
+actions, exported a Pedro Pathing autonomous file, ran it on the
+field, and read the generated code to understand how path
+following works.
+</p>

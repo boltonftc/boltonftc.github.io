@@ -1,0 +1,356 @@
+---
+layout: page
+title: "Button Actions: Intake"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-easier">Easier</span>
+
+<h1>Button Actions: Intake</h1>
+<h2>What Is a Robot Action?</h2>
+<p>
+Driving is only half the job. During a match your robot also
+needs to interact with the field — picking up game elements,
+scoring them, and releasing them. Each of these tasks is an
+<strong>action</strong>.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">An **action** is anything your robot does besides driving —
+<p>
+toggling the intake, shooting a ball, extending an arm.</div></div>
+</p>
+<p>
+Here are some actions that map well to a single button press:
+</p>
+<ul>
+<li><strong>A</strong> — turn the intake on or off</li>
+<li><strong>B</strong> — spin up the ball shooter</li>
+<li><strong>X</strong> — fire a ball into the goal</li>
+<li><strong>Y</strong> — raise or lower an arm</li>
+</ul>
+<p>
+Each of these is something a driver triggers at the right moment
+during a match. One button, one job.
+</p>
+<hr>
+<h2>Why Separate Files?</h2>
+<p>
+You might expect all your code to live inside MecanumDrive.java.
+But in our project, each button gets its own file:
+</p>
+<ul>
+<li><code>ButtonA_Action.java</code></li>
+<li><code>ButtonB_Action.java</code></li>
+<li><code>ButtonX_Action.java</code></li>
+<li><code>ButtonY_Action.java</code></li>
+</ul>
+<p>
+Each file has an <code>execute()</code> method that runs when its button
+is pressed. Why split things up?
+</p>
+<p>
+<strong>Reuse.</strong> The same action file works in both TeleOp and
+Autonomous. When you record an auto path and press A at a
+certain spot, the robot calls the exact same
+<code>ButtonA_Action.execute()</code>. You write the code once and it
+works everywhere.
+</p>
+<p>
+<strong>Teamwork.</strong> On a real FTC team, one student can work on the
+intake while another works on the shooter. Separate files mean
+separate work — no one accidentally overwrites someone else's
+code.
+</p>
+<p>
+<strong>Clarity.</strong> MecanumDrive handles driving. ButtonA_Action handles
+the intake. Each file has one job. When something breaks, you
+know exactly where to look.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">Button action files keep mechanism code **separate** from drive
+<p>
+code. The same action works in both TeleOp and Autonomous.</div></div>
+</p>
+<p>
+For this lesson we will work in <strong>two files</strong>: ButtonA_Action.java
+and MecanumDrive.java.
+</p>
+<hr>
+<h2>State Machines</h2>
+<p>
+Our intake has two states: <strong>ON</strong> and <strong>OFF</strong>. Pressing the A
+button switches between them. It does not hold-to-run — one press
+turns it on, another press turns it off. This is called a
+<strong>toggle</strong>.
+</p>
+<p>
+That toggle is a <strong>state machine</strong> — a program that:
+</p>
+<ol>
+<li>Tracks which <strong>state</strong> it is currently in</li>
+<li>Changes state based on <strong>inputs</strong> (like a button press)</li>
+</ol>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A **state machine** is a program that tracks which state it is
+<p>
+in and follows rules to switch between states.</div></div>
+</p>
+<p>
+Ours has two states and one input:
+</p>
+<pre><code class="language-">State: OFF  →  press A  →  State: ON
+<p>
+State: ON   →  press A  →  State: OFF
+</code></pre>
+</p>
+<p>
+How do we know which state we are in? We check the intake motor's
+current power. If it is spinning (power > 0), the intake is ON.
+If it is stopped (power = 0), the intake is OFF. The motor itself
+stores the state for us.
+</p>
+<p>
+State machines show up everywhere in FTC. A ball shooter might
+have IDLE, SPINNING_UP, READY, and FIRING states. An arm might
+have STOWED, EXTENDING, and EXTENDED. Once you understand the
+pattern, you will see it in every mechanism.
+</p>
+<hr>
+<h2>Rising Edge Detection</h2>
+<p>
+Remember that <code>while (opModeIsActive())</code> loop in your code? It
+runs about 50 times per second. Every time through, the program
+checks the gamepad, does math, and sends commands to the motors.
+</p>
+<p>
+Here is the problem: if you check <code>gamepad1.a</code> directly, it will
+be <code>true</code> for every loop while the button is held down. Hold A
+for half a second and the toggle fires 25 times — flickering
+between ON and OFF rapidly.
+</p>
+<p>
+The fix is called <strong>rising edge detection</strong>. You remember what
+the button was last loop. You only act when the button goes from
+<code>false</code> (released) to <code>true</code> (pressed) — the moment you first
+push it down. If the button was already <code>true</code> last loop, you
+skip it.
+</p>
+<pre><code class="language-">loop 1:  A = false,  prevA = false  →  no change
+<p>
+loop 2:  A = true,   prevA = false  →  TRIGGER! (rising edge)
+loop 3:  A = true,   prevA = true   →  skip (still held)
+loop 4:  A = false,  prevA = true   →  no change (released)
+</code></pre>
+</p>
+<p>
+In code, the check is: <code>if (gamepad1.a &amp;&amp; !prevA)</code>. That means
+"A is pressed NOW and was NOT pressed last time." After the check,
+you save the current state: <code>prevA = gamepad1.a</code>.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Rising edge detection** fires an action once when a button is
+<p>
+first pressed, not every loop while it is held down.</div></div>
+</p>
+<hr>
+<h2>The Intake</h2>
+<p>
+Our robot has an intake — a spinning roller that pulls game balls
+into the robot. The intake can hold up to three balls in its
+hopper. Later lessons will cover how to shoot them, but first we
+need to turn the intake on and off.
+</p>
+<p>
+The intake motor is called <code>&quot;intake_motor&quot;</code> in the hardware map.
+Setting its power to <code>1.0</code> spins it forward (pulling balls in).
+Setting it to <code>0.0</code> stops it.
+</p>
+<hr>
+<h2>Part 1 — Code the Toggle</h2>
+<p>
+Time to write the toggle logic inside ButtonA_Action.java.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open ButtonA_Action.java and jump to
+<p>
+the intake section:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ ButtonA_Action.java › Button Actions : Intake ]</span>
+<p>
+The file has a constructor that gives you <code>hardwareMap</code> and
+<code>telemetry</code> — you do not need to change anything outside the
+<code>execute()</code> method.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Replace the `Button Actions: Intake` comment block inside
+<p>
+<code>execute()</code> with the code from the green block:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Get the intake motor from the hardware map
+<p>
+DcMotor intakeMotor = hardwareMap.dcMotor.get(&quot;intake_motor&quot;);
+</p>
+<p>
+// Check if the motor is currently running
+boolean isRunning = Math.abs(intakeMotor.getPower()) &gt; 0.01;
+</p>
+<p>
+// Toggle: if running, stop it; if stopped, start it
+if (isRunning) {
+    intakeMotor.setPower(0.0);
+} else {
+    intakeMotor.setPower(1.0);
+}
+</code></pre></div></div>
+</p>
+<p>
+Let's walk through what this does:
+</p>
+<ol>
+<li>Get the intake motor from the hardware map.</li>
+<li>Check its current power — if it is above 0.01, it is running.</li>
+<li>If running, stop it. If stopped, start it.</li>
+</ol>
+<p>
+The <code>Math.abs()</code> call handles the case where power might be a
+tiny negative number due to floating-point math. Anything close
+to zero counts as stopped.
+</p>
+<p>
+Notice we are NOT adding telemetry here. ButtonA_Action only
+runs once per button press, but the main loop calls
+<code>telemetry.update()</code> every frame — which would immediately
+overwrite anything we display here. We will add intake telemetry
+in the main loop instead.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click **Save** in the code editor.</div></div>
+<hr>
+<h2>Part 2 — Wire Up the Button</h2>
+<p>
+The action code is ready, but MecanumDrive does not call it yet.
+We need to add two things:
+</p>
+<ol>
+<li>A <code>prevA</code> variable to track the previous button state</li>
+<li>A rising-edge check that calls <code>ButtonA_Action.execute()</code></li>
+</ol>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Click the link below to open MecanumDrive.java and jump to the
+<p>
+variable section:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Button Actions : Variables ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Type the line from the green block right below the
+<p>
+<code>Add your button action variables below</code> comment:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Track previous A button state for rising edge detection
+<p>
+boolean prevA = false;
+</code></pre></div></div>
+</p>
+<p>
+This creates a boolean that remembers whether A was pressed on
+the previous loop. It starts as <code>false</code> because no buttons are
+pressed when the program begins.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Now click the link below to jump to the loop section. Type the
+<p>
+code from the green block right below the `Add your button
+action code below` comment:</div></div>
+</p>
+<span class="sim-action" title="Simulator action only">[ Button Actions : Loop ]</span>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// Rising edge: only trigger on the first frame A is pressed
+<p>
+if (gamepad1.a &amp;&amp; !prevA) {
+    new ButtonA_Action(this).execute();
+}
+prevA = gamepad1.a;  // remember this frame for next loop
+</p>
+<p>
+// Show intake status on the Driver Hub every frame
+DcMotor intakeMotor = hardwareMap.dcMotor.get(&quot;intake_motor&quot;);
+telemetry.addData(&quot;Intake&quot;, Math.abs(intakeMotor.getPower()) &gt; 0.01 ? &quot;ON&quot; : &quot;OFF&quot;);
+</code></pre></div></div>
+</p>
+<p>
+The first four lines handle the rising-edge toggle:
+</p>
+<ul>
+<li><code>gamepad1.a &amp;&amp; !prevA</code> — A is pressed now AND was not pressed</li>
+</ul>
+<p>
+  last loop. This is the rising edge.
+</p>
+<ul>
+<li><code>new ButtonA_Action(this).execute()</code> — create a ButtonA_Action</li>
+</ul>
+<p>
+  and run its <code>execute()</code> method.
+</p>
+<ul>
+<li><code>prevA = gamepad1.a</code> — save the current button state for the</li>
+</ul>
+<p>
+  next loop.
+</p>
+<p>
+The last two lines add telemetry. Because this runs every loop
+iteration (not just when A is pressed), the intake status stays
+visible on the Driver Hub at all times.
+</p>
+<p>
+The <code>this</code> keyword passes your entire OpMode to ButtonA_Action.
+That is how it gets access to <code>hardwareMap</code> and <code>telemetry</code>
+without you wiring them up manually.
+</p>
+<hr>
+<h2>Part 3 — Save, Compile, and Test!</h2>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save**.
+<ol>
+<li>Click <strong>Recompile</strong> on the Driver Hub.</li>
+<li>Select <strong>MecanumDrive</strong> from TeleOp.</li>
+<li>Click <strong>INIT</strong>, then <strong>START</strong>.</div></div></li>
+</ol>
+<p>
+Press A on the gamepad. You should see the intake roller on the
+robot start spinning and the telemetry display "Intake: ON" on
+the Driver Hub. Press A again — the roller stops and telemetry
+shows "Intake: OFF". The status stays visible because we read
+the motor power every loop, not just when the button is pressed.
+</p>
+<p>
+On the test stand the robot will not move, but you can see the
+intake roller spin. Try driving with the left stick at the same
+time — the intake keeps running independently because its state
+lives in the motor, not in a variable that resets each loop.
+</p>
+<p>
+Now try it on the competition field! Click <strong>Return to Match</strong>,
+load your code package, compile, and drive around near the game
+balls while toggling the intake. You should be able to pick up
+balls into the hopper.
+</p>
+<p>
+<strong>What's next?</strong> The intake gets balls into the robot, but you
+cannot score them yet. Future lessons will add the flywheel
+shooter and the indexer so you can launch balls at the goal.
+</p>
+<hr>

@@ -1,0 +1,342 @@
+---
+layout: page
+title: "A Tour of Your Code"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-easier">Easier</span>
+
+<h1>A Tour of Your Code</h1>
+<h2>Don't Worry — You Are Just Looking</h2>
+<p>
+This lesson is a <strong>tour</strong>, not a test. You are not writing any
+code today, and you will not be responsible for memorizing
+everything on this page. The goal is to walk through
+MecanumDrive.java top to bottom so that future lessons — where
+you actually start typing — make sense from the beginning.
+</p>
+<p>
+If something looks confusing, that is fine. Read the
+explanation, look at the code, and move on. You will see every
+one of these concepts again in a later lesson when you actually
+use it.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Open MecanumDrive.java by clicking the link below:</div></div>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › MecanumDrive : Starter TeleOp ]</span>
+<hr>
+<h2>The Package Declaration</h2>
+<span class="sim-action" title="Simulator action only">[ package org.firstinspires.ftc.teamcode ]</span>
+<p>
+Just below the gray comment block at the top of the file is
+the very first line of real code:
+</p>
+<pre><code class="language-java">package org.firstinspires.ftc.teamcode;
+<p>
+</code></pre>
+</p>
+<p>
+A <strong>package</strong> is Java's way of grouping related files together.
+Think of it like a folder name on your computer — it tells the
+robot's Controller Hub which team's code to run. All the files
+in your code package share the same package name:
+<code>org.firstinspires.ftc.teamcode</code>.
+</p>
+<p>
+The dots are like slashes in a folder path:
+<code>org / firstinspires / ftc / teamcode</code>. You will never need to
+change this line.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A **package** is a named group of Java files. All your robot
+<p>
+code lives in the package <code>org.firstinspires.ftc.teamcode</code>.
+Think of it as the folder address for your team's code.</div></div>
+</p>
+<hr>
+<h2>The Imports</h2>
+<span class="sim-action" title="Simulator action only">[ FTC SDK Imports ]</span>
+<p>
+Directly below the package declaration are a series of
+<code>import</code> lines, organized into labeled sections:
+</p>
+<pre><code class="language-java">import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+<p>
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+</code></pre>
+</p>
+<p>
+Java cannot use a class unless you tell it where to find it.
+<code>import</code> is how you do that — each line brings in one class
+from the FTC SDK (the official robotics library). As you add
+new features in later lessons, you will see new imports
+appear at the top of the file.
+</p>
+<hr>
+<h2>The @TeleOp Annotation</h2>
+<span class="sim-action" title="Simulator action only">[ @TeleOp(name ]</span>
+<p>
+Just above the class declaration there is a line with an <code>@</code>
+symbol:
+</p>
+<pre><code class="language-java">@TeleOp(name = &quot;MecanumDrive&quot;, group = &quot;Starter&quot;)
+<p>
+</code></pre>
+</p>
+<p>
+The <code>@</code> marks a Java <strong>annotation</strong> — a label that attaches
+extra information to code without being a line the robot
+actually runs. The <code>@TeleOp</code> annotation tells the FTC Driver
+Hub that this program is a driver-controlled OpMode and makes
+its name show up in the program list on the tablet.
+</p>
+<p>
+<code>name = &quot;MecanumDrive&quot;</code> is what the driver sees and selects
+before a match. If you change that string, the name on the
+Driver Hub changes.
+</p>
+<hr>
+<h2>The Class Declaration</h2>
+<span class="sim-action" title="Simulator action only">[ public class MecanumDrive ]</span>
+<p>
+The next line opens the <strong>class</strong>:
+</p>
+<pre><code class="language-java">public class MecanumDrive extends LinearOpMode {
+<p>
+</code></pre>
+</p>
+<p>
+Here is what each piece means:
+</p>
+<ul>
+<li><code>public</code> — other parts of the program can see this class</li>
+<li><code>class MecanumDrive</code> — the name of the class</li>
+<li><code>extends LinearOpMode</code> — your class <em>inherits</em> all the</li>
+</ul>
+<p>
+  built-in FTC robot tools already written for you: reading
+  hardware, accessing the gamepad, checking match state, etc.
+</p>
+<ul>
+<li><code>{</code> — opens the class body; everything until the last <code>}</code> in</li>
+</ul>
+<p>
+  the file belongs to this class
+</p>
+<p>
+You will sometimes hear <code>extends</code> described as an "is-a"
+relationship. <code>MecanumDrive</code> is a <code>LinearOpMode</code> — it has all
+the same built-in capabilities, plus whatever you add on top.
+</p>
+<p>
+We will go deeper on classes in a later lesson. For now, just
+know: <strong>the class is the container for everything</strong>.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A **class** in Java is a named container that holds related
+<p>
+code together. <code>MecanumDrive extends LinearOpMode</code> means your
+program gets all the built-in FTC robot tools for free — you
+just add your own robot logic on top.</div></div>
+</p>
+<hr>
+<h2>The runOpMode() Method</h2>
+<span class="sim-action" title="Simulator action only">[ public void runOpMode ]</span>
+<p>
+Inside the class, you will see this:
+</p>
+<pre><code class="language-java">@Override
+<p>
+public void runOpMode() throws InterruptedException {
+</code></pre>
+</p>
+<p>
+This is the <strong>method</strong> that contains everything your robot does.
+A <strong>method</strong> is a named block of instructions. When the FTC
+framework needs your robot to run, it calls <code>runOpMode()</code> and
+executes every line inside its <code>{</code> and <code>}</code>.
+</p>
+<p>
+A few things on these lines you do not need to dig into yet:
+</p>
+<p>
+<strong><code>@Override</code></strong> — You are replacing (overriding) a built-in
+version of <code>runOpMode()</code> that lives in <code>LinearOpMode</code>. Your
+version wins. The <code>@Override</code> annotation is just a safety
+check that says "I know I am replacing something."
+</p>
+<p>
+<strong><code>throws InterruptedException</code></strong> — Java requires this
+declaration on any method that uses <code>sleep()</code>. The computer
+needs to see it. Ignore what it means for now.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">A **method** is a named block of instructions. `runOpMode()`
+<p>
+is the main method for FTC — everything your robot does
+during a match is written inside it. The FTC framework calls
+it automatically when the driver presses START.</div></div>
+</p>
+<hr>
+<h2>Connecting to Hardware</h2>
+<span class="sim-action" title="Simulator action only">[ hardwareMap.dcMotor.get ]</span>
+<p>
+The first lines inside <code>runOpMode()</code> grab the four drive
+motors:
+</p>
+<pre><code class="language-java">DcMotor backLeft  = hardwareMap.dcMotor.get(&quot;back_left_motor&quot;);
+<p>
+DcMotor frontLeft = hardwareMap.dcMotor.get(&quot;front_left_motor&quot;);
+</code></pre>
+</p>
+<p>
+The <code>hardwareMap</code> is a built-in object that contains every
+piece of hardware plugged into the Control Hub. <code>.dcMotor.get</code>
+looks up a motor by the <strong>name label</strong> configured on the
+Driver Hub. Those names — <code>back_left_motor</code>, <code>front_left_motor</code>,
+and so on — must exactly match the labels on the physical wiring
+of the real robot.
+</p>
+<p>
+You got a look at the physical robot in an earlier lesson. The
+motors have name stickers on them. If the string in the code
+does not match the sticker, the program will crash. Getting
+these names right is one of the most common setup bugs on a
+real robot.
+</p>
+<hr>
+<h2>Naming Conventions — camelCase and PascalCase</h2>
+<p>
+While you are looking at the hardware setup, notice the
+pattern of how things are named:
+</p>
+<pre><code class="language-java">DcMotor backLeft  = hardwareMap.dcMotor.get(&quot;back_left_motor&quot;);
+<p>
+</code></pre>
+</p>
+<p>
+<code>backLeft</code> starts with a lowercase letter and each new word
+after the first is capitalized: <strong>backLeft</strong>, <strong>frontLeft</strong>,
+<strong>backRight</strong>. This convention is called <strong>camelCase</strong> because
+the capital letters in the middle look like camel humps.
+</p>
+<p>
+In Java, <strong>camelCase</strong> is used for variables and methods —
+the names of things that hold values or do work:
+<code>backLeft</code>, <code>frontLeft</code>, <code>opModeIsActive</code>, <code>setDirection</code>.
+</p>
+<p>
+<code>DcMotor</code> starts with a capital letter with each new word
+also capitalized: <strong>DcMotor</strong>, <strong>LinearOpMode</strong>,
+<strong>MecanumDrive</strong>. This is called <strong>PascalCase</strong> (every word
+capitalized, no separator).
+</p>
+<p>
+In Java, <strong>PascalCase</strong> is used for class names — the names
+of types and blueprints: <code>DcMotor</code>, <code>LinearOpMode</code>,
+<code>MecanumDrive</code>.
+</p>
+<p>
+You will see these patterns throughout the codebase. When
+you write your own variables, use camelCase. When you name
+a class, use PascalCase.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**camelCase** — first word lowercase, each following word
+<p>
+capitalized. Used for variables and methods: <code>backLeft</code>,
+<code>setDirection</code>, <code>opModeIsActive</code>.
+</p>
+<p>
+<strong>PascalCase</strong> — every word capitalized. Used for class
+names: <code>DcMotor</code>, <code>LinearOpMode</code>, <code>MecanumDrive</code>.</div></div>
+</p>
+<hr>
+<h2>Reversing the Left Motors</h2>
+<span class="sim-action" title="Simulator action only">[ backLeft.setDirection ]</span>
+<p>
+Right below the hardware setup:
+</p>
+<pre><code class="language-java">backLeft.setDirection(DcMotor.Direction.REVERSE);
+<p>
+frontLeft.setDirection(DcMotor.Direction.REVERSE);
+</code></pre>
+</p>
+<p>
+The left-side motors are mounted as a mirror image of the
+right-side motors. If you tell both sides to spin "forward"
+without reversing the left side, the left wheels push the
+robot backward while the right wheels push it forward. The
+call to <code>setDirection(REVERSE)</code> fixes this so all four wheels
+agree on which way is "forward."
+</p>
+<hr>
+<h2>The Start Line — waitForStart()</h2>
+<span class="sim-action" title="Simulator action only">[ waitForStart ]</span>
+<p>
+After all the setup, there is one critical line:
+</p>
+<pre><code class="language-java">waitForStart();
+<p>
+</code></pre>
+</p>
+<p>
+This is the dividing line between <strong>init</strong> and <strong>loop</strong> — the
+same boundary you saw in the Code Orientation lesson. Everything
+above <code>waitForStart()</code> runs once when the program loads.
+The code pauses here and waits for the driver to press START
+on the Driver Hub.
+</p>
+<hr>
+<h2>The Operational Loop</h2>
+<span class="sim-action" title="Simulator action only">[ while (opModeIsActive ]</span>
+<p>
+Immediately below <code>waitForStart()</code>:
+</p>
+<pre><code class="language-java">while (opModeIsActive()) {
+<p>
+</code></pre>
+</p>
+<p>
+This is the <strong>loop</strong> — a block of code that repeats over and
+over until the match ends. <code>opModeIsActive()</code> is a built-in
+method that returns <code>true</code> while the match is running and
+<code>false</code> when it ends or the driver presses STOP. The <code>while</code>
+keeps checking: *"Is the match still going? If yes, run the
+code inside the braces again."*
+</p>
+<p>
+Scroll down through the interior of the loop. It is mostly
+empty comment blocks — one placeholder for each future lesson.
+As you complete lessons, these will fill up with real code.
+</p>
+<hr>
+<h2>What's Next?</h2>
+<p>
+In the next lesson, <strong>Telemetry</strong>, you will write your first
+real line of code — a message that appears on the Driver Hub
+screen when the robot is running. You will use a method called
+<code>telemetry.addData()</code>, and you now know exactly what a method
+is and where in this file it belongs.
+</p>
+<hr>

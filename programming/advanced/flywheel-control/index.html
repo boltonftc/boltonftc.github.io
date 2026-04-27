@@ -1,0 +1,691 @@
+---
+layout: page
+title: "Flywheel Control"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+</style>
+
+<span class="tier-badge tier-advanced">Advanced</span>
+
+<h1>Flywheel Control: Feedforward + PID</h1>
+<h2>The Problem</h2>
+<p>
+You built a flywheel shooter. You set its power to 1.0 and it
+spins up to 312 RPM. You fire a ball — the RPM drops 40%.
+You wait... and wait... and eventually it recovers. Then you
+fire again.
+</p>
+<p>
+What if you want to fire three balls <strong>quickly</strong>, one after
+another? With a simple <code>setPower(1.0)</code> the first shot is
+strong, the second is weak, and the third barely makes it.
+Why? Because the flywheel has not recovered between shots.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**The core problem:** `setPower(1.0)` is **open-loop** control.
+<p>
+You set a fixed power and hope for the best. The motor has no
+idea it slowed down after a shot — it just keeps applying the
+same voltage. Recovery is slow because the motor is already at
+"full power" and has nothing extra to give.</div></div>
+</p>
+<h2>The Smart Way: Tell the Motor What to Do</h2>
+<p>
+Imagine you are driving on cruise control set to 60 mph. The
+car does not just hold the gas pedal in one spot — it
+<strong>measures</strong> the speed with the speedometer and <strong>adjusts</strong> the
+throttle. Going uphill? More gas. Going downhill? Less gas.
+</p>
+<p>
+But what if the car <em>already knew</em> roughly how much gas it
+needs for 60 mph on flat road? It could start there and only
+make small adjustments. That is <strong>much</strong> faster than starting
+from zero and guessing.
+</p>
+<p>
+That is the idea behind <strong>feedforward + feedback control</strong>:
+</p>
+<ol>
+<li><strong>Feedforward</strong> — "I already know roughly what power to set</li>
+</ol>
+<p>
+   for this target speed" (the starting point)
+</p>
+<ol>
+<li><strong>Feedback (P)</strong> — "Let me fine-tune based on what the</li>
+</ol>
+<p>
+   encoder actually reads" (the correction)
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Feedforward** gives you a smart starting point based on
+<p>
+physics. <strong>Feedback</strong> (the P term) corrects for real-world
+disturbances like shots, friction, and battery drain. Together
+they are faster and more stable than either one alone.</div></div>
+</p>
+<hr>
+<h2>The Formula</h2>
+<p>
+The total motor power is:
+</p>
+<pre><code class="language-">power = kS + kV × targetRPM + kP × error
+<p>
+</code></pre>
+</p>
+<p>
+| Constant | Name | What It Does |
+|----------|------|-------------|
+| <strong>kS</strong> | Static friction | Minimum power to overcome friction and start spinning |
+| <strong>kV</strong> | Velocity constant | Maps target RPM directly to power (the motor curve) |
+| <strong>kP</strong> | Proportional gain | Corrects based on the current error (target − actual) |
+</p>
+<p>
+You will tune each one <strong>individually</strong>, in order. This is the
+same approach used by FTCLib, Road Runner, and most competitive
+FTC teams.
+</p>
+<hr>
+<h2>Part 1 — Finding kS: "How Much Power Just to Start?"</h2>
+<p>
+Every motor has internal friction. If you set power to 0.01,
+the shaft does not move. You need a minimum power just to
+overcome friction and get the flywheel barely turning. That
+minimum power is <strong>kS</strong>.
+</p>
+<p>
+Think of it like pushing a heavy box on carpet. You push
+lightly — nothing happens. You push a bit harder — still
+nothing. Then at some threshold the box starts to slide. That
+threshold is kS.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**kS (static friction):** The minimum motor power needed to
+<p>
+overcome friction and start the shaft turning. Below kS, the
+motor buzzes but does not spin.</div></div>
+</p>
+<h3>Find kS By Experiment</h3>
+<p>
+The Encoder RPM section you wrote earlier already computes
+<code>rpm</code> from the flywheel encoder — and <code>shooterMotor</code> is already
+in scope from the Flywheel Shooter section. Your new control
+code builds directly on those existing variables.
+</p>
+<h3>Before You Start — Disable the Trim Section</h3>
+<p>
+The Flywheel Trim code from the previous lesson is still
+running above the Flywheel Control section. It calls
+<code>shooterMotor.setPower(flywheelPower)</code> every frame — which
+will <strong>fight</strong> with your new control code. You need to disable
+it first.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Open MecanumDrive.java and find the **Flywheel Trim** section:</div></div>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Flywheel Trim : Loop ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Comment out these two lines in the Flywheel Trim section:
+<ol>
+<li><code>shooterMotor.setPower(flywheelPower);</code></li>
+<li>The <code>telemetry.addData(&quot;Flywheel&quot;, ...)</code> block below it</li>
+</ol>
+<p>
+Add <code>//</code> at the start of each line. This stops the trim code
+from overriding your new controller. The rest of the trim
+section (the <code>flywheelOn</code> and <code>dtSec</code> variables) stays active
+— your control code will use them.</div></div>
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Why comment out instead of delete?** The trim code is useful
+<p>
+reference. Once your controller is working, you'll integrate
+the right-stick RPM adjustment directly into the controller
+(Part 3). Commenting out keeps the old code visible as a
+reference.</div></div>
+</p>
+<p>
+Now find the Flywheel Control section:
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Flywheel Control : Loop ]</span>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Type the code from the green block below the
+<p>
+<code>Add your flywheel control code below</code> comment.
+We will start by finding kS:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// ── Flywheel Control ──────────────────────────────
+<p>
+// ┌─────────────────────────────────────────────┐
+// │  STEP 1: Find kS                           │
+// │  Slowly increase testPower until the        │
+// │  flywheel JUST BARELY starts spinning.      │
+// │  Try: 0.01, 0.02, 0.03, 0.05, 0.08...     │
+// │  Your kS ≈ the lowest power that moves.     │
+// └─────────────────────────────────────────────┘
+if (flywheelOn) {  // flywheelOn is already set by the Flywheel Trim section above
+    double testPower = 0.05;
+    shooterMotor.setPower(testPower);
+    telemetry.addData(&quot;Test Power&quot;, &quot;%.3f&quot;, testPower);
+}
+</code></pre></div></div>
+</p>
+<h3>Save, Compile, and Test</h3>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save**, then **Recompile** on the Driver Hub.
+<ol>
+<li>Select <strong>MecanumDrive</strong> and press <strong>INIT → START</strong>.</li>
+<li>Press <strong>B</strong> to toggle the flywheel on.</li>
+<li>Watch the <strong>Flywheel RPM</strong> readout. Is it spinning?</li>
+<li>If RPM = 0, <strong>increase testPower</strong> (try 0.08, 0.10...).</li>
+<li>If the flywheel is spinning fast, <strong>decrease testPower</strong>.</li>
+<li>Find the <strong>lowest value</strong> where RPM is barely above zero.</li>
+</ol>
+<p>
+   <em>That is your kS.</em>
+</p>
+<ol>
+<li>Press <strong>B</strong> again to toggle the flywheel off. Confirm it</li>
+</ol>
+<p>
+   stops — the control code only runs when the flywheel is on.</div></div>
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**Typical kS values** for goBILDA 312 RPM motors:
+<p>
+<strong>0.05 to 0.12</strong>. Your value depends on the gear mesh, belt tension, and
+how worn the motor is. On a real robot, kS may drift slightly
+over time — that is normal.</div></div>
+</p>
+<h3>Write Down Your kS!</h3>
+<p>
+You will need it in the next step. A good starting value for
+the simulator is around <strong>0.06</strong>.
+</p>
+<hr>
+<h2>Part 2 — Finding kV: "How Much Power Per RPM?"</h2>
+<p>
+Now you know the friction floor (kS). The next question: once
+the motor is spinning, <strong>how much additional power</strong> do you
+need for each RPM of target speed?
+</p>
+<p>
+This is the <strong>velocity constant</strong> — it maps target RPM to the
+power needed to sustain that speed at steady state. For a DC
+motor, this relationship is nearly linear:
+</p>
+<pre><code class="language-">power_for_speed = kS + kV × targetRPM
+<p>
+</code></pre>
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**kV (velocity constant):** The slope of the motor's
+<p>
+power-to-speed curve. It tells you how much power each
+additional RPM costs. <code>kV = (1.0 - kS) / maxRPM</code> is a good
+starting estimate.</div></div>
+</p>
+<h3>Calculate Your Starting kV</h3>
+<p>
+Your motor's max RPM is 312 at full power (1.0). So:
+</p>
+<pre><code class="language-">kV = (1.0 - kS) / 312
+<p>
+</code></pre>
+</p>
+<p>
+If kS = 0.06:
+</p>
+<pre><code class="language-">kV = (1.0 - 0.06) / 312 = 0.94 / 312 ≈ 0.00301
+<p>
+</code></pre>
+</p>
+<h3>Test kV</h3>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">Replace your flywheel control code with this to test
+<p>
+feedforward (kS + kV) at a target RPM:</div></div>
+</p>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// ── Flywheel Control ──────────────────────────────
+<p>
+// ┌─────────────────────────────────────────────┐
+// │  STEP 2: Test feedforward (kS + kV)         │
+// │                                             │
+// │  kS: Your value from Step 1 (e.g. 0.06)    │
+// │  kV: (1.0 - kS) / 312   (e.g. 0.00301)    │
+// │  targetRPM: Try 250                         │
+// └─────────────────────────────────────────────┘
+if (flywheelOn) {  // flywheelOn is already set by the Flywheel Trim section above
+    double targetRPM = 250.0;
+    double kS = 0.06;
+    double kV = 0.00301;
+</p>
+<p>
+    // Feedforward: predict the power needed for this RPM
+    double feedforward = kS + kV * targetRPM;
+</p>
+<p>
+    // Clamp to valid motor range [0, 1]
+    double power = Math.max(0.0, Math.min(1.0, feedforward));
+    shooterMotor.setPower(power);
+</p>
+<p>
+    telemetry.addData(&quot;Target RPM&quot;, &quot;%.0f&quot;, targetRPM);
+    telemetry.addData(&quot;Actual RPM&quot;, &quot;%.1f&quot;, rpm);
+    telemetry.addData(&quot;Feedforward&quot;, &quot;%.3f&quot;, feedforward);
+    telemetry.addData(&quot;Error&quot;, &quot;%.0f RPM&quot;, targetRPM - rpm);
+}
+</code></pre></div></div>
+</p>
+<h3>What to Look For</h3>
+<p>
+Watch the <strong>whiteboard RPM graph</strong>:
+</p>
+<ul>
+<li><strong>Green line</strong> = actual RPM (from the encoder)</li>
+<li><strong>Gray line</strong> = target RPM (250)</li>
+<li><strong>Red line</strong> = motor power being applied</li>
+</ul>
+<p>
+With good kS and kV, the green line should settle <strong>very close</strong>
+to the gray target line — maybe within 5–10 RPM. That is the
+feedforward doing most of the work!
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Fine-tune kV:**
+<ul>
+<li>If actual RPM is <strong>below</strong> target → increase kV slightly</li>
+<li>If actual RPM is <strong>above</strong> target → decrease kV slightly</li>
+<li>Try small adjustments: ±0.0002 at a time</li>
+<li>Goal: actual RPM settles within ~5 RPM of target</div></div></li>
+</ul>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Feedforward is proactive.** It does not wait for an error —
+<p>
+it calculates the right power from the target speed directly.
+This is why the flywheel reaches target RPM almost immediately,
+unlike pure P control which has to "discover" the right power
+through trial and error.</div></div>
+</p>
+<p>
+Now fire a ball: press <strong>B</strong> to spin up the flywheel, wait for
+it to reach target, then hold <strong>X</strong> to fire. Watch the green
+line dip and recover. The feedforward power stays constant (red
+line flat) — it does not react to the shot. The flywheel has to
+recover on its own, which takes about <strong>2 seconds</strong>.
+</p>
+<p>
+That is where kP comes in.
+</p>
+<hr>
+<h2>Part 3 — Adding kP: "Correct What Feedforward Misses"</h2>
+<p>
+Feedforward gets you 95% of the way there. But it cannot react
+to <strong>disturbances</strong> — shots, battery voltage changes, friction
+changes. For that, you need a small amount of <strong>feedback</strong>.
+</p>
+<p>
+The <strong>P (proportional) term</strong> measures the current error and
+adds extra power proportional to that error:
+</p>
+<pre><code class="language-">error = targetRPM - actualRPM
+<p>
+correction = kP × error
+total_power = kS + kV × targetRPM + kP × error
+</code></pre>
+</p>
+<p>
+After a shot drops the RPM by 100, kP kicks in with extra
+power to bring it back faster. Once the error shrinks to near
+zero, kP fades away and feedforward holds steady.
+</p>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**kP (proportional gain):** Adds a correction proportional to
+<p>
+the current error. Big error → big boost. Small error → small
+boost. It handles disturbances that feedforward cannot predict.</div></div>
+</p>
+<h3>Add kP to Your Code</h3>
+<p>
+First, you need a variable to hold the target RPM that
+<strong>persists</strong> between loop iterations (so the right stick
+adjustment is "sticky"). Add these in the **Flywheel Control :
+Variables** section (above the main loop):
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Flywheel Control : Variables ]</span>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">double targetRPM = 250.0;
+<p>
+long lastControlTime = System.nanoTime();
+</code></pre></div></div>
+</p>
+<p>
+Now replace your flywheel control <strong>loop</strong> code with the full
+feedforward + P controller:
+</p>
+<span class="sim-action" title="Simulator action only">[ MecanumDrive.java › Flywheel Control : Loop ]</span>
+<div class="lesson-block code-block"><div class="block-label">&gt;&gt; Type This Code</div><div class="block-body"><pre><code class="language-java">// ── Flywheel Control ──────────────────────────────
+<p>
+// ┌─────────────────────────────────────────────┐
+// │  FEEDFORWARD + P CONSTANTS                  │
+// │                                             │
+// │  kS: 0.06    (static friction — Step 1)     │
+// │  kV: 0.00301 (velocity constant — Step 2)   │
+// │  kP: 0.005   (proportional gain — tune now) │
+// │                                             │
+// │  Right stick Y: adjust target RPM (sticky)  │
+// │  Up = faster, down = slower, center = hold  │
+// └─────────────────────────────────────────────┘
+if (flywheelOn) {  // flywheelOn is already set by the Flywheel Trim section above
+    double kS = 0.06;
+    double kV = 0.00301;
+    double kP = 0.005;
+</p>
+<p>
+    // Compute time since last frame for sticky stick adjustment
+    long now = System.nanoTime();
+    double dtSec = (now - lastControlTime) / 1_000_000_000.0;
+    lastControlTime = now;
+</p>
+<p>
+    // Right stick Y adjusts target RPM (sticky — holds value when released)
+    double stickY = -gamepad1.right_stick_y;
+    if (Math.abs(stickY) &gt; 0.05) {
+        targetRPM += stickY <em> 60.0 </em> dtSec;  // 60 RPM/sec adjust rate
+        targetRPM = Math.max(100.0, Math.min(312.0, targetRPM));
+    }
+</p>
+<p>
+    // Feedforward: predict the power needed for this RPM
+    double feedforward = kS + kV * targetRPM;
+</p>
+<p>
+    // Feedback: correct based on current error
+    // (rpm already computed in the Encoder RPM section above)
+    double error = targetRPM - rpm;
+    double correction = kP * error;
+</p>
+<p>
+    // Total power = feedforward + feedback
+    double power = feedforward + correction;
+</p>
+<p>
+    // Clamp to valid motor range [0, 1]
+    power = Math.max(0.0, Math.min(1.0, power));
+    shooterMotor.setPower(power);
+</p>
+<p>
+    telemetry.addData(&quot;Target RPM&quot;, &quot;%.0f&quot;, targetRPM);
+    telemetry.addData(&quot;Actual RPM&quot;, &quot;%.1f&quot;, rpm);
+    telemetry.addData(&quot;Error&quot;, &quot;%.0f&quot;, error);
+    telemetry.addData(&quot;FF Power&quot;, &quot;%.3f&quot;, feedforward);
+    telemetry.addData(&quot;P Correction&quot;, &quot;%.3f&quot;, correction);
+    telemetry.addData(&quot;Total Power&quot;, &quot;%.3f&quot;, power);
+}
+</code></pre></div></div>
+</p>
+<h3>Save, Compile, and Test</h3>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">1. Click **Save**, then **Recompile** on the Driver Hub.
+<ol>
+<li>Press <strong>INIT → START</strong>, then press <strong>B</strong> to start the</li>
+</ol>
+<p>
+   flywheel. Watch the green RPM line snap to the gray target.
+</p>
+<ol>
+<li><strong>Fire a ball</strong> — hold <strong>X</strong> to fire. Watch the green line</li>
+</ol>
+<p>
+   dip when the ball hits the flywheel, then recover.
+</p>
+<ol>
+<li><strong>Move the right stick up/down</strong> — notice the target RPM</li>
+</ol>
+<p>
+   adjusts and <strong>stays</strong> at the new value when you release the
+   stick. Push up to increase, down to decrease. The controller
+   tracks the new target automatically.
+</p>
+<ol>
+<li>Press <strong>B</strong> to toggle the flywheel off. Confirm it stops.</div></div></li>
+</ol>
+<h3>The kP Comparison — See the Difference!</h3>
+<p>
+This is the most important test in the lesson. You want to
+<strong>see</strong> why kP matters.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Step A — Without kP (feedforward only):**
+<ol>
+<li>In your code, change <code>kP = 0.005</code> to <code>kP = 0.0</code>.</li>
+<li>Save and recompile. Press <strong>B</strong> to spin up.</li>
+<li>Fire <strong>two balls</strong> rapidly with <strong>X</strong>. Watch the graph.</li>
+<li>Notice: the green line drops ~40% after each shot and takes</li>
+</ol>
+<p>
+   about <strong>2 full seconds</strong> to crawl back. The red power line
+   stays flat — feedforward does not react to the shot.
+</p>
+<p>
+<strong>Step B — With kP:</strong>
+</p>
+<ol>
+<li>Change <code>kP</code> back to <code>0.005</code>. Save and recompile.</li>
+<li>Spin up with <strong>B</strong>, then fire <strong>two balls</strong> rapidly.</li>
+<li>Notice: the green line drops the same amount but snaps back</li>
+</ol>
+<p>
+   in under <strong>1 second</strong>. The red power line spikes up after
+   each shot (that is kP adding extra power) then settles.
+</p>
+<p>
+The difference should be dramatic — about 2× faster recovery.</div></div>
+</p>
+<h3>What to Look For</h3>
+<p>
+Compare feedforward-only (kP=0) vs feedforward + kP:
+</p>
+<ul>
+<li><strong>Spin-up</strong> is similar (feedforward handles it either way)</li>
+<li><strong>After a shot</strong>, kP=0 takes ~2s to recover; kP=0.005 takes</li>
+</ul>
+<p>
+  ~0.8s — the red power line spikes as kP compensates
+</p>
+<ul>
+<li><strong>Rapid fire</strong>: with kP, all balls get similar launch power.</li>
+</ul>
+<p>
+  Without kP, each successive ball is weaker.
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**Tune kP:**
+<ul>
+<li>If recovery after a shot is <strong>too slow</strong> → increase kP</li>
+<li>If the green line <strong>oscillates</strong> (bounces up and down) →</li>
+</ul>
+<p>
+  decrease kP
+</p>
+<ul>
+<li>Sweet spot: fast recovery with no visible bouncing</div></div></li>
+</ul>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Why not just use a big kP?** Because feedforward already
+<p>
+provides the baseline power, kP only needs to handle small
+disturbances. This means kP can be <strong>small</strong>, which prevents
+oscillation. Compare this to pure P-only control where kP has
+to do all the work — it must be big enough to reach the target,
+but then it overshoots and oscillates.</div></div>
+</p>
+<hr>
+<h2>The Rapid-Fire Test</h2>
+<p>
+Now for the fun part!
+</p>
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">**The Rapid-Fire Challenge:**
+<ol>
+<li>Press <strong>B</strong> to spin up, wait for target RPM.</li>
+<li>Fire <strong>three balls</strong> as quickly as you can (hold X, release,</li>
+</ol>
+<p>
+   hold X, release, hold X).
+</p>
+<ol>
+<li>Watch the RPM graph — how quickly does RPM recover between</li>
+</ol>
+<p>
+   each shot?</div></div>
+</p>
+<p>
+With well-tuned feedforward + kP you should see:
+</p>
+<ul>
+<li>RPM drops after each shot but <strong>snaps back quickly</strong></li>
+<li>All three balls get approximately the <strong>same launch power</strong></li>
+<li>The red power line spikes after each shot as kP compensates,</li>
+</ul>
+<p>
+  then settles back to the feedforward baseline
+</p>
+<p>
+Without control (old <code>setPower(1.0)</code> approach):
+</p>
+<ul>
+<li>RPM drops and <strong>slowly climbs</strong> back</li>
+<li>Each successive ball is weaker than the last</li>
+<li>Recovery takes so long that rapid fire is impractical</li>
+</ul>
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">**Why feedforward + P matters for shooters:** Feedforward gets
+<p>
+the flywheel to target speed almost instantly. kP handles shot
+recovery. Together they give you consistent shots and faster
+fire rates — a real competitive advantage on the field.</div></div>
+</p>
+<hr>
+<h2>What About PID?</h2>
+<p>
+You may have heard of <strong>PID control</strong> (Proportional, Integral,
+Derivative). That is a valid approach, but for flywheels the
+feedforward + P method is <strong>simpler and better</strong>:
+</p>
+<p>
+| | Pure PID | Feedforward + P |
+|---|---|---|
+| Spin-up | Slow — P must discover correct power | Fast — feedforward knows immediately |
+| Steady-state gap | Needs I term to close it | Feedforward handles it directly |
+| Oscillation risk | High if P is too aggressive | Low — P only handles small corrections |
+| Tuning complexity | 3 interacting gains (Kp, Ki, Kd) | 3 independent values (kS, kV, kP) |
+</p>
+<p>
+In PID, the <strong>I (integral) term</strong> slowly accumulates past error
+to close the steady-state gap — but feedforward eliminates that
+gap instantly. The <strong>D (derivative) term</strong> dampens oscillation —
+but since kP is small (feedforward does the heavy lifting),
+oscillation is rarely a problem.
+</p>
+<p>
+Competitive FTC teams (and libraries like FTCLib and Road
+Runner) use feedforward + P as the standard approach for
+velocity control.
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**When IS full PID useful?** PID shines for **position control**
+<p>
+— holding an arm at a specific angle, or keeping the robot at a
+specific heading. In those cases there is no simple feedforward
+model, so you need I and D to handle steady-state error and
+oscillation. Different tool for a different job.</div></div>
+</p>
+<hr>
+<h2>Tuning Summary</h2>
+<p>
+Here is the full tuning process, start to finish:
+</p>
+<ol>
+<li><strong>Find kS:</strong> Slowly increase power until the flywheel barely</li>
+</ol>
+<p>
+   spins. That is your kS. (Typical: 0.05–0.12)
+</p>
+<ol>
+<li><strong>Calculate kV:</strong> <code>kV = (1.0 - kS) / 312</code>. Test at your</li>
+</ol>
+<p>
+   target RPM, fine-tune until the steady-state error is small.
+   (Typical: 0.0025–0.0035)
+</p>
+<ol>
+<li><strong>Tune kP:</strong> Start at 0.005. Increase until shot recovery is</li>
+</ol>
+<p>
+   fast. Decrease if you see oscillation. (Typical: 0.002–0.015)
+</p>
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">**These values transfer to real robots.** The kS, kV, kP
+<p>
+tuning process is the same on a physical robot with the same
+motor. You may need to re-tune kS (real friction is different),
+but the process and code are identical.</div></div>
+</p>
+<hr>
+<h2>What You Learned</h2>
+<ul>
+<li><strong>Open-loop</strong> control (<code>setPower</code>) has no feedback — it</li>
+</ul>
+<p>
+  cannot react to disturbances like shots
+</p>
+<ul>
+<li><strong>Feedforward</strong> (kS + kV) predicts the right power from</li>
+</ul>
+<p>
+  physics — no error needed
+</p>
+<ul>
+<li><strong>kS</strong> overcomes static friction (the floor)</li>
+<li><strong>kV</strong> maps target RPM to power (the slope)</li>
+<li><strong>kP</strong> corrects for disturbances (the safety net)</li>
+<li>Feedforward + P is <strong>simpler and faster</strong> than full PID for</li>
+</ul>
+<p>
+  velocity control
+</p>
+<ul>
+<li>This is the <strong>standard approach</strong> used by FTCLib, Road Runner,</li>
+</ul>
+<p>
+  and competitive FTC teams
+</p>
+<h2>Where Else Is This Used?</h2>
+<p>
+Feedforward + feedback controllers are everywhere:
+</p>
+<ul>
+<li><strong>FTC drivetrains</strong> — feedforward for velocity, PID for</li>
+</ul>
+<p>
+  heading correction
+</p>
+<ul>
+<li><strong>Industrial motors</strong> — factory conveyor belts, CNC machines</li>
+<li><strong>Cruise control</strong> — throttle map (feedforward) + speed</li>
+</ul>
+<p>
+  sensor correction (P)
+</p>
+<ul>
+<li><strong>Drone rotors</strong> — RPM model (feedforward) + gyro</li>
+</ul>
+<p>
+  stabilization (PID)
+</p>
+<p>
+The concepts you just learned — measuring, predicting, and
+correcting — apply to <strong>any</strong> system where you have a target,
+a sensor, and an actuator.
+</p>
+<hr>
