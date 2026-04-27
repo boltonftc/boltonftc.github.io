@@ -1,0 +1,16 @@
+/* Widen the main content area */
+.container {
+  max-width: 1200px !important;
+}
+
+.col-xl-8 {
+  flex: 0 0 90% !important;
+  max-width: 90% !important;
+}
+
+@media (min-width: 1200px) {
+  .col-xl-8 {
+    flex: 0 0 88% !important;
+    max-width: 88% !important;
+  }
+}
