@@ -1,3 +1,67 @@
+"""One-off script to rebuild the schedule page, widen content CSS, fix programming index,
+   and re-run the lesson converter with fixed image copying."""
+
+import re, os, shutil, json
+
+SITE_ROOT  = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+MODULE_DIR = os.path.normpath(os.path.join(SITE_ROOT, "..", "impulse_3dsim", "modules", "ftc_starter_course"))
+WP_DIR     = os.path.normpath(os.path.join(SITE_ROOT, "..", "impulse_3dsim", "docs", "planning", "wp"))
+
+# ──────────────────────────────────────────────
+# 1. SCHEDULE PAGE — use schedule_table.html
+# ──────────────────────────────────────────────
+
+with open(os.path.join(WP_DIR, "schedule_table.html"), encoding="utf-8") as f:
+    raw = f.read()
+
+# Strip the HTML comment header
+raw = re.sub(r'<!--.*?-->', '', raw, flags=re.DOTALL).strip()
+
+# Remove the Littleton/6328 address references
+raw = re.sub(
+    r'Meeting at 6328 headquarters.*?20 Harvard Rd Building D, Littleton, MA 01460</span>',
+    'Optional Sunday buffer meeting',
+    raw, flags=re.DOTALL
+)
+
+schedule_page = '---\nlayout: page\ntitle: "Schedule"\n---\n\n' + raw + '\n'
+os.makedirs(os.path.join(SITE_ROOT, "schedule"), exist_ok=True)
+with open(os.path.join(SITE_ROOT, "schedule", "index.html"), "w", encoding="utf-8") as f:
+    f.write(schedule_page)
+print("✓ Schedule page updated")
+
+# ──────────────────────────────────────────────
+# 2. WIDE-PAGE CSS — inject into Beautiful Jekyll via custom CSS file
+# ──────────────────────────────────────────────
+
+css = """\
+/* Widen the main content area */
+.container {
+  max-width: 1200px !important;
+}
+
+.col-xl-8 {
+  flex: 0 0 90% !important;
+  max-width: 90% !important;
+}
+
+@media (min-width: 1200px) {
+  .col-xl-8 {
+    flex: 0 0 88% !important;
+    max-width: 88% !important;
+  }
+}
+"""
+os.makedirs(os.path.join(SITE_ROOT, "assets", "css"), exist_ok=True)
+with open(os.path.join(SITE_ROOT, "assets", "css", "custom.css"), "w", encoding="utf-8") as f:
+    f.write(css)
+print("✓ Custom wide CSS written")
+
+# ──────────────────────────────────────────────
+# 3. PROGRAMMING INDEX — collapsible tiers with icons
+# ──────────────────────────────────────────────
+
+programming_index = '''\
 ---
 layout: page
 title: "Programming Lessons"
@@ -74,7 +138,7 @@ Click a tier to expand its lessons.</p>
   </button>
   <div class="tier-body">
     <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/mecanum-drive/">Mecanum Drive</a><p>Replace tank drive with full mecanum holonomic movement.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/otos/">SparkFun OTOS</a><p>Track your robot's position with the Optical Tracking Odometry Sensor.</p></div></div>
+    <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/otos/">SparkFun OTOS</a><p>Track your robot\'s position with the Optical Tracking Odometry Sensor.</p></div></div>
     <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/apriltag/">AprilTag Detection</a><p>Use the robot camera to detect AprilTags for autonomous alignment.</p></div></div>
     <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/localization/">Localization</a><p>Fuse OTOS and AprilTag data into a single drift-free position estimate.</p></div></div>
     <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/pedro-pathing/">Pedro Pathing: Capture Mode</a><p>Record a path and run a full autonomous using Pedro Pathing.</p></div></div>
@@ -95,3 +159,51 @@ function toggleTier(btn) {
   }
 }
 </script>
+'''
+
+with open(os.path.join(SITE_ROOT, "programming", "index.html"), "w", encoding="utf-8") as f:
+    f.write(programming_index)
+print("✓ Programming index updated with collapsible tiers")
+
+# ──────────────────────────────────────────────
+# 4. RE-RUN LESSON CONVERTER with fixed image copying
+# ──────────────────────────────────────────────
+
+MODULE_JSON = os.path.join(MODULE_DIR, "module.json")
+with open(MODULE_JSON, encoding="utf-8") as f:
+    module = json.load(f)
+
+CATEGORY_DIR = {"programming": "programming", "electrical": "electrical", "mechanical": "mechanical"}
+
+image_count = 0
+for lesson in module["lessons"]:
+    category = lesson.get("category", "programming")
+    tier     = lesson.get("tier", "easier")
+    lid      = lesson["id"]
+    folder   = lesson["folder"]
+
+    lesson_dir = os.path.join(MODULE_DIR, folder)
+    tier_slug  = tier
+    id_slug    = lid.replace("_", "-")
+    out_dir    = os.path.join(SITE_ROOT, CATEGORY_DIR[category], tier_slug, id_slug)
+
+    # Copy images/ subfolder
+    src_img_dir = os.path.join(lesson_dir, "images")
+    dst_img_dir = os.path.join(out_dir, "images")
+    if os.path.isdir(src_img_dir):
+        if os.path.exists(dst_img_dir):
+            shutil.rmtree(dst_img_dir)
+        shutil.copytree(src_img_dir, dst_img_dir)
+        count = len(os.listdir(dst_img_dir))
+        image_count += count
+
+    # Copy any images sitting directly in the lesson root (referenced without path)
+    for fname in os.listdir(lesson_dir):
+        if fname.lower().endswith(('.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg')):
+            src = os.path.join(lesson_dir, fname)
+            dst = os.path.join(out_dir, fname)
+            shutil.copy2(src, dst)
+            image_count += 1
+
+print(f"✓ Images copied: {image_count} total")
+print("\nAll done.")

@@ -1,9 +1,4 @@
----
-layout: page
-title: "Schedule"
----
-
-<style>
+﻿<style>
 .ftc-schedule {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     max-width: 720px;
@@ -84,7 +79,7 @@ title: "Schedule"
       </tr>
 
       <tr class="sunday">
-        <td class="col-num">—</td>
+        <td class="col-num">â€”</td>
         <td class="col-date">Sun May 3</td>
         <td class="col-theme">Optional Sunday buffer meeting</td>
       </tr>
@@ -102,7 +97,7 @@ title: "Schedule"
       </tr>
 
       <tr class="sunday">
-        <td class="col-num">—</td>
+        <td class="col-num">â€”</td>
         <td class="col-date">Sun May 17</td>
         <td class="col-theme">Optional Sunday buffer meeting</td>
       </tr>
@@ -116,7 +111,7 @@ title: "Schedule"
       <tr>
         <td class="col-num"><span class="badge badge-blue">5</span></td>
         <td class="col-date">Wed May 27</td>
-        <td class="col-theme">First Drive — Everyone Drives!</td>
+        <td class="col-theme">First Drive â€” Everyone Drives!</td>
       </tr>
 
       <tr>
@@ -134,3 +129,4 @@ title: "Schedule"
     </tbody>
   </table>
 </div>
+

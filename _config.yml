@@ -1,5 +1,7 @@
 title: Bolton Robotics FTC
 author: The Bolton Robotics Team
+url: "https://boltonftc.github.io"
+baseurl: ""
 
 remote_theme: daattali/beautiful-jekyll@6.0.1
 
@@ -28,6 +30,9 @@ footer-link-col: "#404040"
 footer-hover-col: "#0085A1"
 
 navbar-var-length: true
+
+site-css:
+  - "/assets/css/custom.css"
 
 markdown: kramdown
 highlighter: rouge
