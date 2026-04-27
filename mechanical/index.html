@@ -4,28 +4,75 @@ title: "Mechanical"
 ---
 
 <style>
+.tier-section { margin-bottom: 1em; border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; }
+.tier-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; cursor: pointer; user-select: none;
+  background: #f8f9fa; border: none; width: 100%; text-align: left;
+  font-size: 1.1em; font-weight: 700;
+}
+.tier-header:hover { background: #e9ecef; }
+.tier-icon { font-size: 1.2em; }
+.tier-count { font-size: 0.8em; font-weight: normal; color: #666; margin-left: auto; }
+.tier-body { padding: 0 16px 8px; display: none; }
+.tier-body.open { display: block; }
 .lesson-card { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
 .lesson-card:last-child { border-bottom: none; }
 .tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; white-space: nowrap; }
 .tier-easier { background: #d4edda; color: #155724; }
 .lesson-card a { font-weight: bold; font-size: 1.05em; }
 .lesson-card p { margin: 2px 0 0; color: #555; font-size: 0.92em; }
-.gobilda-card { background: #f8f9fa; border-radius: 8px; padding: 16px 20px; margin-top: 1.5em; border: 1px solid #dee2e6; }
-.gobilda-card h2 { margin: 0 0 8px; }
-.gobilda-card p { margin: 0 0 12px; color: #555; }
+.ri3d-card { background: #f8f9fa; border-radius: 8px; padding: 20px 22px; margin-top: 1.5em; border: 1px solid #dee2e6; }
+.ri3d-card h2 { margin: 0 0 8px; font-size: 1.25em; }
+.ri3d-card p { margin: 0 0 14px; color: #555; }
+.ri3d-card ul { margin: 0 0 14px; padding-left: 1.4em; color: #555; font-size: 0.95em; }
+.ri3d-card ul li { margin-bottom: 4px; }
 </style>
 
-## Mechanical Lessons
+<h2>Mechanical Lessons</h2>
 
-<div class="lesson-card">
-  <span class="tier-badge tier-easier">Easier</span>
-  <div><a href="easier/hardware/">Robot Hardware</a><p>Identify the structural components, motion hardware, and fasteners on the Impulse robot.</p></div>
+<p>Learn about the physical components of your FTC robot. Click a tier to expand.</p>
+
+<div class="tier-section">
+  <button class="tier-header" onclick="toggleTier(this)">
+    <span class="tier-icon">🟢</span> Easier
+    <span class="tier-count">1 lesson</span>
+    <span>▶</span>
+  </button>
+  <div class="tier-body">
+    <div class="lesson-card">
+      <span class="tier-badge tier-easier">Easier</span>
+      <div><a href="easier/hardware/">Robot Hardware</a><p>Identify the structural components, motion hardware, and fasteners on the Impulse robot.</p></div>
+    </div>
+  </div>
 </div>
 
----
+<hr>
 
-<div class="gobilda-card">
-  <h2>goBILDA RI3D Parts</h2>
-  <p>Complete parts lists for every sub-assembly of the Impulse robot — with photos, SKUs, and quantities.</p>
+<div class="ri3d-card">
+  <h2>goBILDA RI3D Assembly Instructions</h2>
+  <p>Complete parts lists for every sub-assembly of the Impulse robot — with photos, SKUs, and quantities.
+  CAD reference links and assembly photos will be added here as they become available.</p>
+  <ul>
+    <li>Drivetrain (left &amp; right sides)</li>
+    <li>Intake (lower &amp; upper)</li>
+    <li>Indexer &amp; Shooter</li>
+    <li>Upper frame (front, back, left, right)</li>
+    <li>Deflector</li>
+  </ul>
   <a href="gobilda-ri3d/" class="btn btn-primary">View Parts Lists →</a>
 </div>
+
+<script>
+function toggleTier(btn) {
+  const body = btn.nextElementSibling;
+  const arrow = btn.querySelector('span:last-child');
+  if (body.classList.contains('open')) {
+    body.classList.remove('open');
+    arrow.textContent = '▶';
+  } else {
+    body.classList.add('open');
+    arrow.textContent = '▼';
+  }
+}
+</script>
