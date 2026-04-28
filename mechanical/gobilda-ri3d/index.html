@@ -5,9 +5,11 @@ title: "goBILDA RI3D Parts Lists"
 
 <style>
 .parts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 1.5em; }
-.parts-card { border: 1px solid #dee2e6; border-radius: 8px; padding: 14px 16px; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.15s, border-color 0.15s; }
+.parts-card { border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow 0.15s, border-color 0.15s; }
 .parts-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: #adb5bd; text-decoration: none; }
-.parts-card h3 { margin: 0 0 6px; font-size: 1em; }
+.parts-card-thumb { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: #f0f0f0; display: block; }
+.parts-card-body { padding: 10px 14px 12px; flex: 1; }
+.parts-card h3 { margin: 0 0 4px; font-size: 1em; }
 .parts-card p { margin: 0; font-size: 0.85em; color: #666; }
 .intro { color: #555; margin-bottom: 0.5em; }
 </style>
@@ -18,51 +20,50 @@ Use these with your goBILDA order or as a reference during assembly.</p>
 
 <div class="parts-grid">
   <a class="parts-card" href="left-side-mecanum-drivetrain/">
-    <h3>Left Drivetrain</h3>
-    <p>Left side mecanum drivebase rails, motors, and hardware</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/drivetrain_left.jpg" alt="Left Drivetrain" loading="lazy">
+    <div class="parts-card-body"><h3>Left Drivetrain</h3><p>Left side mecanum drivebase rails, motors, and hardware</p></div>
   </a>
   <a class="parts-card" href="right-side-mecanum-drivetrain/">
-    <h3>Right Drivetrain</h3>
-    <p>Right side mecanum drivebase rails, motors, and hardware</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/drivetrain_right.jpg" alt="Right Drivetrain" loading="lazy">
+    <div class="parts-card-body"><h3>Right Drivetrain</h3><p>Right side mecanum drivebase rails, motors, and hardware</p></div>
   </a>
   <a class="parts-card" href="lower-intake/">
-    <h3>Lower Intake</h3>
-    <p>Bottom intake roller, mounts, and motor</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/lower_intake.jpg" alt="Lower Intake" loading="lazy">
+    <div class="parts-card-body"><h3>Lower Intake</h3><p>Bottom intake roller, mounts, and motor</p></div>
   </a>
   <a class="parts-card" href="upper-intake/">
-    <h3>Upper Intake</h3>
-    <p>Upper intake roller, mounts, and linkage</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/upper_intake.jpg" alt="Upper Intake" loading="lazy">
+    <div class="parts-card-body"><h3>Upper Intake</h3><p>Upper intake roller, mounts, and linkage</p></div>
   </a>
   <a class="parts-card" href="indexer/">
-    <h3>Indexer</h3>
-    <p>Servo-driven indexer arm and mount hardware</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/indexer.jpg" alt="Indexer" loading="lazy">
+    <div class="parts-card-body"><h3>Indexer</h3><p>Servo-driven indexer arm and mount hardware</p></div>
   </a>
   <a class="parts-card" href="shooter/">
-    <h3>Shooter</h3>
-    <p>Flywheel shooter assembly, pulleys, and belts</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/shooter.jpg" alt="Shooter" loading="lazy">
+    <div class="parts-card-body"><h3>Shooter</h3><p>Flywheel shooter assembly, pulleys, and belts</p></div>
   </a>
   <a class="parts-card" href="shooter-sub-assembly/">
-    <h3>Shooter Sub-Assembly</h3>
-    <p>Shooter inner subframe and bearing hardware</p>
+    <div class="parts-card-body"><h3>Shooter Sub-Assembly</h3><p>Shooter inner subframe and bearing hardware</p></div>
   </a>
   <a class="parts-card" href="upper-front/">
-    <h3>Upper Front</h3>
-    <p>Front upper structure and mounting hardware</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/upper_front.jpg" alt="Upper Front" loading="lazy">
+    <div class="parts-card-body"><h3>Upper Front</h3><p>Front upper structure and mounting hardware</p></div>
   </a>
   <a class="parts-card" href="upper-right/">
-    <h3>Upper Right</h3>
-    <p>Right upper structure and mounting hardware</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/upper_right.jpg" alt="Upper Right" loading="lazy">
+    <div class="parts-card-body"><h3>Upper Right</h3><p>Right upper structure and mounting hardware</p></div>
   </a>
   <a class="parts-card" href="upper-left/">
-    <h3>Upper Left</h3>
-    <p>Left upper structure and mounting hardware</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/upper_left.jpg" alt="Upper Left" loading="lazy">
+    <div class="parts-card-body"><h3>Upper Left</h3><p>Left upper structure and mounting hardware</p></div>
   </a>
   <a class="parts-card" href="upper-back/">
-    <h3>Upper Back</h3>
-    <p>Rear upper structure and mounting hardware</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/upper_back.jpg" alt="Upper Back" loading="lazy">
+    <div class="parts-card-body"><h3>Upper Back</h3><p>Rear upper structure and mounting hardware</p></div>
   </a>
   <a class="parts-card" href="deflector/">
-    <h3>Deflector</h3>
-    <p>Ball deflector plate and standoffs</p>
+    <img class="parts-card-thumb" src="/assets/img/subassembly/deflector.jpg" alt="Deflector" loading="lazy">
+    <div class="parts-card-body"><h3>Deflector</h3><p>Ball deflector plate and standoffs</p></div>
   </a>
 </div>
