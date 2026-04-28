@@ -14,3 +14,20 @@
     max-width: 88% !important;
   }
 }
+
+/* Onshape CAD link banner on parts pages */
+.onshape-cad-link {
+  display: inline-block;
+  margin: 0 0 1.1em;
+  padding: 0.45em 1em;
+  background: #e8f0fe;
+  border-left: 4px solid #1a73e8;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+.onshape-cad-link a {
+  color: #1a73e8;
+  font-weight: bold;
+  text-decoration: none;
+}
+.onshape-cad-link a:hover { text-decoration: underline; }
