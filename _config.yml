@@ -8,6 +8,7 @@ remote_theme: daattali/beautiful-jekyll@6.0.1
 navbar-links:
   Home: "https://boltonftc.github.io"
   Meetings: "meetings/"
+  Resources: "resources/"
   Schedule: "schedule/"
   Programming: "programming/"
   Electrical: "electrical/"
