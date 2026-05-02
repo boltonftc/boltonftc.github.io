@@ -1,0 +1,291 @@
+---
+layout: page
+title: "Resources"
+---
+
+<style>
+.res-intro { color: #555; margin-bottom: 1.8em; }
+.res-section { margin-bottom: 2.2em; }
+.res-cat-header {
+  font-size: 1em;
+  font-weight: bold;
+  color: #fff;
+  padding: 0.45em 0.9em;
+  border-radius: 6px;
+  margin-bottom: 0.85em;
+  letter-spacing: 0.02em;
+}
+.cat-start    { background: #2e7d32; }
+.cat-season   { background: #b71c1c; }
+.cat-mech     { background: #e65100; }
+.cat-cad      { background: #1565c0; }
+.cat-elec     { background: #6a1b9a; }
+.cat-prog     { background: #00695c; }
+
+.res-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.res-card {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 0.85em 1em 0.9em;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8em;
+  background: #fff;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.res-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.1); border-color: #adb5bd; text-decoration: none; }
+.res-icon { font-size: 1.6em; line-height: 1; flex-shrink: 0; padding-top: 0.05em; }
+.res-body { flex: 1; min-width: 0; }
+.res-body h3 { margin: 0 0 0.3em; font-size: 0.95em; color: #222; }
+.res-body p  { margin: 0 0 0.5em; font-size: 0.83em; color: #555; line-height: 1.4; }
+.res-badge {
+  display: inline-block;
+  font-size: 0.7em;
+  font-weight: bold;
+  padding: 1px 7px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.badge-web  { background: #e8f0fe; color: #1a73e8; }
+.badge-pdf  { background: #fce8e6; color: #c5221f; }
+.badge-video { background: #fce4ec; color: #c62828; }
+.badge-docs { background: #e8f5e9; color: #2e7d32; }
+.badge-dl   { background: #fff3e0; color: #e65100; }
+</style>
+
+<p class="res-intro">Useful references, guides, and tools for FTC — organized by topic.</p>
+
+<!-- ── START HERE ─────────────────────────────────────────── -->
+<div class="res-section">
+  <div class="res-cat-header cat-start">📚 Start Here</div>
+  <div class="res-grid">
+
+    <a class="res-card" href="https://gm0.org/" target="_blank" rel="noopener">
+      <div class="res-icon">📗</div>
+      <div class="res-body">
+        <h3>Game Manual Zero</h3>
+        <p>The community-maintained FTC bible — hardware, mechanisms, software, strategy, electronics, and more. Required reading for every team.</p>
+        <span class="res-badge badge-web">Website</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://kingtec2169.com/wp-content/uploads/2024/02/FTC-Survival-Guide-compressed.pdf" target="_blank" rel="noopener">
+      <div class="res-icon">📄</div>
+      <div class="res-body">
+        <h3>FTC Survival Guide</h3>
+        <p>Team 2169 KingTec's comprehensive PDF covering design, strategy, build, electrical, and programming from rookie through advanced.</p>
+        <span class="res-badge badge-pdf">PDF</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://portfolios.hivemindrobotics.net/" target="_blank" rel="noopener">
+      <div class="res-icon">🏆</div>
+      <div class="res-body">
+        <h3>Hivemind Portfolio Gallery</h3>
+        <p>Gallery of award-winning portfolios from 170+ FTC and FRC teams. Browse top teams' engineering notebooks for structure and inspiration.</p>
+        <span class="res-badge badge-web">Website</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ── SEASON & RULES ──────────────────────────────────────── -->
+<div class="res-section">
+  <div class="res-cat-header cat-season">🎮 Season &amp; Rules</div>
+  <div class="res-grid">
+
+    <a class="res-card" href="https://www.firstinspires.org/resource-library/ftc/game-and-season-info" target="_blank" rel="noopener">
+      <div class="res-icon">📋</div>
+      <div class="res-body">
+        <h3>FTC Game Manual</h3>
+        <p>Official FIRST game rules, season info, and competition manual. Read before every tournament.</p>
+        <span class="res-badge badge-web">Website</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://ftc-resources.firstinspires.org/ftc/event/inspection-reference" target="_blank" rel="noopener">
+      <div class="res-icon">✅</div>
+      <div class="res-body">
+        <h3>FTC Inspection Reference</h3>
+        <p>Official pre-competition robot inspection checklist. Review this before every event so you pass on the first try.</p>
+        <span class="res-badge badge-web">Website</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ── MECHANICAL & BUILD ─────────────────────────────────── -->
+<div class="res-section">
+  <div class="res-cat-header cat-mech">🔧 Mechanical &amp; Build</div>
+  <div class="res-grid">
+
+    <a class="res-card" href="https://docs.gobilda.com/" target="_blank" rel="noopener">
+      <div class="res-icon">🟡</div>
+      <div class="res-body">
+        <h3>goBILDA Documentation</h3>
+        <p>Full part specs, CAD files, and build guides for all goBILDA components. Indispensable while building.</p>
+        <span class="res-badge badge-docs">Docs</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://www.projectb.net.au/resources/robot-mechanisms/" target="_blank" rel="noopener">
+      <div class="res-icon">⚙️</div>
+      <div class="res-body">
+        <h3>Mechanism Encyclopedia</h3>
+        <p>Unofficial FRC/FTC mechanism encyclopedia — curated YouTube playlists for drivetrains, intakes, indexers, lifts, and shooters.</p>
+        <span class="res-badge badge-web">Website</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://boltdepot.com/fastener-information/printable-tools/printable-fastener-tools.pdf" target="_blank" rel="noopener">
+      <div class="res-icon">🔩</div>
+      <div class="res-body">
+        <h3>Bolt Depot Fastener Charts</h3>
+        <p>Printable fastener size identification tools — thread gauges, head type reference, and metric/imperial conversion charts.</p>
+        <span class="res-badge badge-pdf">PDF</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://www.youtube.com/@BroganMPratt" target="_blank" rel="noopener">
+      <div class="res-icon">🎥</div>
+      <div class="res-body">
+        <h3>Brogan Pratt — YouTube</h3>
+        <p>FTC build strategy, mechanism design tutorials, and competitive robot breakdowns. High-quality FTC content from a top competitor.</p>
+        <span class="res-badge badge-video">YouTube</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ── CAD & DESIGN ───────────────────────────────────────── -->
+<div class="res-section">
+  <div class="res-cat-header cat-cad">📐 CAD &amp; Design</div>
+  <div class="res-grid">
+
+    <a class="res-card" href="https://www.onshape.com/en/education/" target="_blank" rel="noopener">
+      <div class="res-icon">🖥️</div>
+      <div class="res-body">
+        <h3>OnShape for Education</h3>
+        <p>Free cloud-native 3D CAD for students — no install required. Collaborative real-time design from any device. Create a free edu account.</p>
+        <span class="res-badge badge-web">Website</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://ftconshape.com/introduction-to-the-ftc-parts-library/" target="_blank" rel="noopener">
+      <div class="res-icon">📦</div>
+      <div class="res-body">
+        <h3>FTC Parts Library (OnShape)</h3>
+        <p>Community-built OnShape library of FTC parts — goBILDA, REV, ServoCity, AndyMark, and Pitsco. Insert real parts directly into your CAD.</p>
+        <span class="res-badge badge-web">Website</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ── ELECTRICAL & WIRING ────────────────────────────────── -->
+<div class="res-section">
+  <div class="res-cat-header cat-elec">🔌 Electrical &amp; Wiring</div>
+  <div class="res-grid">
+
+    <a class="res-card" href="https://docs.revrobotics.com/duo-control/" target="_blank" rel="noopener">
+      <div class="res-icon">🔴</div>
+      <div class="res-body">
+        <h3>REV Control Hub Docs</h3>
+        <p>Official REV Robotics documentation — wiring, firmware updates, hardware configuration, and troubleshooting the control system.</p>
+        <span class="res-badge badge-docs">Docs</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://info.firstinspires.org/hubfs/web/program/ftc/guide-robot-wiring.pdf" target="_blank" rel="noopener">
+      <div class="res-icon">📄</div>
+      <div class="res-body">
+        <h3>FIRST Robot Wiring Guide</h3>
+        <p>Official FTC wiring guide from FIRST — covers the full control system layout, power distribution, and motor/servo connections.</p>
+        <span class="res-badge badge-pdf">PDF</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://cyborgeagles.weebly.com/uploads/2/1/8/1/21816346/ftc_robot_wiring_guide.pdf" target="_blank" rel="noopener">
+      <div class="res-icon">📄</div>
+      <div class="res-body">
+        <h3>Cyborg Eagles Wiring Guide</h3>
+        <p>Supplemental FTC wiring reference from team Cyborg Eagles — useful additional diagrams for control hub wiring layouts.</p>
+        <span class="res-badge badge-pdf">PDF</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/managing_esd/managing-esd.html" target="_blank" rel="noopener">
+      <div class="res-icon">⚡</div>
+      <div class="res-body">
+        <h3>Managing ESD Effects</h3>
+        <p>Official FIRST guide on electrostatic discharge — causes, risks, and step-by-step mitigation using ferrite chokes, grounding straps, and insulation.</p>
+        <span class="res-badge badge-docs">Docs</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://ftc-docs.firstinspires.org/en/latest/_downloads/64f2b78ce9343bbd8b61e6e7710b70c9/analysis-esd-mitigation-echin.pdf" target="_blank" rel="noopener">
+      <div class="res-icon">📄</div>
+      <div class="res-body">
+        <h3>ESD Mitigation Analysis</h3>
+        <p>In-depth white paper by FIRST alumnus Eric Chin — quantifies the effectiveness of each ESD protection technique with testing data.</p>
+        <span class="res-badge badge-pdf">PDF</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ── PROGRAMMING & AUTONOMY ─────────────────────────────── -->
+<div class="res-section">
+  <div class="res-cat-header cat-prog">💻 Programming &amp; Autonomy</div>
+  <div class="res-grid">
+
+    <a class="res-card" href="https://docs.sparkfun.com/SparkFun_Optical_Tracking_Odometry_Sensor/software_setup-FTC/" target="_blank" rel="noopener">
+      <div class="res-icon">📡</div>
+      <div class="res-body">
+        <h3>SparkFun OTOS — FTC Setup</h3>
+        <p>Official setup guide for the SparkFun Optical Tracking Odometry Sensor with FTC SDK v9.2+. Hardware config and sample OpMode walkthrough.</p>
+        <span class="res-badge badge-docs">Docs</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://pedropathing.com/docs/pathing/tuning/localization/otos" target="_blank" rel="noopener">
+      <div class="res-icon">🗺️</div>
+      <div class="res-body">
+        <h3>Pedro Pathing — OTOS Tuning</h3>
+        <p>Guide for calibrating OTOS localization within Pedro Pathing for accurate autonomous navigation on the real robot.</p>
+        <span class="res-badge badge-docs">Docs</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://pedropathing.com/" target="_blank" rel="noopener">
+      <div class="res-icon">🤖</div>
+      <div class="res-body">
+        <h3>Pedro Pathing</h3>
+        <p>The most popular autonomous pathing library for FTC. Curve-based paths, an interactive web visualizer, and the new Ivy command framework.</p>
+        <span class="res-badge badge-web">Website</span>
+      </div>
+    </a>
+
+    <a class="res-card" href="https://drive.google.com/file/d/1azJ_-Rywqo-oKbPyvgu_tLojlprJoeoD/view?usp=drive_link" target="_blank" rel="noopener">
+      <div class="res-icon">🎮</div>
+      <div class="res-body">
+        <h3>PIT Mode Simulator</h3>
+        <p>Bolton Robotics' custom Godot-based FTC simulator — write real Java code and drive a 3D robot before you ever touch the hardware.</p>
+        <span class="res-badge badge-dl">Download</span>
+      </div>
+    </a>
+
+  </div>
+</div>
