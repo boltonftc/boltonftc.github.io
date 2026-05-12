@@ -1,0 +1,285 @@
+---
+layout: page
+title: "2025–26 Season Budget"
+---
+
+<style>
+.budget-intro { color: #555; margin-bottom: 1.5em; }
+
+.budget-table-wrap { overflow-x: auto; margin-bottom: 2em; }
+table.budget {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.88em;
+}
+table.budget th {
+  background: #333;
+  color: #fff;
+  padding: 8px 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+table.budget td {
+  padding: 7px 12px;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: top;
+}
+table.budget tr:hover td { background: #f8f9fa; }
+
+/* Category header rows */
+.cat-row td {
+  font-weight: bold;
+  font-size: 0.82em;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 10px 12px 4px;
+  border-bottom: 2px solid;
+  color: #fff;
+}
+.cat-robot   td { background: #1565c0; border-color: #0d47a1; }
+.cat-judging td { background: #6a1b9a; border-color: #4a148c; }
+.cat-tools   td { background: #e65100; border-color: #bf360c; }
+.cat-field   td { background: #2e7d32; border-color: #1b5e20; }
+.cat-spares  td { background: #37474f; border-color: #263238; }
+
+/* Alternating within a section */
+.row-robot   td { background: #e3f2fd; }
+.row-robot:nth-child(even) td { background: #bbdefb; }
+.row-judging td { background: #f3e5f5; }
+.row-judging:nth-child(even) td { background: #e1bee7; }
+.row-tools   td { background: #fff3e0; }
+.row-tools:nth-child(even) td { background: #ffe0b2; }
+.row-field   td { background: #e8f5e9; }
+.row-field:nth-child(even) td { background: #c8e6c9; }
+.row-spares  td { background: #eceff1; }
+.row-spares:nth-child(even) td { background: #cfd8dc; }
+
+.row-total td {
+  font-weight: bold;
+  font-size: 1em;
+  background: #333 !important;
+  color: #fff;
+  border-top: 3px solid #111;
+}
+
+td.cost { text-align: right; white-space: nowrap; }
+td.qty  { text-align: center; }
+td.note { color: #555; font-size: 0.85em; }
+td.tbd  { color: #999; font-style: italic; }
+a.sku-link { color: #1a73e8; text-decoration: none; }
+a.sku-link:hover { text-decoration: underline; }
+
+/* Recommended additions */
+.rec-section { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 1.2em 1.4em; margin-bottom: 2em; }
+.rec-section h2 { margin-top: 0; font-size: 1.05em; color: #333; }
+.rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-top: 0.8em; }
+.rec-card { background: #fff; border: 1px solid #dee2e6; border-radius: 7px; padding: 0.7em 0.9em; }
+.rec-card h3 { margin: 0 0 0.3em; font-size: 0.92em; color: #1565c0; }
+.rec-card p  { margin: 0; font-size: 0.82em; color: #555; line-height: 1.4; }
+.rec-est { font-size: 0.78em; font-weight: bold; color: #e65100; margin-top: 0.3em; }
+
+.back-link { font-size: 0.9em; margin-top: 1.5em; }
+.back-link a { color: #1a73e8; }
+</style>
+
+<p class="budget-intro">Estimated per-season budget for Bolton Robotics FTC — two teams, building on existing goBILDA RI3D robots. Does not include registration or event fees.</p>
+
+<div class="budget-table-wrap">
+<table class="budget">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th class="qty">QTY</th>
+      <th class="cost">Unit Cost</th>
+      <th class="cost">Total</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- ROBOT PARTS -->
+    <tr class="cat-row cat-robot"><td colspan="5">🤖 Robot Parts</td></tr>
+    <tr class="row-robot">
+      <td><a class="sku-link" href="https://axon-robotics.com/products/axon-max-mk2" target="_blank" rel="noopener">Axon MAX MK2 Servos</a></td>
+      <td class="qty">4</td><td class="cost">$90.00</td><td class="cost">$360.00</td>
+      <td class="note">High-power servos — 2 per team</td>
+    </tr>
+    <tr class="row-robot">
+      <td><a class="sku-link" href="https://www.gobilda.com/6v-servo-power-injector-6-channel-8-15v-input/" target="_blank" rel="noopener">goBILDA Servo Power Injector</a></td>
+      <td class="qty">2</td><td class="cost">$52.49</td><td class="cost">$104.98</td>
+      <td class="note">Powers high-performance servos from main battery</td>
+    </tr>
+    <tr class="row-robot">
+      <td>goBILDA Miscellaneous Parts</td>
+      <td class="qty">2</td><td class="cost">$400.00</td><td class="cost">$800.00</td>
+      <td class="note">"We don't know what we don't know" fund — gears, chains, belts, sprockets, shafts, etc.</td>
+    </tr>
+    <tr class="row-robot">
+      <td><a class="sku-link" href="https://www.gobilda.com/12v-nimh-nested-battery-3000mah-mh-fc-xt30-connector/" target="_blank" rel="noopener">Robot Battery (12V NiMH 3000mAh)</a></td>
+      <td class="qty">4</td><td class="cost">$48.74</td><td class="cost">$194.96</td>
+      <td class="note">Each team runs 3 batteries (2 charged + 1 on robot)</td>
+    </tr>
+    <tr class="row-robot">
+      <td><a class="sku-link" href="https://www.gobilda.com/12v-battery-charger-nicad-nimh-xt30-connector/" target="_blank" rel="noopener">Battery Charger (NiMH XT30)</a></td>
+      <td class="qty">2</td><td class="cost">$14.99</td><td class="cost">$29.98</td>
+      <td class="note">One charger per team</td>
+    </tr>
+    <tr class="row-robot">
+      <td><a class="sku-link" href="https://www.revrobotics.com/rev-31-1269/" target="_blank" rel="noopener">Resistive Grounding Strap</a></td>
+      <td class="qty">2</td><td class="cost">$5.50</td><td class="cost">$11.00</td>
+      <td class="note">ESD mitigation — one per robot</td>
+    </tr>
+    <tr class="row-robot">
+      <td><a class="sku-link" href="https://www.gobilda.com/4-bar-odometry-pack-2-pods-1-pinpoint-computer/" target="_blank" rel="noopener">goBILDA 4-Bar Odometry / Pinpoint</a></td>
+      <td class="qty">2</td><td class="cost">$209.99</td><td class="cost">$419.98</td>
+      <td class="note">2 odometry pods + Pinpoint computer per robot</td>
+    </tr>
+
+    <!-- JUDGING -->
+    <tr class="cat-row cat-judging"><td colspan="5">📋 Judging</td></tr>
+    <tr class="row-judging">
+      <td>Pit Judging Presentation Supplies</td>
+      <td class="qty">2</td><td class="cost">$100.00</td><td class="cost">$200.00</td>
+      <td class="note">Poster prints, binder prints, miscellaneous pit supplies per team</td>
+    </tr>
+
+    <!-- TOOLS -->
+    <tr class="cat-row cat-tools"><td colspan="5">🔧 Tools</td></tr>
+    <tr class="row-tools">
+      <td>Crimping Tool &amp; Wiring Supplies</td>
+      <td class="qty">—</td><td class="cost tbd">TBD</td><td class="cost tbd">TBD</td>
+      <td class="note">Custom cut-to-length wiring capability — research needed</td>
+    </tr>
+
+    <!-- GAME FIELD -->
+    <tr class="cat-row cat-field"><td colspan="5">🏟️ Game Field</td></tr>
+    <tr class="row-field">
+      <td><a class="sku-link" href="https://www.andymark.com/products/first-tech-challenge-perimeter-kit" target="_blank" rel="noopener">FTC Perimeter Kit</a></td>
+      <td class="qty">1</td><td class="cost">$709.00</td><td class="cost">$709.00</td>
+      <td class="note">Full practice field perimeter</td>
+    </tr>
+    <tr class="row-field">
+      <td><a class="sku-link" href="https://www.andymark.com/products/ftc-2026-27-biobuzz-pre-orders" target="_blank" rel="noopener">FTC 2026–27 BIOBUZZ™ Game Elements</a></td>
+      <td class="qty">1</td><td class="cost">$599.00</td><td class="cost">$599.00</td>
+      <td class="note">Full set of game elements for practice field</td>
+    </tr>
+
+    <!-- SPARES -->
+    <tr class="cat-row cat-spares"><td colspan="5">🔄 Spares</td></tr>
+    <tr class="row-spares">
+      <td><a class="sku-link" href="https://www.gobilda.com/motors/" target="_blank" rel="noopener">Spare goBILDA Motors</a></td>
+      <td class="qty">4</td><td class="cost">$42.00</td><td class="cost">$168.00</td>
+      <td class="note">Estimate — gearboxes are integral; teams need correct ratio spares</td>
+    </tr>
+    <tr class="row-spares">
+      <td><a class="sku-link" href="https://www.gobilda.com/gripforce-mecanum-wheel-set-104mm-40a-durometer-rollers/" target="_blank" rel="noopener">Spare Mecanum Wheel Set (GripForce™)</a></td>
+      <td class="qty">1</td><td class="cost">$142.00</td><td class="cost">$142.00</td>
+      <td class="note">Shared between 2 teams</td>
+    </tr>
+    <tr class="row-spares">
+      <td><a class="sku-link" href="https://www.gobilda.com/4-bar-odometry-pack-2-pods-1-pinpoint-computer/" target="_blank" rel="noopener">Spare Pinpoint Odometry Pack</a></td>
+      <td class="qty">1</td><td class="cost">$209.99</td><td class="cost">$209.99</td>
+      <td class="note">Shared between 2 teams</td>
+    </tr>
+    <tr class="row-spares">
+      <td><a class="sku-link" href="https://limelightvision.io/products/limelight-3a" target="_blank" rel="noopener">Spare Limelight 3A</a></td>
+      <td class="qty">1</td><td class="cost">$189.00</td><td class="cost">$189.00</td>
+      <td class="note">Shared between 2 teams</td>
+    </tr>
+    <tr class="row-spares">
+      <td><a class="sku-link" href="https://www.revrobotics.com/rev-31-1595/" target="_blank" rel="noopener">Spare REV Control Hub</a></td>
+      <td class="qty">1</td><td class="cost">$375.00</td><td class="cost">$375.00</td>
+      <td class="note">Shared between 2 teams</td>
+    </tr>
+    <tr class="row-spares">
+      <td><a class="sku-link" href="https://www.revrobotics.com/rev-31-1596/" target="_blank" rel="noopener">Spare REV Driver Hub</a></td>
+      <td class="qty">1</td><td class="cost">$275.00</td><td class="cost">$275.00</td>
+      <td class="note">Shared between 2 teams</td>
+    </tr>
+    <tr class="row-spares">
+      <td><a class="sku-link" href="https://www.revrobotics.com/rev-31-1153/" target="_blank" rel="noopener">Spare REV Expansion Hub</a></td>
+      <td class="qty">1</td><td class="cost">$275.00</td><td class="cost">$275.00</td>
+      <td class="note">Shared between 2 teams</td>
+    </tr>
+
+    <!-- TOTAL -->
+    <tr class="row-total">
+      <td colspan="3"><strong>Total (excl. TBD items)</strong></td>
+      <td class="cost">$5,062.89</td>
+      <td></td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+<!-- RECOMMENDED ADDITIONS -->
+<div class="rec-section">
+  <h2>💡 Recommended Additional Budget Items</h2>
+  <p style="font-size:0.88em; color:#555; margin: 0 0 0.8em;">Items not currently in the budget that are commonly needed over the course of a full FTC season.</p>
+  <div class="rec-grid">
+
+    <div class="rec-card">
+      <h3>Limelight 3A — One Per Robot</h3>
+      <p>Currently only 1 spare for 2 teams. AprilTag detection and vision is core to autonomous. Each robot needs its own.</p>
+      <div class="rec-est">~$189 × 2 = $378</div>
+    </div>
+
+    <div class="rec-card">
+      <h3>Ferrite Choke Bulk Pack</h3>
+      <p>Snap-on ferrite chokes for every signal cable (encoders, servos, sensors). Cheap, highly effective ESD protection.</p>
+      <div class="rec-est">~$15–25</div>
+    </div>
+
+    <div class="rec-card">
+      <h3>3D Printing Filament (PETG, 2kg)</h3>
+      <p>Custom sensor mounts, intake guides, cable routing clips, and field element practice pieces. You'll go through it.</p>
+      <div class="rec-est">~$40–60</div>
+    </div>
+
+    <div class="rec-card">
+      <h3>Wire &amp; Electrical Consumables</h3>
+      <p>Bulk heat shrink kit, zip tie assortment, velcro straps, electrical tape, spare JST connectors. Burns through fast over a season.</p>
+      <div class="rec-est">~$50–75</div>
+    </div>
+
+    <div class="rec-card">
+      <h3>Anderson Powerpole Kit + Crimper</h3>
+      <p>Covers the "TBD" wiring line — makes clean, custom-length power cables. A good crimper pays for itself in saved time.</p>
+      <div class="rec-est">~$40 tool + $20 connectors</div>
+    </div>
+
+    <div class="rec-card">
+      <h3>Spare REV Servo Extension Cables (25-pack)</h3>
+      <p>Most frequently damaged/lost cable at competition. Cheap to stock, expensive to be without.</p>
+      <div class="rec-est">~$30–40</div>
+    </div>
+
+    <div class="rec-card">
+      <h3>Team Shirts / Uniforms</h3>
+      <p>Judges and alliance partners notice a cohesive team. Required at most events to look "put together." Plan for 10–15 shirts.</p>
+      <div class="rec-est">~$200–350 (screen print)</div>
+    </div>
+
+    <div class="rec-card">
+      <h3>Pit Infrastructure</h3>
+      <p>Folding table, team banner/backdrop, rolling tool bag or case. First-year teams often arrive at their first event without these.</p>
+      <div class="rec-est">~$150–300</div>
+    </div>
+
+    <div class="rec-card">
+      <h3>Dedicated Programming Laptop (Per Team)</h3>
+      <p>Students shouldn't be fighting over a laptop at competition. A refurbished ThinkPad or similar runs Android Studio fine.</p>
+      <div class="rec-est">~$250–400 refurb</div>
+    </div>
+
+    <div class="rec-card">
+      <h3>Backup Driver Station Device</h3>
+      <p>You have 1 spare Driver Hub for 2 teams. A DS failure during quals is catastrophic. A second backup is worth the insurance.</p>
+      <div class="rec-est">~$275 (REV Driver Hub)</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="back-link"><a href="../">&larr; Back to Resources</a></div>
