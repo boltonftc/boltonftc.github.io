@@ -78,6 +78,20 @@ a.sku-link:hover { text-decoration: underline; }
 .rec-card p  { margin: 0; font-size: 0.82em; color: #555; line-height: 1.4; }
 .rec-est { font-size: 0.78em; font-weight: bold; color: #e65100; margin-top: 0.3em; }
 
+.row-subtotal td {
+  font-weight: 600;
+  font-style: italic;
+  border-top: 2px solid #bbb;
+  border-bottom: 3px double #999;
+}
+.row-subtotal-robot td  { background: #d0e8ff !important; color: #0d47a1; }
+.row-subtotal-judging td { background: #e8d0f8 !important; color: #4a148c; }
+.row-subtotal-tools td  { background: #ffe5c0 !important; color: #bf360c; }
+.row-subtotal-field td  { background: #c6ebc8 !important; color: #1b5e20; }
+.row-subtotal-spares td { background: #d8e2e7 !important; color: #263238; }
+
+.chart-wrap { max-width: 480px; margin: 0 auto 2.5em; }
+
 .back-link { font-size: 0.9em; margin-top: 1.5em; }
 .back-link a { color: #1a73e8; }
 </style>
@@ -134,6 +148,10 @@ a.sku-link:hover { text-decoration: underline; }
       <td class="qty">2</td><td class="cost">$209.99</td><td class="cost">$419.98</td>
       <td class="note">2 odometry pods + Pinpoint computer per robot</td>
     </tr>
+    <tr class="row-subtotal row-subtotal-robot">
+      <td colspan="3"><em>Robot Parts Subtotal</em></td>
+      <td class="cost">$1,920.90</td><td></td>
+    </tr>
 
     <!-- JUDGING -->
     <tr class="cat-row cat-judging"><td colspan="5">📋 Judging</td></tr>
@@ -142,13 +160,31 @@ a.sku-link:hover { text-decoration: underline; }
       <td class="qty">2</td><td class="cost">$100.00</td><td class="cost">$200.00</td>
       <td class="note">Poster prints, binder prints, miscellaneous pit supplies per team</td>
     </tr>
+    <tr class="row-judging">
+      <td>Team Banner (custom printed vinyl, 2×4 ft)</td>
+      <td class="qty">2</td><td class="cost">$80.00</td><td class="cost">$160.00</td>
+      <td class="note">1 per team — displayed at pit table and alliance station</td>
+    </tr>
+    <tr class="row-subtotal row-subtotal-judging">
+      <td colspan="3"><em>Judging Subtotal</em></td>
+      <td class="cost">$360.00</td><td></td>
+    </tr>
 
     <!-- TOOLS -->
     <tr class="cat-row cat-tools"><td colspan="5">🔧 Tools</td></tr>
     <tr class="row-tools">
-      <td>Crimping Tool &amp; Wiring Supplies</td>
-      <td class="qty">—</td><td class="cost tbd">TBD</td><td class="cost tbd">TBD</td>
-      <td class="note">Custom cut-to-length wiring capability — research needed</td>
+      <td><a class="sku-link" href="https://www.andersonpower.com/us/en/products/pp15-45/" target="_blank" rel="noopener">Anderson Powerpole Kit + Crimper</a></td>
+      <td class="qty">1</td><td class="cost">$60.00</td><td class="cost">$60.00</td>
+      <td class="note">Ratchet crimper (~$40) + PP15–45 connector assortment (~$20) — clean custom-length power cables</td>
+    </tr>
+    <tr class="row-tools">
+      <td>Wire &amp; Electrical Consumables</td>
+      <td class="qty">1</td><td class="cost">$75.00</td><td class="cost">$75.00</td>
+      <td class="note">Bulk heat shrink assortment, zip ties, velcro straps, electrical tape, spare JST connectors — shared between teams</td>
+    </tr>
+    <tr class="row-subtotal row-subtotal-tools">
+      <td colspan="3"><em>Tools Subtotal</em></td>
+      <td class="cost">$135.00</td><td></td>
     </tr>
 
     <!-- GAME FIELD -->
@@ -163,9 +199,13 @@ a.sku-link:hover { text-decoration: underline; }
       <td class="qty">1</td><td class="cost">$599.00</td><td class="cost">$599.00</td>
       <td class="note">Full set of game elements for practice field</td>
     </tr>
+    <tr class="row-subtotal row-subtotal-field">
+      <td colspan="3"><em>Game Field Subtotal</em></td>
+      <td class="cost">$1,308.00</td><td></td>
+    </tr>
 
-    <!-- SPARES -->
-    <tr class="cat-row cat-spares"><td colspan="5">🔄 Spares</td></tr>
+    <!-- SPARES & ELECTRICAL -->
+    <tr class="cat-row cat-spares"><td colspan="5">🔄 Spares &amp; Electrical</td></tr>
     <tr class="row-spares">
       <td><a class="sku-link" href="https://www.gobilda.com/motors/" target="_blank" rel="noopener">Spare goBILDA Motors</a></td>
       <td class="qty">4</td><td class="cost">$42.00</td><td class="cost">$168.00</td>
@@ -201,11 +241,25 @@ a.sku-link:hover { text-decoration: underline; }
       <td class="qty">1</td><td class="cost">$275.00</td><td class="cost">$275.00</td>
       <td class="note">Shared between 2 teams</td>
     </tr>
+    <tr class="row-spares">
+      <td>Ferrite Choke Bulk Pack (snap-on, 31-pc assortment)</td>
+      <td class="qty">2</td><td class="cost">$18.00</td><td class="cost">$36.00</td>
+      <td class="note">One pack per team — snap on every signal cable (encoders, servos, sensors) for ESD suppression</td>
+    </tr>
+    <tr class="row-spares">
+      <td><a class="sku-link" href="https://www.revrobotics.com/rev-31-1413/" target="_blank" rel="noopener">Spare REV Servo Extension Cables (25-pack)</a></td>
+      <td class="qty">2</td><td class="cost">$35.00</td><td class="cost">$70.00</td>
+      <td class="note">Most frequently damaged cable at competition — 1 pack per team</td>
+    </tr>
+    <tr class="row-subtotal row-subtotal-spares">
+      <td colspan="3"><em>Spares &amp; Electrical Subtotal</em></td>
+      <td class="cost">$1,739.99</td><td></td>
+    </tr>
 
-    <!-- TOTAL -->
+    <!-- GRAND TOTAL -->
     <tr class="row-total">
-      <td colspan="3"><strong>Total (excl. TBD items)</strong></td>
-      <td class="cost">$5,062.89</td>
+      <td colspan="3"><strong>Grand Total</strong></td>
+      <td class="cost">$5,463.89</td>
       <td></td>
     </tr>
 
@@ -213,73 +267,52 @@ a.sku-link:hover { text-decoration: underline; }
 </table>
 </div>
 
-<!-- RECOMMENDED ADDITIONS -->
-<div class="rec-section">
-  <h2>💡 Recommended Additional Budget Items</h2>
-  <p style="font-size:0.88em; color:#555; margin: 0 0 0.8em;">Items not currently in the budget that are commonly needed over the course of a full FTC season.</p>
-  <div class="rec-grid">
-
-    <div class="rec-card">
-      <h3>Limelight 3A — One Per Robot</h3>
-      <p>Currently only 1 spare for 2 teams. AprilTag detection and vision is core to autonomous. Each robot needs its own.</p>
-      <div class="rec-est">~$189 × 2 = $378</div>
-    </div>
-
-    <div class="rec-card">
-      <h3>Ferrite Choke Bulk Pack</h3>
-      <p>Snap-on ferrite chokes for every signal cable (encoders, servos, sensors). Cheap, highly effective ESD protection.</p>
-      <div class="rec-est">~$15–25</div>
-    </div>
-
-    <div class="rec-card">
-      <h3>3D Printing Filament (PETG, 2kg)</h3>
-      <p>Custom sensor mounts, intake guides, cable routing clips, and field element practice pieces. You'll go through it.</p>
-      <div class="rec-est">~$40–60</div>
-    </div>
-
-    <div class="rec-card">
-      <h3>Wire &amp; Electrical Consumables</h3>
-      <p>Bulk heat shrink kit, zip tie assortment, velcro straps, electrical tape, spare JST connectors. Burns through fast over a season.</p>
-      <div class="rec-est">~$50–75</div>
-    </div>
-
-    <div class="rec-card">
-      <h3>Anderson Powerpole Kit + Crimper</h3>
-      <p>Covers the "TBD" wiring line — makes clean, custom-length power cables. A good crimper pays for itself in saved time.</p>
-      <div class="rec-est">~$40 tool + $20 connectors</div>
-    </div>
-
-    <div class="rec-card">
-      <h3>Spare REV Servo Extension Cables (25-pack)</h3>
-      <p>Most frequently damaged/lost cable at competition. Cheap to stock, expensive to be without.</p>
-      <div class="rec-est">~$30–40</div>
-    </div>
-
-    <div class="rec-card">
-      <h3>Team Shirts / Uniforms</h3>
-      <p>Judges and alliance partners notice a cohesive team. Required at most events to look "put together." Plan for 10–15 shirts.</p>
-      <div class="rec-est">~$200–350 (screen print)</div>
-    </div>
-
-    <div class="rec-card">
-      <h3>Pit Infrastructure</h3>
-      <p>Folding table, team banner/backdrop, rolling tool bag or case. First-year teams often arrive at their first event without these.</p>
-      <div class="rec-est">~$150–300</div>
-    </div>
-
-    <div class="rec-card">
-      <h3>Dedicated Programming Laptop (Per Team)</h3>
-      <p>Students shouldn't be fighting over a laptop at competition. A refurbished ThinkPad or similar runs Android Studio fine.</p>
-      <div class="rec-est">~$250–400 refurb</div>
-    </div>
-
-    <div class="rec-card">
-      <h3>Backup Driver Station Device</h3>
-      <p>You have 1 spare Driver Hub for 2 teams. A DS failure during quals is catastrophic. A second backup is worth the insurance.</p>
-      <div class="rec-est">~$275 (REV Driver Hub)</div>
-    </div>
-
-  </div>
+<!-- BUDGET PIE CHART -->
+<h2 style="margin-top:2em;">Budget Breakdown by Category</h2>
+<div class="chart-wrap">
+  <canvas id="budgetPie" width="480" height="480"></canvas>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+  var ctx = document.getElementById('budgetPie').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Robot Parts — $1,920.90',
+        'Judging — $360.00',
+        'Tools — $135.00',
+        'Game Field — $1,308.00',
+        'Spares & Electrical — $1,739.99'
+      ],
+      datasets: [{
+        data: [1920.90, 360.00, 135.00, 1308.00, 1739.99],
+        backgroundColor: ['#1565c0','#6a1b9a','#e65100','#2e7d32','#37474f'],
+        borderColor: '#fff',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 13 }, padding: 16, boxWidth: 18 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              var total = ctx.dataset.data.reduce(function(a,b){ return a+b; }, 0);
+              var pct = Math.round(ctx.parsed * 1000 / total) / 10;
+              return ' ' + ctx.label.split(' — ')[0] + ': ' + pct + '%';
+            }
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
 
 <div class="back-link"><a href="../">&larr; Back to Resources</a></div>
