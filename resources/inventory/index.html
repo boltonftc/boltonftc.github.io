@@ -1,0 +1,609 @@
+---
+layout: page
+title: "Parts Inventory"
+---
+
+<style>
+.inv-intro { color: #555; margin-bottom: 0.4em; }
+.inv-note  { font-size: 0.84em; color: #888; margin-bottom: 1.2em; }
+
+/* ── Controls ─────────────────────────────────────────────── */
+.inv-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7em;
+  align-items: center;
+  margin-bottom: 1.1em;
+}
+#inv-search {
+  flex: 1;
+  min-width: 200px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+.cat-filters { display: flex; flex-wrap: wrap; gap: 0.4em; }
+.cat-btn {
+  padding: 5px 13px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background: #f8f9fa;
+  cursor: pointer;
+  font-size: 0.82em;
+  transition: background 0.15s;
+}
+.cat-btn.active, .cat-btn:hover { background: #37474f; color: #fff; border-color: #37474f; }
+
+/* ── Summary bar ──────────────────────────────────────────── */
+.inv-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em 1.4em;
+  background: #f0f4f8;
+  border: 1px solid #d0d9e2;
+  border-radius: 8px;
+  padding: 0.7em 1.1em;
+  font-size: 0.86em;
+  margin-bottom: 1.1em;
+  color: #333;
+}
+.inv-bar span { white-space: nowrap; }
+.inv-bar strong { color: #1565c0; }
+
+/* ── Table ────────────────────────────────────────────────── */
+.inv-wrap { overflow-x: auto; margin-bottom: 2em; }
+table.inv {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.86em;
+}
+table.inv th {
+  background: #37474f;
+  color: #fff;
+  padding: 9px 11px;
+  text-align: left;
+  white-space: nowrap;
+}
+table.inv td {
+  padding: 7px 11px;
+  border-bottom: 1px solid #e4e8ec;
+  vertical-align: top;
+}
+table.inv tr.data-row:hover td { background: #f5f7fa !important; }
+
+/* Category header rows */
+.inv-cat td {
+  font-weight: bold;
+  font-size: 0.79em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 11px 5px;
+  border-bottom: 2px solid;
+  color: #fff;
+}
+.inv-motors td { background: #b71c1c; border-color: #7f0000; }
+.inv-servos td { background: #1565c0; border-color: #0d47a1; }
+.inv-drive  td { background: #2e7d32; border-color: #1b5e20; }
+.inv-power  td { background: #e65100; border-color: #bf360c; }
+.inv-vision td { background: #6a1b9a; border-color: #4a148c; }
+.inv-field  td { background: #00695c; border-color: #004d40; }
+.inv-misc   td { background: #455a64; border-color: #263238; }
+
+/* Data row tints */
+.row-motors td  { background: #ffebee; }
+.row-motors:nth-child(even) td { background: #ffcdd2; }
+.row-servos td  { background: #e3f2fd; }
+.row-servos:nth-child(even) td { background: #bbdefb; }
+.row-drive td   { background: #e8f5e9; }
+.row-drive:nth-child(even) td  { background: #c8e6c9; }
+.row-power td   { background: #fff3e0; }
+.row-power:nth-child(even) td  { background: #ffe0b2; }
+.row-vision td  { background: #f3e5f5; }
+.row-vision:nth-child(even) td { background: #e1bee7; }
+.row-field td   { background: #e0f2f1; }
+.row-field:nth-child(even) td  { background: #b2dfdb; }
+.row-misc td    { background: #eceff1; }
+.row-misc:nth-child(even) td   { background: #cfd8dc; }
+
+td.qty  { text-align: center; white-space: nowrap; }
+td.cost { text-align: right;  white-space: nowrap; }
+td.sku  { font-family: monospace; font-size: 0.82em; color: #555; white-space: nowrap; }
+a.itm   { color: #1a73e8; text-decoration: none; }
+a.itm:hover { text-decoration: underline; }
+
+.tag { display: inline-block; font-size: 0.74em; padding: 1px 7px; border-radius: 10px; font-weight: 600; vertical-align: middle; }
+.tag-onhand { background: #e8f5e9; color: #2e7d32; }
+.tag-misc   { background: #fff3e0; color: #e65100; }
+.tag-norcpt { background: #f5f5f5; color: #757575; }
+
+.hidden { display: none !important; }
+
+.chart-wrap { max-width: 500px; margin: 0 auto 2.5em; }
+
+.disclaimer {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-left: 5px solid #f9a825;
+  border-radius: 6px;
+  padding: 0.8em 1.1em;
+  font-size: 0.88em;
+  color: #5d4037;
+  margin-bottom: 1.2em;
+}
+.disclaimer strong { color: #e65100; }
+
+.back-link { font-size: 0.9em; margin-top: 1.5em; }
+.back-link a { color: #1a73e8; }
+</style>
+
+<div class="disclaimer">
+  <strong>📋 Scope note:</strong> This inventory covers the majority of parts purchased to date via traceable receipts. It does <strong>not</strong> include tools, personal tool contributions, items donated or acquired without receipts, or every small consumable. Shipping costs are excluded from all totals.
+</div>
+
+<p class="inv-note">Items purchased for &gt;$20/ea are listed individually. Items &lt;$20/ea from the same order are grouped into a single Misc row.</p>
+
+<!-- Controls -->
+<div class="inv-controls">
+  <input type="text" id="inv-search" placeholder="🔍 Search items, SKU, notes…">
+  <div class="cat-filters">
+    <button class="cat-btn active" data-cat="all">All</button>
+    <button class="cat-btn" data-cat="motors">🔴 Motors</button>
+    <button class="cat-btn" data-cat="servos">🔵 Servos</button>
+    <button class="cat-btn" data-cat="drive">🟢 Drive</button>
+    <button class="cat-btn" data-cat="power">🟠 Power</button>
+    <button class="cat-btn" data-cat="vision">🟣 Vision/Sensors</button>
+    <button class="cat-btn" data-cat="field">🏟️ Field</button>
+    <button class="cat-btn" data-cat="misc">⚙️ Misc</button>
+  </div>
+</div>
+
+<!-- Summary bar -->
+<div class="inv-bar">
+  <span>Showing <strong id="visible-count">20</strong> rows</span>
+  <span>Motors: <strong>$577.36</strong></span>
+  <span>Servos: <strong>$256.40</strong></span>
+  <span>Drive: <strong>$284.98</strong></span>
+  <span>Power: <strong>$167.46</strong></span>
+  <span>Electronics: <strong>$1,850.00</strong></span>
+  <span>Vision/Sensors: <strong>$378.00</strong></span>
+  <span>Field: <strong>$140.00</strong></span>
+  <span>Misc goBILDA: <strong>$2,510.79</strong></span>
+  <span style="border-left:2px solid #aaa; padding-left:1em;">Total invoiced: <strong style="color:#b71c1c;">$6,164.99</strong></span>
+  <span style="color:#888;">(excl. shipping &amp; items without receipts)</span>
+</div>
+
+<!-- Inventory table -->
+<div class="inv-wrap">
+<table class="inv">
+  <thead>
+    <tr>
+      <th style="min-width:240px">Item</th>
+      <th>SKU / Model</th>
+      <th style="min-width:90px">Category</th>
+      <th class="qty">QTY</th>
+      <th class="cost">Unit Cost</th>
+      <th class="cost">Line Total</th>
+      <th>Vendor</th>
+      <th>Purchased</th>
+      <th style="min-width:200px">Notes</th>
+    </tr>
+  </thead>
+  <tbody id="inv-body">
+
+    <!-- ── MOTORS ──────────────────────────────────────────── -->
+    <tr class="inv-cat inv-motors" data-cat="motors">
+      <td colspan="9">🔴 Motors</td>
+    </tr>
+
+    <tr class="data-row row-motors" data-cat="motors" data-search="motor yellow jacket 5203 1:1 6000rpm direct drive">
+      <td><a class="itm" href="https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-1-1-ratio-24mm-length-8mm-rex-shaft-6000-rpm-3-3-5v-encoder/" target="_blank" rel="noopener">goBILDA 5203 Yellow Jacket Motor (1:1, 6000 RPM)</a></td>
+      <td class="sku">5203-2402-0001</td>
+      <td>Motor</td>
+      <td class="qty">4</td>
+      <td class="cost">$41.24</td>
+      <td class="cost">$164.96</td>
+      <td>goBILDA</td>
+      <td>Mar &amp; Apr 2026</td>
+      <td>2 per team — high-speed / direct-drive applications</td>
+    </tr>
+
+    <tr class="data-row row-motors" data-cat="motors" data-search="motor yellow jacket 5203 5.2:1 1150rpm">
+      <td><a class="itm" href="https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-5-2-1-ratio-24mm-length-8mm-rex-shaft-1150-rpm-3-3-5v-encoder/" target="_blank" rel="noopener">goBILDA 5203 Yellow Jacket Motor (5.2:1, 1150 RPM)</a></td>
+      <td class="sku">5203-2402-0005</td>
+      <td>Motor</td>
+      <td class="qty">2</td>
+      <td class="cost">$41.24</td>
+      <td class="cost">$82.48</td>
+      <td>goBILDA</td>
+      <td>Mar &amp; Apr 2026</td>
+      <td>1 per team</td>
+    </tr>
+
+    <tr class="data-row row-motors" data-cat="motors" data-search="motor yellow jacket 5203 19.2:1 312rpm drivetrain">
+      <td><a class="itm" href="https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/" target="_blank" rel="noopener">goBILDA 5203 Yellow Jacket Motor (19.2:1, 312 RPM)</a></td>
+      <td class="sku">5203-2402-0019</td>
+      <td>Motor</td>
+      <td class="qty">8</td>
+      <td class="cost">$41.24</td>
+      <td class="cost">$329.92</td>
+      <td>goBILDA</td>
+      <td>Mar &amp; Apr 2026</td>
+      <td>4 per team — mecanum drivetrain</td>
+    </tr>
+
+    <!-- ── SERVOS ───────────────────────────────────────────── -->
+    <tr class="inv-cat inv-servos" data-cat="servos">
+      <td colspan="9">🔵 Servos &amp; Servo Hardware</td>
+    </tr>
+
+    <tr class="data-row row-servos" data-cat="servos" data-search="servo dual mode 2000 25-4 super speed gobilda">
+      <td><a class="itm" href="https://www.gobilda.com/2000-series-dual-mode-servo-25-4-super-speed/" target="_blank" rel="noopener">goBILDA 2000 Series Dual Mode Servo (25-4, Super Speed)</a></td>
+      <td class="sku">2000-0025-0004</td>
+      <td>Servo</td>
+      <td class="qty">4</td>
+      <td class="cost">$27.74</td>
+      <td class="cost">$110.96</td>
+      <td>goBILDA</td>
+      <td>Mar &amp; Apr 2026</td>
+      <td>2 per team</td>
+    </tr>
+
+    <tr class="data-row row-servos" data-cat="servos" data-search="servo dual mode 2000 25-2 torque gobilda">
+      <td><a class="itm" href="https://www.gobilda.com/2000-series-dual-mode-servo-25-2-torque/" target="_blank" rel="noopener">goBILDA 2000 Series Dual Mode Servo (25-2, Torque)</a></td>
+      <td class="sku">2000-0025-0002</td>
+      <td>Servo</td>
+      <td class="qty">2</td>
+      <td class="cost">$27.74</td>
+      <td class="cost">$55.48</td>
+      <td>goBILDA</td>
+      <td>Mar &amp; Apr 2026</td>
+      <td>1 per team</td>
+    </tr>
+
+    <tr class="data-row row-servos" data-cat="servos" data-search="servoblock compact 43mm H25T hub shaft gobilda">
+      <td><a class="itm" href="https://www.gobilda.com/compact-servoblock-43mm-width-for-standard-size-h25t-spline-servo-hub-shaft/" target="_blank" rel="noopener">goBILDA Compact ServoBlock® (43mm, H25T, Hub-Shaft)</a></td>
+      <td class="sku">3217-0001-2501</td>
+      <td>Servo</td>
+      <td class="qty">4</td>
+      <td class="cost">$22.49</td>
+      <td class="cost">$89.96</td>
+      <td>goBILDA</td>
+      <td>Mar &amp; Apr 2026</td>
+      <td>2 per team</td>
+    </tr>
+
+    <!-- ── DRIVE SYSTEM ─────────────────────────────────────── -->
+    <tr class="inv-cat inv-drive" data-cat="drive">
+      <td colspan="9">🟢 Drive System</td>
+    </tr>
+
+    <tr class="data-row row-drive" data-cat="drive" data-search="mecanum wheel set gripforce 104mm 40A gobilda">
+      <td><a class="itm" href="https://www.gobilda.com/gripforce-mecanum-wheel-set-104mm-40a-durometer-rollers/" target="_blank" rel="noopener">goBILDA GripForce™ Mecanum Wheel Set (Ø104mm, 40A)</a></td>
+      <td class="sku">3625-0202-0104</td>
+      <td>Drive</td>
+      <td class="qty">2 sets</td>
+      <td class="cost">$142.49</td>
+      <td class="cost">$284.98</td>
+      <td>goBILDA</td>
+      <td>Mar &amp; Apr 2026</td>
+      <td>1 complete set per team (4 wheels each)</td>
+    </tr>
+
+    <!-- ── POWER & ELECTRICAL ───────────────────────────────── -->
+    <tr class="inv-cat inv-power" data-cat="power">
+      <td colspan="9">🟠 Power &amp; Electrical</td>
+    </tr>
+
+    <tr class="data-row row-power" data-cat="power" data-search="floodgate power switch XT30 current sensing gobilda">
+      <td><a class="itm" href="https://www.gobilda.com/floodgate-power-switch-xt30-current-sensing/" target="_blank" rel="noopener">goBILDA Floodgate Power Switch (XT30, Current Sensing)</a></td>
+      <td class="sku">3103-0005-0001</td>
+      <td>Power</td>
+      <td class="qty">2</td>
+      <td class="cost">$34.99</td>
+      <td class="cost">$69.98</td>
+      <td>goBILDA</td>
+      <td>Mar 2026</td>
+      <td>1 per team — main power switch with current display</td>
+    </tr>
+
+    <tr class="data-row row-power" data-cat="power" data-search="12v nimh battery 3000mah XT30 nested gobilda">
+      <td><a class="itm" href="https://www.gobilda.com/12v-nimh-nested-battery-3000mah-mh-fc-xt30-connector/" target="_blank" rel="noopener">goBILDA 12V NiMH Battery (3000mAh, XT30)</a></td>
+      <td class="sku">3100-0012-0020</td>
+      <td>Power</td>
+      <td class="qty">2</td>
+      <td class="cost">$48.74</td>
+      <td class="cost">$97.48</td>
+      <td>goBILDA</td>
+      <td>Mar &amp; Apr 2026</td>
+      <td>1 per team (on-robot battery)</td>
+    </tr>
+
+    <tr class="data-row row-power" data-cat="power" data-search="REV control hub REV-31-1595 main robot controller android">
+      <td><a class="itm" href="https://www.revrobotics.com/rev-31-1595/" target="_blank" rel="noopener">REV Control Hub</a></td>
+      <td class="sku">REV-31-1595</td>
+      <td>Electronics</td>
+      <td class="qty">2</td>
+      <td class="cost">$375.00</td>
+      <td class="cost">$750.00</td>
+      <td>REV Robotics</td>
+      <td>On hand</td>
+      <td><span class="tag tag-norcpt">No Receipt on File</span> 1 per team — main robot controller</td>
+    </tr>
+
+    <tr class="data-row row-power" data-cat="power" data-search="REV expansion hub REV-31-1153 motor servo controller">
+      <td><a class="itm" href="https://www.revrobotics.com/rev-31-1153/" target="_blank" rel="noopener">REV Expansion Hub</a></td>
+      <td class="sku">REV-31-1153</td>
+      <td>Electronics</td>
+      <td class="qty">2</td>
+      <td class="cost">$275.00</td>
+      <td class="cost">$550.00</td>
+      <td>REV Robotics</td>
+      <td>On hand</td>
+      <td><span class="tag tag-norcpt">No Receipt on File</span> 1 per team — additional motor/servo ports</td>
+    </tr>
+
+    <tr class="data-row row-power" data-cat="power" data-search="REV driver hub REV-31-1596 driver station android">
+      <td><a class="itm" href="https://www.revrobotics.com/rev-31-1596/" target="_blank" rel="noopener">REV Driver Hub</a></td>
+      <td class="sku">REV-31-1596</td>
+      <td>Electronics</td>
+      <td class="qty">2</td>
+      <td class="cost">$275.00</td>
+      <td class="cost">$550.00</td>
+      <td>REV Robotics</td>
+      <td>On hand</td>
+      <td><span class="tag tag-norcpt">No Receipt on File</span> 1 per team — driver station device</td>
+    </tr>
+
+    <tr class="data-row row-power" data-cat="power" data-search="logitech gamepad controller F310 wired driver station">
+      <td><a class="itm" href="https://www.logitech.com/en-us/products/gamepads/f310-gamepad.940-000110.html" target="_blank" rel="noopener">Logitech G F310 Wired Gamepad</a></td>
+      <td class="sku">940-000110</td>
+      <td>Electronics</td>
+      <td class="qty">2</td>
+      <td class="cost">—</td>
+      <td class="cost">—</td>
+      <td>Logitech</td>
+      <td>On hand</td>
+      <td><span class="tag tag-norcpt">No Receipt</span> 1 per team — gamepad for driver station; connects to REV Driver Hub</td>
+    </tr>
+
+    <!-- ── VISION & SENSORS ─────────────────────────────────── -->
+    <tr class="inv-cat inv-vision" data-cat="vision">
+      <td colspan="9">🟣 Vision &amp; Sensors</td>
+    </tr>
+
+    <tr class="data-row row-vision" data-cat="vision" data-search="limelight 3a vision apriltag autonomous camera">
+      <td><a class="itm" href="https://limelightvision.io/products/limelight-3a" target="_blank" rel="noopener">Limelight 3A Vision Camera</a></td>
+      <td class="sku">LL-3A</td>
+      <td>Vision</td>
+      <td class="qty">2</td>
+      <td class="cost">$189.00</td>
+      <td class="cost">$378.00</td>
+      <td>Limelight</td>
+      <td>May 2026</td>
+      <td>1 per team — AprilTag detection, autonomous localization</td>
+    </tr>
+
+    <tr class="data-row row-vision" data-cat="vision" data-search="sparkfun OTOS optical tracking odometry sensor SEN-24904">
+      <td><a class="itm" href="https://www.sparkfun.com/products/24904" target="_blank" rel="noopener">SparkFun Optical Tracking Odometry Sensor (OTOS)</a></td>
+      <td class="sku">SEN-24904</td>
+      <td>Sensor</td>
+      <td class="qty">1</td>
+      <td class="cost">—</td>
+      <td class="cost">—</td>
+      <td>SparkFun</td>
+      <td>On hand</td>
+      <td><span class="tag tag-norcpt">No Receipt</span> Optical odometry — direct heading + position</td>
+    </tr>
+
+    <!-- ── FIELD EQUIPMENT ─────────────────────────────────── -->
+    <tr class="inv-cat inv-field" data-cat="field">
+      <td colspan="9">🏟️ Field Equipment</td>
+    </tr>
+
+    <tr class="data-row row-field" data-cat="field" data-search="FTC field soft tiles andymark am-2499 foam practice field">
+      <td><a class="itm" href="https://www.andymark.com/products/ftc-field-tiles" target="_blank" rel="noopener">FTC Field Soft Tiles (18-tile set)</a></td>
+      <td class="sku">am-2499-18</td>
+      <td>Field</td>
+      <td class="qty">18 tiles</td>
+      <td class="cost">$7.78</td>
+      <td class="cost">$140.00</td>
+      <td>AndyMark</td>
+      <td>May 2026</td>
+      <td>Full practice field tile set</td>
+    </tr>
+
+
+    <tr class="data-row row-field" data-cat="field" data-search="pollen game pieces scoring elements practice biobuzz">
+      <td>Pollen Game Scoring Pieces</td>
+      <td class="sku">—</td>
+      <td>Field</td>
+      <td class="qty">6</td>
+      <td class="cost">—</td>
+      <td class="cost">—</td>
+      <td>—</td>
+      <td>On hand</td>
+      <td><span class="tag tag-norcpt">No Receipt</span> Practice game elements</td>
+    </tr>
+
+    <!-- ── MISC GOBILDA PARTS ───────────────────────────────── -->
+    <tr class="inv-cat inv-misc" data-cat="misc">
+      <td colspan="9">⚙️ Misc goBILDA Parts (grouped by order — all items &lt;$20/ea)</td>
+    </tr>
+
+    <tr class="data-row row-misc" data-cat="misc" data-search="misc gobilda parts brackets spacers u-channel shafts sprockets timing pulleys belts boot wheels gecko intake rollers flywheels polycarbonate screws nuts standoffs">
+      <td>Misc goBILDA Parts — Mar 21, 2026 <span class="tag tag-misc">Misc</span></td>
+      <td class="sku">Mar 21, 2026</td>
+      <td>Misc</td>
+      <td class="qty">—</td>
+      <td class="cost">—</td>
+      <td class="cost">$1,107.25</td>
+      <td>goBILDA</td>
+      <td>Mar 21, 2026</td>
+      <td>U-channels, shafts, clamping collars, pillow blocks, quad mounts, timing pulleys &amp; belts, boot wheels, gecko wheels, intake rollers, steel flywheels, polycarbonate grid plates, battery mount, sprockets, standoffs, miter gears, servo frame, screws, nuts, spacers, shims, bearings, and more</td>
+    </tr>
+
+    <tr class="data-row row-misc" data-cat="misc" data-search="misc gobilda electrical wiring JST adaptors XT30 extension zip ties">
+      <td>Misc goBILDA Wiring/Electrical — Mar 21, 2026 <span class="tag tag-misc">Misc</span></td>
+      <td class="sku">Mar 21, 2026</td>
+      <td>Misc</td>
+      <td class="qty">—</td>
+      <td class="cost">—</td>
+      <td class="cost">$42.22</td>
+      <td>goBILDA</td>
+      <td>Mar 21, 2026</td>
+      <td>JST adaptors (2-pos VH→3.5mm bullet ×7, 4-pos PH→XH 600mm ×7, 4-pos PH→PH ×1), XT30 extension, zip ties ×100</td>
+    </tr>
+
+    <tr class="data-row row-misc" data-cat="misc" data-search="misc gobilda parts brackets spacers u-channel shafts sprockets timing miter gears wheels screws adaptors charger">
+      <td>Misc goBILDA Parts — Apr 6, 2026 <span class="tag tag-misc">Misc</span></td>
+      <td class="sku">Apr 6, 2026</td>
+      <td>Misc</td>
+      <td class="qty">—</td>
+      <td class="cost">—</td>
+      <td class="cost">$1,191.44</td>
+      <td>goBILDA</td>
+      <td>Apr 6, 2026</td>
+      <td>U-channels, spacers, brackets, shafts, clamping collars, pillow blocks, quad mounts, clamping miter gears, timing pulleys &amp; belts, boot wheels, gecko wheels, intake rollers, flywheels, polycarbonate plates, battery mount, sprockets, JST &amp; XT30 adaptors, servo programmer ×2, battery charger ×2, screws, nuts, hyper hubs, sonic hubs, bearings</td>
+    </tr>
+
+    <tr class="data-row row-misc" data-cat="misc" data-search="misc gobilda premium thread locking screws m4 6mm 8mm 10mm 12mm 14mm 16mm">
+      <td>Misc goBILDA Premium Thread-Locking Screws (M4) — Apr 30, 2026 <span class="tag tag-misc">Misc</span></td>
+      <td class="sku">Apr 30, 2026</td>
+      <td>Misc</td>
+      <td class="qty">—</td>
+      <td class="cost">—</td>
+      <td class="cost">$43.42</td>
+      <td>goBILDA</td>
+      <td>Apr 30, 2026</td>
+      <td>Premium M4 thread-locking socket head screws — 6, 8, 10, 12, 14, 16mm lengths (25-packs)</td>
+    </tr>
+
+    <tr class="data-row row-misc" data-cat="misc" data-search="misc gobilda hardware square beams brackets clamping hubs threaded plates standoffs idlers tensioner nylock grommets">
+      <td>Misc goBILDA Hardware — May 8, 2026 <span class="tag tag-misc">Misc</span></td>
+      <td class="sku">May 8, 2026</td>
+      <td>Misc</td>
+      <td class="qty">—</td>
+      <td class="cost">—</td>
+      <td class="cost">$126.46</td>
+      <td>goBILDA</td>
+      <td>May 8, 2026</td>
+      <td>Square beams, flat brackets, 32mm clamping hubs, threaded plates, pattern spacers, standoffs, timing belt idlers, arc-slot tensioner brackets, round-end pattern plates, nylock nuts (250-pack), rubber grommets</td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+<script>
+(function () {
+  var searchInput = document.getElementById('inv-search');
+  var catBtns     = document.querySelectorAll('.cat-btn');
+  var tbody       = document.getElementById('inv-body');
+  var countEl     = document.getElementById('visible-count');
+  var currentCat  = 'all';
+
+  var catRowMap = {
+    'inv-motors': 'motors',
+    'inv-servos': 'servos',
+    'inv-drive':  'drive',
+    'inv-power':  'power',
+    'inv-vision': 'vision',
+    'inv-field':  'field',
+    'inv-misc':   'misc'
+  };
+
+  function update() {
+    var q = searchInput.value.toLowerCase().trim();
+    var dataRows = tbody.querySelectorAll('tr.data-row');
+    var catRows  = tbody.querySelectorAll('tr.inv-cat');
+    var visibleCats = {};
+    var count = 0;
+
+    dataRows.forEach(function (row) {
+      var cat = row.dataset.cat;
+      var txt = (row.dataset.search || '') + ' ' + row.textContent.toLowerCase();
+      var matchesCat    = currentCat === 'all' || cat === currentCat;
+      var matchesSearch = !q || txt.indexOf(q) !== -1;
+      var show = matchesCat && matchesSearch;
+      row.classList.toggle('hidden', !show);
+      if (show) { visibleCats[cat] = true; count++; }
+    });
+
+    catRows.forEach(function (row) {
+      var cls = null;
+      row.classList.forEach(function (c) { if (catRowMap[c]) cls = c; });
+      var cat = cls ? catRowMap[cls] : null;
+      var matchesCat = currentCat === 'all' || currentCat === cat;
+      var hasVisible  = cat && visibleCats[cat];
+      row.classList.toggle('hidden', !matchesCat || !hasVisible);
+    });
+
+    countEl.textContent = count;
+  }
+
+  catBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      catBtns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentCat = btn.dataset.cat;
+      update();
+    });
+  });
+
+  searchInput.addEventListener('input', update);
+})();
+</script>
+
+<h2 style="margin-top:2em;">Actual Spending by Category</h2>
+<p style="font-size:0.85em;color:#888;">Based on receipted purchases only. Excludes shipping, tools, and on-hand items without receipts.</p>
+<div class="chart-wrap">
+  <canvas id="spendPie" width="500" height="500"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+  var ctx = document.getElementById('spendPie').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: [
+        'Motors — $577.36',
+        'Servos — $256.40',
+        'Drive — $284.98',
+        'Power — $167.46',
+        'Electronics (REV) — $1,850.00',
+        'Vision/Sensors — $378.00',
+        'Field Equipment — $140.00',
+        'Misc goBILDA — $2,510.79'
+      ],
+      datasets: [{
+        data: [577.36, 256.40, 284.98, 167.46, 1850.00, 378.00, 140.00, 2510.79],
+        backgroundColor: ['#b71c1c','#1565c0','#2e7d32','#e65100','#c62828','#6a1b9a','#00695c','#455a64'],
+        borderColor: '#fff',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 13 }, padding: 16, boxWidth: 18 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              var total = ctx.dataset.data.reduce(function(a,b){ return a+b; }, 0);
+              var pct = Math.round(ctx.parsed * 1000 / total) / 10;
+              return ' ' + ctx.label.split(' — ')[0] + ': ' + pct + '%';
+            }
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
+
+<div class="back-link"><a href="../">&larr; Back to Resources</a></div>
