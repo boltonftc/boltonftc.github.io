@@ -1,0 +1,365 @@
+---
+layout: page
+title: "Pollen Harvest — Practice Game"
+---
+
+<style>
+/* ── page-nav bar ── */
+.game-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  background: #ffc107;
+  border-radius: 8px;
+  padding: 0.7em 1em;
+  margin: 0 0 2em;
+  position: sticky;
+  top: 56px;
+  z-index: 100;
+}
+.game-nav a {
+  color: #1a1a1a;
+  font-size: 0.82em;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.game-nav a:hover { background: rgba(0,0,0,0.12); }
+
+/* ── hero graphic ── */
+.game-graphic-wrap {
+  text-align: center;
+  margin: 0 0 2.5em;
+}
+.game-graphic-wrap img {
+  max-width: 100%;
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid #dee2e6;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.13);
+}
+.game-graphic-wrap figcaption {
+  font-size: 0.82em;
+  color: #777;
+  margin-top: 0.5em;
+}
+
+/* ── intro blurb ── */
+.game-intro {
+  background: #fffde7;
+  border-left: 5px solid #ffc107;
+  border-radius: 0 8px 8px 0;
+  padding: 1em 1.2em;
+  margin: 0 0 2.5em;
+  font-size: 1.04em;
+}
+
+/* ── section cards ── */
+.game-section {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.2em 1.4em 1.4em;
+  margin-bottom: 2em;
+}
+.game-section h2 {
+  margin: 0 0 0.7em;
+  font-size: 1.25em;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+}
+.game-section h2 .sec-num {
+  background: #ffc107;
+  color: #1a1a1a;
+  font-size: 0.75em;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 0.15em 0.45em;
+}
+.game-section h3 {
+  font-size: 1em;
+  color: #444;
+  margin: 1em 0 0.4em;
+}
+.game-section ul { padding-left: 1.3em; margin: 0 0 0.6em; }
+.game-section li { margin-bottom: 0.3em; }
+
+/* ── scoring table ── */
+.scoring-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.97em;
+}
+.scoring-table th {
+  background: #ffc107;
+  color: #1a1a1a;
+  padding: 0.55em 0.9em;
+  text-align: left;
+}
+.scoring-table td {
+  padding: 0.5em 0.9em;
+  border-bottom: 1px solid #dee2e6;
+}
+.scoring-table tr:last-child td { border-bottom: none; }
+.scoring-table tr:nth-child(even) td { background: #f8f9fa; }
+.pts-col { text-align: center; font-weight: 700; color: #1a73e8; }
+
+/* ── safety callout ── */
+.safety-box {
+  background: #fff3cd;
+  border: 2px solid #e53935;
+  border-radius: 8px;
+  padding: 0.9em 1.1em;
+  margin-top: 1em;
+  color: #b71c1c;
+  font-weight: 600;
+}
+
+/* ── two-col layout for rules ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2em;
+}
+@media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ── sub-label ── */
+.sub-label {
+  font-size: 0.73em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #1a73e8;
+  margin: 0.8em 0 0.25em;
+}
+</style>
+
+<!-- ── page nav ── -->
+<nav class="game-nav">
+  <a href="#overview">Overview</a>
+  <a href="#field">Field Setup</a>
+  <a href="#match">Match Structure</a>
+  <a href="#auto">Autonomous</a>
+  <a href="#teleop">Tele-Op</a>
+  <a href="#human">Human-Assisted</a>
+  <a href="#endgame">End Game</a>
+  <a href="#scoring">Scoring</a>
+</nav>
+
+<!-- ── title block ── -->
+<div id="overview">
+  <p class="game-intro">
+    Pollen Harvest is our custom practice game for the spring season. It's robot-vs-field, played on an 8&prime;&times;8&prime; field.
+    The goal is simple: collect yellow wiffle balls ("pollen") and deliver them to the Bee Hive. 12 balls, one robot, one shot at a clean run.
+    Autonomous is worth big points, but Tele-Op rewards sustained ball flow. Pull it all together and you've got a real score.
+  </p>
+</div>
+
+<!-- ── hero graphic ── -->
+<figure class="game-graphic-wrap">
+  <img src="/assets/img/spring_game_field.jpg" alt="Pollen Harvest field diagram and rules overview">
+  <figcaption>Full game overview — field layout, match structure, and scoring rules.</figcaption>
+</figure>
+
+<!-- ── 1. Field Setup ── -->
+<div class="game-section" id="field">
+  <h2><span class="sec-num">1</span> Field Setup</h2>
+
+  <div class="two-col">
+    <div>
+      <p class="sub-label">1.1 Dimensions</p>
+      <ul>
+        <li>8 ft &times; 8 ft field</li>
+        <li>12-inch wall height</li>
+        <li>Standard FTC tiles recommended</li>
+      </ul>
+
+      <p class="sub-label">1.2 Pollen (Game Elements)</p>
+      <ul>
+        <li>12 yellow wiffle balls total</li>
+        <li>3 groups of 4 balls</li>
+        <li>Placed 2&prime; in from the far wall, on 2&prime;&times;2&prime; tile intersections</li>
+        <li>Not stacked — all flat on the mat</li>
+      </ul>
+    </div>
+    <div>
+      <p class="sub-label">1.3 Red Scoring / Loading Zone</p>
+      <ul>
+        <li>2 ft &times; 2 ft square</li>
+        <li>Near-left corner — two sides touch the field walls</li>
+        <li>Used for human-assisted scoring and endgame parking</li>
+      </ul>
+
+      <p class="sub-label">1.4 Bee Hive (Scoring Structure)</p>
+      <ul>
+        <li>Lower-right corner of the field</li>
+        <li>~18" wide, 6" deep, ~8" off the mat, ~4" wall height</li>
+        <li>White pipe exits the hive and runs ~2&prime; along the right wall, sloping to the floor</li>
+        <li>A triangular deflector at wall height redirects returning pollen toward center field</li>
+        <li>Pollen is <em>scored</em> when it rolls through the pipe and returns to the field</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── 2. Match Structure ── -->
+<div class="game-section" id="match">
+  <h2><span class="sec-num">2</span> Match Structure</h2>
+  <ul>
+    <li>1 robot, no alliance partners, no opposing robot</li>
+    <li>Format: Robot vs. Field</li>
+  </ul>
+
+  <div class="two-col">
+    <div>
+      <p class="sub-label">Autonomous Period</p>
+      <p>30 seconds — pre-programmed code only, no driver input.</p>
+    </div>
+    <div>
+      <p class="sub-label">Tele-Op Period</p>
+      <p>2 minutes — drivers take over, run and gun.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── 3. Autonomous ── -->
+<div class="game-section" id="auto">
+  <h2><span class="sec-num">3</span> Autonomous Period</h2>
+
+  <p class="sub-label">Rules</p>
+  <ul>
+    <li>Pre-programmed code only — no touching the controllers</li>
+    <li>Robot may collect pollen, score directly into the hive, or deliver pollen to the red zone</li>
+  </ul>
+
+  <p class="sub-label">Scoring</p>
+  <ul>
+    <li>Each pollen scored through the hive: <strong>5 points</strong></li>
+  </ul>
+
+  <p class="sub-label">End of Autonomous</p>
+  <ul>
+    <li>Robot must come to a complete stop</li>
+    <li>If the robot is fully inside the red zone <em>and</em> holding pollen at the stop, the drive coach may remove those pollen and place them into the hive — each one earns <strong>5 points</strong></li>
+  </ul>
+
+  <p>Autonomous is 5x the points of Tele-Op per ball. A solid auto routine that scores even 4 or 5 pollen puts you in a great position heading into driver control.</p>
+</div>
+
+<!-- ── 4. Tele-Op ── -->
+<div class="game-section" id="teleop">
+  <h2><span class="sec-num">4</span> Tele-Op Period</h2>
+
+  <p class="sub-label">Rules</p>
+  <ul>
+    <li>Drivers control the robot normally</li>
+    <li>Robot may collect pollen, score into the hive, and re-cycle balls as they exit the pipe</li>
+  </ul>
+
+  <p class="sub-label">Scoring</p>
+  <ul>
+    <li>Each pollen scored through the hive: <strong>1 point</strong></li>
+  </ul>
+
+  <p>The pipe returns balls to the field after scoring, so if your intake is fast you can keep cycling the same balls repeatedly. High scores come from keeping the robot moving and the intake full.</p>
+</div>
+
+<!-- ── 5. Human-Assisted ── -->
+<div class="game-section" id="human">
+  <h2><span class="sec-num">5</span> Human-Assisted Scoring</h2>
+  <p>This only happens if every condition below is met. All of them. At once.</p>
+
+  <div class="two-col">
+    <div>
+      <p class="sub-label">All conditions required</p>
+      <ol>
+        <li>Robot is completely inside the red zone</li>
+        <li>Robot is fully stopped</li>
+        <li>Drive Hub is off (robot is disabled)</li>
+        <li>Pollen are in robot possession</li>
+        <li>Only the drive coach (adult mentor) interacts</li>
+      </ol>
+    </div>
+    <div>
+      <p class="sub-label">Restrictions</p>
+      <ul>
+        <li>No picking up loose pollen from the field</li>
+        <li>No repositioning the robot</li>
+        <li>No repairs or adjustments</li>
+        <li>Only pollen already in the robot may be scored</li>
+      </ul>
+
+      <p class="sub-label">Process</p>
+      <ol>
+        <li>Drive coach removes pollen from robot</li>
+        <li>Places them into the hive</li>
+        <li>Robot may then restart</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="safety-box">
+    ⚠️ Failure to follow the human-assisted procedure halts the match and results in a score of 0. This is about safety — follow the rules exactly.
+  </div>
+</div>
+
+<!-- ── 6. End Game ── -->
+<div class="game-section" id="endgame">
+  <h2><span class="sec-num">6</span> End Game — Parking Bonus</h2>
+  <ul>
+    <li>Robot must be fully inside the red zone</li>
+    <li>Robot must be stopped on the Drive Hub</li>
+    <li>Bonus: <strong>+5 points</strong></li>
+  </ul>
+  <p>5 points is 5 tele-op balls. If you're close on time, parking is worth it.</p>
+</div>
+
+<!-- ── 7. Robot Rules ── -->
+<div class="game-section">
+  <h2>Robot Rules</h2>
+  <ul>
+    <li>Recommended max size: 18" &times; 18" &times; 18"</li>
+    <li>Must be safe and field-friendly</li>
+    <li>No intentional launching or shooting of pollen</li>
+    <li>Game is designed for carrying, conveying, and dumping mechanisms</li>
+  </ul>
+</div>
+
+<!-- ── 8. Scoring Summary ── -->
+<div class="game-section" id="scoring">
+  <h2><span class="sec-num">8</span> Scoring Summary</h2>
+  <table class="scoring-table">
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th style="text-align:center">Points</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Pollen scored in Autonomous (each)</td>
+        <td class="pts-col">5</td>
+      </tr>
+      <tr>
+        <td>Pollen scored in Tele-Op (each)</td>
+        <td class="pts-col">1</td>
+      </tr>
+      <tr>
+        <td>Endgame Park — red zone</td>
+        <td class="pts-col">5</td>
+      </tr>
+      <tr>
+        <td><strong>Max possible (all 12 in Auto + park)</strong></td>
+        <td class="pts-col"><strong>65</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top:0.9em; font-size:0.88em; color:#777;">
+    Max assumes all 12 pollen scored during autonomous plus endgame park. Tele-Op cycling can exceed this if balls are re-scored.
+  </p>
+</div>
