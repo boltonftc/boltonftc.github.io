@@ -1,0 +1,459 @@
+---
+layout: page
+title: "Dump Servo — Positional Mode"
+---
+<style>
+.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
+.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+.block-body { padding: 10px 14px; }
+.key-idea  { border: 2px solid #f0c040; }
+.key-idea .block-label  { background: #f0c040; color: #333; }
+.key-idea .block-body   { background: #fffbe6; }
+.code-block { border: 2px solid #50c070; }
+.code-block .block-label { background: #50c070; color: #fff; }
+.code-block .block-body  { background: #f0fff4; }
+.todo  { border: 2px solid #5090e0; }
+.todo .block-label  { background: #5090e0; color: #fff; }
+.todo .block-body   { background: #f0f4ff; }
+.hint  { border: 2px solid #c080e0; }
+.hint .block-label  { background: #c080e0; color: #fff; }
+.hint .block-body   { background: #faf0ff; }
+.warn  { border: 2px solid #e05050; }
+.warn .block-label  { background: #e05050; color: #fff; }
+.warn .block-body   { background: #fff0f0; }
+.sim-action { color: #aaa; font-style: italic; font-size: 0.9em; }
+.lesson-img { max-width: 100%; border-radius: 6px; margin: 0.6em 0; border: 1px solid #dee2e6; }
+.lesson-img-sm { max-width: 480px; border-radius: 6px; margin: 0.6em 0; border: 1px solid #dee2e6; display: block; }
+.lesson-block pre { margin: 0; }
+.lesson-block code { font-size: 0.9em; }
+.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; margin-left: 8px; vertical-align: middle; }
+.tier-easier { background: #d4edda; color: #155724; }
+.tier-intermediate { background: #fff3cd; color: #856404; }
+.tier-advanced { background: #f8d7da; color: #721c24; }
+
+/* comparison table */
+.spec-table { width: 100%; border-collapse: collapse; font-size: 0.95em; margin: 0.8em 0; }
+.spec-table th { background: #f0f0f0; padding: 7px 10px; text-align: left; border-bottom: 2px solid #ccc; }
+.spec-table td { padding: 6px 10px; border-bottom: 1px solid #eee; vertical-align: top; }
+.spec-table tr:last-child td { border-bottom: none; }
+.spec-table .highlight { background: #fffbe6; }
+
+/* servo diagram inline */
+.two-col-img { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; margin: 0.8em 0; }
+@media (max-width: 580px) { .two-col-img { grid-template-columns: 1fr; } }
+
+/* position diagram */
+.pos-bar { background: #f0f0f0; border-radius: 8px; overflow: hidden; height: 28px; margin: 0.5em 0; position: relative; }
+.pos-fill { height: 100%; background: linear-gradient(90deg, #1a73e8, #34a853); border-radius: 8px 0 0 8px; display: flex; align-items: center; padding-left: 8px; color: white; font-size: 0.8em; font-weight: bold; }
+.pos-label { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 0.8em; color: #555; }
+
+/* code annotation callout */
+.code-note { background: #fffbe6; border-left: 4px solid #f0c040; padding: 6px 12px; margin: 6px 0; font-size: 0.88em; border-radius: 0 4px 4px 0; }
+
+/* loop trace table */
+.trace-table { width: 100%; border-collapse: collapse; font-size: 0.88em; font-family: monospace; margin: 0.7em 0; }
+.trace-table th { background: #333; color: #fff; padding: 5px 10px; }
+.trace-table td { padding: 4px 10px; border-bottom: 1px solid #eee; }
+.trace-table .edge-row td { background: #e8f5e9; font-weight: bold; }
+.trace-table .skip-row td { background: #fafafa; color: #888; }
+</style>
+
+<span class="tier-badge tier-intermediate">Intermediate</span>
+
+<h1>Dump Servo — Positional Mode</h1>
+
+<p>
+The robot's dump mechanism uses a <strong>positional servo</strong> connected to Control Hub Servo Port 0.
+When you press <strong>X</strong>, the servo flips between its home position and its dump position.
+This lesson covers what that servo is, how to wire and configure it, and exactly
+how the code works.
+</p>
+
+<p>
+<img src="https://cdn11.bigcommerce.com/s-x56mtydx1w/images/stencil/original/products/1190/5970/2000-0025-0002__75515__83589.1701992706.jpg"
+  alt="goBILDA 2000 Series Dual Mode Servo (Torque)" class="lesson-img-sm">
+</p>
+
+<hr>
+
+<h2>Section 1 — What Is a Servo? (Quick Review)</h2>
+<p>
+A servo is a small motor with a built-in position sensor and control circuit. Unlike a plain
+DC motor that just spins, a servo actively moves to a specific angle and holds it there.
+Inside are three parts working together: a DC motor, a gear train, and a potentiometer that
+tracks the shaft position.
+</p>
+<p>
+If this is your first time with servos, read the
+<a href="/programming/intermediate/indexer-servo/">Indexer Servo lesson</a> first —
+it goes into detail on how PWM signals, potentiometers, and gear ratios work.
+</p>
+
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">
+A servo moves to a position and <strong>holds it</strong>. A DC motor just spins.
+That built-in holding ability is what makes servos useful for arms, dumps, and claws.
+</div></div>
+
+<hr>
+
+<h2>Section 2 — Positional Mode vs CR Mode</h2>
+<p>
+The goBILDA 2000 Series servo is a <em>dual-mode</em> servo — it can be either positional
+or continuous rotation (CR). The mode is set with a small programmer tool before you
+install it on the robot. Our dump servo is in <strong>positional mode</strong>.
+</p>
+
+<table class="spec-table">
+  <thead><tr><th>Mode</th><th>What you control</th><th>Potentiometer used?</th><th>Typical use</th></tr></thead>
+  <tbody>
+    <tr class="highlight">
+      <td><strong>Positional (Normal)</strong></td>
+      <td>Target angle (0° – 300°)</td>
+      <td>Yes — holds position</td>
+      <td>Dump arms, claws, gates, wrist joints</td>
+    </tr>
+    <tr>
+      <td>Continuous Rotation (CR)</td>
+      <td>Speed and direction</td>
+      <td>No — ignored</td>
+      <td>Intake rollers, indexers, feed wheels</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+In positional mode, you tell the servo <em>where to go</em> and it figures out how to get there.
+In CR mode, you tell it <em>how fast to spin</em> and it never stops unless you command it to.
+</p>
+
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">
+<code>setPosition()</code> is for positional servos. <code>setPower()</code> is for CR servos.
+Using the wrong one compiles fine but does not do what you expect.
+</div></div>
+
+<hr>
+
+<h2>Section 3 — goBILDA Servo Models: Torque vs Speed</h2>
+<p>
+goBILDA makes two main variants of the 2000 Series servo. The difference is in the gear train
+inside — more gears means more torque but slower speed.
+</p>
+
+<table class="spec-table">
+  <thead><tr><th></th><th>Torque (25-2)</th><th>Speed (2-1)</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Stall Torque (6V)</strong></td><td>300 oz-in (21.6 kg·cm)</td><td>~40 oz-in</td></tr>
+    <tr><td><strong>No-Load Speed (6V)</strong></td><td>0.20 sec/60°</td><td>~0.085 sec/60°</td></tr>
+    <tr><td><strong>Gear Ratio</strong></td><td>300:1</td><td>~25:1</td></tr>
+    <tr><td><strong>Range</strong></td><td>300°</td><td>300°</td></tr>
+    <tr class="highlight"><td><strong>Best for</strong></td><td>Arms, dumps, claws — needs torque to hold a load</td><td>Gates, triggers, light mechanisms — needs speed</td></tr>
+  </tbody>
+</table>
+
+<p>
+The dump arm is loaded — it holds weight against gravity at its extended position.
+That is why we use the <strong>Torque</strong> variant. If this were a simple ball gate that just
+opens and closes with no real load, the Speed variant would be faster and fine.
+</p>
+
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">
+Pick the Torque servo when your mechanism holds something heavy or works against gravity.
+Pick the Speed servo when you need fast movement and the load is light.
+</div></div>
+
+<hr>
+
+<h2>Section 4 — Connecting the Servo</h2>
+<p>
+Positional servos plug directly into the servo ports on the <strong>Control Hub</strong>
+or <strong>Expansion Hub</strong>. Each port has three pins: ground, power, and signal.
+</p>
+
+<p>
+<img src="https://docs.revrobotics.com/assets/images/Control-Hub-Top-2-d15f8f7b5c16e6d820c2c55e3f7b79ee.jpg"
+  alt="REV Control Hub top view showing servo ports"
+  class="lesson-img"
+  onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+<span style="display:none; font-size:0.88em; color:#888;">[Control Hub diagram — see <a href="https://docs.revrobotics.com/control-hub/ch-overview" target="_blank" rel="noopener">REV documentation</a>]</span>
+</p>
+
+<ul>
+  <li>Servo ports are labeled <strong>0 – 5</strong> on the Control Hub</li>
+  <li>The dump servo is on <strong>Servo Port 0</strong></li>
+  <li>The 3-pin servo connector only fits one way — the brown wire (ground) goes to the side marked with a minus sign</li>
+  <li>Each servo port is powered from the hub's 5V rail — no separate power wiring needed</li>
+</ul>
+
+<div class="lesson-block warn"><div class="block-label">⚠️ Watch Out</div><div class="block-body">
+Do not plug a servo into a <strong>motor port</strong> — the voltage is 12V and will immediately destroy the servo.
+Servo ports are the smaller connectors on the top row of the Control Hub.
+</div></div>
+
+<hr>
+
+<h2>Section 5 — Driver Hub Configuration</h2>
+<p>
+The Driver Hub needs to know the servo exists before your code can use it. You add it in
+the robot configuration file.
+</p>
+
+<ol>
+  <li>On the Driver Hub, tap the three-line menu and open <strong>Configure Robot</strong></li>
+  <li>Select your existing configuration (or create one if this is the first time)</li>
+  <li>Under the Control Hub, tap <strong>Servo Controller</strong></li>
+  <li>Find <strong>Port 0</strong> and tap it</li>
+  <li>Set the type to <strong>Servo</strong> (not CRServo)</li>
+  <li>Set the name to <code>dump_servo</code> — this must exactly match the string in your code</li>
+  <li>Tap <strong>Done</strong> and save the configuration</li>
+</ol>
+
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">
+The name in the Driver Hub config and the name in <code>hardwareMap.get()</code> must be
+<strong>identical</strong> — same spelling, same capitalization. A mismatch causes a runtime crash
+when the OpMode starts.
+</div></div>
+
+<hr>
+
+<h2>Section 6 — The Code</h2>
+<p>
+The servo code in MecanumDrive.java has four parts: an import, variable declarations,
+initialization, and the loop. We will walk through each one.
+</p>
+
+<h3>6.1 — The Import</h3>
+<p>
+Every hardware type needs an import at the top of the file so Java knows where to find its class.
+</p>
+
+<div class="lesson-block code-block"><div class="block-label">📄 From MecanumDrive.java</div><div class="block-body">
+<pre><code class="language-java">import com.qualcomm.robotcore.hardware.Servo;</code></pre>
+</div></div>
+
+<div class="code-note">
+This line pulls in the <code>Servo</code> class from the FTC SDK. Without it, Java sees the word
+<code>Servo</code> and has no idea what it means — you will get a <strong>"cannot find symbol"</strong>
+compile error.
+</div>
+
+<hr>
+
+<h3>6.2 — Variables and Initialization</h3>
+<p>
+These lines appear before <code>waitForStart()</code>, in the setup area of the OpMode.
+</p>
+
+<div class="lesson-block code-block"><div class="block-label">📄 From MecanumDrive.java — Servo Setup</div><div class="block-body">
+<pre><code class="language-java">// Track previous X button state for rising edge detection
+boolean prevX = false;
+
+// Track current servo state
+boolean servoOut = false;
+
+// Get the servo from the hardware map
+Servo dumpServo = hardwareMap.get(Servo.class, "dump_servo");
+
+// Set the initial servo position
+dumpServo.setPosition(0.0);</code></pre>
+</div></div>
+
+<p>Four things are happening here:</p>
+
+<ul>
+  <li><code>prevX</code> — remembers whether X was pressed on the <em>previous</em> loop iteration (explained in section 6.3)</li>
+  <li><code>servoOut</code> — remembers whether the servo is currently out or home (explained in section 6.4)</li>
+  <li><code>hardwareMap.get(Servo.class, "dump_servo")</code> — looks up the servo by name from the Driver Hub configuration</li>
+  <li><code>setPosition(0.0)</code> — commands the servo to its home position immediately when the OpMode starts, so it does not start in some unknown position</li>
+</ul>
+
+<hr>
+
+<h3>6.3 — Rising Edge Detection</h3>
+<p>
+This is the most important concept in this lesson and it applies to any button-triggered action in FTC.
+</p>
+
+<p>
+The <code>while (opModeIsActive())</code> loop runs roughly 50 times per second.
+If you check <code>gamepad1.x</code> directly and act on it, pressing X for just half a second
+means the condition is true for about 25 consecutive loops. The servo would toggle
+25 times — too fast to see, ending up back where it started.
+</p>
+
+<p>
+<strong>Rising edge detection</strong> solves this. Instead of asking "is X pressed right now?",
+you ask "did X just become pressed?" — meaning it was <em>not</em> pressed last loop but <em>is</em>
+pressed this loop. That transition (false → true) is called the <strong>rising edge</strong>, and it
+only happens once per button press, no matter how long you hold it.
+</p>
+
+<table class="trace-table">
+  <thead>
+    <tr><th>Loop</th><th>gamepad1.x</th><th>prevX</th><th>x &amp;&amp; !prevX</th><th>Action</th></tr>
+  </thead>
+  <tbody>
+    <tr class="skip-row"><td>1</td><td>false</td><td>false</td><td>false</td><td>—</td></tr>
+    <tr class="edge-row"><td>2</td><td><strong>true</strong></td><td>false</td><td><strong>true ← FIRE</strong></td><td>Toggle servo</td></tr>
+    <tr class="skip-row"><td>3</td><td>true</td><td>true</td><td>false</td><td>skip (held)</td></tr>
+    <tr class="skip-row"><td>4</td><td>true</td><td>true</td><td>false</td><td>skip (held)</td></tr>
+    <tr class="skip-row"><td>5</td><td>false</td><td>true</td><td>false</td><td>—</td></tr>
+    <tr class="skip-row"><td>6</td><td>false</td><td>false</td><td>false</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<p>
+The code for the check is:
+</p>
+
+<div class="lesson-block code-block"><div class="block-label">📄 The Rising Edge Check</div><div class="block-body">
+<pre><code class="language-java">if (gamepad1.x && !prevX) {
+    // only runs once, on the first loop where X is pressed
+}
+prevX = gamepad1.x;  // save this frame for next loop</code></pre>
+</div></div>
+
+<div class="code-note">
+<code>prevX = gamepad1.x</code> runs <em>every loop</em> — not just inside the if-block.
+If you put it inside the if-block, <code>prevX</code> only updates when the button fires, which breaks the detection.
+</div>
+
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">
+<strong>Rising edge detection</strong> fires an action once when a button is first pressed,
+regardless of how long it is held. The check is: <code>current && !previous</code>.
+</div></div>
+
+<hr>
+
+<h3>6.4 — The State Machine</h3>
+<p>
+The dump servo has two positions: <strong>Home</strong> (dumper is retracted) and <strong>Out</strong>
+(dumper is extended). Pressing X switches between them. That is a <strong>state machine</strong>.
+</p>
+
+<p>
+A state machine is a program that:
+</p>
+<ol>
+  <li>Tracks which <strong>state</strong> it is currently in</li>
+  <li>Transitions to a different state when a specific input occurs</li>
+</ol>
+
+<p>
+Ours has two states and one input:
+</p>
+
+<pre style="background:#f8f9fa; padding:10px; border-radius:6px; font-size:0.9em;"><code>State: HOME  →  press X  →  State: OUT
+State: OUT   →  press X  →  State: HOME</code></pre>
+
+<p>
+The state is stored in a <code>boolean</code> called <code>servoOut</code>. When we enter the rising-edge
+block, we flip it with <code>servoOut = !servoOut</code>, then immediately command the servo to the
+matching position:
+</p>
+
+<div class="lesson-block code-block"><div class="block-label">📄 From MecanumDrive.java — Dump Servo Code</div><div class="block-body">
+<pre><code class="language-java">if (gamepad1.x && !prevX) {
+    servoOut = !servoOut;                                  // flip the state
+    dumpServo.setPosition(servoOut ? 4.0 : 0.0);          // move to matching position
+}
+prevX = gamepad1.x;
+
+telemetry.addData("dumpServo", servoOut ? "Out" : "Home"); // show state on Driver Hub</code></pre>
+</div></div>
+
+<p>
+The <code>?</code> is a ternary operator — a compact if/else: <code>condition ? value_if_true : value_if_false</code>.
+So <code>servoOut ? 4.0 : 0.0</code> means "if servoOut is true, use 4.0; otherwise use 0.0."
+</p>
+
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">
+The state machine stores <em>which position the servo should be in</em> so it survives
+across loops. Without a state variable, you have no way to know whether to move to Home or Out —
+you would need to physically read the servo's position, which only tells you where it ended up
+last time.
+</div></div>
+
+<hr>
+
+<h3>6.5 — Position Mapping: 0.0 and 4.0</h3>
+<p>
+<code>setPosition()</code> takes a value between <code>0.0</code> and <code>1.0</code>. That range maps
+to the servo's full physical travel — for a goBILDA Torque servo in default mode, that is
+<strong>0° to 300°</strong>.
+</p>
+
+<p>Position → Angle (goBILDA Torque, 300° range):</p>
+
+<div>
+  <div style="margin-bottom:6px; font-size:0.85em; color:#555;"><code>setPosition(0.0)</code> — home (0°)</div>
+  <div class="pos-bar"><div class="pos-fill" style="width:0%;">0%</div><span class="pos-label">0°</span></div>
+
+  <div style="margin-bottom:6px; margin-top:12px; font-size:0.85em; color:#555;"><code>setPosition(0.33)</code> — one third (100°)</div>
+  <div class="pos-bar"><div class="pos-fill" style="width:33%;">33%</div><span class="pos-label">100°</span></div>
+
+  <div style="margin-bottom:6px; margin-top:12px; font-size:0.85em; color:#555;"><code>setPosition(0.5)</code> — halfway (150°)</div>
+  <div class="pos-bar"><div class="pos-fill" style="width:50%;">50%</div><span class="pos-label">150°</span></div>
+
+  <div style="margin-bottom:6px; margin-top:12px; font-size:0.85em; color:#555;"><code>setPosition(1.0)</code> — full range (300°)</div>
+  <div class="pos-bar"><div class="pos-fill" style="width:100%;">100%</div><span class="pos-label">300°</span></div>
+</div>
+
+<p style="margin-top:1.2em;">
+So what about <code>setPosition(4.0)</code> in the code?
+</p>
+<p>
+The FTC SDK <strong>clamps</strong> any value outside 0.0–1.0. A value of 4.0 gets treated the
+same as 1.0 — the servo moves to its maximum position (300°). The programmer used 4.0 as a
+way of saying "go as far as possible in the out direction." The result is identical to
+writing <code>setPosition(1.0)</code>.
+</p>
+
+<div class="lesson-block key-idea"><div class="block-label">💡 Key Idea</div><div class="block-body">
+<ul style="margin:0; padding-left:1.2em;">
+  <li><code>setPosition(0.0)</code> = 0° (home)</li>
+  <li><code>setPosition(1.0)</code> = 300° (full out)</li>
+  <li><code>setPosition(4.0)</code> = clamped to 1.0 = 300° (same result)</li>
+  <li>To hit a specific angle, divide it by 300: 120° → <code>setPosition(0.4)</code></li>
+</ul>
+</div></div>
+
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">
+The dump servo probably does not need to go a full 300°. Once you have the code working,
+tune the <code>4.0</code> (or equivalent) down toward <code>1.0</code>, then toward lower values until the
+dump position is exactly where you need it mechanically. Same for the home position — <code>0.0</code>
+might push the servo hard against a mechanical stop, so you may want to raise it slightly.
+</div></div>
+
+<hr>
+
+<h2>Section 7 — Save, Compile, and Test</h2>
+
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">
+1. Click <strong>Save</strong> in the code editor.<br>
+2. Click <strong>Recompile</strong> on the Driver Hub.<br>
+3. Select <strong>MecanumDrive</strong> from TeleOp.<br>
+4. Click <strong>INIT</strong>, then <strong>START</strong>.
+</div></div>
+
+<div class="lesson-block todo"><div class="block-label">✅ To Do</div><div class="block-body">
+<strong>Test the servo:</strong><br>
+1. Press <strong>X</strong> once — servo should move to the out position. Telemetry shows <code>dumpServo: Out</code>.<br>
+2. Press <strong>X</strong> again — servo returns to home. Telemetry shows <code>dumpServo: Home</code>.<br>
+3. Hold <strong>X</strong> for a full second, then release. It should have toggled exactly <em>once</em>, not bounced back and forth.<br>
+4. Drive around and press X at the same time — the servo should toggle regardless of what the robot is doing.
+</div></div>
+
+<div class="lesson-block hint"><div class="block-label">💜 Hint</div><div class="block-body">
+If the servo toggles twice per press, check that <code>prevX = gamepad1.x</code> is
+<em>outside</em> the if-block, not inside it. If it is inside the block it only updates when
+the button fires, which breaks the edge detection.
+</div></div>
+
+<hr>
+
+<p>
+<strong>What's next?</strong> Now that you have a working servo toggle, try tuning the dump angle —
+change 4.0 and 0.0 to values that match the exact mechanical positions you need.
+Future lessons will cover how to add a second servo position (a partial dump) and how to
+trigger the dump automatically in autonomous.
+</p>
