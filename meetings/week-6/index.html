@@ -1,0 +1,203 @@
+---
+layout: page
+title: "Meeting 6 — Design Iteration"
+---
+
+<style>
+.meeting-meta { color: #666; font-size: 0.92em; margin: -0.5em 0 1.5em; }
+.meeting-meta span { margin-right: 1.2em; }
+.section-label {
+  font-size: 0.75em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a73e8;
+  margin-bottom: 0.6em;
+}
+
+/* ── schedule timeline ── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0.5em 0 0;
+  position: relative;
+  padding-left: 1em;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 1.35em;
+  top: 1.2em;
+  bottom: 1.2em;
+  width: 2px;
+  background: #dee2e6;
+}
+.timeline-item {
+  display: flex;
+  gap: 1em;
+  align-items: flex-start;
+  padding: 0.55em 0;
+  position: relative;
+}
+.tl-dot {
+  width: 0.9em;
+  height: 0.9em;
+  border-radius: 50%;
+  background: #dee2e6;
+  flex-shrink: 0;
+  margin-top: 0.3em;
+  position: relative;
+  z-index: 1;
+}
+.tl-dot.today { background: #1565c0; }
+.tl-dot.finale { background: #f57f17; }
+.tl-label { font-size: 0.78em; font-weight: 700; color: #888; min-width: 6.5em; padding-top: 0.1em; }
+.tl-text { font-size: 0.93em; line-height: 1.5; }
+.tl-text strong { color: #1a1a1a; }
+.tl-text a { color: #1a73e8; }
+
+/* ── agenda card ── */
+.agenda-card {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.1em 1.25em 1.4em;
+  margin-bottom: 1.8em;
+}
+.agenda-card h3 { margin: 0 0 0.9em; font-size: 1.05em; color: #222; }
+
+/* ── agenda items ── */
+.agenda-item {
+  display: flex;
+  gap: 1em;
+  padding: 0.7em 0;
+  border-bottom: 1px solid #e9ecef;
+  align-items: flex-start;
+}
+.agenda-item:last-child { border-bottom: none; padding-bottom: 0; }
+.agenda-icon { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
+.agenda-text h4 { margin: 0 0 0.15em; font-size: 0.97em; color: #1a1a1a; }
+.agenda-text p  { margin: 0; font-size: 0.88em; color: #555; line-height: 1.55; }
+.agenda-text a  { color: #1a73e8; font-size: 0.88em; }
+
+/* ── resource cards ── */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  margin-top: 0.5em;
+}
+.resource-card {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1em 1.1em;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.resource-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.09); border-color: #adb5bd; text-decoration: none; }
+.resource-card .rc-icon { font-size: 1.6em; margin-bottom: 0.35em; }
+.resource-card h4 { margin: 0 0 0.3em; font-size: 0.97em; color: #1a1a1a; }
+.resource-card p  { margin: 0; font-size: 0.84em; color: #555; line-height: 1.5; }
+
+/* ── meeting nav ── */
+.meeting-nav { display: flex; justify-content: space-between; margin-top: 2em; font-size: 0.9em; }
+.meeting-nav a { color: #1a73e8; }
+</style>
+
+<p class="meeting-meta">
+  <span>📅 May 27, 2026</span>
+  <span>🏷️ Design Iteration</span>
+</p>
+
+<!-- ── remaining schedule ── -->
+<div class="agenda-card">
+  <div class="section-label">Remaining Schedule</div>
+  <h3>Three Meetings Left</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="tl-dot today"></div>
+      <div class="tl-label">May 27 — Today</div>
+      <div class="tl-text"><strong>Design Iteration</strong> — drive code, intake, servo mechanisms</div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot"></div>
+      <div class="tl-label">June 3</div>
+      <div class="tl-text"><strong>Complete Robots</strong> — finish builds, tune code, test on the field</div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot finale"></div>
+      <div class="tl-label">June 10</div>
+      <div class="tl-text"><strong>Spring Friendly Competition</strong> — <a href="/game/">Pollen Harvest</a> end-of-season match</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── today's work ── -->
+<div class="agenda-card">
+  <div class="section-label">Today's Work</div>
+  <h3>Iterating on Robot Design</h3>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🕹️</div>
+    <div class="agenda-text">
+      <h4>Field-Centric Mecanum Drive</h4>
+      <p>Get your robot driving smoothly with field-centric control. If you haven't nailed this yet, start here — everything else depends on it.</p>
+      <a href="https://boltonftc.github.io/programming/advanced/mecanum-drive/">→ Mecanum Drive Lesson</a>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">⚙️</div>
+    <div class="agenda-text">
+      <h4>Intake Code</h4>
+      <p>Wire up the A button to toggle the intake on and off. Once the code works in the sim, transfer it to the real robot and test with actual pollen.</p>
+      <a href="https://boltonftc.github.io/programming/easier/button-actions/">→ Button Actions: Intake Lesson</a>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🔩</div>
+    <div class="agenda-text">
+      <h4>Servo Code — Dump Mechanism</h4>
+      <p>Add the X button toggle for your dump servo. Tune the home and dump positions to match your specific mechanism — every robot will be a little different.</p>
+      <a href="https://boltonftc.github.io/programming/intermediate/dump-servo/">→ Dump Servo Lesson</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── learning on your own ── -->
+<div class="agenda-card">
+  <div class="section-label">Learning on Your Own</div>
+  <h3>Going Further with FTC</h3>
+  <p style="font-size:0.92em; color:#555; margin: -0.3em 0 1em;">
+    This spring was a speed run — a working robot, learned by doing. There's a lot more to FTC.
+    If you want to keep going over the summer or head into a competitive season, these are the best places to start.
+  </p>
+
+  <div class="resource-grid">
+    <a class="resource-card" href="https://learn.onshape.com/learn/learning-path/introduction-to-cad" target="_blank" rel="noopener">
+      <div class="rc-icon">📐</div>
+      <h4>CAD — OnShape</h4>
+      <p>Competitive teams design every part before they build it. OnShape's intro learning path teaches you the basics of 3D CAD from scratch.</p>
+    </a>
+    <a class="resource-card" href="https://www.youtube.com/playlist?list=PLRHdgFNRLyaPiZ5rvINwMmGMHEIL9usla" target="_blank" rel="noopener">
+      <div class="rc-icon">🎬</div>
+      <h4>Programming — Brogan Pratt</h4>
+      <p>Solid YouTube series focused on Java and FTC programming. Goes deeper than our lessons and covers things like PID, odometry, and autonomous.</p>
+    </a>
+    <a class="resource-card" href="https://gm0.org/en/latest/" target="_blank" rel="noopener">
+      <div class="rc-icon">📖</div>
+      <h4>Game Manual Zero</h4>
+      <p>The unofficial guide to competitive FTC. Covers robot design, mechanisms, software, and strategy. Start with whatever interests you most.</p>
+    </a>
+  </div>
+</div>
+
+<div class="meeting-nav">
+  <a href="../week-5/">&larr; Meeting 5</a>
+  <a href="../">All Meetings</a>
+</div>
