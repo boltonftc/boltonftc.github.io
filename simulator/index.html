@@ -118,6 +118,10 @@ title: "FTC 3D Simulator — PIT Mode"
   flex-shrink: 0;
   margin-top: 0.1em;
 }
+.steps li > div {
+  flex: 1;
+  min-width: 0;
+}
 
 /* ── note callout ── */
 .sim-note {
@@ -224,28 +228,28 @@ title: "FTC 3D Simulator — PIT Mode"
   </p>
 
   <ol class="steps">
-    <li>Create a <strong>new code package</strong> and select the <strong>Dumper</strong> track at the prompt.</li>
-    <li>
+    <li><div>Create a <strong>new code package</strong> and select the <strong>Dumper</strong> track at the prompt.</div></li>
+    <li><div>
       Open the <strong>SparkFun OTOS</strong> lesson. This sets up the optical odometry sensor used for
       field-centric drive on the dumper bot.
       <img src="/assets/img/simulator/sparkfun_otos_lesson.jpg"
         alt="SparkFun OTOS lesson in the lesson menu" class="screenshot">
       <span class="screenshot-caption" style="margin-bottom:0;">SparkFun OTOS lesson.</span>
-    </li>
-    <li>
+    </div></li>
+    <li><div>
       Use <strong>Reset Lesson Code</strong> to apply the full MecanumDrive field-centric code to your package in one step.
       This gives you a driving robot immediately — no need to re-type the drive code.
       <img src="/assets/img/simulator/reset_lesson_code.jpg"
         alt="Reset lesson code button" class="screenshot">
       <span class="screenshot-caption" style="margin-bottom:0;">Reset Lesson Code pulls in the complete, tested drive code.</span>
-    </li>
-    <li>
+    </div></li>
+    <li><div>
       Complete the <strong>Intake</strong> and <strong>Servo</strong> lessons to enable the dumper bot's
       intake roller and dump bed.
       <img src="/assets/img/simulator/intake_and_servo_lessons.jpg"
         alt="Intake and servo lessons in the lesson menu" class="screenshot">
       <span class="screenshot-caption" style="margin-bottom:0;">Intake and Servo lessons add the two remaining mechanisms.</span>
-    </li>
+    </div></li>
   </ol>
 
   <div class="sim-note">
