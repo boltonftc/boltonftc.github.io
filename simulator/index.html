@@ -1,0 +1,308 @@
+---
+layout: page
+title: "FTC 3D Simulator — PIT Mode"
+---
+
+<style>
+/* ── page nav ── */
+.sim-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  background: #1a3a7a;
+  border-radius: 8px;
+  padding: 0.7em 1em;
+  margin: 0 0 2em;
+  position: sticky;
+  top: 56px;
+  z-index: 100;
+}
+.sim-nav a {
+  color: #c5d8ff;
+  font-size: 0.82em;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.sim-nav a:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+/* ── version badge ── */
+.version-badge {
+  display: inline-block;
+  background: #1565c0;
+  color: #fff;
+  font-size: 0.78em;
+  font-weight: 700;
+  padding: 0.2em 0.65em;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  margin-bottom: 1em;
+}
+
+/* ── section cards ── */
+.sim-section {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.2em 1.4em 1.5em;
+  margin-bottom: 2em;
+}
+.sim-section h2 {
+  margin: 0 0 0.7em;
+  font-size: 1.2em;
+  color: #1a1a1a;
+}
+.sim-section p { margin: 0 0 0.75em; line-height: 1.65; }
+.sim-section p:last-child { margin-bottom: 0; }
+.sim-section ul { padding-left: 1.3em; margin: 0 0 0.75em; }
+.sim-section li { margin-bottom: 0.35em; line-height: 1.55; }
+
+/* ── screenshots ── */
+.screenshot {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+  margin: 0.9em 0 0.4em;
+  display: block;
+}
+.screenshot-caption {
+  font-size: 0.82em;
+  color: #777;
+  margin: 0 0 1.2em;
+  text-align: center;
+}
+
+/* ── two-up screenshots ── */
+.two-screenshots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+  margin: 0.9em 0;
+}
+@media (max-width: 600px) { .two-screenshots { grid-template-columns: 1fr; } }
+.two-screenshots figure { margin: 0; }
+.two-screenshots img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+}
+.two-screenshots figcaption { font-size: 0.8em; color: #777; margin-top: 0.35em; text-align: center; }
+
+/* ── step list ── */
+.steps { counter-reset: step-counter; list-style: none; padding: 0; margin: 0.5em 0 0.75em; }
+.steps li {
+  counter-increment: step-counter;
+  display: flex;
+  gap: 0.8em;
+  margin-bottom: 0.7em;
+  align-items: flex-start;
+  line-height: 1.55;
+}
+.steps li::before {
+  content: counter(step-counter);
+  background: #1565c0;
+  color: #fff;
+  font-size: 0.78em;
+  font-weight: 700;
+  min-width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1em;
+}
+
+/* ── note callout ── */
+.sim-note {
+  background: #fffde7;
+  border-left: 4px solid #fbc02d;
+  border-radius: 0 6px 6px 0;
+  padding: 0.75em 1em;
+  margin: 0.75em 0;
+  font-size: 0.92em;
+  line-height: 1.6;
+}
+
+/* ── download CTA ── */
+.dl-cta-wrap { text-align: center; margin: 2em 0 0.5em; }
+.dl-cta {
+  display: inline-block;
+  padding: 12px 32px;
+  background: #1565c0;
+  color: #fff !important;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.05em;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.dl-cta:hover { background: #0d47a1; text-decoration: none; }
+.dl-meta { font-size: 0.82em; color: #888; margin-top: 0.5em; text-align: center; }
+</style>
+
+<!-- ── page nav ── -->
+<nav class="sim-nav">
+  <a href="#overview">Overview</a>
+  <a href="#tracks">Lesson Tracks</a>
+  <a href="#switching">Switching Tracks</a>
+  <a href="#export">Export to Robot</a>
+  <a href="#download">Download</a>
+</nav>
+
+<!-- ── overview ── -->
+<div id="overview">
+  <span class="version-badge">v2026.05.26</span>
+  <p>
+    The <strong>FTC 3D Simulator (PIT Mode)</strong> is a custom simulator that lets students write
+    real FTC Java code and test it on a virtual robot — before touching any physical hardware.
+    Code written in the sim runs unmodified on a real robot. The May 2026 release adds a second
+    robot and a second lesson track to support both the 2025–26 and 2026–27 seasons.
+  </p>
+</div>
+
+<!-- ── two lesson tracks ── -->
+<div class="sim-section" id="tracks">
+  <h2>Two Robots, Two Lesson Tracks</h2>
+
+  <img src="/assets/img/simulator/both_robots.jpg"
+    alt="Shooter bot and dumper bot competing together on the practice field"
+    class="screenshot">
+  <p class="screenshot-caption">Both robots on the field at the same time — they can practice against each other.</p>
+
+  <p>
+    The simulator now ships with two distinct robots and two matching lesson tracks:
+  </p>
+
+  <ul>
+    <li>
+      <strong>Shooter Track</strong> — uses the original shooter bot with intake, flywheel, and indexer servo.
+      Follows the structure of the <strong>2025–26 Decode season</strong>. This is the default track
+      and has the most complete lesson set.
+    </li>
+    <li>
+      <strong>Dumper Track</strong> — introduces a new dumper bot that intakes up to 3 balls and uses a
+      servo-controlled dump bed to deliver them to the 5× high goal. Aligned with the
+      <strong>2026–27 BioBuzz season</strong>.
+    </li>
+  </ul>
+
+  <p>
+    Both robots can be used on the same practice field and can run against each other — useful for
+    testing defense, spacing, and cycle timing.
+  </p>
+
+  <p>The lesson track is selected when you create a new code package:</p>
+
+  <div class="two-screenshots">
+    <figure>
+      <img src="/assets/img/simulator/shooter_or_dumper_selection.jpg"
+        alt="Track selection screen when creating a code package">
+      <figcaption>Choose your track when creating a new code package.</figcaption>
+    </figure>
+    <figure>
+      <img src="/assets/img/simulator/shooter_or_dumper_track.jpg"
+        alt="Lesson menu showing the active track at the top">
+      <figcaption>The active track is shown at the top of the lesson menu.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- ── switching tracks ── -->
+<div class="sim-section" id="switching">
+  <h2>Switching to the Dumper Track</h2>
+
+  <p>
+    If you've already been working through the Shooter track and have completed lessons up through
+    MecanumDrive, here's the recommended path to get the dumper bot up and running quickly:
+  </p>
+
+  <ol class="steps">
+    <li>Create a <strong>new code package</strong> and select the <strong>Dumper</strong> track at the prompt.</li>
+    <li>
+      Open the <strong>SparkFun OTOS</strong> lesson. This sets up the optical odometry sensor used for
+      field-centric drive on the dumper bot.
+      <img src="/assets/img/simulator/sparkfun_otos_lesson.jpg"
+        alt="SparkFun OTOS lesson in the lesson menu" class="screenshot">
+      <span class="screenshot-caption" style="margin-bottom:0;">SparkFun OTOS lesson.</span>
+    </li>
+    <li>
+      Use <strong>Reset Lesson Code</strong> to apply the full MecanumDrive field-centric code to your package in one step.
+      This gives you a driving robot immediately — no need to re-type the drive code.
+      <img src="/assets/img/simulator/reset_lesson_code.jpg"
+        alt="Reset lesson code button" class="screenshot">
+      <span class="screenshot-caption" style="margin-bottom:0;">Reset Lesson Code pulls in the complete, tested drive code.</span>
+    </li>
+    <li>
+      Complete the <strong>Intake</strong> and <strong>Servo</strong> lessons to enable the dumper bot's
+      intake roller and dump bed.
+      <img src="/assets/img/simulator/intake_and_servo_lessons.jpg"
+        alt="Intake and servo lessons in the lesson menu" class="screenshot">
+      <span class="screenshot-caption" style="margin-bottom:0;">Intake and Servo lessons add the two remaining mechanisms.</span>
+    </li>
+  </ol>
+
+  <div class="sim-note">
+    <strong>What's intentionally skipped:</strong> This path does not go through the OTOS autonomous,
+    AprilTag, or Pedro Pathing lessons. Those add significant complexity and aren't needed to get a
+    competitive dumper bot on the field. We'll revisit autonomous for the dumper later.
+  </div>
+
+  <p>
+    This code path has been tested on a real robot. A few small adjustments may be needed when
+    transferring to physical hardware:
+  </p>
+  <ul>
+    <li>Intake motor power direction may need to be inverted depending on how the motor is mounted</li>
+    <li>Servo home and dump positions will need to be tuned to match your specific mechanism geometry</li>
+  </ul>
+</div>
+
+<!-- ── export to robot ── -->
+<div class="sim-section" id="export">
+  <h2>Exporting Code to Your Real Robot</h2>
+
+  <p>
+    When you're ready to move from the simulator to physical hardware, use <strong>Export Code Package</strong>.
+    This creates a zip file containing all the Java files in your package.
+  </p>
+
+  <img src="/assets/img/simulator/export_code_package.jpg"
+    alt="Export code package button in the simulator" class="screenshot">
+  <p class="screenshot-caption">Export Code Package — generates a zip of your Java files.</p>
+
+  <p>
+    Open the zip and copy the files — all of them, or just the ones you need — into your Android
+    project's <code>./teamcode</code> folder. The code is standard FTC SDK Java and compiles with
+    no modifications.
+  </p>
+
+  <div class="sim-note">
+    The simulator and the real robot use the same SDK interfaces (<code>DcMotor</code>, <code>Servo</code>,
+    <code>IMU</code>, etc.). There are no simulator-specific imports to remove — what you write in
+    PIT Mode is already real robot code.
+  </div>
+</div>
+
+<!-- ── download ── -->
+<div class="sim-section" id="download">
+  <h2>Download</h2>
+  <p>
+    Runs on Windows. No install of Java or Android Studio required — the simulator is a standalone
+    application.
+  </p>
+  <div class="dl-cta-wrap">
+    <a class="dl-cta"
+      href="https://drive.google.com/file/d/1kLSUP81OOtd8mI6eWJ1woWsjcFzQqM1c/view?usp=drive_web"
+      target="_blank" rel="noopener">
+      ⬇ Download FTC 3D Simulator v2026.05.26
+    </a>
+  </div>
+  <p class="dl-meta">Windows · ~150 MB installer · Includes PIT Mode, both lesson tracks, and the practice field</p>
+</div>
