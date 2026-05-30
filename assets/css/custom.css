@@ -47,3 +47,23 @@
   text-decoration: none;
 }
 .onshape-cad-link a:hover { text-decoration: underline; }
+
+/* Attribution / use notice block */
+.attribution-note {
+  margin: 2em 0 0;
+  padding: 0.85em 1.05em;
+  border: 1px solid #cfd8dc;
+  border-left: 5px solid #455a64;
+  border-radius: 6px;
+  background: #f8f9fa;
+  font-size: 0.9em;
+  color: #37474f;
+}
+
+.attribution-note strong {
+  color: #263238;
+}
+
+.attribution-note a {
+  color: #1565c0;
+}
