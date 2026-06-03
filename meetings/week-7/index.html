@@ -1,0 +1,182 @@
+---
+layout: page
+title: "Meeting 7 — Complete the Robot"
+---
+
+<style>
+.meeting-meta { color: #666; font-size: 0.92em; margin: -0.5em 0 1.5em; }
+.meeting-meta span { margin-right: 1.2em; }
+.section-label {
+  font-size: 0.75em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a73e8;
+  margin-bottom: 0.6em;
+}
+
+/* ── schedule timeline ── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0.5em 0 0;
+  position: relative;
+  padding-left: 1em;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 1.35em;
+  top: 1.2em;
+  bottom: 1.2em;
+  width: 2px;
+  background: #dee2e6;
+}
+.timeline-item {
+  display: flex;
+  gap: 1em;
+  align-items: flex-start;
+  padding: 0.55em 0;
+  position: relative;
+}
+.tl-dot {
+  width: 0.9em;
+  height: 0.9em;
+  border-radius: 50%;
+  background: #dee2e6;
+  flex-shrink: 0;
+  margin-top: 0.3em;
+  position: relative;
+  z-index: 1;
+}
+.tl-dot.today { background: #1565c0; }
+.tl-dot.finale { background: #f57f17; }
+.tl-label { font-size: 0.78em; font-weight: 700; color: #888; min-width: 6.5em; padding-top: 0.1em; }
+.tl-text { font-size: 0.93em; line-height: 1.5; }
+.tl-text strong { color: #1a1a1a; }
+.tl-text a { color: #1a73e8; }
+
+/* ── agenda card ── */
+.agenda-card {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.1em 1.25em 1.4em;
+  margin-bottom: 1.8em;
+}
+.agenda-card h3 { margin: 0 0 0.9em; font-size: 1.05em; color: #222; }
+
+/* ── agenda items ── */
+.agenda-item {
+  display: flex;
+  gap: 1em;
+  padding: 0.7em 0;
+  border-bottom: 1px solid #e9ecef;
+  align-items: flex-start;
+}
+.agenda-item:last-child { border-bottom: none; padding-bottom: 0; }
+.agenda-icon { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
+.agenda-text h4 { margin: 0 0 0.15em; font-size: 0.97em; color: #1a1a1a; }
+.agenda-text p  { margin: 0; font-size: 0.88em; color: #555; line-height: 1.55; }
+.agenda-text a  { color: #1a73e8; font-size: 0.88em; }
+
+/* ── game rules callout ── */
+.rules-box {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-left: 5px solid #f9a825;
+  border-radius: 8px;
+  padding: 0.85em 1em;
+  margin-bottom: 1.8em;
+  font-size: 0.93em;
+  color: #4e3b00;
+}
+.rules-box strong { color: #3e2f00; }
+
+/* ── meeting nav ── */
+.meeting-nav { display: flex; justify-content: space-between; margin-top: 2em; font-size: 0.9em; }
+.meeting-nav a { color: #1a73e8; }
+</style>
+
+<p class="meeting-meta">
+  <span>📅 June 3, 2026</span>
+  <span>🏷️ Complete the Robot</span>
+</p>
+
+<!-- ── remaining schedule ── -->
+<div class="agenda-card">
+  <div class="section-label">Remaining Schedule</div>
+  <h3>Two Meetings Left</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="tl-dot today"></div>
+      <div class="tl-label">June 3 — Today</div>
+      <div class="tl-text"><strong>Complete the Robot</strong> — finish intake, optional dumper, get robot driveable</div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-dot finale"></div>
+      <div class="tl-label">June 10</div>
+      <div class="tl-text"><strong>Friendly Pollen Harvest</strong> — end-of-season match, <a href="/game/">game rules</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── game format callout ── -->
+<div class="rules-box">
+  <strong>🐝 Modified Game Rules for June 10:</strong>
+  2:30 of tele-op only — no autonomous period.
+  See the <a href="/game/">Pollen Harvest game page</a> for full scoring rules.
+</div>
+
+<!-- ── today's goals ── -->
+<div class="agenda-card">
+  <div class="section-label">Today's Goal</div>
+  <h3>Robot Driveable by End of Meeting</h3>
+  <p style="font-size:0.9em; color:#555; margin: -0.3em 0 0.9em;">
+    The minimum bar for today is a robot that drives and picks up pollen. Everything beyond that — a dumper, tuned positioning, jam recovery — is bonus.
+    Work in priority order: drive first, intake second, dumper if time allows.
+  </p>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🕹️</div>
+    <div class="agenda-text">
+      <h4>Drive — Must Have</h4>
+      <p>Robot must drive reliably with the gamepad before moving on to anything else. Test on the actual field tiles if possible.</p>
+      <a href="/programming/advanced/mecanum-drive/">→ Mecanum Drive Lesson</a>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">⚙️</div>
+    <div class="agenda-text">
+      <h4>Intake — Must Have</h4>
+      <p>Finish the physical intake design and get the A-button toggle working. Test it picking up real pollen on the field — adjust roller speed if needed.</p>
+      <a href="/programming/easier/button-actions/">→ Button Actions: Intake Lesson</a>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🔩</div>
+    <div class="agenda-text">
+      <h4>Dumper into the Hive — Bonus</h4>
+      <p>If your robot has a dump mechanism, get it working today. Use the X button toggle and tune the carry/dump servo positions to reliably drop pollen into the hive.</p>
+      <a href="/programming/intermediate/dump-servo/">→ Dump Servo Lesson</a>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">↩️</div>
+    <div class="agenda-text">
+      <h4>Jam Recovery — Bonus</h4>
+      <p>If time allows, add the reverse-intake jam-clear from the dumper lesson. In a 2:30 match, a single jam can cost you 30+ seconds.</p>
+      <a href="/simulator/">→ Dumper Lesson in the Simulator</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="meeting-nav">
+  <a href="../week-6/">&larr; Meeting 6</a>
+  <a href="../">All Meetings</a>
+</div>
