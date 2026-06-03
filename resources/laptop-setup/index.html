@@ -43,6 +43,23 @@ title: "Bolton FTC Laptop Setup (Windows 11)"
 .quick-links li {
   margin-bottom: 0.3em;
 }
+.git-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.6em;
+  font-size: 0.92em;
+}
+.git-table th,
+.git-table td {
+  border: 1px solid #d8e0e8;
+  padding: 0.5em 0.6em;
+  text-align: left;
+  vertical-align: top;
+}
+.git-table th {
+  background: #eef4fb;
+  color: #1f3b57;
+}
 </style>
 
 <p class="setup-intro">
@@ -213,11 +230,47 @@ git commit -m "Initial FTC 2026 team codebase"</div>
 
 <div class="setup-section">
   <h2>9. Common Student Git Commands</h2>
+  <p>Use this quick table during normal coding and before making an MR:</p>
+  <table class="git-table">
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>What it does</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>git status</code></td>
+        <td>Shows changed files, staged files, and current branch.</td>
+      </tr>
+      <tr>
+        <td><code>git remote -v</code></td>
+        <td>Shows configured remotes (usually <strong>origin</strong> and <strong>upstream</strong>).</td>
+      </tr>
+      <tr>
+        <td><code>git checkout branch_name</code></td>
+        <td>Switches to an existing branch.</td>
+      </tr>
+      <tr>
+        <td><code>git add .</code></td>
+        <td>Stages your current file changes for the next commit.</td>
+      </tr>
+      <tr>
+        <td><code>git pull --rebase</code></td>
+        <td>Brings in latest remote changes and reapplies your local commits on top to keep history clean.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="margin-top:0.8em;"><strong>Typical push flow for an MR (on your laptop branch):</strong></p>
   <div class="setup-code">git status
-git remote -v
-git checkout branch_name
 git add .
-git pull --rebase</div>
+git commit -m "Short summary of your change"
+git pull --rebase
+git push -u origin laptop2</div>
+  <p class="setup-note">
+    Replace <strong>laptop2</strong> with your branch name. After pushing, open GitHub and create a merge request/pull request from your laptop branch.
+  </p>
 </div>
 
 <div class="attribution-note">
