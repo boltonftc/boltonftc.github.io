@@ -1,0 +1,160 @@
+---
+layout: page
+title: "Bolton FTC Laptop Setup (Windows 11)"
+---
+
+<style>
+.setup-intro {
+  color: #555;
+  margin-bottom: 1.2em;
+}
+.setup-box {
+  border: 1px solid #dfe4ea;
+  border-left: 5px solid #1565c0;
+  border-radius: 8px;
+  padding: 0.9em 1em;
+  background: #f8fbff;
+  margin: 0 0 1.2em;
+}
+.setup-section {
+  margin: 1.6em 0;
+}
+.setup-section h2 {
+  margin: 0 0 0.45em;
+  font-size: 1.15em;
+}
+.setup-section ol,
+.setup-section ul {
+  margin-top: 0.4em;
+}
+.setup-note {
+  font-size: 0.9em;
+  color: #666;
+}
+.setup-code {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.65em 0.8em;
+  font-family: Consolas, monospace;
+  font-size: 0.9em;
+  white-space: pre-wrap;
+}
+.quick-links li {
+  margin-bottom: 0.3em;
+}
+</style>
+
+<p class="setup-intro">
+This guide prepares a Windows 11 laptop for FTC programming and robot testing.
+The goal is a consistent setup across all team laptops so students can switch machines without losing time.
+</p>
+
+<div class="setup-box">
+  <strong>About FIRST Tech Challenge (FTC):</strong>
+  FTC is a robotics program where students design, build, wire, and code robots for a new game each season.
+  Teams practice engineering process skills: testing, iteration, debugging, and communicating design decisions.
+</div>
+
+<div class="setup-section">
+  <h2>1. Core Software Install</h2>
+  <ol>
+    <li>Install <strong>Android Studio</strong> (current stable release).</li>
+    <li>Follow Brogan Pratt's Android Studio + FTC SDK setup guide.</li>
+    <li>If you already have your team Git repository, clone that repo instead of creating a fresh SDK project.</li>
+    <li>Install the <strong>REV Hardware Client</strong> (firmware and hardware management).</li>
+    <li>Install the <strong>Impulse 3D Simulator</strong> from <a href="https://boltonftc.github.io/simulator/">boltonftc.github.io/simulator/</a>.</li>
+  </ol>
+  <p class="setup-note">
+    Android Studio: ensure the SDK Manager installs a recent Android API level and Platform Tools.
+    You do not need to target phones for FTC Control Hub development, but keeping SDK tools current helps avoid Gradle/build issues.
+  </p>
+</div>
+
+<div class="setup-section">
+  <h2>2. USB Wi-Fi + Network Reliability Setup</h2>
+  <ol>
+    <li>Plug in the USB Wi-Fi adapter.</li>
+    <li>Open <strong>Network Connections</strong> and rename adapters so one is clearly robot-facing (for example: <strong>FTC ROBOT</strong>).</li>
+    <li>Verify which adapter reliably connects to the robot network. Not all adapters behave the same.</li>
+    <li>In Windows Wi-Fi settings, forget all old robot SSIDs except your active robot network.</li>
+    <li>Keep your other adapter focused on internet Wi-Fi only, so Windows does not jump robot/internet networks unexpectedly.</li>
+  </ol>
+</div>
+
+<div class="setup-section">
+  <h2>3. Folder + Desktop Shortcut Setup</h2>
+  <ol>
+    <li>Create <strong>C:\ftc</strong> and put a desktop shortcut to it.</li>
+    <li>In Android Studio, right-click <strong>TeamCode</strong> and choose <strong>Open In &gt; Explorer</strong>.</li>
+    <li>Create a desktop shortcut to the TeamCode folder that contains the Java files.</li>
+  </ol>
+</div>
+
+<div class="setup-section">
+  <h2>4. Browser Favorites (Recommended)</h2>
+  <p>Pin these URLs to your browser favorites bar for quick pit access:</p>
+  <ul class="quick-links">
+    <li><a href="https://boltonftc.github.io/">https://boltonftc.github.io/</a> (Bolton FTC website)</li>
+    <li><a href="http://192.168.43.1:8080/dash">http://192.168.43.1:8080/dash</a> (FTC Dashboard)</li>
+    <li><a href="https://gm0.org/">https://gm0.org/</a> (Game Manual Zero)</li>
+    <li><a href="https://learn.onshape.com/learning-paths/introduction-to-cad">https://learn.onshape.com/learning-paths/introduction-to-cad</a> (Onshape intro lessons)</li>
+    <li><a href="http://limelight.local:5801">http://limelight.local:5801</a> (Limelight config)</li>
+  </ul>
+</div>
+
+<div class="setup-section">
+  <h2>5. Git Branch Per Laptop</h2>
+  <p>Each laptop should use its own branch to avoid accidental conflicts.</p>
+  <div class="setup-code">git checkout -b laptop1
+git status</div>
+  <p class="setup-note">
+    Use branch names like <strong>laptop1</strong>, <strong>laptop2</strong>, etc.
+    Run <strong>git status</strong> often so students confirm which branch they are on before coding.
+  </p>
+</div>
+
+<div class="setup-section">
+  <h2>6. FTC Git + SSH Setup (Dual-Remote Pattern)</h2>
+  <p>This is the workflow we use so we can pull updates from FTC SDK while pushing team code to our own repository.</p>
+
+  <ol>
+    <li>Start from an FTC SDK-based project (or your existing team codebase with FTC structure).</li>
+    <li>Create a base snapshot commit:
+      <div class="setup-code">git add .
+git commit -m "Initial FTC 2026 team codebase"</div>
+    </li>
+    <li>Check current remotes:
+      <div class="setup-code">git remote -v</div>
+    </li>
+    <li>Create SSH key on the laptop:
+      <div class="setup-code">ssh-keygen -t ed25519 -C "ftc-laptop-1"</div>
+    </li>
+    <li>Copy and add public key to GitHub account (<strong>Settings &gt; SSH and GPG keys</strong>).</li>
+    <li>Test auth:
+      <div class="setup-code">ssh -T git@github.com</div>
+    </li>
+    <li>Rename FTC SDK remote to <strong>upstream</strong>:
+      <div class="setup-code">git remote rename origin upstream</div>
+    </li>
+    <li>Add team repository as <strong>origin</strong>:
+      <div class="setup-code">git remote add origin git@github.com:boltonftc/team2_code_2026.git</div>
+    </li>
+    <li>Verify:
+      <div class="setup-code">git remote -v</div>
+    </li>
+    <li>Push base code to team repo:
+      <div class="setup-code">git push -u origin master</div>
+    </li>
+  </ol>
+
+  <p class="setup-note">
+    Final layout: <strong>upstream</strong> = official FTC SDK, <strong>origin</strong> = Bolton FTC team repository.
+  </p>
+</div>
+
+<div class="attribution-note">
+  <strong>Use &amp; Attribution:</strong> This setup guide may be reused for educational purposes with attribution.
+  Please include: <em>Source: Bolton Robotics FTC — https://boltonftc.github.io</em>.
+  See <a href="/use/">Use &amp; Attribution</a> for details.
+</div>
