@@ -59,31 +59,69 @@ The goal is a consistent setup across all team laptops so students can switch ma
 <div class="setup-section">
   <h2>1. Core Software Install</h2>
   <ol>
-    <li>Install <strong>Android Studio</strong> (current stable release).</li>
-    <li>Follow Brogan Pratt's Android Studio + FTC SDK setup guide.</li>
+    <li>Install <strong>Android Studio</strong>: <a href="https://developer.android.com/studio" target="_blank" rel="noopener">developer.android.com/studio</a>.</li>
+    <li>Follow Brogan Pratt's Android Studio + FTC SDK setup video: <a href="https://www.youtube.com/watch?v=_ZIYtNadJBo&t=456s" target="_blank" rel="noopener">YouTube setup guide</a>.</li>
     <li>If you already have your team Git repository, clone that repo instead of creating a fresh SDK project.</li>
-    <li>Install the <strong>REV Hardware Client</strong> (firmware and hardware management).</li>
+    <li>Install the <strong>REV Hardware Client</strong>: <a href="https://docs.revrobotics.com/rev-hardware-client/gs/install" target="_blank" rel="noopener">REV install guide</a>.</li>
     <li>Install the <strong>Impulse 3D Simulator</strong> from <a href="https://boltonftc.github.io/simulator/">boltonftc.github.io/simulator/</a>.</li>
   </ol>
-  <p class="setup-note">
-    Android Studio: ensure the SDK Manager installs a recent Android API level and Platform Tools.
-    You do not need to target phones for FTC Control Hub development, but keeping SDK tools current helps avoid Gradle/build issues.
-  </p>
 </div>
 
 <div class="setup-section">
-  <h2>2. USB Wi-Fi + Network Reliability Setup</h2>
+  <h2>2. FTC Gradle Dependencies</h2>
+  <p>Add or verify these entries in <strong>build.dependencies.gradle</strong>:</p>
+  <div class="setup-code">repositories {
+    mavenCentral()
+    google() // Needed for androidx
+    maven { url 'https://jitpack.io'}
+    maven { url = 'https://maven.brott.dev/' }
+}
+
+dependencies {
+    implementation 'org.firstinspires.ftc:Inspection:11.1.0'
+    implementation 'org.firstinspires.ftc:Blocks:11.1.0'
+    implementation 'org.firstinspires.ftc:RobotCore:11.1.0'
+    implementation 'org.firstinspires.ftc:RobotServer:11.1.0'
+    implementation 'org.firstinspires.ftc:OnBotJava:11.1.0'
+    implementation 'org.firstinspires.ftc:Hardware:11.1.0'
+    implementation 'org.firstinspires.ftc:FtcCommon:11.1.0'
+    implementation 'org.firstinspires.ftc:Vision:11.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+}</div>
+
+  <p>Add or verify these entries in <strong>TeamCode/build.gradle</strong>:</p>
+  <div class="setup-code">// Include common definitions from above.
+apply from: '../build.common.gradle'
+apply from: '../build.dependencies.gradle'
+
+android {
+    namespace = 'org.firstinspires.ftc.teamcode'
+
+    packagingOptions {
+        jniLibs.useLegacyPackaging true
+    }
+}
+
+dependencies {
+    implementation project(':FtcRobotController')
+    implementation 'com.github.Pedro-Pathing.PedroPathing:core:v2.0.6'
+    implementation 'com.acmerobotics.dashboard:dashboard:0.6.0'
+}</div>
+</div>
+
+<div class="setup-section">
+  <h2>3. USB Wi-Fi + Network Reliability Setup</h2>
   <ol>
     <li>Plug in the USB Wi-Fi adapter.</li>
     <li>Open <strong>Network Connections</strong> and rename adapters so one is clearly robot-facing (for example: <strong>FTC ROBOT</strong>).</li>
     <li>Verify which adapter reliably connects to the robot network. Not all adapters behave the same.</li>
-    <li>In Windows Wi-Fi settings, forget all old robot SSIDs except your active robot network.</li>
+    <li>In Windows Wi-Fi settings, forget all existing SSIDs except your active robot network.</li>
     <li>Keep your other adapter focused on internet Wi-Fi only, so Windows does not jump robot/internet networks unexpectedly.</li>
   </ol>
 </div>
 
 <div class="setup-section">
-  <h2>3. Folder + Desktop Shortcut Setup</h2>
+  <h2>4. Folder + Desktop Shortcut Setup</h2>
   <ol>
     <li>Create <strong>C:\ftc</strong> and put a desktop shortcut to it.</li>
     <li>In Android Studio, right-click <strong>TeamCode</strong> and choose <strong>Open In &gt; Explorer</strong>.</li>
@@ -92,7 +130,7 @@ The goal is a consistent setup across all team laptops so students can switch ma
 </div>
 
 <div class="setup-section">
-  <h2>4. Browser Favorites (Recommended)</h2>
+  <h2>5. Browser Favorites (Recommended)</h2>
   <p>Pin these URLs to your browser favorites bar for quick pit access:</p>
   <ul class="quick-links">
     <li><a href="https://boltonftc.github.io/">https://boltonftc.github.io/</a> (Bolton FTC website)</li>
@@ -104,7 +142,7 @@ The goal is a consistent setup across all team laptops so students can switch ma
 </div>
 
 <div class="setup-section">
-  <h2>5. Git Branch Per Laptop</h2>
+  <h2>6. Git Branch Per Laptop</h2>
   <p>Each laptop should use its own branch to avoid accidental conflicts.</p>
   <div class="setup-code">git checkout -b laptop1
 git status</div>
@@ -115,7 +153,7 @@ git status</div>
 </div>
 
 <div class="setup-section">
-  <h2>6. FTC Git + SSH Setup (Dual-Remote Pattern)</h2>
+  <h2>7. FTC Git + SSH Setup (Dual-Remote Pattern)</h2>
   <p>This is the workflow we use so we can pull updates from FTC SDK while pushing team code to our own repository.</p>
 
   <ol>
@@ -151,6 +189,35 @@ git commit -m "Initial FTC 2026 team codebase"</div>
   <p class="setup-note">
     Final layout: <strong>upstream</strong> = official FTC SDK, <strong>origin</strong> = Bolton FTC team repository.
   </p>
+</div>
+
+<div class="setup-section">
+  <h2>8. Cloning to a Second Laptop</h2>
+  <ol>
+    <li>Generate a unique SSH key on the second laptop:
+      <div class="setup-code">ssh-keygen -t ed25519 -C "ftc-laptop-2"</div>
+    </li>
+    <li>Add that laptop's public key to GitHub (Settings &gt; SSH and GPG keys).</li>
+    <li>Test SSH access:
+      <div class="setup-code">ssh -T git@github.com</div>
+    </li>
+    <li>Clone the team repo to <strong>C:\ftc</strong>:
+      <div class="setup-code">git clone git@github.com:boltonftc/team2_code_2026.git</div>
+    </li>
+    <li>Open the project in Android Studio.</li>
+    <li>Create and switch to a laptop-specific branch:
+      <div class="setup-code">git checkout -b laptop2</div>
+    </li>
+  </ol>
+</div>
+
+<div class="setup-section">
+  <h2>9. Common Student Git Commands</h2>
+  <div class="setup-code">git status
+git remote -v
+git checkout branch_name
+git add .
+git pull --rebase</div>
 </div>
 
 <div class="attribution-note">
