@@ -43,7 +43,7 @@ EXCLUDED_SKUS = {
 }
 
 # Fixed non-misc subtotal values already shown in the inventory page.
-BASE_NON_MISC_TOTAL = 577.36 + 256.40 + 284.98 + 167.46 + 1850.00 + 378.00 + 140.00
+BASE_NON_MISC_TOTAL = 577.36 + 256.40 + 284.98 + 167.46 + 1850.00 + 378.00 + 972.00
 
 
 @dataclass
