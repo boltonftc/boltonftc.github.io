@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "OnShape CAD Training — Lesson 2: Introduction to Part Studios"
+title: "OnShape CAD Training — Lesson 3: Introduction to Assemblies"
 ---
 <style>
 .lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
@@ -40,21 +40,22 @@ title: "OnShape CAD Training — Lesson 2: Introduction to Part Studios"
   <a href="/mechanical/cad-training/">← CAD Training</a>
 </div>
 
-<span class="tier-badge tier-cad">CAD Training — Lesson 2</span>
+<span class="tier-badge tier-cad">CAD Training — Lesson 3</span>
 
-<h1>Introduction to Part Studios</h1>
+<h1>Introduction to OnShape Assemblies</h1>
 
 <p>
-  This is <strong>Lesson 2</strong> of the Bolton FTC summer CAD training series.
-  In this lesson you'll become familiar with the tools inside OnShape's Part Studio
-  modeling environment — the workspace where you'll create every 3D part you ever design.
-  Part Studios are where sketches become solid objects, and where you'll spend most of
-  your time as you learn to build real robot components.
+  This is <strong>Lesson 3</strong> of the Bolton FTC summer CAD training series.
+  In this lesson you'll learn how to bring multiple parts together into an
+  <strong>Assembly</strong> — the OnShape workspace where individual parts get connected and
+  constrained to each other using <strong>Mates</strong>. Assemblies are how you'll model
+  a complete robot mechanism: every motor, bracket, shaft, and gear placed in its correct
+  position relative to everything else.
 </p>
 <p>
   Work through the full
-  <a href="https://learn.onshape.com/learn/course/introduction-to-part-studios" target="_blank" rel="noopener">Introduction to Part Studios</a>
-  course on learn.onshape.com, then complete all five exercises using the reference videos
+  <a href="https://learn.onshape.com/learn/course/introduction-to-onshape-assemblies" target="_blank" rel="noopener">Introduction to OnShape Assemblies</a>
+  course on learn.onshape.com, then complete the three exercises using the reference videos
   below if you get stuck.
 </p>
 <p style="font-size:0.92em; color:#555;">
@@ -68,10 +69,11 @@ title: "OnShape CAD Training — Lesson 2: Introduction to Part Studios"
 <div class="lesson-block key-idea">
   <div class="block-label">💡 Key Idea</div>
   <div class="block-body">
-    A <strong>Part Studio</strong> is OnShape's 3D modeling workspace. You create sketches,
-    then use features like Extrude, Revolve, and Fillet to turn those sketches into solid 3D
-    geometry. Every feature is recorded in the <strong>Feature List</strong> on the left — you
-    can go back and edit any step at any time without redrawing.
+    A <strong>Mate</strong> defines the relationship between two parts — it tells OnShape
+    how they connect and how they can (or can't) move relative to each other. A
+    <em>Fastened Mate</em> locks two parts rigidly together. A <em>Revolute Mate</em> allows
+    rotation around an axis, like a hinge or axle. Choosing the right mate type is what
+    makes a virtual assembly behave like the real thing.
   </div>
 </div>
 
@@ -79,9 +81,9 @@ title: "OnShape CAD Training — Lesson 2: Introduction to Part Studios"
   <div class="block-label">✅ What to Do</div>
   <div class="block-body">
     <ol style="margin:0; padding-left:1.3em;">
-      <li>Open the <a href="https://learn.onshape.com/learn/course/introduction-to-part-studios" target="_blank" rel="noopener">Introduction to Part Studios</a> course on learn.onshape.com.</li>
+      <li>Open the <a href="https://learn.onshape.com/learn/course/introduction-to-onshape-assemblies" target="_blank" rel="noopener">Introduction to OnShape Assemblies</a> course on learn.onshape.com.</li>
       <li>Work through <strong>all the lessons</strong> in order — watch the videos and complete all knowledge checks.</li>
-      <li>Complete <strong>all five exercises</strong> listed below. Use the reference videos if you get stuck on any of them.</li>
+      <li>Complete <strong>all three exercises</strong> listed below. Use the reference videos if you get stuck.</li>
       <li>Mark the course complete before moving on.</li>
     </ol>
   </div>
@@ -90,9 +92,10 @@ title: "OnShape CAD Training — Lesson 2: Introduction to Part Studios"
 <div class="lesson-block hint">
   <div class="block-label">💜 Hint</div>
   <div class="block-body">
-    If your model doesn't look right, check the Feature List first. OnShape shows errors
-    directly on the feature that has a problem. Click the warning icon to see what's wrong —
-    most issues are a missing dimension or a sketch that isn't fully closed.
+    When adding a mate, OnShape highlights valid mate connectors as you hover over parts.
+    If a part is flying off to an unexpected location, check that you selected the right
+    connector on each part — it's easy to accidentally pick a face instead of an axis.
+    Undo (<kbd>Ctrl+Z</kbd>) and try again.
   </div>
 </div>
 
@@ -103,12 +106,12 @@ the exercise yourself, or if you're genuinely stuck.</p>
 
 <!-- Exercise 1 -->
 <div class="exercise-card">
-  <div class="exercise-header"><span class="ex-num">Exercise 1</span> Control Arm</div>
+  <div class="exercise-header"><span class="ex-num">Exercise 1</span> Start an Assembly</div>
   <div class="exercise-body">
     <p class="video-label">📹 Reference Video</p>
     <div class="video-wrap">
-      <iframe src="https://www.youtube.com/embed/PXC-i7PNbTM"
-        title="OnShape Part Studios Exercise: Control Arm"
+      <iframe src="https://www.youtube.com/embed/hX6nalbu8vo"
+        title="OnShape Assemblies Exercise: Start an Assembly"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen></iframe>
     </div>
@@ -117,12 +120,12 @@ the exercise yourself, or if you're genuinely stuck.</p>
 
 <!-- Exercise 2 -->
 <div class="exercise-card">
-  <div class="exercise-header"><span class="ex-num">Exercise 2</span> Reducer Coupling</div>
+  <div class="exercise-header"><span class="ex-num">Exercise 2</span> Pneumatic Cylinder</div>
   <div class="exercise-body">
     <p class="video-label">📹 Reference Video</p>
     <div class="video-wrap">
-      <iframe src="https://www.youtube.com/embed/9xmWUALG9TI"
-        title="OnShape Part Studios Exercise: Reducer Coupling"
+      <iframe src="https://www.youtube.com/embed/d41DQ2kfKL0"
+        title="OnShape Assemblies Exercise: Pneumatic Cylinder"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen></iframe>
     </div>
@@ -131,40 +134,12 @@ the exercise yourself, or if you're genuinely stuck.</p>
 
 <!-- Exercise 3 -->
 <div class="exercise-card">
-  <div class="exercise-header"><span class="ex-num">Exercise 3</span> Jackhammer Gear Cover</div>
+  <div class="exercise-header"><span class="ex-num">Exercise 3</span> Assembly Structure</div>
   <div class="exercise-body">
     <p class="video-label">📹 Reference Video</p>
     <div class="video-wrap">
-      <iframe src="https://www.youtube.com/embed/0Ri5V0Ijiao"
-        title="OnShape Part Studios Exercise: Jackhammer Gear Cover"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-    </div>
-  </div>
-</div>
-
-<!-- Exercise 4 -->
-<div class="exercise-card">
-  <div class="exercise-header"><span class="ex-num">Exercise 4</span> Funnel</div>
-  <div class="exercise-body">
-    <p class="video-label">📹 Reference Video</p>
-    <div class="video-wrap">
-      <iframe src="https://www.youtube.com/embed/Y7uWezWDKUU"
-        title="OnShape Part Studios Exercise: Funnel"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-    </div>
-  </div>
-</div>
-
-<!-- Exercise 5 -->
-<div class="exercise-card">
-  <div class="exercise-header"><span class="ex-num">Exercise 5</span> Rocket Guidance Reflector</div>
-  <div class="exercise-body">
-    <p class="video-label">📹 Reference Video</p>
-    <div class="video-wrap">
-      <iframe src="https://www.youtube.com/embed/2FzYmbnHsRs"
-        title="OnShape Part Studios Exercise: Rocket Guidance Reflector"
+      <iframe src="https://www.youtube.com/embed/oxLoV_VRpso"
+        title="OnShape Assemblies Exercise: Assembly Structure"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen></iframe>
     </div>
@@ -172,7 +147,7 @@ the exercise yourself, or if you're genuinely stuck.</p>
 </div>
 
 <div class="series-nav">
-  <strong>Series:</strong> <a href="/mechanical/cad-training/">CAD Training</a> — Lesson 2 of several &nbsp;|&nbsp;
-  <strong>← Previous:</strong> <a href="/mechanical/onshape-cad/">Lesson 1 — Getting Started</a> &nbsp;|&nbsp;
-  <strong>Next:</strong> <a href="/mechanical/cad-training/assemblies/">Lesson 3 — Introduction to Assemblies</a>
+  <strong>Series:</strong> <a href="/mechanical/cad-training/">CAD Training</a> — Lesson 3 of several &nbsp;|&nbsp;
+  <strong>← Previous:</strong> <a href="/mechanical/cad-training/part-studios/">Lesson 2 — Introduction to Part Studios</a> &nbsp;|&nbsp;
+  <strong>Next up:</strong> More OnShape modules — drawings, FTC-specific robot design.
 </div>
