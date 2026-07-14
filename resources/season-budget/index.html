@@ -114,16 +114,6 @@ a.sku-link:hover { text-decoration: underline; }
     <!-- ROBOT PARTS -->
     <tr class="cat-row cat-robot"><td colspan="5">🤖 Robot Parts</td></tr>
     <tr class="row-robot">
-      <td><a class="sku-link" href="https://axon-robotics.com/products/axon-max-mk2" target="_blank" rel="noopener">Axon MAX MK2 Servos</a></td>
-      <td class="qty">4</td><td class="cost">$90.00</td><td class="cost">$360.00</td>
-      <td class="note">High-power servos — 2 per team</td>
-    </tr>
-    <tr class="row-robot">
-      <td><a class="sku-link" href="https://www.gobilda.com/6v-servo-power-injector-6-channel-8-15v-input/" target="_blank" rel="noopener">goBILDA Servo Power Injector</a></td>
-      <td class="qty">2</td><td class="cost">$52.49</td><td class="cost">$104.98</td>
-      <td class="note">Powers high-performance servos from main battery</td>
-    </tr>
-    <tr class="row-robot">
       <td>goBILDA Miscellaneous Parts</td>
       <td class="qty">2</td><td class="cost">$400.00</td><td class="cost">$800.00</td>
       <td class="note">"We don't know what we don't know" fund — gears, chains, belts, sprockets, shafts, etc.</td>
@@ -143,14 +133,9 @@ a.sku-link:hover { text-decoration: underline; }
       <td class="qty">2</td><td class="cost">$5.50</td><td class="cost">$11.00</td>
       <td class="note">ESD mitigation — one per robot</td>
     </tr>
-    <tr class="row-robot">
-      <td><a class="sku-link" href="https://www.gobilda.com/4-bar-odometry-pack-2-pods-1-pinpoint-computer/" target="_blank" rel="noopener">goBILDA 4-Bar Odometry / Pinpoint</a></td>
-      <td class="qty">2</td><td class="cost">$209.99</td><td class="cost">$419.98</td>
-      <td class="note">2 odometry pods + Pinpoint computer per robot</td>
-    </tr>
     <tr class="row-subtotal row-subtotal-robot">
       <td colspan="3"><em>Robot Parts Subtotal</em></td>
-      <td class="cost">$1,920.90</td><td></td>
+      <td class="cost">$1,035.94</td><td></td>
     </tr>
 
     <!-- JUDGING -->
@@ -185,23 +170,6 @@ a.sku-link:hover { text-decoration: underline; }
     <tr class="row-subtotal row-subtotal-tools">
       <td colspan="3"><em>Tools Subtotal</em></td>
       <td class="cost">$135.00</td><td></td>
-    </tr>
-
-    <!-- GAME FIELD -->
-    <tr class="cat-row cat-field"><td colspan="5">🏟️ Game Field</td></tr>
-    <tr class="row-field">
-      <td><a class="sku-link" href="https://www.andymark.com/products/first-tech-challenge-perimeter-kit" target="_blank" rel="noopener">FTC Perimeter Kit</a></td>
-      <td class="qty">1</td><td class="cost">$709.00</td><td class="cost">$709.00</td>
-      <td class="note">Full practice field perimeter</td>
-    </tr>
-    <tr class="row-field">
-      <td><a class="sku-link" href="https://www.andymark.com/products/ftc-2026-27-biobuzz-pre-orders" target="_blank" rel="noopener">FTC 2026–27 BIOBUZZ™ Game Elements</a></td>
-      <td class="qty">1</td><td class="cost">$599.00</td><td class="cost">$599.00</td>
-      <td class="note">Full set of game elements for practice field</td>
-    </tr>
-    <tr class="row-subtotal row-subtotal-field">
-      <td colspan="3"><em>Game Field Subtotal</em></td>
-      <td class="cost">$1,308.00</td><td></td>
     </tr>
 
     <!-- SPARES & ELECTRICAL -->
@@ -259,7 +227,7 @@ a.sku-link:hover { text-decoration: underline; }
     <!-- GRAND TOTAL -->
     <tr class="row-total">
       <td colspan="3"><strong>Grand Total</strong></td>
-      <td class="cost">$5,463.89</td>
+      <td class="cost">$3,270.93</td>
       <td></td>
     </tr>
 
@@ -280,15 +248,14 @@ a.sku-link:hover { text-decoration: underline; }
     type: 'doughnut',
     data: {
       labels: [
-        'Robot Parts — $1,920.90',
+        'Robot Parts — $1,035.94',
         'Judging — $360.00',
         'Tools — $135.00',
-        'Game Field — $1,308.00',
         'Spares & Electrical — $1,739.99'
       ],
       datasets: [{
-        data: [1920.90, 360.00, 135.00, 1308.00, 1739.99],
-        backgroundColor: ['#1565c0','#6a1b9a','#e65100','#2e7d32','#37474f'],
+        data: [1035.94, 360.00, 135.00, 1739.99],
+        backgroundColor: ['#1565c0','#6a1b9a','#e65100','#37474f'],
         borderColor: '#fff',
         borderWidth: 3
       }]
