@@ -37,13 +37,17 @@ EXCLUDED_SKUS = {
     "2000-0025-0004",  # servo
     "2000-0025-0002",  # servo
     "3217-0001-2501",  # servoblock
+    "2004-0025-0002",  # Axon MAX Servo MK2
+    "3102-0002-0001",  # Axon Servo Programmer MK2
     "3625-0202-0104",  # mecanum wheels
     "3103-0005-0001",  # floodgate power switch
     "3100-0012-0020",  # battery
+    "3125-0001-0001",  # 6V Servo Power Injector
+    "3203-3110-0002",  # 4-Bar Odometry Pack (Pinpoint)
 }
 
 # Fixed non-misc subtotal values already shown in the inventory page.
-BASE_NON_MISC_TOTAL = 577.36 + 256.40 + 284.98 + 167.46 + 1850.00 + 378.00 + 972.00
+BASE_NON_MISC_TOTAL = 577.36 + 776.34 + 284.98 + 272.44 + 1850.00 + 797.98 + 1571.00
 
 
 @dataclass
