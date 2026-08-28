@@ -1,0 +1,10 @@
+{
+  "_help": "Add-on libraries pushed to the robot's OnBotJava before building. Drop the .jar (or .aar) in ./libs/ and add an entry below. 'requiredWhenImport' pushes the jar ONLY when a selected OpMode contains that text (usually a package import), so students never think about it. Omit 'requiredWhenImport' to always push. Jars must be slim (no classes that overlap the FTC SDK or another lib) and OnBotJava requires Android 7.0+ on the robot.",
+  "_example": {
+    "file": "PedroPathing-2.0.6.jar",
+    "url": "libs/PedroPathing-2.0.6.jar",
+    "requiredWhenImport": "com.pedropathing",
+    "note": "Pedro Pathing v2.0.6"
+  },
+  "libraries": []
+}
