@@ -1,0 +1,569 @@
+---
+layout: page
+title: "Deploy to Robot (USB)"
+subtitle: "Push your OpModes straight from the browser to the Control Hub — no installs"
+---
+
+<style>
+.dep-req {
+  background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px;
+  padding: 0.8em 1em; margin: 0 0 1.4em; font-size: 0.95em;
+}
+.dep-req b { color: #8a6d00; }
+.dep-steps { display: flex; flex-wrap: wrap; gap: 0.6em; margin: 0 0 1.2em; }
+.dep-step {
+  flex: 1 1 180px; background: #f5f7fb; border: 1px solid #dde3ee;
+  border-radius: 8px; padding: 0.7em 0.9em;
+}
+.dep-step .n {
+  display: inline-block; width: 1.6em; height: 1.6em; line-height: 1.6em;
+  text-align: center; border-radius: 50%; background: #1a3a7a; color: #fff;
+  font-weight: 700; margin-right: 0.4em;
+}
+.dep-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6em; margin: 0 0 1em; }
+.dep-bar button {
+  background: #1a3a7a; color: #fff; border: none; border-radius: 6px;
+  padding: 0.55em 1.1em; font-size: 0.95em; font-weight: 600; cursor: pointer;
+}
+.dep-bar button:hover:not(:disabled) { background: #244d9e; }
+.dep-bar button:disabled { background: #b7c0d4; cursor: not-allowed; }
+.dep-status { display: inline-flex; align-items: center; gap: 0.4em; font-size: 0.9em; color: #555; }
+.dot { width: 11px; height: 11px; border-radius: 50%; background: #c4c4c4; display: inline-block; }
+.dot.busy { background: #e6b800; }
+.dot.ok { background: #2e9e44; }
+.dot.err { background: #d33; }
+
+.file-panel { border: 1px solid #dde3ee; border-radius: 8px; margin: 0 0 1em; overflow: hidden; }
+.file-panel h4 { margin: 0; padding: 0.5em 0.9em; background: #f5f7fb; font-size: 0.95em; border-bottom: 1px solid #dde3ee; }
+.file-list { max-height: 260px; overflow: auto; }
+.file-row { display: flex; align-items: center; gap: 0.6em; padding: 0.35em 0.9em; border-bottom: 1px solid #f0f0f0; font-size: 0.9em; }
+.file-row:last-child { border-bottom: none; }
+.file-row .name { font-weight: 600; }
+.file-row .dev { color: #888; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.82em; }
+.file-empty { padding: 0.9em; color: #888; font-size: 0.9em; }
+
+#log {
+  background: #10151f; color: #d7dde8; border-radius: 8px; padding: 0.8em 1em;
+  font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.82em;
+  line-height: 1.5; height: 320px; overflow: auto; white-space: pre-wrap; word-break: break-word;
+}
+#log .l-ok { color: #6ee787; }
+#log .l-err { color: #ff8080; }
+#log .l-warn { color: #ffcf5c; }
+#log .l-dim { color: #8b97a8; }
+#log .l-info { color: #d7dde8; }
+.unsupported { background: #fdecea; border: 1px solid #f5c6cb; color: #721c24; border-radius: 8px; padding: 0.9em 1em; }
+</style>
+
+<p>Built an OpMode in the <a href="{{ '/simulator/' | relative_url }}">3D Simulator</a> and want it on the real bot?
+Plug the Control Hub into this computer with a USB cable, then use the buttons below. Everything runs in your
+browser — there is nothing to install.</p>
+
+<div class="dep-req">
+  <b>You need:</b> Google Chrome or Microsoft Edge · a USB cable to the Control Hub ·
+  the Hub powered on. (Safari and Firefox can’t talk to USB devices — use Chrome/Edge.)
+</div>
+
+<div class="dep-steps">
+  <div class="dep-step"><span class="n">1</span><b>Connect</b><br>Pick the Control Hub in the browser prompt.</div>
+  <div class="dep-step"><span class="n">2</span><b>Choose code</b><br>Select your <code>teamcode</code> folder.</div>
+  <div class="dep-step"><span class="n">3</span><b>Deploy</b><br>Push the files and build on the robot.</div>
+</div>
+
+<div id="unsupported" class="unsupported" style="display:none;"></div>
+
+<div class="dep-bar">
+  <button id="btnConnect">1 · Connect to robot</button>
+  <button id="btnPick" disabled>2 · Choose teamcode folder</button>
+  <button id="btnDeploy" disabled>3 · Deploy + build</button>
+  <span class="dep-status"><span id="dot" class="dot"></span><span id="statusText">not connected</span></span>
+</div>
+
+<div class="file-panel">
+  <h4 id="fileHeader">No folder chosen yet</h4>
+  <div id="fileList" class="file-list"><div class="file-empty">Choose your <code>teamcode</code> folder to list the OpModes that will be deployed.</div></div>
+</div>
+
+<div class="dep-bar">
+  <button id="btnDownload" disabled>⭳ Download from robot</button>
+  <span class="dep-status">Pull the code &amp; <code>lesson_progress.json</code> currently on the Hub back to a folder.</span>
+</div>
+
+<div id="log"></div>
+
+<p style="margin-top:1em; font-size:0.88em; color:#777;">
+  Tip: your <code>teamcode</code> folder is at
+  <code>impulse_3dsim/java/src/main/java/org/firstinspires/ftc/teamcode</code>.
+  The tool reads each file’s <code>package</code> line to place it correctly on the robot.
+</p>
+
+{% raw %}
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const logEl = $("log");
+
+function log(msg, cls = "info") {
+  const t = new Date().toLocaleTimeString();
+  const line = document.createElement("div");
+  line.className = "l-" + cls;
+  line.textContent = `[${t}] ${msg}`;
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+function setStatus(text, kind) {
+  $("statusText").textContent = text;
+  $("dot").className = "dot" + (kind ? " " + kind : "");
+}
+
+/* ---------- browser support ---------- */
+const hasUsb = !!navigator.usb;
+const hasPicker = typeof window.showDirectoryPicker === "function";
+if (!hasUsb) {
+  const el = $("unsupported");
+  el.style.display = "block";
+  el.innerHTML = "This browser can’t access USB devices. Please open this page in <b>Google Chrome</b> or <b>Microsoft Edge</b> on a computer (not a phone).";
+  $("btnConnect").disabled = true;
+}
+
+/* ---------- minimal ADB transport (legacy checksummed protocol, no auth) ---------- */
+const A = { CNXN: 0x4e584e43, OPEN: 0x4e45504f, OKAY: 0x59414b4f, WRTE: 0x45545257, CLSE: 0x45534c43, AUTH: 0x48545541 };
+let usb = null;          // { dev, ifaceNum, epIn, epOut, maxData }
+let nextLocalId = 1;
+
+function cmdName(c) {
+  return ({
+    0x4e584e43: "CNXN", 0x48545541: "AUTH", 0x4e45504f: "OPEN",
+    0x59414b4f: "OKAY", 0x45534c43: "CLSE", 0x45545257: "WRTE",
+  })[c] || ("0x" + (c >>> 0).toString(16));
+}
+function withTimeout(promise, ms, label) {
+  let t;
+  const timeout = new Promise((_, rej) => { t = setTimeout(() => rej(new Error(`Timed out after ${ms}ms during ${label}`)), ms); });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(t));
+}
+function adbSum(payload) {
+  let s = 0;
+  for (let i = 0; i < payload.length; i++) s = (s + payload[i]) >>> 0;
+  return s;
+}
+function concatBytes(...arrs) {
+  let n = 0; for (const a of arrs) n += a.length;
+  const out = new Uint8Array(n); let k = 0;
+  for (const a of arrs) { out.set(a, k); k += a.length; }
+  return out;
+}
+async function sendMsg(command, arg0, arg1, payload = new Uint8Array(0)) {
+  const hdr = new DataView(new ArrayBuffer(24));
+  hdr.setUint32(0, command, true);
+  hdr.setUint32(4, arg0 >>> 0, true);
+  hdr.setUint32(8, arg1 >>> 0, true);
+  hdr.setUint32(12, payload.length, true);
+  hdr.setUint32(16, adbSum(payload), true);
+  hdr.setUint32(20, (command ^ 0xffffffff) >>> 0, true);
+  await usb.dev.transferOut(usb.epOut, hdr.buffer);
+  if (payload.length) await usb.dev.transferOut(usb.epOut, payload);
+}
+async function recvMsg(timeoutMs = 20000) {
+  const h = await withTimeout(usb.dev.transferIn(usb.epIn, 24), timeoutMs, "read header");
+  if (!h.data || h.data.byteLength < 24) throw new Error("short/empty ADB header");
+  const dv = h.data;
+  const command = dv.getUint32(0, true), arg0 = dv.getUint32(4, true), arg1 = dv.getUint32(8, true), len = dv.getUint32(12, true);
+  let payload = new Uint8Array(0);
+  if (len > 0) {
+    const p = await withTimeout(usb.dev.transferIn(usb.epIn, len), timeoutMs, "read payload");
+    payload = new Uint8Array(p.data.buffer.slice(0, p.data.byteLength));
+  }
+  return { command, arg0, arg1, payload };
+}
+async function openStream(service) {
+  const localId = nextLocalId++;
+  await sendMsg(A.OPEN, localId, 0, new TextEncoder().encode(service + "\0"));
+  while (true) {
+    const p = await recvMsg();
+    if (p.arg1 !== localId) continue;
+    if (p.command === A.OKAY) return { localId, remoteId: p.arg0 };
+    if (p.command === A.CLSE) throw new Error("stream refused for " + service + " (is the Robot Controller app running?)");
+  }
+}
+
+/* ---------- connect ---------- */
+async function connect() {
+  if (!navigator.usb) return;
+  try {
+    setStatus("requesting device…", "busy");
+    log("Opening device picker — choose the Control Hub…");
+    const dev = await navigator.usb.requestDevice({ filters: [{ classCode: 0xff, subclassCode: 0x42, protocolCode: 1 }] });
+    await dev.open();
+    if (dev.configuration === null) await dev.selectConfiguration(dev.configurations[0].configurationValue);
+
+    let iface = null, alt = null;
+    for (const cfg of dev.configurations)
+      for (const i of cfg.interfaces)
+        for (const a of i.alternates)
+          if (a.interfaceClass === 0xff && a.interfaceSubclass === 0x42 && a.interfaceProtocol === 1) { iface = i; alt = a; }
+    if (!iface) { log("No ADB interface on this device — is USB debugging on?", "err"); setStatus("error", "err"); return; }
+
+    setStatus("claiming interface…", "busy");
+    await dev.claimInterface(iface.interfaceNumber);
+    let epIn = null, epOut = null;
+    for (const e of alt.endpoints) {
+      if (e.type === "bulk" && e.direction === "in") epIn = e.endpointNumber;
+      if (e.type === "bulk" && e.direction === "out") epOut = e.endpointNumber;
+    }
+    usb = { dev, ifaceNum: iface.interfaceNumber, epIn, epOut, maxData: 256 * 1024 };
+    nextLocalId = 1;
+
+    setStatus("connecting…", "busy");
+    log("Shaking hands with the robot…");
+    await sendMsg(A.CNXN, 0x01000000, 256 * 1024, new TextEncoder().encode("host::features=cmd,shell_v2\0"));
+    const pkt = await recvMsg(8000);
+    if (pkt.command === A.AUTH) {
+      log("This robot has secure ADB enabled and is asking for authorization approval, which a headless Hub can’t confirm here.", "err");
+      setStatus("needs authorization", "err"); return;
+    }
+    if (pkt.command !== A.CNXN) { log("Unexpected reply from robot: " + cmdName(pkt.command), "err"); setStatus("error", "err"); return; }
+    usb.maxData = (pkt.arg1 >>> 0) || 256 * 1024;
+    const banner = new TextDecoder().decode(pkt.payload).replace(/[^\x20-\x7e]/g, ".");
+    const model = /ro\.product\.model=([^;]+)/.exec(banner)?.[1] ?? "robot";
+
+    setStatus("connected", "ok");
+    $("btnPick").disabled = false;
+    $("btnDownload").disabled = !hasPicker;
+    updateDeployEnabled();
+    log(`Connected to ${model}.`, "ok");
+    log("Now choose your teamcode folder (step 2).", "ok");
+  } catch (err) {
+    setStatus("error", "err");
+    if (err?.name === "NotFoundError") { log("No robot selected.", "warn"); setStatus("not connected"); }
+    else if (/busy|claim|access|SecurityError/i.test(String(err))) log("USB port is busy — unplug/replug the Hub, close other tabs, and try again.", "err");
+    else log("Connect failed: " + (err?.message || err), "err");
+  }
+}
+
+/* ---------- HTTP over an ADB tcp:8080 stream ---------- */
+async function httpRequest(method, path, { body = null, contentType = "application/x-www-form-urlencoded", readTimeout = 20000 } = {}) {
+  if (!usb) throw new Error("not connected");
+  const enc = new TextEncoder();
+  const bodyBytes = body == null ? null : (typeof body === "string" ? enc.encode(body) : body);
+
+  let head =
+    `${method} ${path} HTTP/1.1\r\n` +
+    `Host: localhost:8080\r\n` +
+    `User-Agent: bolton-deploy\r\n` +
+    `Accept: */*\r\n` +
+    `Connection: close\r\n`;
+  if (bodyBytes) head += `Content-Type: ${contentType}\r\nContent-Length: ${bodyBytes.length}\r\n`;
+  head += `\r\n`;
+  const reqBytes = bodyBytes ? concatBytes(enc.encode(head), bodyBytes) : enc.encode(head);
+
+  const { localId, remoteId } = await openStream("tcp:8080");
+  const respChunks = [];
+  let closed = false;
+  const max = Math.max(1, Math.min(usb.maxData, 0x40000));
+
+  for (let off = 0; off < reqBytes.length && !closed; off += max) {
+    await sendMsg(A.WRTE, localId, remoteId, reqBytes.subarray(off, off + max));
+    let acked = false;
+    while (!acked) {
+      const p = await recvMsg(readTimeout);
+      if (p.arg1 !== localId) continue;
+      if (p.command === A.OKAY) acked = true;
+      else if (p.command === A.WRTE) { respChunks.push(p.payload); await sendMsg(A.OKAY, localId, remoteId); }
+      else if (p.command === A.CLSE) { closed = true; acked = true; }
+    }
+  }
+  while (!closed) {
+    const p = await recvMsg(readTimeout);
+    if (p.arg1 !== localId) continue;
+    if (p.command === A.WRTE) { respChunks.push(p.payload); await sendMsg(A.OKAY, localId, remoteId); }
+    else if (p.command === A.CLSE) closed = true;
+  }
+  try { await sendMsg(A.CLSE, localId, remoteId); } catch {}
+  return parseHttp(concatBytes(...respChunks));
+}
+function indexOfCRLFCRLF(bytes) {
+  for (let i = 0; i + 3 < bytes.length; i++) {
+    if (bytes[i] === 13 && bytes[i + 1] === 10 && bytes[i + 2] === 13 && bytes[i + 3] === 10) return i;
+  }
+  return -1;
+}
+function parseHttp(raw) {
+  const sep = indexOfCRLFCRLF(raw);
+  if (sep < 0) return { status: 0, statusText: "no headers", headers: {}, body: "", raw };
+  const headText = new TextDecoder("ascii").decode(raw.subarray(0, sep));
+  const bodyBytes = raw.subarray(sep + 4);
+  const lines = headText.split("\r\n");
+  const statusLine = lines.shift() || "";
+  const m = statusLine.match(/^HTTP\/\d\.\d\s+(\d+)\s*(.*)$/);
+  const status = m ? parseInt(m[1], 10) : 0;
+  const statusText = m ? m[2] : statusLine;
+  const headers = {};
+  for (const line of lines) {
+    const idx = line.indexOf(":");
+    if (idx > 0) headers[line.slice(0, idx).trim().toLowerCase()] = line.slice(idx + 1).trim();
+  }
+  let body;
+  if ((headers["transfer-encoding"] || "").toLowerCase().includes("chunked")) {
+    body = new TextDecoder().decode(dechunk(bodyBytes));
+  } else {
+    body = new TextDecoder().decode(bodyBytes);
+  }
+  return { status, statusText, headers, body, raw };
+}
+function dechunk(bytes) {
+  const out = [];
+  let i = 0;
+  while (i < bytes.length) {
+    let j = i;
+    while (j + 1 < bytes.length && !(bytes[j] === 13 && bytes[j + 1] === 10)) j++;
+    const sizeHex = new TextDecoder("ascii").decode(bytes.subarray(i, j)).trim();
+    const size = parseInt(sizeHex, 16);
+    if (!Number.isFinite(size) || size <= 0) break;
+    const start = j + 2;
+    out.push(bytes.subarray(start, start + size));
+    i = start + size + 2;
+  }
+  let len = 0; for (const c of out) len += c.length;
+  const merged = new Uint8Array(len);
+  let off = 0; for (const c of out) { merged.set(c, off); off += c.length; }
+  return merged;
+}
+
+/* ---------- teamcode folder loading (File System Access) ---------- */
+const TEAMCODE_ROOT = "/src/org/firstinspires/ftc/teamcode/";
+// Lesson-sync companions pushed alongside the code so lessons stay in sync with what's on the bot.
+const COMPANION_JSON = ["lesson_progress.json", "package.json"];
+let files = [];  // { rel, name, devicePath, text, selected }
+
+async function* walk(dirHandle, prefix = "") {
+  for await (const [name, handle] of dirHandle.entries()) {
+    const rel = prefix ? prefix + "/" + name : name;
+    if (handle.kind === "file") yield { rel, handle };
+    else yield* walk(handle, rel);
+  }
+}
+function devicePathFor(text, name, rel) {
+  const m = /(^|\n)\s*package\s+([\w.]+)\s*;/.exec(text);
+  if (m) return "/src/" + m[2].split(".").join("/") + "/" + name;
+  return TEAMCODE_ROOT + rel;  // fallback
+}
+async function pickFolder() {
+  try {
+    if (!hasPicker) { log("This browser can’t open a folder picker — use Chrome/Edge.", "err"); return; }
+    const dir = await window.showDirectoryPicker({ id: "teamcode", mode: "read" });
+    log(`Reading folder “${dir.name}”…`);
+    files = [];
+    for await (const { rel, handle } of walk(dir)) {
+      const name = rel.split("/").pop();
+      const isJava = rel.toLowerCase().endsWith(".java");
+      const isCompanion = COMPANION_JSON.includes(name);
+      if (!isJava && !isCompanion) continue;
+      const file = await handle.getFile();
+      const text = await file.text();
+      const devicePath = isJava ? devicePathFor(text, name, rel) : TEAMCODE_ROOT + name;
+      files.push({ rel, name, devicePath, text, selected: true });
+    }
+    files.sort((a, b) => a.devicePath.localeCompare(b.devicePath));
+    renderFiles(dir.name);
+    log(`Found ${files.length} file${files.length === 1 ? "" : "s"} to deploy.`, files.length ? "ok" : "warn");
+    updateDeployEnabled();
+  } catch (err) {
+    if (err?.name === "AbortError") return;
+    log("Could not read folder: " + (err?.message || err), "err");
+  }
+}
+function renderFiles(dirName) {
+  $("fileHeader").textContent = `${dirName} — ${files.length} file${files.length === 1 ? "" : "s"}`;
+  const list = $("fileList");
+  list.innerHTML = "";
+  if (!files.length) {
+    list.innerHTML = '<div class="file-empty">No <code>.java</code> files found in that folder.</div>';
+    return;
+  }
+  files.forEach((f, idx) => {
+    const row = document.createElement("label");
+    row.className = "file-row";
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = f.selected;
+    cb.addEventListener("change", () => { files[idx].selected = cb.checked; updateDeployEnabled(); });
+    const name = document.createElement("span");
+    name.className = "name";
+    name.textContent = f.name;
+    const dev = document.createElement("span");
+    dev.className = "dev";
+    dev.textContent = f.devicePath;
+    row.append(cb, name, dev);
+    list.appendChild(row);
+  });
+}
+function updateDeployEnabled() {
+  const any = usb && files.some((f) => f.selected);
+  $("btnDeploy").disabled = !any;
+}
+
+/* ---------- library auto-provisioning (OnBotJava external libraries) ---------- */
+// Manifest (libs.json) lists jars the curriculum needs. A jar is pushed only when a
+// selected OpMode imports its package (requiredWhenImport) — so the complexity stays hidden.
+function buildMultipart(fieldName, filename, bytes, mime) {
+  const boundary = "----BoltonDeploy" + Math.random().toString(16).slice(2);
+  const enc = new TextEncoder();
+  const pre = enc.encode(
+    `--${boundary}\r\n` +
+    `Content-Disposition: form-data; name="${fieldName}"; filename="${filename}"\r\n` +
+    `Content-Type: ${mime}\r\n\r\n`);
+  const post = enc.encode(`\r\n--${boundary}--\r\n`);
+  return { body: concatBytes(pre, bytes, post), contentType: `multipart/form-data; boundary=${boundary}` };
+}
+function libNeeded(lib, chosen) {
+  if (!lib.requiredWhenImport) return true;
+  return chosen.some((f) => f.text.includes(lib.requiredWhenImport));
+}
+async function ensureLibraries(chosen) {
+  let manifest;
+  try {
+    const res = await fetch("libs.json", { cache: "no-store" });
+    if (!res.ok) return;
+    manifest = await res.json();
+  } catch { return; }
+  const wanted = (manifest.libraries || []).filter((l) => libNeeded(l, chosen));
+  if (!wanted.length) return;
+
+  const tree = await httpRequest("GET", "/java/file/tree");
+  const treeText = tree.status === 200 ? tree.body : "";
+  const missing = wanted.filter((l) => !treeText.includes(l.file));
+  if (!missing.length) { log("Required libraries already on the robot.", "ok"); return; }
+
+  for (const lib of missing) {
+    log(`Installing library ${lib.file}…`, "warn");
+    const res = await fetch(lib.url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`could not fetch library ${lib.url} (${res.status})`);
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    const { body, contentType } = buildMultipart("file", lib.file, bytes, "application/java-archive");
+    const up = await httpRequest("POST", "/java/file/upload?force=true", { body, contentType, readTimeout: 120000 });
+    if (up.status === 200) {
+      log(`  ✓ ${lib.file} installed (${bytes.length} bytes)`, "ok");
+    } else {
+      const detail = (up.body || "").slice(0, 200);
+      if (/7\.0|external librar/i.test(detail)) log("  This robot’s Android version is too old for add-on libraries (needs Android 7.0+).", "err");
+      throw new Error(`library upload failed for ${lib.file}: ${up.status} ${up.statusText} ${detail}`);
+    }
+  }
+}
+
+/* ---------- deploy ---------- */
+async function saveOne(f) {
+  const body = `f=${encodeURIComponent(f.devicePath)}&data=${encodeURIComponent(f.text)}`;
+  const r = await httpRequest("POST", "/java/file/save", { body });
+  return r.status === 200;
+}
+async function deploy() {
+  const chosen = files.filter((f) => f.selected);
+  if (!usb) { log("Connect to the robot first.", "warn"); return; }
+  if (!chosen.length) { log("Select at least one file to deploy.", "warn"); return; }
+
+  $("btnDeploy").disabled = true;
+  $("btnConnect").disabled = true;
+  $("btnPick").disabled = true;
+  $("btnDownload").disabled = true;
+  try {
+    await ensureLibraries(chosen);
+    log(`Uploading ${chosen.length} file${chosen.length === 1 ? "" : "s"} to the robot…`, "warn");
+    let failed = 0;
+    for (const f of chosen) {
+      const ok = await saveOne(f);
+      log(`  ${ok ? "✓" : "✗"} ${f.devicePath}`, ok ? "ok" : "err");
+      if (!ok) failed++;
+    }
+    if (failed) { log(`${failed} file(s) failed to upload — aborting build.`, "err"); return; }
+
+    log("Starting the build on the robot…");
+    const s = await httpRequest("GET", "/java/build/start");
+    if (s.status !== 200) { log("Could not start build: " + s.status + " " + s.statusText, "err"); return; }
+
+    log("Compiling (this can take a minute on the first build)…", "warn");
+    const w = await httpRequest("GET", "/java/build/wait", { readTimeout: 300000 });
+    const body = w.body || "";
+    log("── build log ──", "dim");
+    if (body.trim()) log(body.slice(0, 8000), /error:/i.test(body) ? "err" : "dim");
+
+    if (w.status === 200 && !/error:/i.test(body)) {
+      log("Build successful — restart the OpMode on the Driver Hub to run it.", "ok");
+      setStatus("deployed", "ok");
+    } else {
+      log("Build reported problems — fix the errors above and deploy again.", "warn");
+      setStatus("build failed", "err");
+    }
+  } catch (err) {
+    log("Deploy failed: " + (err?.message || err), "err");
+    setStatus("error", "err");
+  } finally {
+    $("btnConnect").disabled = false;
+    $("btnPick").disabled = !usb;
+    $("btnDownload").disabled = !usb || !hasPicker;
+    updateDeployEnabled();
+  }
+}
+
+/* ---------- download from robot (read-back over USB) ---------- */
+async function writeInto(rootDir, relPath, text) {
+  const parts = relPath.split("/").filter(Boolean);
+  const fileName = parts.pop();
+  let dir = rootDir;
+  for (const p of parts) dir = await dir.getDirectoryHandle(p, { create: true });
+  const fh = await dir.getFileHandle(fileName, { create: true });
+  const w = await fh.createWritable();
+  await w.write(text);
+  await w.close();
+}
+async function download() {
+  if (!usb) { log("Connect to the robot first.", "warn"); return; }
+  if (!hasPicker) { log("This browser can’t save to a folder — use Chrome/Edge.", "err"); return; }
+  $("btnDownload").disabled = true;
+  $("btnConnect").disabled = true;
+  $("btnPick").disabled = true;
+  $("btnDeploy").disabled = true;
+  try {
+    log("Reading the file list from the robot…");
+    const tree = await httpRequest("GET", "/java/file/tree");
+    if (tree.status !== 200) { log("Could not read the robot’s files: " + tree.status + " " + tree.statusText, "err"); return; }
+    let paths = [];
+    try {
+      const parsed = JSON.parse(tree.body);
+      paths = (parsed.src || []).filter((p) => typeof p === "string" && p.startsWith("/src/") && !p.endsWith("/"));
+    } catch { log("Robot returned an unexpected file list.", "err"); return; }
+    if (!paths.length) { log("No source files found on the robot.", "warn"); return; }
+
+    log(`Robot has ${paths.length} file${paths.length === 1 ? "" : "s"}. Choose where to save them…`);
+    const dest = await window.showDirectoryPicker({ id: "download", mode: "readwrite" });
+    let saved = 0, failed = 0;
+    for (const p of paths) {
+      const r = await httpRequest("GET", "/java/file/get?f=" + encodeURIComponent(p));
+      if (r.status !== 200) { log(`  ✗ ${p} (${r.status})`, "err"); failed++; continue; }
+      const relPath = p.replace(/^\/src\//, "");
+      await writeInto(dest, relPath, r.body);
+      log(`  ✓ ${relPath}`, "ok");
+      saved++;
+    }
+    log(`Downloaded ${saved} file${saved === 1 ? "" : "s"}${failed ? `, ${failed} failed` : ""}.`, failed ? "warn" : "ok");
+  } catch (err) {
+    if (err?.name === "AbortError") log("Download canceled.", "warn");
+    else log("Download failed: " + (err?.message || err), "err");
+  } finally {
+    $("btnConnect").disabled = false;
+    $("btnPick").disabled = !usb;
+    $("btnDownload").disabled = !usb || !hasPicker;
+    updateDeployEnabled();
+  }
+}
+
+/* ---------- wire up ---------- */
+$("btnConnect").addEventListener("click", connect);
+$("btnPick").addEventListener("click", pickFolder);
+$("btnDeploy").addEventListener("click", deploy);
+$("btnDownload").addEventListener("click", download);
+
+log("Ready. Plug in the Control Hub, then click “Connect to robot”.", "dim");
+if (!hasPicker && hasUsb) log("Note: folder picker needs Chrome/Edge; you can still connect but not load a folder here.", "warn");
+</script>
+{% endraw %}
