@@ -41,6 +41,9 @@ subtitle: "Push your OpModes straight from the browser to the Control Hub — no
 .file-row .name { font-weight: 600; }
 .file-row .dev { color: #888; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.82em; }
 .file-empty { padding: 0.9em; color: #888; font-size: 0.9em; }
+.dep-opts { margin: 0 0 1em; font-size: 0.9em; color: #333; }
+.dep-opts label { display: flex; gap: 0.5em; align-items: flex-start; cursor: pointer; }
+.dep-opts input { margin-top: 0.2em; }
 
 #log {
   background: #10151f; color: #d7dde8; border-radius: 8px; padding: 0.8em 1em;
@@ -77,6 +80,12 @@ browser — there is nothing to install.</p>
   <button id="btnPick" disabled>2 · Choose teamcode folder</button>
   <button id="btnDeploy" disabled>3 · Deploy + build</button>
   <span class="dep-status"><span id="dot" class="dot"></span><span id="statusText">not connected</span></span>
+</div>
+
+<div class="dep-opts">
+  <label><input type="checkbox" id="optOb" checked>
+    <span><b>On-bot test mode</b> — deploy into the <code>.ob</code> package and add “ OB” to OpMode names, so it stays separate from the code already built into the robot. Pulling files back with <b>Download</b> removes the <code>.ob</code> again, so they drop cleanly into Android Studio.</span>
+  </label>
 </div>
 
 <div class="file-panel">
@@ -335,6 +344,28 @@ const TEAMCODE_ROOT = "/src/org/firstinspires/ftc/teamcode/";
 const COMPANION_JSON = ["lesson_progress.json", "package.json"];
 let files = [];  // { rel, name, devicePath, text, selected }
 
+/* ---------- on-bot (.ob) namespacing ---------- */
+// During the transition the robot's APK still owns org.firstinspires.ftc.teamcode, so we deploy
+// into a sibling `.ob` package to avoid class/OpMode collisions. Fully reversible on download.
+const OB_PKG = "ob";
+const OB_TAG = " OB";
+let obMode = true;
+let currentDirName = "";
+function toOb(text) {
+  let out = text.replace(/\borg\.firstinspires\.ftc\.teamcode\b(?!\.ob\b)/g, "org.firstinspires.ftc.teamcode.ob");
+  out = out.replace(/(@(?:TeleOp|Autonomous)\s*\(\s*name\s*=\s*")([^"]*)(")/g,
+    (m, pre, nm, post) => nm.endsWith(OB_TAG) ? m : pre + nm + OB_TAG + post);
+  return out;
+}
+function fromOb(text) {
+  let out = text.replace(/\borg\.firstinspires\.ftc\.teamcode\.ob\b/g, "org.firstinspires.ftc.teamcode");
+  out = out.replace(/(@(?:TeleOp|Autonomous)\s*\(\s*name\s*=\s*")([^"]*)(")/g,
+    (m, pre, nm, post) => nm.endsWith(OB_TAG) ? pre + nm.slice(0, -OB_TAG.length) + post : m);
+  return out;
+}
+function obDevicePath(p) { return p.replace(TEAMCODE_ROOT, TEAMCODE_ROOT + OB_PKG + "/"); }
+function stripObPath(rel) { return rel.replace("org/firstinspires/ftc/teamcode/ob/", "org/firstinspires/ftc/teamcode/"); }
+
 async function* walk(dirHandle, prefix = "") {
   for await (const [name, handle] of dirHandle.entries()) {
     const rel = prefix ? prefix + "/" + name : name;
@@ -364,7 +395,8 @@ async function pickFolder() {
       files.push({ rel, name, devicePath, text, selected: true });
     }
     files.sort((a, b) => a.devicePath.localeCompare(b.devicePath));
-    renderFiles(dir.name);
+    currentDirName = dir.name;
+    renderFiles();
     log(`Found ${files.length} file${files.length === 1 ? "" : "s"} to deploy.`, files.length ? "ok" : "warn");
     updateDeployEnabled();
   } catch (err) {
@@ -372,7 +404,7 @@ async function pickFolder() {
     log("Could not read folder: " + (err?.message || err), "err");
   }
 }
-function renderFiles(dirName) {
+function renderFiles(dirName = currentDirName) {
   $("fileHeader").textContent = `${dirName} — ${files.length} file${files.length === 1 ? "" : "s"}`;
   const list = $("fileList");
   list.innerHTML = "";
@@ -392,7 +424,7 @@ function renderFiles(dirName) {
     name.textContent = f.name;
     const dev = document.createElement("span");
     dev.className = "dev";
-    dev.textContent = f.devicePath;
+    dev.textContent = obMode ? obDevicePath(f.devicePath) : f.devicePath;
     row.append(cb, name, dev);
     list.appendChild(row);
   });
@@ -452,8 +484,8 @@ async function ensureLibraries(chosen) {
 }
 
 /* ---------- deploy ---------- */
-async function saveOne(f) {
-  const body = `f=${encodeURIComponent(f.devicePath)}&data=${encodeURIComponent(f.text)}`;
+async function saveOne(path, text) {
+  const body = `f=${encodeURIComponent(path)}&data=${encodeURIComponent(text)}`;
   const r = await httpRequest("POST", "/java/file/save", { body });
   return r.status === 200;
 }
@@ -468,11 +500,14 @@ async function deploy() {
   $("btnDownload").disabled = true;
   try {
     await ensureLibraries(chosen);
+    if (obMode) log("On-bot test mode: deploying into the .ob package (OpMode names get “ OB”).", "dim");
     log(`Uploading ${chosen.length} file${chosen.length === 1 ? "" : "s"} to the robot…`, "warn");
     let failed = 0;
     for (const f of chosen) {
-      const ok = await saveOne(f);
-      log(`  ${ok ? "✓" : "✗"} ${f.devicePath}`, ok ? "ok" : "err");
+      const outText = obMode ? toOb(f.text) : f.text;
+      const outPath = obMode ? obDevicePath(f.devicePath) : f.devicePath;
+      const ok = await saveOne(outPath, outText);
+      log(`  ${ok ? "✓" : "✗"} ${outPath}`, ok ? "ok" : "err");
       if (!ok) failed++;
     }
     if (failed) { log(`${failed} file(s) failed to upload — aborting build.`, "err"); return; }
@@ -538,13 +573,14 @@ async function download() {
 
     log(`Robot has ${entries.length} file${entries.length === 1 ? "" : "s"}. Choose where to save them…`);
     const dest = await window.showDirectoryPicker({ id: "download", mode: "readwrite" });
+    log("Pulled files are reversed to the plain teamcode package (Android-Studio ready).", "dim");
     let saved = 0, failed = 0;
     for (const e of entries) {
       const getPath = "/src" + (e.startsWith("/") ? e : "/" + e);
       const r = await httpRequest("GET", "/java/file/get?f=" + encodeURIComponent(getPath));
       if (r.status !== 200) { log(`  ✗ ${e} (${r.status})`, "err"); failed++; continue; }
-      const relPath = e.replace(/^\/+/, "");
-      await writeInto(dest, relPath, r.body);
+      const relPath = stripObPath(e.replace(/^\/+/, ""));
+      await writeInto(dest, relPath, fromOb(r.body));
       log(`  ✓ ${relPath}`, "ok");
       saved++;
     }
@@ -565,6 +601,7 @@ $("btnConnect").addEventListener("click", connect);
 $("btnPick").addEventListener("click", pickFolder);
 $("btnDeploy").addEventListener("click", deploy);
 $("btnDownload").addEventListener("click", download);
+$("optOb").addEventListener("change", () => { obMode = $("optOb").checked; if (files.length) renderFiles(); });
 
 log("Ready. Plug in the Control Hub, then click “Connect to robot”.", "dim");
 if (!hasPicker && hasUsb) log("Note: folder picker needs Chrome/Edge; you can still connect but not load a folder here.", "warn");
