@@ -527,20 +527,23 @@ async function download() {
     log("Reading the file list from the robot…");
     const tree = await httpRequest("GET", "/java/file/tree");
     if (tree.status !== 200) { log("Could not read the robot’s files: " + tree.status + " " + tree.statusText, "err"); return; }
-    let paths = [];
+    let entries = [];
     try {
       const parsed = JSON.parse(tree.body);
-      paths = (parsed.src || []).filter((p) => typeof p === "string" && p.startsWith("/src/") && !p.endsWith("/"));
+      // tree paths are relative to /src (e.g. "/org/.../Foo.java"); folders end in "/", libs use "<...>".
+      entries = (parsed.src || []).filter((p) =>
+        typeof p === "string" && !p.endsWith("/") && !p.startsWith("<") && !p.includes("EXTERNAL_LIBRARIES"));
     } catch { log("Robot returned an unexpected file list.", "err"); return; }
-    if (!paths.length) { log("No source files found on the robot.", "warn"); return; }
+    if (!entries.length) { log("No source files found on the robot.", "warn"); return; }
 
-    log(`Robot has ${paths.length} file${paths.length === 1 ? "" : "s"}. Choose where to save them…`);
+    log(`Robot has ${entries.length} file${entries.length === 1 ? "" : "s"}. Choose where to save them…`);
     const dest = await window.showDirectoryPicker({ id: "download", mode: "readwrite" });
     let saved = 0, failed = 0;
-    for (const p of paths) {
-      const r = await httpRequest("GET", "/java/file/get?f=" + encodeURIComponent(p));
-      if (r.status !== 200) { log(`  ✗ ${p} (${r.status})`, "err"); failed++; continue; }
-      const relPath = p.replace(/^\/src\//, "");
+    for (const e of entries) {
+      const getPath = "/src" + (e.startsWith("/") ? e : "/" + e);
+      const r = await httpRequest("GET", "/java/file/get?f=" + encodeURIComponent(getPath));
+      if (r.status !== 200) { log(`  ✗ ${e} (${r.status})`, "err"); failed++; continue; }
+      const relPath = e.replace(/^\/+/, "");
       await writeInto(dest, relPath, r.body);
       log(`  ✓ ${relPath}`, "ok");
       saved++;
