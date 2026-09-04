@@ -46,8 +46,40 @@ EXCLUDED_SKUS = {
     "3203-3110-0002",  # 4-Bar Odometry Pack (Pinpoint)
 }
 
-# Fixed non-misc subtotal values already shown in the inventory page.
-BASE_NON_MISC_TOTAL = 577.36 + 776.34 + 284.98 + 272.44 + 1850.00 + 797.98 + 1571.00
+# Some receipts are order summaries that list items WITHOUT a SKU, so the SKU
+# filter above cannot catch them. These items are already itemized in fixed
+# non-misc categories, so exclude them from Misc by normalized name to avoid
+# double-counting (this was the cause of a ~$1,044.90 overcount).
+EXCLUDED_NAME_KEYS = {
+    "axonmaxservomk2",                         # 2004-0025-0002
+    "axonservoprogrammermk2",                  # 3102-0002-0001
+    "6vservopowerinjector6channel815vinput",   # 3125-0001-0001
+    "4barodometrypack2pods1pinpointcomputer",  # 3203-3110-0002
+}
+
+
+def norm_name(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", text.lower())
+
+
+# Fixed non-misc category subtotals shown on the inventory page. These are the
+# single source of truth for the summary bar + pie-chart aggregate slices.
+CAT_TOTALS = {
+    "Motors": 577.36,
+    "Servos": 776.34,
+    "Drive": 284.98,
+    "Power": 564.88,   # floodgate 69.98 + battery 389.92 (qty 8) + injector 104.98
+    "Electronics": 1850.00,
+    "Vision/Sensors": 797.98,
+    "Field": 1571.00,
+}
+BASE_NON_MISC_TOTAL = sum(CAT_TOTALS.values())
+
+# Sum of curated goBILDA line-totals (motors + servos + drive + power + odometry).
+# Used to detect drift when a curated-category quantity changes on a new receipt.
+CURATED_GOBILDA_TOTAL = 2623.54
+
+SUBTOTAL_RE = re.compile(r"^Subtotal\s+\$([0-9,]+\.\d{2})$")
 
 
 @dataclass
@@ -124,6 +156,23 @@ def parse_gobilda_items(pdf_path: Path) -> list[tuple[int, str, str, float]]:
                         total = float(pm.group(3).replace(",", ""))
                     else:
                         name_parts.append(rest)
+            else:
+                # Pattern B2: qty + plain numeric SKU. goBILDA resells third-party
+                # items under a plain integer SKU (e.g. "2 44370 Hitec RDX2 200 ...").
+                # These matched no pattern before and vanished from all totals.
+                m2b = re.match(r"^(\d+)\s+(\d{3,6})\s+(\S.*)$", ln)
+                if m2b:
+                    qty = int(m2b.group(1))
+                    sku = m2b.group(2)
+                    rest = m2b.group(3).strip()
+                    i += 1
+                    pm = PRICE_INLINE_RE.match(rest)
+                    if pm:
+                        name_parts.append(pm.group(1).strip())
+                        unit = float(pm.group(2).replace(",", ""))
+                        total = float(pm.group(3).replace(",", ""))
+                    else:
+                        name_parts.append(rest)
 
         if qty is not None:
             while unit is None and i < len(lines):
@@ -179,17 +228,12 @@ def parse_gobilda_items(pdf_path: Path) -> list[tuple[int, str, str, float]]:
 def build_misc_aggregates() -> list[ItemAgg]:
     aggs: dict[str, ItemAgg] = defaultdict(lambda: ItemAgg(sku="", name=""))
 
-    def norm_name(text: str) -> str:
-        t = text.lower()
-        t = re.sub(r"[^a-z0-9]+", "", t)
-        return t
-
     name_to_key: dict[str, str] = {}
 
     for pdf in sorted(RECEIPTS_DIR.glob("gobilda_*.pdf")):
         receipt_dt = parse_receipt_date(pdf.name)
         for qty, sku, name, line_total in parse_gobilda_items(pdf):
-            if sku in EXCLUDED_SKUS:
+            if sku in EXCLUDED_SKUS or norm_name(name) in EXCLUDED_NAME_KEYS:
                 continue
 
             nn = norm_name(name)
@@ -226,6 +270,56 @@ def build_misc_aggregates() -> list[ItemAgg]:
 
 def money(value: float) -> str:
     return f"${value:,.2f}"
+
+
+def reconcile(misc_total: float) -> bool:
+    """Cross-check parsed receipts against printed subtotals and curated rows.
+
+    Catches the two silent failure modes that caused past accounting errors:
+      1. a receipt line item dropped by the parser (parsed sum < printed Subtotal)
+      2. a curated-category quantity that changed on a new receipt but was never
+         updated in the fixed rows (curated receipt sum drifts from the constant)
+    """
+    ok = True
+    total_gobilda = 0.0
+    curated_seen = 0.0
+    print("\nReconciliation:")
+    for pdf in sorted(RECEIPTS_DIR.glob("gobilda_*.pdf")):
+        items = parse_gobilda_items(pdf)
+        captured = round(sum(t for _, _, _, t in items), 2)
+        total_gobilda += captured
+        for _, sku, name, t in items:
+            if sku in EXCLUDED_SKUS or norm_name(name) in EXCLUDED_NAME_KEYS:
+                curated_seen += t
+        subs = [
+            float(m.group(1).replace(",", ""))
+            for ln in load_lines(pdf)
+            if (m := SUBTOTAL_RE.match(ln))
+        ]
+        printed = max(subs) if subs else None
+        if printed is not None and abs(captured - printed) > 0.01:
+            ok = False
+            print(f"  [FAIL] {pdf.name}: parsed {money(captured)} vs printed Subtotal "
+                  f"{money(printed)} (missing {money(printed - captured)})")
+        else:
+            print(f"  [ok]   {pdf.name}: {money(captured)}")
+
+    total_gobilda = round(total_gobilda, 2)
+    curated_seen = round(curated_seen, 2)
+    if abs(curated_seen - CURATED_GOBILDA_TOTAL) > 0.01:
+        ok = False
+        print(f"  [FAIL] curated goBILDA rows drift: receipts total {money(curated_seen)} for "
+              f"curated SKUs but the page hardcodes {money(CURATED_GOBILDA_TOTAL)} "
+              f"(diff {money(curated_seen - CURATED_GOBILDA_TOTAL)}). Update the fixed rows "
+              f"and CURATED_GOBILDA_TOTAL / CAT_TOTALS.")
+    if abs((CURATED_GOBILDA_TOTAL + misc_total) - total_gobilda) > 0.01:
+        ok = False
+        print(f"  [FAIL] invariant: curated {money(CURATED_GOBILDA_TOTAL)} + misc "
+              f"{money(misc_total)} != total goBILDA line items {money(total_gobilda)}")
+    print(f"  total goBILDA line items: {money(total_gobilda)} "
+          f"(curated {money(CURATED_GOBILDA_TOTAL)} + misc {money(misc_total)})")
+    print("  RECONCILED OK" if ok else "  *** RECONCILIATION PROBLEMS ABOVE ***")
+    return ok
 
 
 def make_misc_rows(rows: list[ItemAgg]) -> str:
@@ -283,6 +377,15 @@ def main() -> None:
         count=1,
     )
 
+    # 2b) Update fixed per-category subtotals in the summary bar.
+    for label, val in CAT_TOTALS.items():
+        html_text = re.sub(
+            rf'{re.escape(label)}: <strong>\$[0-9,]+\.\d{{2}}</strong>',
+            f'{label}: <strong>{money(val)}</strong>',
+            html_text,
+            count=1,
+        )
+
     # 3) Replace misc category block (header + rows).
     misc_rows_html = make_misc_rows(rows)
     new_misc_block = (
@@ -300,18 +403,28 @@ def main() -> None:
         count=1,
     )
 
-    # 4) Update pie chart misc label and misc value.
+    # 4) Rebuild pie chart labels + data from the single-source CAT_TOTALS + misc.
+    pie = [
+        ("Motors", CAT_TOTALS["Motors"]),
+        ("Servos", CAT_TOTALS["Servos"]),
+        ("Drive", CAT_TOTALS["Drive"]),
+        ("Power", CAT_TOTALS["Power"]),
+        ("Electronics (REV)", CAT_TOTALS["Electronics"]),
+        ("Vision/Sensors", CAT_TOTALS["Vision/Sensors"]),
+        ("Field Equipment", CAT_TOTALS["Field"]),
+        ("Misc goBILDA", misc_total),
+    ]
+    pie_labels = ",\n".join(f"        '{name} \u2014 {money(val)}'" for name, val in pie)
     html_text = re.sub(
-        r"'Misc goBILDA — \$[0-9,]+\.\d{2}'",
-        f"'Misc goBILDA — {money(misc_total)}'",
+        r"labels:\s*\[[\s\S]*?\],",
+        "labels: [\n" + pie_labels + "\n      ],",
         html_text,
         count=1,
     )
-
-    # Dataset is fixed order; replace final value in data array.
+    pie_data = ", ".join(f"{val:.2f}" for _, val in pie)
     html_text = re.sub(
-        r'data:\s*\[577\.36,\s*256\.40,\s*284\.98,\s*167\.46,\s*1850\.00,\s*378\.00,\s*140\.00,\s*[0-9.]+\]',
-        f'data: [577.36, 256.40, 284.98, 167.46, 1850.00, 378.00, 140.00, {misc_total:.2f}]',
+        r"data:\s*\[[0-9.,\s]+\],",
+        f"data: [{pie_data}],",
         html_text,
         count=1,
     )
@@ -335,6 +448,8 @@ def main() -> None:
     print(f"Itemized misc rows: {len(rows)}")
     print(f"Misc subtotal: {money(misc_total)}")
     print(f"Total invoiced: {money(grand_total)}")
+
+    reconcile(misc_total)
 
 
 if __name__ == "__main__":
