@@ -64,14 +64,16 @@ def norm_name(text: str) -> str:
 
 # Fixed non-misc category subtotals shown on the inventory page. These are the
 # single source of truth for the summary bar + pie-chart aggregate slices.
+# NOTE: includes hand-added non-goBILDA (Amazon) items not covered by the parser below
+# (Drive +$21.53 intake tubing; Electronics +$19.99 3rd gamepad; Field +$10.98 first aid kit).
 CAT_TOTALS = {
     "Motors": 577.36,
     "Servos": 776.34,
-    "Drive": 284.98,
+    "Drive": 306.51,   # 284.98 mecanum wheels + 21.53 intake tubing (Amazon, Sep 15 2026)
     "Power": 564.88,   # floodgate 69.98 + battery 389.92 (qty 8) + injector 104.98
-    "Electronics": 1850.00,
+    "Electronics": 1869.99,   # 1850.00 REV hubs + 19.99 3rd Logitech gamepad (Amazon, Sep 9 2026)
     "Vision/Sensors": 797.98,
-    "Field": 1571.00,
+    "Field": 1581.98,   # 1571.00 + 10.98 first aid kit (Amazon, Sep 15 2026)
 }
 BASE_NON_MISC_TOTAL = sum(CAT_TOTALS.values())
 
