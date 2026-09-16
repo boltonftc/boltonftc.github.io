@@ -111,6 +111,10 @@ title: "FTC Rules Quiz"
     <a href="https://ftc-resources.firstinspires.org/ftc/game/manual" target="_blank" rel="noopener">FTC Game Manual (official, firstinspires.org)</a>
   </p>
   <p class="quiz-intro">
+    🏟️ Setting up the field or a HIVE for practice? The official Event Field Guide covers assembly and setup details:<br>
+    <a href="https://ftc-resources.firstinspires.org/ftc/field/eventfieldguide" target="_blank" rel="noopener">FTC Event Field Guide (official, firstinspires.org)</a>
+  </p>
+  <p class="quiz-intro">
     Score <strong>90% or higher</strong> to pass. If you don't pass, you'll get some encouragement and a chance to
     try again with the questions reshuffled.
   </p>
@@ -144,13 +148,13 @@ const QUIZ_QUESTIONS = [
   {
     q: "How many pollen does it take to tip the hive?",
     choices: [
-      "There's no fixed number — the HIVE is a physical bi-stable mechanism that tips based on the weight balanced in the CELL, not a rule-defined count",
-      "Exactly 4 pollen",
-      "Exactly 8 pollen",
-      "Exactly 20 pollen"
+      "8 pollen, per the field setup/calibration guide",
+      "4 pollen",
+      "12 pollen",
+      "20 pollen"
     ],
     correct: 0,
-    explain: "Per 10.5.1 HIVE Scoring Criteria, a HIVE TIP happens when the physical bi-stable mechanism moves from one stable state to the other. The manual does not specify an exact game-piece count needed — it depends on the real weight/geometry of what's LAUNCHED into the CELL."
+    explain: "The field setup/calibration guide specifies 8 POLLEN to tip a HIVE. (For NECTAR alone, teams commonly report around 5 — but that figure isn't officially published in the setup guide, since the HIVE is a physical bi-stable mechanism and the exact count depends on real hardware weight/geometry.)"
   },
   {
     q: "How many game pieces can the robot possess at once?",
@@ -327,15 +331,15 @@ const QUIZ_QUESTIONS = [
     explain: "9.8 Scoring Elements — POLLEN are approximately 2.8 in. (7.1 cm) yellow balls; NECTAR are approximately 3.6 in. (9.1 cm) red/blue balls."
   },
   {
-    q: "Acting alone, does it take more, less, or an equal number of full-load cycles to tip a hive shooting pollen vs. shooting nectar?",
+    q: "Acting alone, does it take more, less, or an equal number of full-load cycles to tip a hive shooting pollen vs. shooting nectar (assuming a full 4-piece load and accurate shooting each cycle)?",
     choices: [
-      "Likely fewer cycles with nectar, since NECTAR (≈3.6 in.) are larger/heavier than POLLEN (≈2.8 in.) per piece",
+      "An equal number — 2 cycles either way, assuming a full 4-piece load and accurate shooting",
+      "Fewer cycles with nectar than with pollen",
       "More cycles with nectar than with pollen",
-      "Exactly the same number of cycles either way",
       "It's impossible to tip a hive using nectar"
     ],
     correct: 0,
-    explain: "The manual doesn't give an exact tip formula (10.5.1 only describes the bi-stable mechanism), but since NECTAR (9.8 Scoring Elements) are physically larger/heavier than POLLEN, fewer nectar pieces would generally be needed to shift the same amount of weight and cause a TIP."
+    explain: "With a 4-piece possession limit per cycle, a robot needs 2 full-load cycles to tip a HIVE whether it's launching POLLEN or NECTAR, assuming accurate shooting each cycle. See the Event Field Guide and Section 10.3.1 SCORING ELEMENTS for HIVE game piece staging."
   },
   {
     q: "What are the minimum dimensions for the robot team number sign displayed on your robot?",
@@ -531,15 +535,15 @@ const QUIZ_QUESTIONS = [
     explain: "9.8 Scoring Elements — \"There are 40 POLLEN, 8 red NECTAR, and 8 blue NECTAR total in a BIOBUZZ MATCH\" — 16 nectar total."
   },
   {
-    q: "What is the maximum number of points you can score in a single flower?",
+    q: "A flower has a bottom nectar, then 5 pollen, then a top nectar (7 pieces total, near a full flower) — all owned by your alliance. How many points is that worth?",
     choices: [
-      "There's no fixed maximum stated in the rules — it's limited only by how many scoring elements physically fit in the flower's scoring volume",
-      "Exactly 20 points",
-      "Exactly 10 points",
-      "Exactly 50 points"
+      "19 points (7 pieces × 2 pts each = 14, plus the 5-pt Bottom NECTAR Bonus)",
+      "14 points — just 2 pts per piece, no bonus",
+      "24 points — 2 pts per piece plus a 10-pt bonus",
+      "7 points — 1 point per piece"
     ],
     correct: 0,
-    explain: "10.5.2 defines the FLOWER scoring volume and per-piece point values (2 pts each, plus a possible 5-pt Bottom NECTAR Bonus), but does not state a maximum total — it depends on physical capacity."
+    explain: "Table 10-2 — POLLEN and/or NECTAR in an owned FLOWER score 2 points each (7 pieces × 2 = 14), and the alliance with the bottom-most NECTAR of its color also earns a separate 5-point Bottom NECTAR Bonus. 14 + 5 = 19 points for this near-full example."
   },
   {
     q: "What happens if pollen is accidentally shot out of the field of play?",
