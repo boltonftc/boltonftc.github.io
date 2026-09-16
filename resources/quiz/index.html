@@ -1,0 +1,715 @@
+---
+layout: page
+title: "FTC Rules Quiz"
+---
+
+<style>
+.quiz-disclaimer {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-left: 5px solid #f9a825;
+  border-radius: 6px;
+  padding: 0.8em 1.1em;
+  font-size: 0.9em;
+  color: #5d4037;
+  margin-bottom: 1.1em;
+}
+.quiz-disclaimer strong { color: #c62828; }
+
+.quiz-intro { color: #444; line-height: 1.5; }
+.quiz-intro a { color: #1a73e8; }
+
+.quiz-card {
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.2em 1.4em;
+  margin: 1.2em 0;
+  background: #fff;
+}
+
+#quiz-start-btn, .quiz-btn {
+  display: inline-block;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 6px;
+  background: #2e7d32;
+  color: #fff;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.6em;
+}
+#quiz-start-btn:hover, .quiz-btn:hover { background: #1b5e20; }
+.quiz-btn.secondary { background: #37474f; }
+.quiz-btn.secondary:hover { background: #263238; }
+
+.quiz-progress { font-size: 0.85em; color: #777; margin-bottom: 0.6em; }
+.quiz-progress-bar {
+  height: 6px;
+  border-radius: 4px;
+  background: #e0e0e0;
+  overflow: hidden;
+  margin-bottom: 1em;
+}
+.quiz-progress-fill { height: 100%; background: #2e7d32; transition: width 0.2s; }
+
+.quiz-question { font-size: 1.08em; font-weight: 600; color: #222; margin-bottom: 0.9em; }
+
+.quiz-choices { display: flex; flex-direction: column; gap: 0.6em; }
+.quiz-choice {
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f8f9fa;
+  cursor: pointer;
+  font-size: 0.95em;
+  transition: background 0.12s, border-color 0.12s;
+}
+.quiz-choice:hover:not(.disabled) { background: #eceff1; border-color: #90a4ae; }
+.quiz-choice.correct { background: #e8f5e9; border-color: #2e7d32; color: #1b5e20; font-weight: 600; }
+.quiz-choice.incorrect { background: #ffebee; border-color: #c62828; color: #b71c1c; font-weight: 600; }
+.quiz-choice.disabled { cursor: default; }
+
+.quiz-feedback {
+  margin-top: 1em;
+  padding: 0.9em 1.1em;
+  border-radius: 8px;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+.quiz-feedback.ok   { background: #e8f5e9; border: 1px solid #a5d6a7; color: #1b5e20; }
+.quiz-feedback.bad  { background: #fff3e0; border: 1px solid #ffcc80; color: #5d4037; }
+.quiz-feedback .cite { font-family: monospace; font-size: 0.88em; color: #6a1b9a; }
+
+.quiz-score-line { font-size: 0.9em; color: #666; margin-top: 1.4em; }
+
+.quiz-results h2 { margin-top: 0; }
+.quiz-results.pass { border: 2px solid #2e7d32; }
+.quiz-results.fail { border: 2px solid #ef6c00; }
+.quiz-pass-badge { font-size: 2.2em; margin-bottom: 0.2em; }
+.quiz-result-pct { font-size: 2.4em; font-weight: 800; margin: 0.1em 0; }
+.quiz-results.pass .quiz-result-pct { color: #2e7d32; }
+.quiz-results.fail .quiz-result-pct { color: #ef6c00; }
+
+.hidden { display: none !important; }
+</style>
+
+<div class="quiz-disclaimer">
+  <strong>🚫 No AI allowed:</strong> Use of AI tools is <strong>not allowed</strong> while taking this quiz. You may only use the official FIRST Tech Challenge game manual as a reference.
+</div>
+
+<!-- ═══════════════════════ INTRO SCREEN ═══════════════════════ -->
+<div id="quiz-intro" class="quiz-card">
+  <p class="quiz-intro">
+    This quiz covers <strong>BIOBUZZ℠ game rules</strong> for the current FIRST Tech Challenge season. Questions are
+    multiple choice and presented in a random order. If you pick the wrong answer, the correct one will be revealed
+    along with an explanation and a citation to the specific rule or section in the game manual.
+  </p>
+  <p class="quiz-intro">
+    📖 Before you start, make sure you (and your team) have access to the official game manual:<br>
+    <a href="https://ftc-resources.firstinspires.org/ftc/game/manual" target="_blank" rel="noopener">FTC Game Manual (official, firstinspires.org)</a>
+  </p>
+  <p class="quiz-intro">
+    Score <strong>90% or higher</strong> to pass. If you don't pass, you'll get some encouragement and a chance to
+    try again with the questions reshuffled.
+  </p>
+  <button id="quiz-start-btn" onclick="quizStart()">Start Quiz</button>
+</div>
+
+<!-- ═══════════════════════ QUIZ SCREEN ═══════════════════════ -->
+<div id="quiz-body" class="quiz-card hidden">
+  <div class="quiz-progress" id="quiz-progress-label">Question 1 of 50</div>
+  <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-progress-fill" style="width:0%"></div></div>
+  <div class="quiz-question" id="quiz-question-text"></div>
+  <div class="quiz-choices" id="quiz-choices"></div>
+  <div id="quiz-feedback"></div>
+  <div>
+    <button class="quiz-btn hidden" id="quiz-next-btn" onclick="quizNext()">Next Question →</button>
+  </div>
+  <div class="quiz-score-line" id="quiz-score-line"></div>
+</div>
+
+<!-- ═══════════════════════ RESULTS SCREEN ═══════════════════════ -->
+<div id="quiz-results" class="quiz-card quiz-results hidden">
+  <div id="quiz-results-inner"></div>
+  <button class="quiz-btn secondary" onclick="quizRestart()">Try Again</button>
+</div>
+
+<script>
+// ── Question bank ────────────────────────────────────────────────────────
+// Each explanation cites the specific BIOBUZZ Competition Manual section / rule code
+// it is drawn from, so students can look it up themselves in the official manual.
+const QUIZ_QUESTIONS = [
+  {
+    q: "How many pollen does it take to tip the hive?",
+    choices: [
+      "There's no fixed number — the HIVE is a physical bi-stable mechanism that tips based on the weight balanced in the CELL, not a rule-defined count",
+      "Exactly 4 pollen",
+      "Exactly 8 pollen",
+      "Exactly 20 pollen"
+    ],
+    correct: 0,
+    explain: "Per 10.5.1 HIVE Scoring Criteria, a HIVE TIP happens when the physical bi-stable mechanism moves from one stable state to the other. The manual does not specify an exact game-piece count needed — it depends on the real weight/geometry of what's LAUNCHED into the CELL."
+  },
+  {
+    q: "How many game pieces can the robot possess at once?",
+    choices: ["Up to 4 at a time", "Only 1 at a time", "Up to 2 at a time", "Up to 6 at a time"],
+    correct: 0,
+    explain: "The intent of the possession rule (Section 11 Game Rules) is that ROBOTS play MATCHES while only CONTROLLING a maximum of 4 SCORING ELEMENTS at a time. ROBOTS CONTROLLING 5 or more at any time are scrutinized for a STRATEGIC violation."
+  },
+  {
+    q: "What happens if you intake and control the other alliance's nectar?",
+    choices: [
+      "It's a rule violation — VERBAL WARNING, and a YELLOW CARD if it's judged STRATEGIC",
+      "Nothing — it's completely legal",
+      "You automatically score bonus points for your alliance",
+      "The match is immediately restarted"
+    ],
+    correct: 0,
+    explain: "G408 — \"Don't CONTROL opponent NECTAR. A ROBOT may not CONTROL the opponent's NECTAR.\" Violation: VERBAL WARNING; YELLOW CARD per MATCH if STRATEGIC."
+  },
+  {
+    q: "When is nectar added onto the field?",
+    choices: [
+      "One NECTAR per HIVE TIP for that alliance, plus all remaining NECTAR once 60 seconds or less remain in the match",
+      "Only at the very start of the match",
+      "Continuously, whenever the human player wants",
+      "Only during the autonomous period"
+    ],
+    correct: 0,
+    explain: "G426 — Drive team members may enter NECTAR onto the field only (A) once per HIVE TIP of their alliance's color, or (B) all remaining NECTAR once 60 seconds or less remain in the match, whichever comes first."
+  },
+  {
+    q: "How many pollen does your robot start with?",
+    choices: ["4", "0", "2", "6"],
+    correct: 0,
+    explain: "10.3.4 ROBOTS — \"ROBOTS must start the MATCH contacting 4 pre-loaded POLLEN.\""
+  },
+  {
+    q: "How many points do you get if 2 pollen and 1 nectar are in your hive at the end of the game?",
+    choices: ["6 points", "3 points", "9 points", "20 points"],
+    correct: 0,
+    explain: "Table 10-2 — POLLEN and/or NECTAR remaining in an upward-facing CELL at the end of the match score 2 points EACH. 2 pollen + 1 nectar = 3 pieces × 2 pts = 6 points."
+  },
+  {
+    q: "How many pollen start in each flower?",
+    choices: ["4", "2", "6", "8"],
+    correct: 0,
+    explain: "10.3.1.A.i — 4 POLLEN are staged in each of the 4 FLOWERS at the start of a match (16 total)."
+  },
+  {
+    q: "How many pollen start in the garden?",
+    choices: ["4 in each alliance's garden", "2 in each alliance's garden", "8 in each alliance's garden", "0 — gardens start empty"],
+    correct: 0,
+    explain: "10.3.1.A.ii/iii — 4 POLLEN are staged in the red GARDEN, and 4 POLLEN are staged in the blue GARDEN."
+  },
+  {
+    q: "Are there restrictions on where your robot can drive in autonomous?",
+    choices: [
+      "Driving into the opposing alliance's side of the field is legal but risky and may be viewed as STRATEGIC",
+      "There are no restrictions at all",
+      "Robots may never cross the field's center line",
+      "Robots must remain in their starting tile the whole period"
+    ],
+    correct: 0,
+    explain: "The manual notes: \"Navigating into the opposing ALLIANCE'S side of the FIELD during AUTO is a risky gameplay strategy that may be seen as STRATEGIC.\" It isn't outright banned, but it draws scrutiny."
+  },
+  {
+    q: "How big must your robot be at the start of the game?",
+    choices: [
+      "Fully contained in an 18 in. × 18 in. × 18 in. cube",
+      "Fully contained in an 18 in. × 18 in. × 24 in. box",
+      "Fully contained in a 24 in. × 24 in. × 18 in. box",
+      "Fully contained in a 12 in. × 12 in. × 12 in. cube"
+    ],
+    correct: 0,
+    explain: "R102 — STARTING CONFIGURATION is limited to an 18 in. (45.70 cm) wide × 18 in. long × 18 in. high volume."
+  },
+  {
+    q: "How much can your robot extend during game play?",
+    choices: [
+      "Up to an 18 in. × 24 in. × 29 in. tall sizing volume when fully expanded",
+      "It may not expand beyond its 18-inch starting cube at all",
+      "There is no expansion limit once the match starts",
+      "Up to a 24 in. × 24 in. × 24 in. cube"
+    ],
+    correct: 0,
+    explain: "R105.A — after the match starts, ROBOTS may expand beyond their STARTING CONFIGURATION but must remain within an 18 in. × 24 in. × 29 in. tall sizing volume at all times (G416)."
+  },
+  {
+    q: "How many points do you get per hive tip?",
+    choices: ["20", "5", "10", "40"],
+    correct: 0,
+    explain: "Table 10-2 — HIVE TIP is worth 20 points, whether it happens during AUTO or TELEOP."
+  },
+  {
+    q: "What determines which alliance gets points for pollen and nectar in a flower?",
+    choices: [
+      "Whichever alliance has the top-most NECTAR of its color in that flower owns it, and scores everything in it",
+      "Whichever alliance placed the very first piece in the flower",
+      "Whichever alliance has more total pieces in the flower",
+      "The points are always split evenly between both alliances"
+    ],
+    correct: 0,
+    explain: "10.5.2 FLOWER Scoring Criteria — the alliance with the top-most NECTAR of its color \"owns\" that FLOWER and earns points for every POLLEN and NECTAR that meets the scoring criteria, regardless of who placed it."
+  },
+  {
+    q: "Can you collect more pollen during autonomous?",
+    choices: [
+      "Yes — only DRIVE TEAM interaction with the robot is restricted during AUTO, not what the robot itself can do",
+      "No — only the 4 pre-loaded pollen count for the whole match",
+      "Only nectar can be collected during AUTO, not pollen",
+      "Only during the final 5 seconds of AUTO"
+    ],
+    correct: 0,
+    explain: "11.4.1 AUTO / G401 restricts DRIVE TEAM members from interacting with the robot or operator console during AUTO — it does not restrict the robot's own autonomous collection of additional POLLEN or NECTAR."
+  },
+  {
+    q: "Is defense legal? Can you make contact with the opposing alliance's robot?",
+    choices: [
+      "Yes, contact is legal, but PINNING an opponent for more than 3 seconds is a foul",
+      "No contact of any kind is ever allowed",
+      "Only if you announce it to the referee first",
+      "Only during TELEOP, never during AUTO"
+    ],
+    correct: 0,
+    explain: "G421 — \"There is a 3-count on PINS. A ROBOT may not PIN an opponent's ROBOT for more than 3 seconds.\" Contact itself isn't banned; sustained pinning is."
+  },
+  {
+    q: "Where are the AprilTags located?",
+    choices: [
+      "On the bottom of each of the 4 CELLs, facing down toward the tiles",
+      "On top of each FLOWER",
+      "On the perimeter wall behind each alliance area",
+      "On top of each robot's turret"
+    ],
+    correct: 0,
+    explain: "Section 9.9 AprilTags — each AprilTag Cluster is placed on the bottom of a CELL facing downward toward the TILES, with 4 tags per CELL across the 4 CELLs on the field."
+  },
+  {
+    q: "How many points do you get for each pollen in a flower controlled by your alliance?",
+    choices: ["2 points", "1 point", "5 points", "10 points"],
+    correct: 0,
+    explain: "Table 10-2 — POLLEN (and/or NECTAR) in an owned FLOWER scores 2 points each."
+  },
+  {
+    q: "How many points do you get for a nectar in a flower controlled by your alliance?",
+    choices: [
+      "2 points, plus a 5-point Bottom NECTAR Bonus if it's the bottom-most nectar of its color",
+      "Always exactly 5 points",
+      "Only 1 point",
+      "10 points, with no bonus available"
+    ],
+    correct: 0,
+    explain: "Table 10-2 — NECTAR in an owned FLOWER scores 2 points like POLLEN, but the alliance with the bottom-most NECTAR of its color in that flower also earns a separate 5-point Bottom NECTAR Bonus."
+  },
+  {
+    q: "Can an opposing alliance steal the points for a flower you partially loaded, by capping it with their nectar?",
+    choices: [
+      "Yes — ownership goes to whoever has the top-most NECTAR of their color",
+      "No, once you own a flower it's locked for the rest of the match",
+      "Only if a majority of pieces in the flower are theirs",
+      "Only during playoff matches"
+    ],
+    correct: 0,
+    explain: "10.5.2 FLOWER Owner — ownership is determined by the top-most NECTAR of a given color, so an opposing alliance can indeed take over a flower by capping it with their own nectar on top."
+  },
+  {
+    q: "What is the size of nectar and pollen?",
+    choices: [
+      "Pollen ≈ 2.8 in.; Nectar ≈ 3.6 in.",
+      "Pollen ≈ 4 in.; Nectar ≈ 2 in.",
+      "Both are the same size, ≈ 3 in.",
+      "Pollen ≈ 1 in.; Nectar ≈ 5 in."
+    ],
+    correct: 0,
+    explain: "9.8 Scoring Elements — POLLEN are approximately 2.8 in. (7.1 cm) yellow balls; NECTAR are approximately 3.6 in. (9.1 cm) red/blue balls."
+  },
+  {
+    q: "Acting alone, does it take more, less, or an equal number of full-load cycles to tip a hive shooting pollen vs. shooting nectar?",
+    choices: [
+      "Likely fewer cycles with nectar, since NECTAR (≈3.6 in.) are larger/heavier than POLLEN (≈2.8 in.) per piece",
+      "More cycles with nectar than with pollen",
+      "Exactly the same number of cycles either way",
+      "It's impossible to tip a hive using nectar"
+    ],
+    correct: 0,
+    explain: "The manual doesn't give an exact tip formula (10.5.1 only describes the bi-stable mechanism), but since NECTAR (9.8 Scoring Elements) are physically larger/heavier than POLLEN, fewer nectar pieces would generally be needed to shift the same amount of weight and cause a TIP."
+  },
+  {
+    q: "What are the minimum dimensions for the robot team number sign displayed on your robot?",
+    choices: ["6.5 in. wide × 2.5 in. tall", "4 in. wide × 2 in. tall", "8 in. wide × 4 in. tall", "10 in. wide × 3 in. tall"],
+    correct: 0,
+    explain: "R401 — ROBOT SIGNS must be at least 6.5 in. (16.5 cm) wide and 2.5 in. (6.4 cm) tall."
+  },
+  {
+    q: "What is the minimum number of robot team number signs required on your robot?",
+    choices: ["2, placed in separate locations ≥90° apart", "1, anywhere visible", "3, one per side", "4, one per surface"],
+    correct: 0,
+    explain: "R401 — \"Minimum of two ROBOT SIGNS per ROBOT... placed in at least 2 separate locations... on opposite or adjacent surfaces... ≥90 degrees apart.\""
+  },
+  {
+    q: "How many robots compete in each FTC match?",
+    choices: ["4 (2 per alliance)", "2 (1 per alliance)", "6 (3 per alliance)", "8 (4 per alliance)"],
+    correct: 0,
+    explain: "Standard Qualification and Playoff MATCHES are 2 robots per alliance (10.3.4 lists placement order as first red, first blue, second red, second blue) = 4 robots total. (FIRST Championship playoff alliances have 3 robots per Section 15.3, but only 2 play at a time.)"
+  },
+  {
+    q: "How long is autonomous in an FTC match?",
+    choices: ["30 seconds", "15 seconds", "60 seconds", "2 minutes"],
+    correct: 0,
+    explain: "10.4 MATCH Periods — \"The first period of each MATCH is 30 seconds (0:30) long and called the Autonomous Period (AUTO).\""
+  },
+  {
+    q: "At a qualifier, what determines which teams become alliance captains in the playoffs?",
+    choices: [
+      "Their qualification ranking — the top-ranked teams become alliance leads",
+      "A random draw among the top 8 teams",
+      "A judges' panel vote",
+      "A coin flip between the top 2 teams"
+    ],
+    correct: 0,
+    explain: "13.7.1 ALLIANCE Selection Process — \"At the end of the Qualification MATCHES, the top ranked teams become the ALLIANCE leads.\""
+  },
+  {
+    q: "At a qualifier, what determines which teams are picked by alliance captains?",
+    choices: [
+      "It's the alliance captain's own choice of any eligible remaining team",
+      "Strictly the next team in qualification rank order",
+      "A random lottery among remaining teams",
+      "A vote by the other alliance captains"
+    ],
+    correct: 0,
+    explain: "13.7.1 — \"each ALLIANCE lead chooses 1 other team to join their ALLIANCE.\" It's the captain's choice, not a forced rank order."
+  },
+  {
+    q: "Are FTC tournaments single elimination?",
+    choices: ["No — a double elimination bracket", "Yes, single elimination", "No — round robin only", "No — best of 3 finals only"],
+    correct: 0,
+    explain: "Section 13.7 — alliances \"advance through a double elimination bracket to determine an event winner.\""
+  },
+  {
+    q: "Are humans allowed on the field during a match?",
+    choices: [
+      "No — drive team members only reach into the LOADING ZONE (from outside the field) to introduce NECTAR",
+      "Yes, drive team members can walk anywhere on the field",
+      "Only the head referee may walk on the field during a match",
+      "Only during the last 8 seconds of the match"
+    ],
+    correct: 0,
+    explain: "G427 — NECTAR may only be introduced via the LOADING ZONE, without a tool, by a drive team member of the corresponding alliance, such that it contacts the tile before contacting a robot or field element — drive team members do not enter the field of play itself."
+  },
+  {
+    q: "What is the maximum number of people allowed on the drive team?",
+    choices: ["4", "2", "3", "6"],
+    correct: 0,
+    explain: "10.2 DRIVE TEAM — \"A DRIVE TEAM is a set of up to 4 people... only 1 member of the DRIVE TEAM is allowed to be a non-STUDENT.\""
+  },
+  {
+    q: "When can all remaining nectar be placed on the field by the human player?",
+    choices: [
+      "When 60 seconds or less remain in the match",
+      "At the very start of TELEOP",
+      "Only in the last 10 seconds of the match",
+      "Never — only 1 nectar per hive tip, no bulk release"
+    ],
+    correct: 0,
+    explain: "G426.B — \"when 60 seconds or less remain in the MATCH, all remaining NECTAR can be entered.\""
+  },
+  {
+    q: "What is the total number of pollen in a BIOBUZZ match?",
+    choices: ["40", "24", "32", "56"],
+    correct: 0,
+    explain: "9.8 Scoring Elements — \"There are 40 POLLEN, 8 red NECTAR, and 8 blue NECTAR total in a BIOBUZZ MATCH.\""
+  },
+  {
+    q: "How does a robot score the Leave points?",
+    choices: [
+      "By moving so it's no longer contacting the perimeter wall",
+      "By driving into the loading zone",
+      "By tipping a hive",
+      "By placing a piece in a flower"
+    ],
+    correct: 0,
+    explain: "10.5.4 ROBOT Scoring Criteria — LEAVE — \"a ROBOT must move so that it is no longer contacting the perimeter wall.\""
+  },
+  {
+    q: "Where can a robot start autonomous?",
+    choices: [
+      "Fully on its own alliance's side of the field, touching the perimeter wall, contacting its 4 pre-load pollen, and not in the loading zone",
+      "Anywhere on the field, including the opponent's side",
+      "Only in the exact center of the field",
+      "Only inside the loading zone"
+    ],
+    correct: 0,
+    explain: "G304 — robots must be fully contained on their own alliance's side of the field, touching the perimeter wall, not in the loading zone or a flower's scoring volume, and in contact with exactly 4 pre-loaded POLLEN."
+  },
+  {
+    q: "How can a robot score park points?",
+    choices: [
+      "By moving so it's at least partially in the loading zone",
+      "By being completely inside the loading zone",
+      "By touching the perimeter wall",
+      "By stopping just outside the field perimeter"
+    ],
+    correct: 0,
+    explain: "10.5.4 PARK — \"a ROBOT must move so that it is at least partially in the LOADING ZONE.\" Full containment is not required."
+  },
+  {
+    q: "How many points for PARK?",
+    choices: ["5 points (earnable once at end of AUTO and once at end of TELEOP)", "3 points, once only", "10 points, once only", "20 points"],
+    correct: 0,
+    explain: "Table 10-2 — PARK is worth 5 points at the end of AUTO and 5 points at the end of TELEOP (up to 10 total in a match)."
+  },
+  {
+    q: "How many points for LEAVE?",
+    choices: ["3 points (AUTO only)", "5 points", "10 points", "2 points"],
+    correct: 0,
+    explain: "Table 10-2 — LEAVE is worth 3 points, assessed only at the end of AUTO."
+  },
+  {
+    q: "How do you score the SWARM ranking point?",
+    choices: [
+      "Combined LEAVE + PARK points at or above the event's threshold (16 points at most events)",
+      "By winning the match",
+      "By scoring a single hive tip",
+      "By placing any nectar in a flower"
+    ],
+    correct: 0,
+    explain: "Table 10-2/10-3 — SWARM RP is earned when combined LEAVE + PARK points meet or exceed the event's threshold (16 points at most events, per Table 10-3)."
+  },
+  {
+    q: "How do you score the POLLINATOR 1 ranking point at a qualifier?",
+    choices: [
+      "Reach the event's HIVE TIP threshold (4 tips at most events)",
+      "Score in all 4 flowers",
+      "Finish the match with zero fouls",
+      "Win the match by 20+ points"
+    ],
+    correct: 0,
+    explain: "Table 10-3 — POLLINATOR 1 RP threshold is 4 TIPS at most events (Regional/Championship thresholds are announced separately)."
+  },
+  {
+    q: "How do you score the POLLINATOR 2 ranking point at a qualifier?",
+    choices: [
+      "Reach the event's higher HIVE TIP threshold (7 tips at most events)",
+      "Score a garden bonus",
+      "Win two matches in a row",
+      "Have the fastest cycle time in the match"
+    ],
+    correct: 0,
+    explain: "Table 10-3 — POLLINATOR 2 RP threshold is 7 TIPS at most events."
+  },
+  {
+    q: "Are there any ranking points associated with the flowers?",
+    choices: [
+      "No — flower points count toward MATCH points, but there is no flower-specific ranking point",
+      "Yes, 1 RP for every flower owned",
+      "Yes, 2 RP for owning all 4 flowers",
+      "Yes, but only at the FIRST Championship"
+    ],
+    correct: 0,
+    explain: "Table 10-2 lists only SWARM, POLLINATOR 1, POLLINATOR 2, WIN, and TIE as ranking-point sources — none are tied specifically to the FLOWERS."
+  },
+  {
+    q: "How many ranking points do you score if your alliance wins a match?",
+    choices: ["3", "1", "2", "5"],
+    correct: 0,
+    explain: "Table 10-2 — WIN is worth 3 Ranking Points."
+  },
+  {
+    q: "How many ranking points do you score if your alliance ties a match?",
+    choices: ["1", "0", "2", "3"],
+    correct: 0,
+    explain: "Table 10-2 — TIE is worth 1 Ranking Point."
+  },
+  {
+    q: "How many nectar are in a match?",
+    choices: ["16 total (8 red + 8 blue)", "8 total", "10 total", "24 total"],
+    correct: 0,
+    explain: "9.8 Scoring Elements — \"There are 40 POLLEN, 8 red NECTAR, and 8 blue NECTAR total in a BIOBUZZ MATCH\" — 16 nectar total."
+  },
+  {
+    q: "What is the maximum number of points you can score in a single flower?",
+    choices: [
+      "There's no fixed maximum stated in the rules — it's limited only by how many scoring elements physically fit in the flower's scoring volume",
+      "Exactly 20 points",
+      "Exactly 10 points",
+      "Exactly 50 points"
+    ],
+    correct: 0,
+    explain: "10.5.2 defines the FLOWER scoring volume and per-piece point values (2 pts each, plus a possible 5-pt Bottom NECTAR Bonus), but does not state a maximum total — it depends on physical capacity."
+  },
+  {
+    q: "What happens if pollen is accidentally shot out of the field of play?",
+    choices: [
+      "Drive team members should pass it to the nearest FIELD STAFF for reintroduction into the field",
+      "It's gone for the rest of the match",
+      "It's an automatic foul on the shooting alliance",
+      "The team must retrieve it themselves by reaching onto the field"
+    ],
+    correct: 0,
+    explain: "Section 11 Game Rules — \"If DRIVE TEAM members come into possession of any POLLEN or opposing ALLIANCE NECTAR that has exited the FIELD, they should pass it to the nearest FIELD STAFF for reintroduction into the FIELD per Section 10.8 Other Logistics.\""
+  },
+  {
+    q: "Can your robot catch pollen as it's tipped out of the hive?",
+    choices: [
+      "No — a robot may not catch or deflect a scoring element released by a tipped hive until it contacts something else first",
+      "Yes, always",
+      "Yes, but only from your own alliance's hive",
+      "Yes, as long as it's caught within 3 seconds"
+    ],
+    correct: 0,
+    explain: "G409 — \"Don't catch SCORING ELEMENTS. A ROBOT may not catch or deflect a SCORING ELEMENT released by a TIPPED HIVE unless and until that SCORING ELEMENT contacts anything else besides that ROBOT.\""
+  },
+  {
+    q: "Must your robot be fully in the loading zone to score PARK points?",
+    choices: [
+      "False — only partial overlap with the loading zone is required",
+      "True — full containment is required",
+      "True, but only during TELEOP",
+      "False — there's no loading zone requirement at all"
+    ],
+    correct: 0,
+    explain: "10.5.4 PARK — \"a ROBOT must move so that it is at least partially in the LOADING ZONE.\" Being fully inside is not required."
+  },
+  {
+    q: "Is it legal to push another robot for 4 seconds?",
+    choices: [
+      "No — the PIN limit is 3 seconds; pushing/pinning for 4 or more seconds is a foul",
+      "Yes, up to 5 seconds is fine",
+      "Yes, pushing has no time limit at all",
+      "No — pushing is never allowed, even for an instant"
+    ],
+    correct: 0,
+    explain: "G421 — \"There is a 3-count on PINS. A ROBOT may not PIN an opponent's ROBOT for more than 3 seconds.\" 4 seconds exceeds that limit."
+  },
+  {
+    q: "What is the minimum number of team members needed to compete at an FTC qualifier?",
+    choices: [
+      "The manual doesn't set an exact roster size — it requires at least 1 STUDENT present at check-in and at least 1 (preferably 2) responsible adult(s) present for the whole event",
+      "Exactly 5 students",
+      "Exactly 2 students, no adults required",
+      "Exactly 10 students"
+    ],
+    correct: 0,
+    explain: "I102 — \"at least one STUDENT must be present at the venue before check-in can be completed.\" I103 — \"At least 1, preferably 2, adult(s) responsible for the STUDENT team members must be present at all times during the event.\""
+  }
+];
+
+// ── Quiz engine ───────────────────────────────────────────────────────────
+let quizOrder = [];      // shuffled indices into QUIZ_QUESTIONS
+let quizPos = 0;         // position within quizOrder
+let quizScore = 0;
+let quizAnswered = false;
+let quizChoiceMap = [];  // shuffled choice indices for the current question
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function quizStart() {
+  quizOrder = shuffle(QUIZ_QUESTIONS.map((_, i) => i));
+  quizPos = 0;
+  quizScore = 0;
+  document.getElementById('quiz-intro').classList.add('hidden');
+  document.getElementById('quiz-results').classList.add('hidden');
+  document.getElementById('quiz-body').classList.remove('hidden');
+  renderQuestion();
+}
+
+function quizRestart() {
+  document.getElementById('quiz-results').classList.add('hidden');
+  quizStart();
+}
+
+function renderQuestion() {
+  quizAnswered = false;
+  const total = quizOrder.length;
+  const qIdx = quizOrder[quizPos];
+  const item = QUIZ_QUESTIONS[qIdx];
+
+  document.getElementById('quiz-progress-label').textContent = `Question ${quizPos + 1} of ${total}`;
+  document.getElementById('quiz-progress-fill').style.width = `${(quizPos / total) * 100}%`;
+  document.getElementById('quiz-question-text').textContent = item.q;
+  document.getElementById('quiz-score-line').textContent = `Score so far: ${quizScore} / ${quizPos}`;
+  document.getElementById('quiz-feedback').innerHTML = '';
+  document.getElementById('quiz-next-btn').classList.add('hidden');
+
+  quizChoiceMap = shuffle(item.choices.map((_, i) => i));
+  const choicesEl = document.getElementById('quiz-choices');
+  choicesEl.innerHTML = '';
+  quizChoiceMap.forEach((choiceIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-choice';
+    btn.textContent = item.choices[choiceIdx];
+    btn.onclick = () => quizAnswer(choiceIdx, btn);
+    choicesEl.appendChild(btn);
+  });
+}
+
+function quizAnswer(choiceIdx, btnEl) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const qIdx = quizOrder[quizPos];
+  const item = QUIZ_QUESTIONS[qIdx];
+  const correct = choiceIdx === item.correct;
+  if (correct) quizScore++;
+
+  const choicesEl = document.getElementById('quiz-choices');
+  Array.from(choicesEl.children).forEach((btn, i) => {
+    btn.classList.add('disabled');
+    const thisChoiceIdx = quizChoiceMap[i];
+    if (thisChoiceIdx === item.correct) btn.classList.add('correct');
+    else if (btn === btnEl) btn.classList.add('incorrect');
+  });
+
+  const fb = document.getElementById('quiz-feedback');
+  if (correct) {
+    fb.innerHTML = `<div class="quiz-feedback ok">✅ <strong>Correct!</strong> ${item.explain}</div>`;
+  } else {
+    fb.innerHTML = `<div class="quiz-feedback bad">❌ <strong>Not quite.</strong> The correct answer is highlighted above.<br>${item.explain}</div>`;
+  }
+  document.getElementById('quiz-score-line').textContent = `Score so far: ${quizScore} / ${quizPos + 1}`;
+  document.getElementById('quiz-next-btn').classList.remove('hidden');
+}
+
+function quizNext() {
+  quizPos++;
+  if (quizPos >= quizOrder.length) {
+    quizFinish();
+  } else {
+    renderQuestion();
+  }
+}
+
+function quizFinish() {
+  document.getElementById('quiz-body').classList.add('hidden');
+  const total = quizOrder.length;
+  const pct = Math.round((quizScore / total) * 100);
+  const pass = pct >= 90;
+  const resultsEl = document.getElementById('quiz-results');
+  resultsEl.classList.remove('hidden', 'pass', 'fail');
+  resultsEl.classList.add(pass ? 'pass' : 'fail');
+  const inner = document.getElementById('quiz-results-inner');
+  if (pass) {
+    inner.innerHTML = `
+      <div class="quiz-pass-badge">🏆</div>
+      <h2>Congratulations!</h2>
+      <div class="quiz-result-pct">${pct}%</div>
+      <p>You scored ${quizScore} / ${total} — great job knowing the BIOBUZZ rules! Your team is ready to compete with confidence.</p>`;
+  } else {
+    inner.innerHTML = `
+      <div class="quiz-pass-badge">💪</div>
+      <h2>Keep at it!</h2>
+      <div class="quiz-result-pct">${pct}%</div>
+      <p>You scored ${quizScore} / ${total}. You need 90% to pass. Review the explanations you missed, check the game manual, and give it another shot — you've got this!</p>`;
+  }
+}
+</script>
