@@ -1,0 +1,143 @@
+---
+layout: page
+title: "Week 5 — Teardown, Sort & Rebuild"
+---
+
+<style>
+.meeting-meta { color: #666; font-size: 0.92em; margin: -0.5em 0 1.5em; }
+.meeting-meta span { margin-right: 1.2em; }
+.section-label {
+  font-size: 0.75em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a73e8;
+  margin-bottom: 0.4em;
+}
+.agenda-card {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.1em 1.25em 1.4em;
+  margin-bottom: 1.8em;
+}
+.agenda-card h3 { margin: 0 0 0.9em; font-size: 1.05em; color: #222; }
+.agenda-item {
+  display: flex;
+  gap: 1em;
+  padding: 0.8em 0;
+  border-bottom: 1px solid #e9ecef;
+  align-items: flex-start;
+}
+.agenda-item:last-child { border-bottom: none; padding-bottom: 0; }
+.agenda-icon { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
+.agenda-text h4 { margin: 0 0 0.2em; font-size: 0.97em; color: #1a1a1a; }
+.agenda-text p  { margin: 0 0 0.35em; font-size: 0.88em; color: #555; }
+.agenda-text p:last-child { margin-bottom: 0; }
+.agenda-text a  { color: #1a73e8; }
+.agenda-text ul { margin: 0.2em 0 0.35em; padding-left: 1.2em; font-size: 0.88em; color: #555; }
+.agenda-text li { margin-bottom: 0.15em; }
+.agenda-imgs { display: flex; flex-wrap: wrap; gap: 0.6em; margin-top: 0.6em; }
+.agenda-imgs a { line-height: 0; }
+.agenda-imgs img {
+  max-width: 230px; width: 100%; height: auto;
+  border-radius: 6px; border: 1px solid #dee2e6; background: #fff;
+}
+.meeting-nav { display: flex; justify-content: space-between; margin-top: 2em; font-size: 0.9em; }
+.meeting-nav a { color: #1a73e8; }
+</style>
+
+<p class="meeting-meta">
+  <span>📅 September 20, 2026</span>
+  <span>🏷️ Teardown, Sort &amp; Rebuild</span>
+</p>
+
+<div class="agenda-card">
+  <div class="section-label">Today's Plan</div>
+  <h3>Week 5 — Teardown, Sort &amp; Rebuild</h3>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🔧</div>
+    <div class="agenda-text">
+      <h4>Activity 1 — Disassemble 36564 &amp; Sort Parts</h4>
+      <p>Take apart the <strong>36564</strong> robot and sort the parts into their bins.</p>
+      <p><strong>Keep the motor + quad block + gear assembled as one unit</strong> — we can reuse that assembly, so don't break it down.</p>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🧰</div>
+    <div class="agenda-text">
+      <h4>Activity 2 — Fully Disassemble 36563 &amp; Sort Parts</h4>
+      <p>Take the <strong>36563</strong> robot all the way apart and sort everything.</p>
+      <ul>
+        <li>Bolts go into a <strong>misc bag</strong>; all other parts get sorted.</li>
+        <li>Any part with multiple components (like a two-part clamp held together with bolts) should be <strong>re-assembled with its pieces before it goes in a bin</strong>, so we don't lose the little pieces.</li>
+        <li>We're generally combining parts and tools together — we'll see if we have enough.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🤖</div>
+    <div class="agenda-text">
+      <h4>Activity 3 — Assemble the Parallel Plate Bot</h4>
+      <p>Build the parallel plate bot (or figure out what doesn't work) using the <strong>Kyle/Cam CAD</strong>.</p>
+      <p><a href="https://cad.onshape.com/documents/d1452737721acb86bbfee7bf/w/1d12968bb7ac7f8de76ed04f/e/b98d7354aceb5e92be15d4f5?renderMode=0&amp;uiState=6ab053947fba3e9877beb380" target="_blank" rel="noopener">→ Parallel Plate Bot — Onshape CAD</a></p>
+      <div class="agenda-imgs">
+        <a href="parallel_plate_bot.png" target="_blank" rel="noopener"><img src="parallel_plate_bot.png" alt="Parallel plate bot CAD" loading="lazy"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🐝</div>
+    <div class="agenda-text">
+      <h4>Activity 4 — Build Part(s) of the goBILDA Starter Bot</h4>
+      <p>Build some part(s) of the goBILDA Starter Bot. We <em>think</em> we have the parts for the <strong>shooter structure</strong>, and we should have some of the parts for the <strong>servo spinners</strong>.</p>
+      <p>We don't have the bigger gecko wheels yet — <strong>can we use the smaller ones?</strong></p>
+      <p><a href="https://www.gobilda.com/ftc-starterbot-with-mecanum-wheels-resource-guide-2026-2027/" target="_blank" rel="noopener">→ goBILDA FTC StarterBot (Mecanum) Resource Guide 2026–2027</a></p>
+      <div class="agenda-imgs">
+        <a href="gobilda_starter.png" target="_blank" rel="noopener"><img src="gobilda_starter.png" alt="goBILDA StarterBot" loading="lazy"></a>
+        <a href="gobilda_starter_shooter_assembly.png" target="_blank" rel="noopener"><img src="gobilda_starter_shooter_assembly.png" alt="goBILDA StarterBot shooter assembly" loading="lazy"></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <div class="section-label">Additional Activities</div>
+  <h3>If You Finish Early / Want More</h3>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">☕</div>
+    <div class="agenda-text">
+      <h4>Java Training</h4>
+      <p>Keep working through the in-browser FTC Java lessons and quizzes.</p>
+      <p><a href="https://boltonftc.github.io/impulse3dsim/" target="_blank" rel="noopener">→ Impulse 3D Sim — Java Training</a></p>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🖨️</div>
+    <div class="agenda-text">
+      <h4>3D-Printed CAD Parts to Make</h4>
+      <p>Model these in CAD and add them to our <code>custom_parts</code> folder:</p>
+      <ul>
+        <li>A longer <strong>2&nbsp;cm REX shaft spacer</strong>.</li>
+        <li>Our own version of a <strong>surgical-tube REX shaft hub</strong>.</li>
+      </ul>
+      <p><a href="https://cad.onshape.com/documents/2f87af93ecb226108194919b/w/3381ec7da59abae50b174d02/e/535cc65bc39f70ad0124bc1e?renderMode=0&amp;uiState=6ab05144e0c142b2591b7be1" target="_blank" rel="noopener">→ Surgical-Tube REX Shaft Hub — Onshape CAD</a></p>
+      <div class="agenda-imgs">
+        <a href="surgical_tube_hub_isometric.png" target="_blank" rel="noopener"><img src="surgical_tube_hub_isometric.png" alt="Surgical-tube REX shaft hub, isometric view" loading="lazy"></a>
+        <a href="surgical_tube_hub.png" target="_blank" rel="noopener"><img src="surgical_tube_hub.png" alt="Surgical-tube REX shaft hub" loading="lazy"></a>
+        <a href="surgical_tube_hub_sketch1.png" target="_blank" rel="noopener"><img src="surgical_tube_hub_sketch1.png" alt="Surgical-tube REX shaft hub, sketch" loading="lazy"></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="meeting-nav">
+  <a href="../week-4/">&larr; Week 4</a>
+  <a href="../../">All Meetings</a>
+</div>
