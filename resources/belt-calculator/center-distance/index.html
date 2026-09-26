@@ -1,0 +1,70 @@
+---
+layout: page
+title: "Find Center-to-Center"
+---
+
+<link rel="stylesheet" href="../belt.css">
+
+<p class="bc-intro">
+  Already have a belt in hand? Pick your two pulleys and the exact goBILDA&reg; belt, and this gives the
+  <b>center-to-center distance</b> to place your two shafts so the belt runs at the right tension.
+</p>
+
+<!-- diagram first -->
+<div class="bc-diagram-wrap">
+  <svg id="bc-svg" viewBox="0 0 640 340" role="img" aria-label="Two-pulley belt drive diagram"></svg>
+</div>
+
+<div class="bc-fields">
+  <div class="bc-field"><label>Pulley 1 teeth (N&#8321;)</label><input id="p-n1" type="number" value="24" step="1" min="8"></div>
+  <div class="bc-field"><label>Pulley 2 teeth (N&#8322;)</label><input id="p-n2" type="number" value="48" step="1" min="8"></div>
+  <div class="bc-field"><label>Belt</label><select id="p-belt"></select></div>
+</div>
+
+<div class="bc-out" id="p-out"></div>
+
+<div class="bc-how">
+  <b>How it works.</b> A belt of a fixed length wrapping two known pulleys can only sit at one center-to-center
+  distance &mdash; this solves that geometry exactly and reports it, along with each pulley's pitch diameter and
+  the wrap angle on the smaller pulley (keep it above ~120&deg; so teeth don't skip under load). If the belt is
+  too short to reach around both pulleys, it says so &mdash; pick a longer one.
+</div>
+
+<div class="back-link"><a href="../">&larr; Back to all belt tools</a></div>
+
+<script src="../belt-core.js"></script>
+<script>
+(function(){
+  const BC = window.BeltCore, fmt = BC.fmt;
+  const draw = BC.makeDrawer(document.getElementById('bc-svg'));
+  const pN1=document.getElementById('p-n1'), pN2=document.getElementById('p-n2'), pBelt=document.getElementById('p-belt');
+
+  BC.BELTS.forEach(b => { const o=document.createElement('option'); o.value=b.t; o.textContent=`${b.t}T \u2014 ${b.mm} mm \u2014 ${b.sku}`; pBelt.appendChild(o); });
+  pBelt.value = 132;
+
+  function run(){
+    const N1=+pN1.value, N2=+pN2.value, Z=+pBelt.value;
+    const out=document.getElementById('p-out');
+    if (!(N1>=8&&N2>=8)){ out.innerHTML='<div class="bc-err">Enter valid pulley teeth (&ge;8).</div>'; return; }
+    const b = BC.BELTS.find(x=>x.t===Z);
+    const C = BC.centerFor(N1,N2,Z);
+    if (C==null){ out.innerHTML=`<div class="bc-err">A ${Z}T belt is too short to wrap a ${N1}T and ${N2}T pulley. Choose a longer belt.</div>`; draw(N1,N2,BC.minCenter(N1,N2)*1.5,''); return; }
+    const D1=BC.pitchDia(N1), D2=BC.pitchDia(N2), ratio=Math.max(N1,N2)/Math.min(N1,N2), mC=BC.minCenter(N1,N2);
+    let html = `<h4>Place your shafts this far apart</h4>`;
+    html += `<span class="bc-stat">Center distance <b>${fmt(C,2)} mm</b></span>`;
+    html += `<span class="bc-stat">Ratio <b>${fmt(ratio,3)} : 1</b></span>`;
+    html += `<span class="bc-stat">P1 &#8960; <b>${fmt(D1,2)} mm</b></span>`;
+    html += `<span class="bc-stat">P2 &#8960; <b>${fmt(D2,2)} mm</b></span>`;
+    html += `<span class="bc-stat">Small-pulley wrap <b>${fmt(BC.smallWrap(N1,N2,C),0)}&deg;</b></span>`;
+    html += `<div style="margin-top:0.5em">Belt: ${BC.skuCell(b)} &nbsp; (${b.t}T, ${b.mm} mm pitch length)</div>`;
+    if (C < mC) html += `<div class="bc-err">This spacing (${fmt(C,1)} mm) is below the ${fmt(mC,1)} mm where the pulleys physically touch. Not buildable &mdash; use a longer belt.</div>`;
+    html += BC.wrapNote(N1,N2,C);
+    out.innerHTML = html;
+    draw(N1,N2,C,`${b.t}T belt \u2192 C = ${fmt(C,2)} mm`);
+  }
+
+  BC.initInteractions(draw);
+  [pN1,pN2,pBelt].forEach(el=>el.addEventListener('input',run));
+  run();
+})();
+</script>

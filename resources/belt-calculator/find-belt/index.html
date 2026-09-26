@@ -1,0 +1,100 @@
+---
+layout: page
+title: "Find Closest Belt"
+---
+
+<link rel="stylesheet" href="../belt.css">
+
+<p class="bc-intro">
+  Already know your two pulley sizes and the <b>center-to-center distance</b> between the shafts? Enter them
+  below and this finds the goBILDA&reg; belts that fit closest &mdash; and how far you'd nudge a shaft to make
+  each one perfect.
+</p>
+
+<!-- diagram first -->
+<div class="bc-diagram-wrap">
+  <svg id="bc-svg" viewBox="0 0 640 340" role="img" aria-label="Two-pulley belt drive diagram"></svg>
+</div>
+
+<div class="bc-fields">
+  <div class="bc-field"><label>Pulley 1 teeth (N&#8321;)</label><input id="f-n1" type="number" value="24" step="1" min="8"></div>
+  <div class="bc-field"><label>Pulley 2 teeth (N&#8322;)</label><input id="f-n2" type="number" value="48" step="1" min="8"></div>
+  <div class="bc-field"><label>Center distance (mm)</label><input id="f-c" type="number" value="110" step="1" min="5"></div>
+</div>
+
+<div class="bc-out" id="f-out"></div>
+
+<div class="bc-how">
+  <b>How it works.</b> From your two pulleys and center distance it computes the <i>ideal</i> belt length, then
+  checks every goBILDA belt: for each one it back-solves the exact center distance that belt needs, and shows
+  the small shaft move (&Delta;C) to reach it. Rule of thumb &mdash; round <b>up</b> to the next belt (slightly
+  loose, take up the slack with a tensioner/idler); never round down or the belt rides too tight. Click a row to
+  preview that belt in the diagram above.
+</div>
+
+<details class="bc-ref">
+  <summary>goBILDA&reg; 2&nbsp;mm GT2 continuous-loop belt catalog</summary>
+  <div style="overflow-x:auto; margin-top:0.6em">
+    <table class="bc-tbl" id="ref-tbl">
+      <thead><tr><th>Teeth</th><th>Pitch length</th><th>SKU</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p style="font-size:0.78em; color:#888; margin-top:0.6em">
+    Need a length that isn't stocked? goBILDA also sells a 5&nbsp;m cut-to-length roll
+    (<span class="bc-sku">3426-0006-0005</span>) for back-and-forth (non-looping) runs.
+  </p>
+</details>
+
+<div class="back-link"><a href="../">&larr; Back to all belt tools</a></div>
+
+<script src="../belt-core.js"></script>
+<script>
+(function(){
+  const BC = window.BeltCore, fmt = BC.fmt, PITCH = BC.PITCH;
+  const draw = BC.makeDrawer(document.getElementById('bc-svg'));
+  const fN1=document.getElementById('f-n1'), fN2=document.getElementById('f-n2'), fC=document.getElementById('f-c');
+
+  function run(){
+    const N1=+fN1.value, N2=+fN2.value, C=+fC.value;
+    const out=document.getElementById('f-out');
+    if (!(N1>=8&&N2>=8&&C>0)){ out.innerHTML='<div class="bc-err">Enter valid pulley teeth (&ge;8) and a center distance.</div>'; return; }
+    const Zi = BC.idealTeeth(N1,N2,C);
+    const ratio = Math.max(N1,N2)/Math.min(N1,N2);
+    const rows = BC.BELTS.map(b => {
+      const Cb = BC.centerFor(N1,N2,b.t);
+      return { b, Cb, dC:(Cb==null?null:Cb-C) };
+    }).filter(r => r.Cb!=null);
+    rows.sort((a,b)=> Math.abs(a.dC)-Math.abs(b.dC));
+    const near = rows.slice(0,4).sort((a,b)=> a.b.t-b.b.t);
+    const recBelt = BC.BELTS.find(b => b.t >= Math.ceil(Zi));
+
+    let html = `<h4>Ideal belt length</h4>`;
+    html += `<span class="bc-stat">Ratio <b>${fmt(ratio,3)} : 1</b></span>`;
+    html += `<span class="bc-stat">Ideal tooth count <b>${fmt(Zi,1)}T</b></span>`;
+    html += `<span class="bc-stat">Ideal length <b>${fmt(Zi*PITCH,1)} mm</b></span>`;
+    html += BC.wrapNote(N1,N2,C);
+    html += `<h4 style="margin-top:0.9em">Nearest stock belts &mdash; shaft move to fit each</h4>`;
+    html += `<div style="overflow-x:auto"><table class="bc-tbl"><thead><tr><th>Belt</th><th>Pitch len</th><th>SKU</th><th>Exact C</th><th>Shaft move &Delta;C</th></tr></thead><tbody>`;
+    near.forEach(r=>{
+      const rec = recBelt && r.b.t===recBelt.t;
+      const dcTxt = (r.dC>=0?'+':'') + fmt(r.dC,2) + ' mm ' + (r.dC>=0?'(farther)':'(closer)');
+      html += `<tr class="${rec?'rec':''}" data-n1="${N1}" data-n2="${N2}" data-c="${r.Cb}">`
+        + `<td>${r.b.t}T${rec?' &nbsp;&#9989; round-up':''}</td><td>${r.b.mm} mm</td><td>${BC.skuCell(r.b)}</td>`
+        + `<td>${fmt(r.Cb,2)} mm</td><td>${dcTxt}</td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+    out.innerHTML = html;
+    draw(N1,N2,C,`Ideal ${fmt(Zi,1)}T at C = ${fmt(C,1)} mm`);
+  }
+
+  // reference table
+  const rtb = document.querySelector('#ref-tbl tbody');
+  BC.BELTS.forEach(b=>{ rtb.insertAdjacentHTML('beforeend',
+    `<tr><td>${b.t}T</td><td>${b.mm} mm</td><td>${BC.skuCell(b)}</td></tr>`); });
+
+  BC.initInteractions(draw);
+  [fN1,fN2,fC].forEach(el=>el.addEventListener('input',run));
+  run();
+})();
+</script>

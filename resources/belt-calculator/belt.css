@@ -1,0 +1,71 @@
+/* Shared styles for the GT2 belt tools (hub + 3 tool pages) */
+
+.bc-intro { color:#555; margin-bottom:1.4em; }
+.bc-intro code { background:#f1f3f5; padding:1px 5px; border-radius:4px; font-size:0.9em; }
+
+/* ── Diagram ──────────────────────────────────────── */
+.bc-diagram-wrap { border:1px solid #e2e6ea; border-radius:10px; background:#fbfcfd; padding:0.6em; margin-bottom:1.4em; }
+.bc-diagram-wrap svg { display:block; width:100%; height:auto; max-height:360px; }
+
+/* ── Inputs ───────────────────────────────────────── */
+.bc-fields { display:flex; flex-wrap:wrap; gap:14px 20px; margin-bottom:1em; align-items:flex-end; }
+.bc-field { display:flex; flex-direction:column; gap:4px; }
+.bc-field label { font-size:0.82em; font-weight:600; color:#555; }
+.bc-field .hint { font-size:0.72em; color:#999; font-weight:400; }
+.bc-field input, .bc-field select {
+  padding:0.45em 0.6em; border:1px solid #ced4da; border-radius:6px;
+  font-size:0.95em; width:150px; background:#fff;
+}
+.bc-field input:focus, .bc-field select:focus { outline:2px solid #90caf9; border-color:#1565c0; }
+
+details.bc-adv { margin:0 0 1.1em; }
+details.bc-adv summary { cursor:pointer; font-size:0.85em; font-weight:600; color:#1565c0; padding:0.3em 0; }
+details.bc-adv[open] summary { margin-bottom:0.6em; }
+
+/* ── Output ───────────────────────────────────────── */
+.bc-out { background:#f8f9fa; border:1px solid #e2e6ea; border-radius:10px; padding:1em 1.2em; margin-bottom:1.4em; }
+.bc-out h4 { margin:0 0 0.5em; font-size:0.95em; color:#333; }
+.bc-warn { background:#fff8e1; border:1px solid #ffe082; color:#8a6d00; border-radius:8px; padding:0.6em 0.9em; font-size:0.85em; margin:0.6em 0; }
+.bc-err  { background:#fdecea; border:1px solid #f5b0a8; color:#a83226; border-radius:8px; padding:0.6em 0.9em; font-size:0.85em; margin:0.6em 0; }
+
+table.bc-tbl { border-collapse:collapse; width:100%; font-size:0.85em; }
+table.bc-tbl th { background:#333; color:#fff; padding:6px 10px; text-align:left; white-space:nowrap; }
+table.bc-tbl td { padding:6px 10px; border-bottom:1px solid #e9ecef; white-space:nowrap; }
+table.bc-tbl tr:hover td { background:#eef4fb; cursor:pointer; }
+table.bc-tbl tr.sel td { background:#d7e9fb; }
+table.bc-tbl tr.rec td { background:#e8f5e9; }
+.bc-sku { font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.9em; }
+.bc-sku a { color:#1a73e8; text-decoration:none; }
+.bc-sku a:hover { text-decoration:underline; }
+.copy-btn {
+  border:1px solid #ced4da; background:#fff; border-radius:5px;
+  font-size:0.72em; padding:1px 6px; cursor:pointer; margin-left:5px; color:#555;
+}
+.copy-btn:hover { background:#eef1f4; }
+
+.bc-stat { display:inline-block; margin:0 1.4em 0.4em 0; font-size:0.9em; }
+.bc-stat b { color:#1565c0; font-size:1.05em; }
+
+.bc-how { background:#eef4fb; border:1px solid #cfe0f5; border-radius:10px; padding:0.9em 1.1em; margin-bottom:1.4em; font-size:0.88em; color:#33475b; }
+.bc-how b { color:#1565c0; }
+
+/* ── Reference table ──────────────────────────────── */
+details.bc-ref { margin-bottom:1.5em; }
+details.bc-ref summary { cursor:pointer; font-weight:600; color:#1565c0; padding:0.4em 0; }
+
+/* ── Hub (intro) page cards ───────────────────────── */
+.bc-hub { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px; margin-bottom:1.8em; }
+.bc-hubcard {
+  display:block; text-decoration:none; color:inherit;
+  border:1px solid #dee2e6; border-radius:12px; background:#fff;
+  padding:1.1em 1.2em 1.2em; transition:box-shadow .15s, border-color .15s, transform .15s;
+}
+.bc-hubcard:hover { box-shadow:0 6px 18px rgba(21,101,192,.12); border-color:#90caf9; transform:translateY(-2px); }
+.bc-hubicon { font-size:2em; line-height:1; margin-bottom:0.35em; }
+.bc-hubcard h3 { margin:0 0 0.3em; font-size:1.08em; color:#1565c0; }
+.bc-when { font-weight:600; color:#444; margin:0 0 0.5em; font-size:0.9em; }
+.bc-hubcard p { margin:0 0 0.7em; font-size:0.86em; color:#555; line-height:1.5; }
+.bc-go { font-size:0.85em; font-weight:600; color:#1a73e8; }
+
+.back-link { font-size:0.9em; margin-top:1.5em; }
+.back-link a { color:#1a73e8; }
