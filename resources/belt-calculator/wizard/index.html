@@ -1,0 +1,101 @@
+---
+layout: page
+title: "GT2 2mm Belt Wizard"
+---
+
+<link rel="stylesheet" href="../belt.css">
+
+<p class="bc-intro">
+  Tell it the <b>reduction</b> you want and roughly <b>how far apart</b> your two shafts should sit &mdash; the
+  Wizard finds the pulley pairs and goBILDA&reg; belts that get closest.
+</p>
+
+<!-- diagram first -->
+<div class="bc-diagram-wrap">
+  <svg id="bc-svg" viewBox="0 0 640 340" role="img" aria-label="Two-pulley belt drive diagram"></svg>
+</div>
+
+<div class="bc-fields">
+  <div class="bc-field"><label>Target ratio (big : small)</label><input id="o-ratio" type="number" value="1" step="0.05" min="0.1"><span class="hint">1 = same size, 2 = 2:1 reduction</span></div>
+  <div class="bc-field"><label>Target center distance (mm)</label><input id="o-c" type="number" value="120" step="1" min="5"><span class="hint">roughly how far apart the shafts sit</span></div>
+</div>
+
+<details class="bc-adv">
+  <summary>Advanced &mdash; tolerances &amp; pulley range</summary>
+  <div class="bc-fields">
+    <div class="bc-field"><label>Center tolerance &plusmn;(mm)</label><input id="o-ctol" type="number" value="15" step="1" min="0"></div>
+    <div class="bc-field"><label>Ratio tolerance &plusmn;(%)</label><input id="o-rtol" type="number" value="2" step="1" min="0"></div>
+    <div class="bc-field"><label>Min pulley teeth</label><input id="o-tmin" type="number" value="12" step="1" min="8"></div>
+    <div class="bc-field"><label>Max pulley teeth</label><input id="o-tmax" type="number" value="60" step="1" min="8"></div>
+  </div>
+</details>
+
+<div class="bc-out" id="o-out"></div>
+
+<div class="bc-how">
+  <b>How it works.</b> For every pair of pulleys in your tooth range whose ratio is within tolerance, the Wizard
+  computes the exact belt length needed at your target spacing, then matches that against real goBILDA belts.
+  Each real belt fixes the geometry, so it back-solves the exact center-to-center distance that belt requires
+  and keeps the ones landing within your center tolerance. Results are ranked by how close the center distance
+  lands to your target (then by ratio). Click any row to preview it in the diagram above.
+</div>
+
+<div class="back-link"><a href="../">&larr; Back to all belt tools</a></div>
+
+<script src="../belt-core.js"></script>
+<script>
+(function(){
+  const BC = window.BeltCore, fmt = BC.fmt;
+  const draw = BC.makeDrawer(document.getElementById('bc-svg'));
+  const oRatio=document.getElementById('o-ratio'), oC=document.getElementById('o-c'),
+        oCtol=document.getElementById('o-ctol'), oRtol=document.getElementById('o-rtol'),
+        oTmin=document.getElementById('o-tmin'), oTmax=document.getElementById('o-tmax');
+
+  function run(){
+    const targR=+oRatio.value, targC=+oC.value, cTol=+oCtol.value, rTol=+oRtol.value/100,
+          tmin=Math.max(8,+oTmin.value|0), tmax=Math.max(+oTmin.value|0,+oTmax.value|0);
+    const out=document.getElementById('o-out');
+    if (!(targR>0&&targC>0&&tmax>=tmin)){ out.innerHTML='<div class="bc-err">Check your inputs: ratio &amp; center distance &gt; 0, and max teeth &ge; min teeth.</div>'; return; }
+    const tR = targR>=1?targR:1/targR;
+    const results=[];
+    for (let n1=tmin;n1<=tmax;n1++){
+      for (let n2=n1;n2<=tmax;n2++){
+        const ratio = n2/n1;
+        if (Math.abs(ratio-tR) > tR*rTol) continue;
+        for (const b of BC.BELTS){
+          const C = BC.centerFor(n1,n2,b.t);
+          if (C==null || C < BC.minCenter(n1,n2)) continue;
+          const dC = C - targC;
+          if (Math.abs(dC) > cTol) continue;
+          results.push({ n1, n2, ratio, b, C, dC, wrap: BC.smallWrap(n1,n2,C) });
+        }
+      }
+    }
+    results.sort((a,b)=> Math.abs(a.dC)-Math.abs(b.dC) || Math.abs(a.ratio-tR)-Math.abs(b.ratio-tR));
+    if (!results.length){ out.innerHTML='<div class="bc-warn">No combination fits. Open <b>Advanced</b> and widen the tolerances or the tooth range.</div>'; draw(+oTmin.value,Math.round(+oTmin.value*tR),targC,''); return; }
+    const top = results.slice(0,30);
+    let html = `<h4>${results.length} match${results.length>1?'es':''} &mdash; closest ${top.length} shown (click a row)</h4>`;
+    html += `<div style="overflow-x:auto"><table class="bc-tbl"><thead><tr>`
+      + `<th>Pulleys</th><th>Ratio (&Delta;)</th><th>Belt</th><th>SKU</th><th>Center C</th><th>&Delta; from target</th><th>Wrap</th></tr></thead><tbody>`;
+    top.forEach((r,i)=>{
+      const rPct = (r.ratio-tR)/tR*100;
+      html += `<tr class="${i===0?'sel':''}" data-n1="${r.n1}" data-n2="${r.n2}" data-c="${r.C}">`
+        + `<td>${r.n1}T : ${r.n2}T</td>`
+        + `<td>${fmt(r.ratio,3)} (${rPct>=0?'+':''}${fmt(rPct,1)}%)</td>`
+        + `<td>${r.b.t}T / ${r.b.mm}mm</td>`
+        + `<td>${BC.skuCell(r.b)}</td>`
+        + `<td>${fmt(r.C,2)} mm</td>`
+        + `<td>${r.dC>=0?'+':''}${fmt(r.dC,2)} mm</td>`
+        + `<td>${fmt(r.wrap,0)}&deg;</td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+    out.innerHTML = html;
+    const best = top[0];
+    draw(best.n1,best.n2,best.C,`${best.n1}T:${best.n2}T + ${best.b.t}T belt \u2192 C = ${fmt(best.C,2)} mm`);
+  }
+
+  BC.initInteractions(draw);
+  [oRatio,oC,oCtol,oRtol,oTmin,oTmax].forEach(el=>el.addEventListener('input',run));
+  run();
+})();
+</script>
