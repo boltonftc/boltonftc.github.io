@@ -1,0 +1,160 @@
+---
+layout: page
+title: "Driver Hub Robot Configuration"
+---
+
+<style>
+.cfg-intro { color:#555; margin-bottom:1.4em; }
+.cfg-intro code { background:#f1f3f5; padding:1px 5px; border-radius:4px; font-size:0.9em; }
+
+.cfg-note { background:#fff8e1; border:1px solid #ffe082; color:#7a5d00; border-radius:8px; padding:0.7em 1em; font-size:0.9em; margin:0 0 1.4em; }
+.cfg-note b { color:#5f4700; }
+
+.cfg-legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:1em; font-size:0.82em; }
+.cfg-legend span { display:inline-flex; align-items:center; gap:6px; }
+.dot { width:12px; height:12px; border-radius:3px; display:inline-block; }
+.dot-motor { background:#e65100; }
+.dot-servo { background:#1565c0; }
+.dot-i2c   { background:#6a1b9a; }
+
+.cfg-table-wrap { overflow-x:auto; margin-bottom:1.8em; }
+table.cfg { border-collapse:collapse; width:100%; font-size:0.9em; }
+table.cfg th { background:#333; color:#fff; padding:9px 12px; text-align:left; white-space:nowrap; }
+table.cfg td { padding:9px 12px; border-bottom:1px solid #e9ecef; vertical-align:top; }
+table.cfg tr:hover td { background:#f8f9fa; }
+.cfg-name { font-family:ui-monospace,Menlo,Consolas,monospace; font-weight:600; color:#c2185b; white-space:nowrap; }
+.cfg-type { font-family:ui-monospace,Menlo,Consolas,monospace; font-size:0.85em; color:#333; white-space:nowrap; }
+
+.badge { display:inline-block; padding:2px 9px; border-radius:11px; font-size:0.76em; font-weight:600; color:#fff; white-space:nowrap; }
+.b-motor { background:#e65100; }
+.b-servo { background:#1565c0; }
+.b-i2c   { background:#6a1b9a; }
+
+.grp-row td { background:#eceff1 !important; font-weight:700; color:#37474f; font-size:0.82em; letter-spacing:0.03em; text-transform:uppercase; }
+
+.cfg-tips { background:#f8f9fa; border:1px solid #dee2e6; border-radius:10px; padding:1em 1.2em; margin-bottom:1.6em; font-size:0.9em; }
+.cfg-tips h3 { margin:0 0 0.5em; font-size:1em; }
+.cfg-tips ul { margin:0; padding-left:1.2em; }
+.cfg-tips li { margin-bottom:0.4em; }
+
+.back-link { font-size:0.9em; margin-top:1.5em; }
+.back-link a { color:#1a73e8; }
+</style>
+
+<p class="cfg-intro">
+  These are the exact device names to enter in the <b>Driver Hub &rarr; Configure Robot</b> screen for our
+  BIOBUZZ robot. Every name below is read directly from our finished code, so the spelling has to match
+  <b>exactly</b> &mdash; all lowercase, underscores (<code>_</code>) between words, no spaces. If a name doesn't
+  match, <code>hardwareMap.get(...)</code> throws and the OpMode won't start.
+</p>
+
+<div class="cfg-note">
+  <b>You need two hubs.</b> This robot has <b>6 motors</b>, but a Control Hub only has 4 motor ports &mdash; so the
+  drivetrain + one mechanism go on the <b>Control Hub</b> and the rest on an <b>Expansion Hub</b>. Exact port
+  numbers are up to your wiring; what matters is that the <b>name</b> and <b>device type</b> match this table.
+</div>
+
+<div class="cfg-legend">
+  <span><span class="dot dot-motor"></span> Motor port (0&ndash;3)</span>
+  <span><span class="dot dot-servo"></span> Servo port (0&ndash;5)</span>
+  <span><span class="dot dot-i2c"></span> I2C bus port (0&ndash;3)</span>
+</div>
+
+<div class="cfg-table-wrap">
+<table class="cfg">
+  <thead>
+    <tr><th>Configuration name</th><th>Port type</th><th>Add it as&hellip;</th><th>Code type</th><th>What it is</th></tr>
+  </thead>
+  <tbody>
+    <tr class="grp-row"><td colspan="5">Drivetrain &mdash; 4 mecanum wheels</td></tr>
+    <tr>
+      <td class="cfg-name">front_left_motor</td>
+      <td><span class="badge b-motor">Motor</span></td>
+      <td>DC Motor (your goBILDA Yellow Jacket model)</td>
+      <td class="cfg-type">DcMotor</td>
+      <td>Front-left mecanum wheel. <em>Reversed in code.</em></td>
+    </tr>
+    <tr>
+      <td class="cfg-name">front_right_motor</td>
+      <td><span class="badge b-motor">Motor</span></td>
+      <td>DC Motor (your goBILDA Yellow Jacket model)</td>
+      <td class="cfg-type">DcMotor</td>
+      <td>Front-right mecanum wheel.</td>
+    </tr>
+    <tr>
+      <td class="cfg-name">back_left_motor</td>
+      <td><span class="badge b-motor">Motor</span></td>
+      <td>DC Motor (your goBILDA Yellow Jacket model)</td>
+      <td class="cfg-type">DcMotor</td>
+      <td>Back-left mecanum wheel. <em>Reversed in code.</em></td>
+    </tr>
+    <tr>
+      <td class="cfg-name">back_right_motor</td>
+      <td><span class="badge b-motor">Motor</span></td>
+      <td>DC Motor (your goBILDA Yellow Jacket model)</td>
+      <td class="cfg-type">DcMotor</td>
+      <td>Back-right mecanum wheel.</td>
+    </tr>
+
+    <tr class="grp-row"><td colspan="5">Mechanisms</td></tr>
+    <tr>
+      <td class="cfg-name">intake_motor</td>
+      <td><span class="badge b-motor">Motor</span></td>
+      <td>DC Motor (your goBILDA Yellow Jacket model)</td>
+      <td class="cfg-type">DcMotor</td>
+      <td>Intake that pulls game pieces in.</td>
+    </tr>
+    <tr>
+      <td class="cfg-name">shooter</td>
+      <td><span class="badge b-motor">Motor</span></td>
+      <td>DC Motor (your goBILDA Yellow Jacket model)</td>
+      <td class="cfg-type">DcMotorEx</td>
+      <td>Flywheel/shooter. <em>DcMotorEx is the same physical motor port &mdash; the &ldquo;Ex&rdquo; just unlocks velocity control in code.</em></td>
+    </tr>
+    <tr>
+      <td class="cfg-name">hood</td>
+      <td><span class="badge b-servo">Servo</span></td>
+      <td>Servo</td>
+      <td class="cfg-type">Servo</td>
+      <td>Shooter hood &mdash; a positional servo that aims the shot angle.</td>
+    </tr>
+    <tr>
+      <td class="cfg-name">feeder</td>
+      <td><span class="badge b-servo">Servo</span></td>
+      <td>Continuous Rotation Servo</td>
+      <td class="cfg-type">CRServo</td>
+      <td>Indexer that feeds pieces into the flywheel. <em>Must be added as a <b>Continuous Rotation Servo</b>, not a regular servo.</em></td>
+    </tr>
+
+    <tr class="grp-row"><td colspan="5">Sensors (I2C)</td></tr>
+    <tr>
+      <td class="cfg-name">pinpoint</td>
+      <td><span class="badge b-i2c">I2C</span></td>
+      <td>goBILDA&reg; Pinpoint Odometry Computer</td>
+      <td class="cfg-type">GoBildaPinpointDriver</td>
+      <td>Odometry computer used for localization (position tracking). Plugs into an <b>I2C</b> bus port.</td>
+    </tr>
+    <tr>
+      <td class="cfg-name">imu</td>
+      <td><span class="badge b-i2c">I2C</span></td>
+      <td>Control Hub built-in IMU</td>
+      <td class="cfg-type">IMU</td>
+      <td>The Control Hub's internal IMU (heading/gyro). It lives on the Control Hub's internal I2C bus and is usually named <code>imu</code> by default.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="cfg-tips">
+  <h3>Before you save the configuration</h3>
+  <ul>
+    <li><b>Names are case-sensitive</b> and must match the code character-for-character: lowercase, underscores, no spaces or capital letters.</li>
+    <li><b>Motors:</b> pick the correct goBILDA motor model when adding each one so the encoder counts and speed limits are right.</li>
+    <li><b>feeder</b> must be added as a <b>Continuous Rotation Servo</b> (CRServo), or it won't spin continuously.</li>
+    <li><b>pinpoint</b> is added on an I2C bus as the <b>goBILDA Pinpoint Odometry Computer</b> device type (available in SDK 12.0).</li>
+    <li><b>imu</b> is the Control Hub's built-in IMU &mdash; on most configs it's already present as <code>imu</code>; if not, add it on the Control Hub's I2C bus 0.</li>
+    <li>After saving, <b>activate</b> the configuration and re-run your OpMode.</li>
+  </ul>
+</div>
+
+<div class="back-link"><a href="../">&larr; Back to Resources</a></div>
