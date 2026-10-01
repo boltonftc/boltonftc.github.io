@@ -1,0 +1,34 @@
+/* /programming/simulator/ — architecture diagram + at-a-glance strip */
+.ad-wrap { padding: clamp(10px, 2vw, 22px); background: radial-gradient(80% 100% at 30% 30%, #1b2650, var(--ink-2)); border: 1px solid var(--line); clip-path: var(--chamfer); --cut: 20px; }
+.ad-wrap svg { display: block; width: 100%; height: auto; }
+.ad-frame { fill: rgba(244, 244, 238, .02); stroke: rgba(244, 244, 238, .22); stroke-width: 1.5; stroke-dasharray: 6 5; }
+.ad-frame.solid { stroke-dasharray: none; fill: rgba(68, 108, 227, .07); stroke: rgba(68, 108, 227, .55); }
+.ad-frame.js { fill: rgba(239, 171, 40, .05); stroke: rgba(239, 171, 40, .45); stroke-dasharray: none; }
+.ad-box { fill: #1c2853; stroke: rgba(244, 244, 238, .45); stroke-width: 1.2; }
+.ad-box.gold { fill: rgba(239, 171, 40, .16); stroke: var(--gold); stroke-width: 2; }
+.ad-box.blue { fill: rgba(68, 108, 227, .22); stroke: #7d9bf0; stroke-width: 1.6; }
+.ad-box.dim { fill: rgba(244, 244, 238, .04); stroke: rgba(244, 244, 238, .25); }
+.ad-t { fill: var(--paper); font: 400 19px var(--display); letter-spacing: .05em; text-transform: uppercase; }
+.ad-s { fill: rgba(244, 244, 238, .62); font: 11.5px var(--body); }
+.ad-lbl { fill: var(--gold); font: 700 10.5px var(--body); letter-spacing: .2em; }
+.ad-lbl.blue { fill: #8ea8ff; }
+.ad-bridge { fill: rgba(244, 244, 238, .78); font: 12px var(--mono); }
+.ad-arrow { stroke: rgba(244, 244, 238, .55); stroke-width: 1.6; fill: none; }
+.ad-arrow.gold { stroke: var(--gold); }
+.ad-head { fill: rgba(244, 244, 238, .7); }
+
+.glance { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; margin-top: 26px; background: var(--line); border: 1px solid var(--line); }
+.glance div { padding: 16px 18px; background: var(--ink); }
+.glance b { display: block; font: 400 30px/1 var(--display); letter-spacing: .02em; text-transform: uppercase; color: var(--gold); }
+.glance div:nth-child(even) b { color: #8ea8ff; }
+.glance small { display: block; margin-top: 6px; color: var(--muted); font-size: 13.5px; line-height: 1.35; }
+
+/* on-page contents for the long read */
+.toc { columns: 2; column-gap: 40px; margin: 0 0 2em; padding: 18px 22px 12px 44px; background: #fff; border-top: 4px solid var(--blue); }
+.toc li { break-inside: avoid; margin-bottom: .4em; }
+.prose .toc a { text-decoration: none; }
+.prose .toc a:hover { text-decoration: underline; }
+.prose h2[id] { scroll-margin-top: calc(var(--nav-h) + 20px); }
+
+@media (max-width: 900px) { .glance { grid-template-columns: repeat(2, 1fr); } .glance div:last-child { grid-column: span 2; } }
+@media (max-width: 640px) { .toc { columns: 1; } }

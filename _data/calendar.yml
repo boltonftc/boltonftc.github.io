@@ -1,0 +1,81 @@
+# ===========================================================================================
+#  Prime Symmetry team calendar — the ONLY place dates live.
+#
+#  Feeds two things automatically on every push:
+#    /calendar/                     the calendar page (next-up countdown, agenda, month grid)
+#    /calendar/prime-symmetry.ics   the subscribe feed (Google / Apple / Outlook refresh it)
+#
+#  How to change things (or ask the agent to):
+#    - Cancel one regular meeting ......... add it to `skip:` with a reason
+#    - Move one meeting to another time ... add the date to `skip:` AND add a one-off in `events:`
+#    - Add a scrimmage / outreach / etc ... add an entry to `events:`
+#    - New weekly slot (e.g. Saturdays) ... add an entry to `series:` (its own first/until)
+#
+#  Rules: dates are QUOTED "YYYY-MM-DD"; times are 24-hour "HH:MM", local Massachusetts time.
+#  Leave optional keys commented out rather than blank (an empty string still counts as "set").
+# ===========================================================================================
+
+# The .ics feed's VTIMEZONE block is written for America/New_York — keep these in sync.
+timezone: America/New_York
+
+season:
+  name: "2026–27 Season"
+  start: "2026-09-30"
+  end: "2027-02-28"
+
+# Regular weekly meetings. `first` must be the first real meeting date (it sets the weekday).
+# Optional per series: until: "YYYY-MM-DD" (defaults to season.end), location: "...".
+series:
+  - id: wed
+    title: "Team meeting"
+    first: "2026-09-30"
+    start: "15:00"
+    end: "17:30"
+    color: gold
+  - id: sun
+    title: "Team meeting"
+    first: "2026-10-04"
+    start: "18:30"
+    end: "20:30"
+    color: blue
+
+# Regular meetings that are NOT happening. Best guesses for US holidays + MA school breaks.
+skip:
+  - { date: "2026-10-11", reason: "Indigenous Peoples' Day weekend" }
+  - { date: "2026-10-21", reason: "8th grade class trip" }
+  - { date: "2026-10-25", reason: "Scrimmage day" }
+  - { date: "2026-11-11", reason: "Veterans Day" }
+  - { date: "2026-11-25", reason: "Thanksgiving break" }
+  - { date: "2026-11-29", reason: "Thanksgiving weekend" }
+  - { date: "2026-12-23", reason: "Winter break" }
+  - { date: "2026-12-27", reason: "Winter break" }
+  - { date: "2026-12-30", reason: "Winter break" }
+  - { date: "2027-01-03", reason: "Winter break" }
+  - { date: "2027-01-17", reason: "MLK Day weekend" }
+  - { date: "2027-02-14", reason: "Presidents' Day weekend" }
+  - { date: "2027-02-17", reason: "February vacation" }
+  - { date: "2027-02-21", reason: "February vacation" }
+
+# One-off events. Omit start/end for an all-day event.
+#   kind: competition | scrimmage | outreach | build | deadline | meeting
+events:
+  - date: "2026-10-17"
+    title: "Backyard Bolton"
+    kind: outreach
+    start: "10:00"
+    end: "15:00"
+  - date: "2026-10-25"
+    title: "Bolts, Boos & Bots Scrimmage"
+    kind: scrimmage
+    start: "09:00"
+    end: "14:00"
+
+# Template:
+#  - date: "2026-11-14"
+#    title: "Scrimmage"
+#    kind: scrimmage
+#    start: "09:00"
+#    end: "16:00"
+#    location: "School gym, 123 Main St"
+#    url: "https://ftc-events.firstinspires.org/"
+#    notes: "Bring the robot, batteries, and the pit kit."

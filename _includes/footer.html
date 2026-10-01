@@ -1,0 +1,38 @@
+  <footer class="ps-footer">
+    <div class="split-rule" aria-hidden="true"></div>
+    <div class="ps-footer-inner">
+      <div class="ps-footer-brand">
+        <img src="/assets/brand/lockup-alt.png" width="260" height="148" alt="Prime Symmetry 36563">
+        <p>Prime Symmetry &middot; <em>FIRST</em>&reg; Tech Challenge Team 36563</p>
+      </div>
+      <nav class="ps-footer-col" aria-label="Explore">
+        <h3>Explore</h3>
+        <a href="/mechanical/">Mechanical</a>
+        <a href="/electrical/">Electrical</a>
+        <a href="/programming/">Programming</a>
+        <a href="/calendar/">Calendar</a>
+      </nav>
+      <nav class="ps-footer-col" aria-label="Team">
+        <h3>Team</h3>
+        <a href="{{ site.sim_url }}" target="_blank" rel="noopener">Impulse 3D Simulator</a>
+        <a href="/meetings/">Meeting notes</a>
+        <a href="/resources/">Resources</a>
+        <a href="/resources/inventory/">Inventory</a>
+      </nav>
+      <div class="ps-footer-col">
+        <h3>Follow</h3>
+        {% if site.youtube_url %}
+        <a class="ps-footer-yt" href="{{ site.youtube_url }}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9l5.8 3.1-5.8 3.1z"/></svg>
+          YouTube
+        </a>
+        {% endif %}
+        <a href="/calendar/prime-symmetry.ics">Subscribe to calendar</a>
+        <a href="/use/">Use &amp; Attribution</a>
+      </div>
+    </div>
+    <div class="ps-legal">
+      <p>Original Prime Symmetry content may be reused for educational purposes with attribution &mdash; see <a href="/use/">Use &amp; Attribution</a>.</p>
+      <p><em>FIRST</em>&reg; and <em>FIRST</em>&reg; Tech Challenge are registered trademarks of <em>FIRST</em>&reg; (For Inspiration and Recognition of Science and Technology), which is not overseeing, involved with, or responsible for this site.</p>
+    </div>
+  </footer>

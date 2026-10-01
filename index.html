@@ -3,7 +3,7 @@ layout: landing
 title: "Prime Symmetry · FTC Team 36563"
 description: "Prime Symmetry is FIRST Tech Challenge Team 36563 — rookie robot builders and the team behind the Impulse 3D Simulator, a free browser-based training tool for new FTC programmers."
 sim_url: "https://boltonftc.github.io/impulse3dsim/"
-# youtube_url: "https://www.youtube.com/@your-channel"    # uncomment to show the YouTube icon in nav + footer
+# YouTube channel URL lives in _config.yml (youtube_url)
 # trailer_url: "https://www.youtube.com/watch?v=..."     # uncomment to show the "Watch the trailer" button
 ---
 
@@ -33,7 +33,7 @@ sim_url: "https://boltonftc.github.io/impulse3dsim/"
         <p class="seam-row hero-line rise" style="--d:.6s"><span class="hl-we">We</span><span class="cycler" data-cycle="code,compete,iterate,teach,inspire" data-side="l">code</span></p>
         <p class="hero-sub rise" style="--d:.75s">A rookie team building robots&hellip;<br><strong>&hellip;and the tools that train the next generation of rookies.</strong></p>
         <div class="hero-cta rise" style="--d:.9s">
-          <a class="ps-btn ps-btn-gold" href="{{ page.sim_url }}" target="_blank" rel="noopener">Launch the Simulator <span class="arrow" aria-hidden="true">&rarr;</span></a>
+          <a class="ps-btn ps-btn-gold" href="{{ site.sim_url }}" target="_blank" rel="noopener">Launch the Simulator <span class="arrow" aria-hidden="true">&rarr;</span></a>
         </div>
       </div>
 
@@ -104,7 +104,7 @@ sim_url: "https://boltonftc.github.io/impulse3dsim/"
     </div>
 
     <div class="sim-cta">
-      <a class="ps-btn ps-btn-gold" href="{{ page.sim_url }}" target="_blank" rel="noopener">Launch the Simulator <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      <a class="ps-btn ps-btn-gold" href="{{ site.sim_url }}" target="_blank" rel="noopener">Launch the Simulator <span class="arrow" aria-hidden="true">&rarr;</span></a>
       {% if page.trailer_url %}<a class="ps-btn ps-btn-blue" href="{{ page.trailer_url }}" target="_blank" rel="noopener">&#9654;&nbsp; Watch the trailer</a>{% endif %}
     </div>
   </div>
@@ -162,7 +162,7 @@ sim_url: "https://boltonftc.github.io/impulse3dsim/"
       <p>We&rsquo;re designing, building and competing in this year&rsquo;s <em>FIRST</em> Tech Challenge game &mdash; and posting what we learn as we go.</p>
     </div>
     <div class="season-links" data-reveal>
-      <a href="/schedule/">Calendar <span>Season plan &amp; dates</span></a>
+      <a href="/calendar/">Calendar <span>Meetings, events &amp; subscribe</span></a>
       <a href="/meetings/">Meetings <span>Notes &amp; build progress</span></a>
       <a href="/resources/">Resources <span>Guides, tools &amp; budget</span></a>
     </div>

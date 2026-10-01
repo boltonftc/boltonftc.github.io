@@ -1,0 +1,56 @@
+---
+layout: site
+title: "Lost in the pit"
+permalink: /404.html
+kicker: "404 · Page not found"
+headline: "Lost in the pit."
+lede: "That page moved or never existed. If it moved, we're sending you to its new home…"
+---
+<div class="page-body">
+  <div class="wrap narrow-col">
+    <p class="muted" id="redirect-note">Nothing matched that address. Try one of these instead:</p>
+    <ol class="ix ix-compact">
+      <li><a href="/"><span class="ix-n">01</span><span class="ix-t">Home</span><span class="ix-d">Prime Symmetry · FTC Team 36563</span></a></li>
+      <li><a href="/mechanical/"><span class="ix-n">02</span><span class="ix-t">Mechanical</span><span class="ix-d">Hardware, CAD training, belt tools, parts lists</span></a></li>
+      <li><a href="/electrical/"><span class="ix-n">03</span><span class="ix-t">Electrical</span><span class="ix-d">Power, wiring and the gremlins that break it</span></a></li>
+      <li><a href="/programming/"><span class="ix-n">04</span><span class="ix-t">Programming</span><span class="ix-d">The Impulse 3D Simulator lessons and references</span></a></li>
+      <li><a href="/calendar/"><span class="ix-n">05</span><span class="ix-t">Calendar</span><span class="ix-d">When and where we meet</span></a></li>
+    </ol>
+  </div>
+</div>
+<script>
+  // Old URLs from the pre-relaunch site -> their new homes (longest matching prefix wins).
+  var REDIRECTS = {
+    "/resources/belt-calculator/wizard/": "/mechanical/belt-tools/#wizard",
+    "/resources/belt-calculator/find-belt/": "/mechanical/belt-tools/#find-belt",
+    "/resources/belt-calculator/center-distance/": "/mechanical/belt-tools/#center-distance",
+    "/resources/belt-calculator/": "/mechanical/belt-tools/",
+    "/resources/robot-config/": "/electrical/robot-config/",
+    "/resources/driver-controls/": "/programming/driver-controls/",
+    "/electrical/easier/electrical/": "/electrical/systems/",
+    "/electrical/intermediate/electrical-issues/": "/electrical/gremlins/",
+    "/electrical/easier/": "/electrical/",
+    "/electrical/intermediate/": "/electrical/",
+    "/mechanical/easier/hardware/": "/mechanical/hardware/",
+    "/mechanical/easier/": "/mechanical/",
+    "/mechanical/onshape-cad/": "/mechanical/cad-training/getting-started/",
+    "/programming/easier/": "/programming/",
+    "/programming/intermediate/": "/programming/",
+    "/programming/advanced/": "/programming/",
+    "/resources/season-budget/": "/resources/",
+    "/resources/laptop-setup/": "/resources/",
+    "/programming/deploy/": "/programming/simulator/#deploy",
+    "/schedule/": "/calendar/",
+    "/simulator/": "/#simulator"
+  };
+  (function () {
+    var path = location.pathname.replace(/\/?$/, "/");
+    var best = Object.keys(REDIRECTS).filter(function (k) { return path.indexOf(k) === 0; })
+      .sort(function (a, b) { return b.length - a.length; })[0];
+    if (!best) return;
+    var parts = REDIRECTS[best].split("#");
+    var target = parts[0] + location.search + (parts[1] ? "#" + parts[1] : location.hash);
+    document.getElementById("redirect-note").textContent = "Found it — taking you to " + target;
+    location.replace(target);
+  })();
+</script>

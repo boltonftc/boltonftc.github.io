@@ -1,109 +1,109 @@
 ---
-layout: page
-title: "Programming Lessons"
+layout: site
+title: "Programming"
+kicker: "Programming"
+headline: "Learn it in the <em>sim.</em> Run it on the <b>robot.</b>"
+lede: "Our programming lessons live inside the Impulse 3D Simulator, so you write real FTC Java and see it drive straight away. This page has the tools that get your code onto the real robot and the best references for when you want to go further."
+description: "Prime Symmetry programming: the Impulse 3D Simulator, deploying code to a Control Hub over USB, our driver controls, and the best FTC Java references."
 ---
 
-<style>
-.tier-section { margin-bottom: 1em; border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; }
-.tier-header {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px; cursor: pointer; user-select: none;
-  background: #f8f9fa; border: none; width: 100%; text-align: left;
-  font-size: 1.1em; font-weight: 700;
-}
-.tier-header:hover { background: #e9ecef; }
-.tier-icon { font-size: 1.2em; }
-.tier-count { font-size: 0.8em; font-weight: normal; color: #666; margin-left: auto; }
-.tier-body { padding: 0 16px 8px; display: none; }
-.tier-body.open { display: block; }
-.lesson-card { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
-.lesson-card:last-child { border-bottom: none; }
-.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; white-space: nowrap; }
-.tier-easier { background: #d4edda; color: #155724; }
-.tier-intermediate { background: #fff3cd; color: #856404; }
-.tier-advanced { background: #f8d7da; color: #721c24; }
-.lesson-card a { font-weight: bold; font-size: 1.05em; }
-.lesson-card p { margin: 2px 0 0; color: #555; font-size: 0.92em; }
-.intro-text { margin-bottom: 1.2em; color: #444; }
-</style>
-
-<p class="intro-text">Learn to program your FTC robot — from your first telemetry line to full autonomous navigation.
-Click a tier to expand its lessons.</p>
-
-<p style="margin:0 0 1.2em;padding:0.7em 1em;background:#eef4ff;border:1px solid #cfe0ff;border-radius:8px;">
-  🤖 <b>Ready to run your code on the real robot?</b>
-  <a href="deploy/">Deploy to Robot (USB)</a> — push your OpModes straight from the browser to the Control Hub, no installs.
-</p>
-
-<!-- EASIER -->
-<div class="tier-section">
-  <button class="tier-header" onclick="toggleTier(this)">
-    <span class="tier-icon">🟢</span> Easier
-    <span class="tier-count">8 lessons</span>
-    <span>▶</span>
-  </button>
-  <div class="tier-body">
-    <div class="lesson-card"><span class="tier-badge tier-easier">Easier</span><div><a href="easier/welcome-to-pit/">Welcome to the PIT</a><p>A quick tour of the PIT training station and how everything works.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-easier">Easier</span><div><a href="easier/robot-basics/">FTC Robot Basics</a><p>What is inside an FTC robot, how matches work, and where you fit in as the programmer.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-easier">Easier</span><div><a href="easier/code-orientation/">Your Code Package</a><p>Tour the Java files in your package, understand init vs loop, and make your first code change.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-easier">Easier</span><div><a href="easier/java-tour/">A Tour of Your Code</a><p>Walk through MecanumDrive.java line by line and learn the Java building blocks.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-easier">Easier</span><div><a href="easier/telemetry/">Telemetry</a><p>Send debug messages to the Driver Hub so you can see what your code is doing.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-easier">Easier</span><div><a href="easier/tank-drive/">Tank Drive</a><p>Wire up the joystick to the motors and make the robot drive like a tank.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-easier">Easier</span><div><a href="easier/button-actions/">Button Actions: Intake</a><p>Make the A button toggle the intake on and off using a state machine.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-easier">Easier</span><div><a href="easier/auto-vs-teleop/">Auto vs TeleOp</a><p>Understand match phases, create your first Autonomous OpMode, and run a full match.</p></div></div>
+<section class="feature">
+  <div class="wrap feature-grid">
+    <div>
+      <p class="kicker">Start here</p>
+      <h2>Impulse 3D <em>Simulator</em></h2>
+      <p>A free, browser-based FTC robot simulator with the whole lesson track built in. No robot, no install, no waiting for a turn on the bench. The lessons, quizzes and your progress all live in the sim, so it's always up to date.</p>
+      <ul class="ticks">
+        <li>Step-by-step lessons, each with a quiz<small>From your first OpMode to sensors and autonomous</small></li>
+        <li>Real FTC SDK Java, real compiler errors<small>The same code style you'll write for the real robot</small></li>
+        <li>Pedro Pathing autonomous<small>Plan a path, run it, watch it follow</small></li>
+        <li>Same code, real hardware<small>Deploy to a Control Hub over USB or Wi-Fi, right from the sim</small></li>
+        <li>Works offline<small>Install it on the competition laptop and it runs with no internet</small></li>
+      </ul>
+      <div class="actions">
+        <a class="ps-btn ps-btn-gold" href="{{ site.sim_url }}" target="_blank" rel="noopener">Launch the Simulator <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        <a class="ps-btn ps-btn-ghost" href="/programming/simulator/">How it works</a>
+      </div>
+    </div>
+    <div class="feature-art">
+      <div class="frame">
+        <video src="/assets/video/sim-montage.mp4" poster="/assets/video/sim-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Footage of the Impulse 3D Simulator: lessons, code, quizzes and the robot driving" style="width:100%;display:block"></video>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
-<!-- INTERMEDIATE -->
-<div class="tier-section">
-  <button class="tier-header" onclick="toggleTier(this)">
-    <span class="tier-icon">🟦</span> Intermediate
-    <span class="tier-count">6 lessons</span>
-    <span>▶</span>
-  </button>
-  <div class="tier-body">
-    <div class="lesson-card"><span class="tier-badge tier-intermediate">Intermediate</span><div><a href="intermediate/imu-heading/">IMU Heading</a><p>Read the gyroscope heading and test it on the turntable.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-intermediate">Intermediate</span><div><a href="intermediate/shooter-flywheel/">Flywheel Shooter</a><p>Spin up the flywheel shooter and understand how inertia affects your shots.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-intermediate">Intermediate</span><div><a href="intermediate/indexer-servo/">Indexer Servo</a><p>Wire up the CR servo indexer and fire balls into the spinning flywheel.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-intermediate">Intermediate</span><div><a href="intermediate/dump-servo/">Dump Servo — Positional Mode</a><p>Toggle a positional servo between two angles using edge detection and a state machine.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-intermediate">Intermediate</span><div><a href="intermediate/encoder-rpm/">Encoder: Flywheel RPM</a><p>Read the flywheel encoder to measure real-time RPM and watch the spin-up curve.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-intermediate">Intermediate</span><div><a href="intermediate/flywheel-trim/">Flywheel Trim</a><p>Use the right stick to adjust flywheel speed on the fly.</p></div></div>
-  </div>
-</div>
+<div class="page-body">
+  <section class="wrap sec">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">Team tools</p>
+        <h2>From sim to <em>robot</em></h2>
+      </div>
+        <p>Our tools, and how they fit together.</p>
+    </div>
+    <ol class="ix">
+      <li><a href="/programming/simulator/">
+        <span class="ix-n">01</span>
+        <span class="ix-t">How the simulator works</span>
+        <span class="ix-d">Java compiled in your browser, FTC SDK shims, motor and sensor models, Pedro Pathing, deploying over USB or Wi-Fi with " OB" OpModes, offline mode, and the license.</span>
+        <span class="ix-m"><span class="tag tag-gold">Architecture</span></span>
+      </a></li>
+      <li><a href="/programming/driver-controls/">
+        <span class="ix-n">02</span>
+        <span class="ix-t">Driver controls</span>
+        <span class="ix-d">Every stick, trigger and button on the gamepad, and what it does on our robot, read straight from the TeleOp code.</span>
+        <span class="ix-m"><span class="tag">Gamepad map</span></span>
+      </a></li>
+      <li><a href="/electrical/robot-config/">
+        <span class="ix-n">03</span>
+        <span class="ix-t">Robot configuration</span>
+        <span class="ix-d">The exact device names <code>hardwareMap</code> expects. If the OpMode won't start, check here first.</span>
+        <span class="ix-m"><span class="tag tag-blue">Electrical</span></span>
+      </a></li>
+    </ol>
+  </section>
 
-<!-- ADVANCED -->
-<div class="tier-section">
-  <button class="tier-header" onclick="toggleTier(this)">
-    <span class="tier-icon">🔷</span> Advanced
-    <span class="tier-count">6 lessons</span>
-    <span>▶</span>
-  </button>
-  <div class="tier-body">
-    <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/mecanum-drive/">Mecanum Drive</a><p>Replace tank drive with full mecanum holonomic movement.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/otos/">SparkFun OTOS</a><p>Track your robot's position with the Optical Tracking Odometry Sensor.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/apriltag/">AprilTag Detection</a><p>Use the robot camera to detect AprilTags for autonomous alignment.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/localization/">Localization</a><p>Fuse OTOS and AprilTag data into a single drift-free position estimate.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/pedro-pathing/">Pedro Pathing: Capture Mode</a><p>Record a path and run a full autonomous using Pedro Pathing.</p></div></div>
-    <div class="lesson-card"><span class="tier-badge tier-advanced">Advanced</span><div><a href="advanced/flywheel-control/">Flywheel Control</a><p>Use feedforward and proportional feedback to hold the flywheel at a target RPM.</p></div></div>
-  </div>
-</div>
-
-<script>
-function toggleTier(btn) {
-  const body = btn.nextElementSibling;
-  const arrow = btn.querySelector('span:last-child');
-  if (body.classList.contains('open')) {
-    body.classList.remove('open');
-    arrow.textContent = '▶';
-  } else {
-    body.classList.add('open');
-    arrow.textContent = '▼';
-  }
-}
-</script>
-
-<div class="attribution-note">
-  <strong>Use &amp; Attribution:</strong> Lessons on this page may be reused for educational purposes with attribution.
-  Please include: <em>Source: Bolton Robotics FTC — https://boltonftc.github.io</em>.
-  See <a href="/use/">Use &amp; Attribution</a> for details.
+  <section class="wrap sec">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">Go further</p>
+        <h2>The best <em>FTC</em> references</h2>
+      </div>
+      <p>Outside resources we trust. They're for when you've finished the sim lessons, or want a second explanation of something.</p>
+    </div>
+    <div class="refs">
+      <div class="refs-group">
+        <h3>Learn</h3>
+        <ul>
+          <li><a href="https://github.com/alan412/LearnJavaForFTC" target="_blank" rel="noopener"><b>Learn Java for FTC</b><small>Alan Smith's free book, from your first OpMode to control theory, with every example solved and tested.</small><i>Book</i></a></li>
+          <li><a href="https://ftc-docs.firstinspires.org/en/latest/programming_resources/index.html" target="_blank" rel="noopener"><b>FTC Docs · programming</b><small>Official tutorials for OnBot Java and Android Studio, plus hub and Driver Hub setup.</small><i>FTC Docs</i></a></li>
+          <li><a href="https://gm0.org/en/latest/docs/software/index.html" target="_blank" rel="noopener"><b>Game Manual 0 · software</b><small>The community's guide to FTC programming practice, from drive code to control loops.</small><i>gm0</i></a></li>
+        </ul>
+      </div>
+      <div class="refs-group">
+        <h3>Look it up</h3>
+        <ul>
+          <li><a href="https://github.com/FIRST-Tech-Challenge/FtcRobotController" target="_blank" rel="noopener"><b>FTC SDK</b><small>The official FtcRobotController project, including the sample OpModes worth reading.</small><i>GitHub</i></a></li>
+          <li><a href="https://javadoc.io/doc/org.firstinspires.ftc" target="_blank" rel="noopener"><b>SDK Javadoc</b><small>Every class and method in the SDK: <code>DcMotorEx</code>, <code>IMU</code>, <code>Gamepad</code> and the rest.</small><i>Javadoc</i></a></li>
+          <li><a href="https://ftc-docs.firstinspires.org/en/latest/programming_resources/vision/vision_overview/vision-overview.html" target="_blank" rel="noopener"><b>Vision &amp; AprilTags</b><small>Which camera approach to use, and how AprilTag localization works.</small><i>FTC Docs</i></a></li>
+        </ul>
+      </div>
+      <div class="refs-group">
+        <h3>Autonomous &amp; control</h3>
+        <ul>
+          <li><a href="https://pedropathing.com/" target="_blank" rel="noopener"><b>Pedro Pathing</b><small>The path-following library behind the simulator's autonomous lessons. Docs, tuning and examples.</small><i>Library</i></a></li>
+          <li><a href="https://www.ctrlaltftc.com/" target="_blank" rel="noopener"><b>CTRL ALT FTC</b><small>An approachable guide to PID, feedforward and motion control for FTC.</small><i>Guide</i></a></li>
+          <li><a href="https://docs.sparkfun.com/SparkFun_Optical_Tracking_Odometry_Sensor/software_setup-FTC/" target="_blank" rel="noopener"><b>SparkFun OTOS for FTC</b><small>Setting up the optical odometry sensor in the SDK.</small><i>SparkFun</i></a></li>
+        </ul>
+      </div>
+      <div class="refs-group">
+        <h3>Debugging</h3>
+        <ul>
+          <li><a href="https://acmerobotics.github.io/ftc-dashboard/" target="_blank" rel="noopener"><b>FTC Dashboard</b><small>Live graphs of telemetry, a field view and adjustable tuning values in your browser while the robot runs.</small><i>Tool</i></a></li>
+          <li><a href="https://ftc-docs.firstinspires.org/en/latest/programming_resources/shared/pidf_coefficients/pidf-coefficients.html" target="_blank" rel="noopener"><b>Changing PIDF coefficients</b><small>Tune the motor's built-in velocity control, which is what <code>setVelocity</code> uses.</small><i>FTC Docs</i></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </div>

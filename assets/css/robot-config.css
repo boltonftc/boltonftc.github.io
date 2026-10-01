@@ -1,0 +1,19 @@
+/* /electrical/robot-config/ */
+.cfg-callout { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; margin-bottom: 34px; padding: 22px 26px; background: var(--navy); clip-path: var(--chamfer); }
+.cfg-callout p { margin: 0; color: var(--muted); }
+.cfg-callout strong { color: var(--paper); }
+.cfg-callout code { font: 600 .9em var(--mono); color: var(--gold); }
+.cfg-callout-n { font: 400 96px/.8 var(--display); color: var(--gold); text-align: center; }
+.cfg-callout-n small { display: block; margin-top: 6px; font: 700 11px/1 var(--body); letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+.cfg .cfg-name { font: 600 14.5px var(--mono); color: var(--gold); white-space: nowrap; }
+.cfg td em { color: var(--muted); }
+.cfg td code { font: 600 .9em var(--mono); color: var(--gold); }
+.cfg .tag { margin: 0; }
+.cfg-grp td { padding-top: 22px; background: transparent !important; font: 400 22px/1 var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--paper); border-bottom: 2px solid var(--line); }
+.cfg-more { margin: 18px 0 0; color: var(--muted); }
+.cfg-more a { color: var(--gold); }
+.ix-compact .ix-row .ix-n { font-size: 40px; }
+@media (max-width: 640px) {
+  .cfg-callout { grid-template-columns: 1fr; text-align: left; }
+  .cfg-callout-n { text-align: left; }
+}

@@ -13,30 +13,6 @@
     } catch (e) { return null; }
   }
 
-  /* ---------- nav ---------- */
-  var nav = document.querySelector('.ps-nav');
-  var burger = document.querySelector('.ps-burger');
-  var coin = document.querySelector('.ps-coin');
-  if (coin && !reduceMotion) {
-    var brand = coin.closest('.ps-brand');
-    var flip = function () { coin.classList.add('flip'); };   // runs to completion even if the pointer leaves
-    brand.addEventListener('mouseenter', flip);
-    brand.addEventListener('focus', flip);
-    coin.addEventListener('animationend', function () { coin.classList.remove('flip'); });
-  }
-  function onScroll() { nav.classList.toggle('is-solid', window.scrollY > 40); }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-  if (burger) {
-    burger.addEventListener('click', function () {
-      var open = nav.classList.toggle('is-open');
-      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    document.querySelectorAll('.ps-menu a').forEach(function (a) {
-      a.addEventListener('click', function () { nav.classList.remove('is-open'); burger.setAttribute('aria-expanded', 'false'); });
-    });
-  }
-
   /* ---------- 36563: twin highlights, a light-up hint, and the fold + proof easter egg ---------- */
   var Egg = { run: function () {}, cancel: function () {}, hint: function () {} };
   (function () {
@@ -278,19 +254,6 @@
         cycler.classList.remove('out');
       }, 280);
     }, 2800);
-  }
-
-  /* ---------- scroll reveals ---------- */
-  var revealEls = document.querySelectorAll('[data-reveal]');
-  if ('IntersectionObserver' in window && !reduceMotion) {
-    var ro = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in-view'); ro.unobserve(e.target); }
-      });
-    }, { threshold: 0.2 });
-    revealEls.forEach(function (el) { ro.observe(el); });
-  } else {
-    revealEls.forEach(function (el) { el.classList.add('in-view'); });
   }
 
   /* ---------- simulator montage synced to the beat rail ---------- */

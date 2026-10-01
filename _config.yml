@@ -1,43 +1,14 @@
-title: Bolton Robotics FTC
-author: The Bolton Robotics Team
+title: "Prime Symmetry · FTC Team 36563"
+description: "Prime Symmetry is FIRST Tech Challenge Team 36563 — rookie robot builders and the team behind the Impulse 3D Simulator, a free browser-based training tool for new FTC programmers."
+author: "Prime Symmetry · FTC Team 36563"
 url: "https://boltonftc.github.io"
 baseurl: ""
 
-remote_theme: daattali/beautiful-jekyll@6.0.1
+sim_url: "https://boltonftc.github.io/impulse3dsim/"
+# youtube_url: "https://www.youtube.com/@your-channel"   # uncomment to show YouTube in the nav + footer
 
-navbar-links:
-  Home: "https://boltonftc.github.io"
-  Use & Attribution: "use/"
-  Simulator: "simulator/"
-  Game: "game/"
-  Meetings: "meetings/"
-  Resources: "resources/"
-  Schedule: "schedule/"
-  Programming: "programming/"
-  Electrical: "electrical/"
-  Mechanical:
-    - "Overview": "mechanical/"
-    - "goBILDA RI3D": "mechanical/gobilda-ri3d/"
-
-title-img: /assets/img/br_logo.jpg
-
-
-navbar-col: "#EAEAEA"
-navbar-text-col: "#404040"
-navbar-border-col: "#DDDDDD"
-page-col: "#FFFFFF"
-text-col: "#404040"
-link-col: "#008AFF"
-hover-col: "#0085A1"
-footer-col: "#EAEAEA"
-footer-text-col: "#777777"
-footer-link-col: "#404040"
-footer-hover-col: "#0085A1"
-
-navbar-var-length: true
-
-site-css:
-  - "/assets/css/custom.css"
+plugins:
+  - jekyll-sitemap
 
 markdown: kramdown
 highlighter: rouge

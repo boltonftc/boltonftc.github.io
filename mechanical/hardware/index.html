@@ -1,0 +1,236 @@
+---
+layout: lesson
+title: "Robot Hardware"
+section: "Mechanical"
+section_url: "/mechanical/"
+kicker: "Lesson 01"
+headline: "Robot <em>hardware</em>"
+lede: "Nuts, bolts and everything in between. Learn the name of every part on the build table, how metric sizes work, which tool fits what, and the four mistakes that ruin parts."
+description: "FTC robot hardware lesson: metric screws, nuts, washers, ID/OD, spacers, shims, hex shafts, bearings, collars, chain, belts, tools and common mistakes."
+scripts: ["/assets/js/quiz.js"]
+next_url: "/mechanical/cad-training/getting-started/"
+next_title: "CAD Training"
+---
+
+<div class="lesson-meta"><span><b>About 25 min</b> to read</span><span><b>Hands-on task</b> at the end</span><span><b>Quiz</b> to check yourself</span></div>
+
+<p>Before you build a robot, you need to know what all the parts are. By the end of this lesson you'll be able to pick up any part from the kit and say what it is, what it's for, and how to install it without wrecking it.</p>
+
+<h2>Everything is metric</h2>
+
+<p>FTC building systems such as goBILDA use <strong>metric</strong> hardware. Every screw, nut, shaft and bearing is measured in <strong>millimeters</strong>. If you're used to hardware-store sizes like 1/4-20, you'll need to switch.</p>
+
+<div class="note note-gold"><b>Key idea</b><p>The <strong>M number</strong> is the screw's diameter in millimeters. <strong>M4×12</strong> means a 4 mm diameter screw that's 12 mm long. Diameter always comes first, then length.</p></div>
+
+<p>The robot is built almost entirely from <strong>M4</strong> hardware: M4 screws, M4 nuts and M4 washers. You'll occasionally see M3 screws on small parts like sensors, but M4 is the standard.</p>
+
+<h2>Screws</h2>
+
+<h3>Socket head cap screws</h3>
+<figure class="fig-md">
+  <img src="hex_head_screw.jpg" alt="M4 socket head cap screw with dimensions" loading="lazy">
+</figure>
+<p>The most common screw on the robot has a round head with a hexagonal hole in it. You turn it with a hex key (an Allen wrench). <strong>M4 socket head screws take a 3 mm hex key</strong>. That's the single most important tool-to-screw pairing to remember.</p>
+
+<h3>Length, and how to pick it</h3>
+<figure class="fig-md">
+  <img src="m4_screw_lengths.jpg" alt="M4 screws in several lengths" loading="lazy">
+</figure>
+<p>Length is measured from <strong>under the head to the tip</strong>. The head doesn't count. Too short and the nut can't grab enough thread. Too long and the tip sticks out and hits something.</p>
+
+<div class="note"><b>Picking a length</b><p>Add up the thickness of everything being clamped, then add the nut's height (an M4 nylon lock nut is about 5 mm). Two 2.5 mm thick plates is 5 mm, plus 5 mm for the nut, so <strong>M4×10</strong>. If you're not sure, go one size longer.</p></div>
+
+<h3>Thread-forming screws</h3>
+<figure class="fig-sm">
+  <img src="m4_thread_forming_hex_head_screw.jpg" alt="M4 thread-forming screw" loading="lazy">
+</figure>
+<p>A <strong>thread-forming</strong> screw cuts its own threads the first time you drive it into a plain hole sized for it. That's fast and needs no nut. The catch: every time you take it out and drive it back in, the hole wears a little more, and over-tightening strips it on the spot.</p>
+
+<h2>Nuts</h2>
+<figure class="fig-sm">
+  <img src="m4_nylon_lock_not.jpg" alt="M4 nylon lock nut" loading="lazy">
+</figure>
+<p>The standard nut is the <strong>nylon lock nut</strong> ("nylock"). It has a ring of nylon inside one end that grips the screw threads. A robot that drives, turns and crashes into things shakes ordinary nuts loose within minutes. Nylocks stay put.</p>
+<div class="note note-gold"><b>Key idea</b><p>Use nylon lock nuts on the robot. You'll feel the turning get harder when the screw reaches the nylon. That's normal, so keep going.</p></div>
+
+<h2>Washers</h2>
+<div class="fig-pair">
+  <figure><img src="flat_washer.jpg" alt="Flat washers" loading="lazy"><figcaption><strong>Flat washer</strong>: spreads the load.</figcaption></figure>
+  <figure><img src="split_washer.jpg" alt="Split lock washer" loading="lazy"><figcaption><strong>Split lock washer</strong>: acts as a spring.</figcaption></figure>
+</div>
+<p>A <strong>flat washer</strong> spreads the clamping force over a wider area, so the screw head doesn't dent soft aluminum. It also bridges a hole that's too big for the head. A <strong>split lock washer</strong> is cut and twisted. It flattens as you tighten and pushes back like a spring, which helps resist loosening. Nylocks are more reliable, but a split washer helps where there's no room for a nut.</p>
+
+<h2>ID and OD</h2>
+<div class="note note-gold"><b>Key idea</b><p><strong>ID</strong> (inside diameter) is the size of the hole. <strong>OD</strong> (outside diameter) is the size of the whole part. Both are in millimeters.</p></div>
+<p>A washer with a 4.1 mm ID and a 9 mm OD has a hole just big enough for an M4 screw and is 9 mm across. ID tells you whether it fits over the screw or shaft. OD tells you whether it covers what it needs to. The same two numbers describe bearings, spacers, shims and anything else round with a hole in it.</p>
+
+<h2>Spacers and shims</h2>
+<div class="fig-pair">
+  <figure><img src="spacer2.jpg" alt="Spacers in various lengths" loading="lazy"><figcaption><strong>Spacers</strong>: set larger gaps.</figcaption></figure>
+  <figure><img src="shim.jpg" alt="Thin shim with dimensions" loading="lazy"><figcaption><strong>Shims</strong>: fine-tune small ones.</figcaption></figure>
+</div>
+<p>A <strong>spacer</strong> is a short tube that slides over a screw or shaft and holds two parts a set distance apart. An M4 spacer has a 4.1 mm ID and comes in lengths from 3 mm up to 70 mm. Spacers set wheel positions on a shaft, gaps between channel walls, and the alignment of gears and pulleys.</p>
+<p>A <strong>shim</strong> is a very thin washer, about 0.5–1 mm thick. When a gear rubs the side plate by a hair, even the thinnest spacer is too much, and a shim gives you that tiny adjustment. Shims are the secret to mechanisms that spin freely.</p>
+
+<h2>Shafts</h2>
+<figure>
+  <img src="REX_hex_shaft_with_eclip_and_thrded_ends.jpg" alt="goBILDA REX hex shaft with threaded ends and an e-clip groove" loading="lazy">
+</figure>
+<p>A <strong>shaft</strong> carries rotation: motor to wheel, motor to gear, motor to roller. goBILDA's <strong>REX</strong> shaft is a <strong>hex shaft</strong>, 7 mm across the flats with an 8 mm round outside, so parts with a matching hex hole <strong>lock on and turn with it</strong>. The ends are threaded M4 so you can put a screw into them, and there's a groove for an <strong>e-clip</strong>, a small snap ring that stops parts sliding off.</p>
+<div class="note"><b>Key idea</b><p>A <strong>hex bore</strong> part is locked to a hex shaft and turns with it. A <strong>round bore</strong> part spins freely on the shaft.</p></div>
+
+<h2>Bearings</h2>
+<figure class="fig-md">
+  <img src="flanged_bearing.jpg" alt="Flanged ball bearing with dimensions" loading="lazy">
+</figure>
+<p>A <strong>bearing</strong> lets a shaft spin freely inside the frame instead of grinding against the aluminum. A <strong>flanged</strong> bearing has a lip around one edge that catches on the hole so the bearing can't push through. Inside, tiny steel balls make the friction almost zero.</p>
+<div class="note note-warn"><b>Installing bearings</b><p>Press only on the <strong>outer ring</strong>. Pushing on the inner ring damages the balls. If it won't slide in, check that the hole matches the bearing's OD. Never hammer a bearing in.</p></div>
+
+<h2>Clamping collars</h2>
+<figure>
+  <img src="clamping_collar.jpg" alt="Clamping collar: 6 mm bore, M4 clamp screw with a 3 mm hex drive" loading="lazy">
+</figure>
+<p>A <strong>clamping collar</strong> grips a shaft so things can't slide along it. It's a split ring with an <strong>M4 clamp screw</strong> (3 mm hex key). Slide it into position and tighten, and it squeezes the shaft. Collars usually sit next to bearings to stop a shaft walking side to side.</p>
+
+<h2>Moving power: chain and belts</h2>
+<p>A motor often can't sit right on the thing it drives. <strong>Chain</strong> and <strong>belts</strong> carry rotation from one shaft to another, and different-sized wheels on each end change the speed and torque.</p>
+
+<div class="fig-pair">
+  <figure><img src="sprocket.jpg" alt="Sprocket" loading="lazy"><figcaption><strong>Sprocket</strong> + chain: strong and forgiving.</figcaption></figure>
+  <figure><img src="gt2_2mm_pulley_with_belt.jpg" alt="GT2 pulley with timing belt" loading="lazy"><figcaption><strong>Pulley</strong> + timing belt: light and precise.</figcaption></figure>
+</div>
+
+<p>A <strong>sprocket</strong> meshes with <strong>chain</strong>, just like a bicycle. goBILDA's plastic chain snaps together link by link, so it's easy to size. A <strong>timing belt</strong> has teeth on the inside that mesh with a toothed <strong>pulley</strong>, so it never slips. The common <strong>GT2 2 mm</strong> belt has teeth 2 mm apart. Belts are lighter, quieter and more precise than chain, which makes them great for intakes, shooters and slides.</p>
+
+<div class="note note-gold"><b>Sizing a belt?</b><p>A belt only comes in certain lengths, and that fixes how far apart the two shafts can be. Our <a href="/mechanical/belt-tools/">GT2 belt tools</a> work out the pulleys, the belt and the shaft spacing for you.</p></div>
+
+<h3>Flywheels</h3>
+<figure class="fig-sm">
+  <img src="flywheel.jpg" alt="Flywheel" loading="lazy">
+</figure>
+<p>A <strong>flywheel</strong> is a heavy, carefully balanced wheel. Its weight stores spinning energy, so its speed barely dips when it hits a game piece. That's why shooters use them.</p>
+
+<h2>Motors and servos</h2>
+<div class="fig-pair">
+  <figure><img src="gobilda_yellowjacket_motor.jpg" alt="goBILDA Yellow Jacket motor" loading="lazy"><figcaption><strong>Motor</strong>: spins continuously.</figcaption></figure>
+  <figure><img src="servo.jpg" alt="Servo" loading="lazy"><figcaption><strong>Servo</strong>: moves to a position.</figcaption></figure>
+</div>
+<p>A <strong>DC motor</strong> is the robot's muscle. Its built-in gearbox trades speed for torque (turning force). A <strong>servo</strong> moves to a commanded angle and holds it, which suits claws, wrists and latches. For how they're powered, see <a href="/electrical/systems/">Electrical Systems</a>.</p>
+
+<h2>Tools</h2>
+<table>
+  <thead><tr><th>Tool</th><th>What it's for</th></tr></thead>
+  <tbody>
+    <tr><td><strong>3 mm T-handle hex key</strong></td><td>M4 socket head screws, so most of the robot. The T-handle gives more control than an L-key. Keep one in your pocket.</td></tr>
+    <tr><td><strong>Ratcheting bit driver</strong></td><td>Tight spots. Swap bits and turn back and forth without lifting the tool off.</td></tr>
+    <tr><td><strong>Powered screwdriver</strong></td><td>Driving lots of screws fast during big builds. <em>Do the final tightening by hand.</em></td></tr>
+    <tr><td><strong>Digital caliper</strong></td><td>Measuring anything to 0.1 mm: screw diameter, spacer length, hole size.</td></tr>
+  </tbody>
+</table>
+<div class="fig-pair">
+  <figure><img src="m4_t_handle_hex_key.jpg" alt="T-handle hex key" loading="lazy"><figcaption>T-handle hex key</figcaption></figure>
+  <figure><img src="digital_caliper.jpg" alt="Digital caliper" loading="lazy"><figcaption>Digital caliper</figcaption></figure>
+</div>
+<p>A caliper has three ways to measure: the big <strong>outside jaws</strong> (screws, shafts, spacer ODs), the small <strong>inside jaws</strong> (holes and slots), and the thin <strong>depth rod</strong> at the end (how deep a hole or step is). Is that screw M3 or M4? Measure it, don't guess.</p>
+
+<h2>Four ways to ruin a part</h2>
+
+<h3>1. Stripping the screw head</h3>
+<figure class="fig-sm"><img src="stripped_hex_head.jpg" alt="Screw with a rounded-out hex socket" loading="lazy"></figure>
+<p>The hex key rounds out the socket and then just spins. Causes: the wrong size key (2.5 mm in a 3 mm socket wrecks it fast), turning at an angle, a worn key, or forcing a stuck screw. <strong>Prevention:</strong> use the right key, seat it fully, and push straight in.</p>
+
+<h3>2. Stripping the threads</h3>
+<div class="fig-pair">
+  <figure><img src="stripped_threads_on_bolt.jpg" alt="Screw with damaged threads" loading="lazy"></figure>
+  <figure><img src="over_torqued_hole_stripped_threads.jpg" alt="Over-tightened hole with its threads torn out" loading="lazy"></figure>
+</div>
+<p>The screw spins but never tightens because the threads are torn. Over-tightening is the number one cause, followed by driving a thread-forming screw in and out too many times. In aluminum, a stripped hole often means replacing the whole part.</p>
+<div class="note note-gold"><b>Snug is enough</b><p>With M4 screws in aluminum, stop when the parts are pressed firmly together and the screw won't turn easily any more. If you hear creaking or see the metal flex, you've already gone too far.</p></div>
+
+<h3>3. Cross-threading</h3>
+<figure class="fig-sm"><img src="cross_threading.jpg" alt="Diagram of a screw entering threads at an angle" loading="lazy"></figure>
+<p>The screw goes in at an angle and its threads cut across the nut's threads, damaging both. It feels stiff from the very first turn, and it may wobble. <strong>Prevention:</strong> always start screws <strong>by hand</strong>. A straight screw turns easily for the first few turns.</p>
+<div class="note"><b>Pro move</b><p>Before tightening, turn the screw <strong>backwards</strong> until you feel a small click. That's the first thread dropping into line. Now turn forward and it will start straight.</p></div>
+
+<h3>4. Power-driver over-torque</h3>
+<p>Powered screwdrivers make stripping easy. Use one to run screws most of the way in, then <strong>finish by hand</strong>. That applies double to thread-forming screws in aluminum.</p>
+
+<div class="recap">
+  <h2>Cheat sheet</h2>
+  <table>
+    <tbody>
+      <tr><td><strong>M4 socket head screw</strong></td><td>Holds most of the robot together. Use a 3 mm hex key.</td></tr>
+      <tr><td><strong>Thread-forming screw</strong></td><td>Cuts its own threads. Easy to strip.</td></tr>
+      <tr><td><strong>Nylon lock nut</strong></td><td>Resists vibration. Use these.</td></tr>
+      <tr><td><strong>Flat / split washer</strong></td><td>Spreads load / adds spring tension.</td></tr>
+      <tr><td><strong>Spacer / shim</strong></td><td>Sets a gap: big (3–70 mm) or tiny (0.5–1 mm).</td></tr>
+      <tr><td><strong>Hex shaft</strong></td><td>Carries rotation. Hex-bore parts lock onto it.</td></tr>
+      <tr><td><strong>Flanged bearing</strong></td><td>Lets a shaft spin in the frame.</td></tr>
+      <tr><td><strong>Clamping collar</strong></td><td>Stops parts sliding along a shaft.</td></tr>
+      <tr><td><strong>Chain / timing belt</strong></td><td>Moves rotation between shafts: strong / light and precise.</td></tr>
+      <tr><td><strong>Flywheel</strong></td><td>Stores spin for steady shooter speed.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="note note-gold"><b>Hands-on</b><p>Pick up five different parts from the build table. Name each one, and use a digital caliper to check at least one measurement: a screw diameter, a spacer length or a bearing OD. Write what you find in your engineering notebook.</p></div>
+
+<section class="quiz" data-quiz>
+<script type="application/json">
+{
+  "title": "Robot Hardware",
+  "draw": 8,
+  "pass": 0.75,
+  "questions": [
+    { "q": "What does M4×12 mean?",
+      "correct": "4 mm diameter, 12 mm long",
+      "wrong": ["12 mm diameter, 4 mm long", "4 threads per mm, 12 mm long", "Size 4 head, 12 threads"],
+      "explain": "The M number is the diameter in millimeters. The second number is the length, measured from under the head." },
+    { "q": "Which hex key fits an M4 socket head screw?",
+      "correct": "3 mm",
+      "wrong": ["4 mm", "2.5 mm", "2 mm"],
+      "explain": "M4 socket head cap screws take a 3 mm hex key. A smaller key will round out the socket." },
+    { "q": "Where is a screw's length measured from?",
+      "correct": "From under the head to the tip",
+      "wrong": ["From the top of the head to the tip", "Only the threaded part", "From the middle of the head to the tip"],
+      "explain": "The head isn't counted. Measure from the underside of the head to the tip." },
+    { "q": "Why do we use nylon lock nuts on the robot?",
+      "correct": "The nylon ring grips the threads so vibration can't loosen them",
+      "wrong": ["They're lighter than steel nuts, which helps the weight limit", "They don't need a hex key or wrench to tighten them", "They insulate the screw from static electricity"],
+      "explain": "Driving and collisions shake ordinary nuts loose. The nylon insert adds friction that holds the nut in place." },
+    { "q": "A washer is listed as 4.1 mm ID, 9 mm OD. What is the 4.1 mm?",
+      "correct": "The size of the hole",
+      "wrong": ["The total width of the washer", "The thickness of the washer", "The screw length it's made for"],
+      "explain": "ID is the inside diameter (the hole). OD is the outside diameter (the whole part)." },
+    { "q": "A gear rubs the side plate by a tiny amount. What's the best fix?",
+      "correct": "Add a shim",
+      "wrong": ["Add a 5 mm spacer", "Tighten the gear's screws harder", "Swap in a longer shaft"],
+      "explain": "Shims are 0.5–1 mm thick, made for tiny adjustments. Even the smallest spacer is too much." },
+    { "q": "Why does a gear with a hex bore turn with a hex shaft?",
+      "correct": "The flat sides lock together",
+      "wrong": ["Glue holds it in place", "Friction from a tight press fit", "Magnets inside the gear"],
+      "explain": "Hex-bore parts lock onto hex shafts. Round-bore parts would spin freely." },
+    { "q": "What's the right way to press a flanged bearing into a hole?",
+      "correct": "Push only on the outer ring",
+      "wrong": ["Push only on the inner ring", "Tap it in with a hammer", "Press on the shaft until it seats"],
+      "explain": "Force through the inner ring goes through the balls and damages them. If it won't fit, check the hole size against the bearing OD." },
+    { "q": "What does a clamping collar do?",
+      "correct": "Grips a shaft so parts can't slide along it",
+      "wrong": ["Lets a shaft spin freely inside the frame", "Connects two shafts end to end", "Joins two pieces of chain together"],
+      "explain": "Tightening its clamp screw squeezes the shaft. Collars usually sit next to bearings." },
+    { "q": "A screw is very stiff from the first turn and wobbles. What's probably happening?",
+      "correct": "It's cross-threading",
+      "wrong": ["The nylon in the lock nut is working", "The screw is too short", "The hex key is the wrong size"],
+      "explain": "A straight screw turns easily by hand for the first few turns. Back it out and start again by hand." },
+    { "q": "When is an M4 screw into aluminum tight enough?",
+      "correct": "When the parts are firmly together and it's snug",
+      "wrong": ["When the aluminum starts to flex", "When you hear it creak", "When the hex key won't turn even with both hands"],
+      "explain": "Going past snug strips the threads. Creaking or flexing means you've already gone too far." },
+    { "q": "Why might you pick a timing belt over chain?",
+      "correct": "Lighter, quieter and more precise",
+      "wrong": ["It's stronger under huge loads", "It never needs the right length", "It works without pulleys"],
+      "explain": "Belts suit intakes, shooters and slides. Chain is stronger and more forgiving of misalignment." }
+  ]
+}
+</script>
+</section>

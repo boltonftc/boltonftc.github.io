@@ -1,0 +1,61 @@
+---
+layout: site
+title: "Robot Configuration"
+section: "Electrical"
+section_url: "/electrical/"
+kicker: "Robot Configuration"
+headline: "Robot <em>configuration</em>"
+lede: "The exact device names to enter in Driver Hub → Configure Robot for our robot, read straight from the finished code. Every character counts: names are all lowercase, with underscores between words and no spaces."
+description: "Driver Hub robot configuration for Prime Symmetry's robot: every motor, servo and I2C device name and type."
+css: ["/assets/css/robot-config.css"]
+---
+
+<div class="page-body">
+  <section class="wrap sec">
+    <div class="cfg-callout">
+      <div class="cfg-callout-n">2<small>hubs</small></div>
+      <p><strong>You need two hubs.</strong> The robot has six motors and a Control Hub only has four motor ports, so the drivetrain goes on the <strong>Control Hub</strong> and the mechanisms go on an <strong>Expansion Hub</strong>. The exact port numbers are up to your wiring. What has to match is the <strong>name</strong> and the <strong>device type</strong>. If one doesn't, <code>hardwareMap.get(...)</code> throws an error and the OpMode won't start.</p>
+    </div>
+
+    <div class="dtable-wrap">
+      <table class="dtable cfg">
+        <thead><tr><th>Configuration name</th><th>Port</th><th>Add it as</th><th>Code type</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr class="cfg-grp"><td colspan="5">Drivetrain · 4 mecanum wheels</td></tr>
+          <tr><td class="cfg-name">front_left_motor</td><td><span class="tag tag-gold">Motor</span></td><td>DC Motor (your goBILDA model)</td><td class="mono">DcMotor</td><td>Front-left wheel. <em>Reversed in code.</em></td></tr>
+          <tr><td class="cfg-name">front_right_motor</td><td><span class="tag tag-gold">Motor</span></td><td>DC Motor (your goBILDA model)</td><td class="mono">DcMotor</td><td>Front-right wheel.</td></tr>
+          <tr><td class="cfg-name">back_left_motor</td><td><span class="tag tag-gold">Motor</span></td><td>DC Motor (your goBILDA model)</td><td class="mono">DcMotor</td><td>Back-left wheel. <em>Reversed in code.</em></td></tr>
+          <tr><td class="cfg-name">back_right_motor</td><td><span class="tag tag-gold">Motor</span></td><td>DC Motor (your goBILDA model)</td><td class="mono">DcMotor</td><td>Back-right wheel.</td></tr>
+
+          <tr class="cfg-grp"><td colspan="5">Mechanisms</td></tr>
+          <tr><td class="cfg-name">intake_motor</td><td><span class="tag tag-gold">Motor</span></td><td>DC Motor (your goBILDA model)</td><td class="mono">DcMotor</td><td>Intake that pulls game pieces in.</td></tr>
+          <tr><td class="cfg-name">shooter</td><td><span class="tag tag-gold">Motor</span></td><td>DC Motor (your goBILDA model)</td><td class="mono">DcMotorEx</td><td>Flywheel. <em>DcMotorEx is the same physical port. The "Ex" just unlocks velocity control in code.</em></td></tr>
+          <tr><td class="cfg-name">hood</td><td><span class="tag tag-blue">Servo</span></td><td>Servo</td><td class="mono">Servo</td><td>Shooter hood. A positional servo that sets the shot angle.</td></tr>
+          <tr><td class="cfg-name">feeder</td><td><span class="tag tag-blue">Servo</span></td><td><strong>Continuous Rotation Servo</strong></td><td class="mono">CRServo</td><td>Indexer that feeds pieces into the flywheel. <em>Must be a Continuous Rotation Servo, not a regular one.</em></td></tr>
+
+          <tr class="cfg-grp"><td colspan="5">Sensors · I2C</td></tr>
+          <tr><td class="cfg-name">pinpoint</td><td><span class="tag">I2C</span></td><td>goBILDA® Pinpoint Odometry Computer</td><td class="mono">GoBildaPinpointDriver</td><td>Odometry computer that tracks the robot's position on the field. Use I2C bus 1–3.</td></tr>
+          <tr><td class="cfg-name">imu</td><td><span class="tag">I2C</span></td><td>Control Hub built-in IMU</td><td class="mono">IMU</td><td>The Control Hub's built-in heading sensor, on internal I2C bus 0. Usually already named <code>imu</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap sec">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">Before you save</p>
+        <h2>Six things to <em>double-check</em></h2>
+      </div>
+    </div>
+    <ol class="ix ix-compact">
+      <li><div class="ix-row"><span class="ix-n">1</span><span class="ix-t">Names are case-sensitive</span><span class="ix-d">They must match the code character for character: lowercase and underscores, with no spaces or capitals.</span></div></li>
+      <li><div class="ix-row"><span class="ix-n">2</span><span class="ix-t">Pick the right motor model</span><span class="ix-d">Choose your exact goBILDA motor when you add each one, so the encoder counts and speed limits are right.</span></div></li>
+      <li><div class="ix-row"><span class="ix-n">3</span><span class="ix-t">feeder is a CRServo</span><span class="ix-d">Add it as a <strong>Continuous Rotation Servo</strong>, or it will only twitch instead of spinning.</span></div></li>
+      <li><div class="ix-row"><span class="ix-n">4</span><span class="ix-t">pinpoint on I2C, not bus 0</span><span class="ix-d">Add it as the <strong>goBILDA Pinpoint Odometry Computer</strong> device type (SDK 12.0+), on bus 1, 2 or 3.</span></div></li>
+      <li><div class="ix-row"><span class="ix-n">5</span><span class="ix-t">imu is usually already there</span><span class="ix-d">It's the Control Hub's built-in IMU. If it's missing, add it on the Control Hub's I2C bus 0.</span></div></li>
+      <li><div class="ix-row"><span class="ix-n">6</span><span class="ix-t">Save, then activate</span><span class="ix-d">Activate the configuration after you save it, then restart your OpMode.</span></div></li>
+    </ol>
+    <p class="cfg-more">Why does bus 0 matter? See <a href="/electrical/gremlins/">Electrical Gremlins → Port gotchas</a>.</p>
+  </section>
+</div>

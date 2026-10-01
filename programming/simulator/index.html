@@ -1,0 +1,257 @@
+---
+layout: site
+title: "How the Simulator Works"
+section: "Programming"
+section_url: "/programming/"
+kicker: "Under the hood"
+headline: "How the <em>simulator</em> works"
+lede: "The Impulse 3D Simulator compiles and runs real FTC Java inside a browser tab, simulates the robot, and deploys the same source to a real Control Hub over USB or Wi-Fi. Here's how it's put together, for students who are curious and mentors who need to trust it."
+description: "Architecture of the Impulse 3D Simulator: Java compiled in the browser with CheerpJ and ECJ, FTC SDK shims, motor and sensor models, Pedro Pathing, OnBotJava deploy over USB or Wi-Fi, offline mode and licensing."
+css: ["/assets/css/sim-arch.css"]
+---
+
+<div class="page-body">
+  <section class="wrap">
+    <div class="ad-wrap">
+      <svg viewBox="0 0 1000 560" role="img" aria-labelledby="ad-title ad-desc">
+        <title id="ad-title">Impulse 3D Simulator architecture</title>
+        <desc id="ad-desc">Inside the browser tab, the editor feeds Java source to the ECJ compiler running on the CheerpJ Java virtual machine. The compiled OpMode runs against FTC SDK shims and the Pedro Pathing jar, hosted by OpModeHost, which exchanges data about 60 times a second with the JavaScript side: Rapier physics, three.js rendering and the Driver Hub. A service worker caches everything for offline use. For a real robot, the same source goes through OnBotJava deploy over a USB cable or Wi-Fi bridge to the REV Control Hub, which compiles it with the real FTC SDK, and the OpMode appears on the Driver Hub with an OB suffix.</desc>
+        <defs>
+          <marker id="adh" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path class="ad-head" d="M0,0 L10,5 L0,10 z"/></marker>
+        </defs>
+
+        <!-- browser tab -->
+        <rect class="ad-frame" x="20" y="30" width="600" height="500" rx="4"/>
+        <text class="ad-lbl" x="38" y="55">YOUR BROWSER TAB · NOTHING TO INSTALL</text>
+
+        <rect class="ad-box dim" x="44" y="70" width="552" height="50"/>
+        <text class="ad-t" x="62" y="100">Editor · lessons · quizzes</text>
+        <text class="ad-s" x="420" y="100">CodeMirror · progress saved locally</text>
+
+        <rect class="ad-frame solid" x="44" y="138" width="552" height="184"/>
+        <text class="ad-lbl blue" x="62" y="160">CHEERPJ · A JAVA 17 VIRTUAL MACHINE IN WEBASSEMBLY</text>
+
+        <rect class="ad-box" x="62" y="176" width="150" height="56"/>
+        <text class="ad-t" x="76" y="200">ECJ compiler</text>
+        <text class="ad-s" x="76" y="220">Java 8 language level</text>
+        <path class="ad-arrow" d="M212 204 H226" marker-end="url(#adh)"/>
+
+        <rect class="ad-box gold" x="234" y="176" width="160" height="56"/>
+        <text class="ad-t" x="248" y="200">Your OpMode</text>
+        <text class="ad-s" x="248" y="220">real FTC Java</text>
+        <path class="ad-arrow" d="M394 204 H408" marker-end="url(#adh)"/>
+
+        <rect class="ad-box" x="416" y="176" width="162" height="56"/>
+        <text class="ad-t" x="430" y="200">OpModeHost</text>
+        <text class="ad-s" x="430" y="220">INIT · START · ~60 Hz loop</text>
+
+        <rect class="ad-box blue" x="234" y="248" width="160" height="56"/>
+        <text class="ad-t" x="248" y="272">FTC SDK shims</text>
+        <text class="ad-s" x="248" y="292">same class names</text>
+
+        <rect class="ad-box blue" x="416" y="248" width="162" height="56"/>
+        <text class="ad-t" x="430" y="272">Pedro Pathing</text>
+        <text class="ad-s" x="430" y="292">the real 2.0.6 jar</text>
+
+        <path class="ad-arrow gold" d="M320 322 V352" marker-end="url(#adh)"/>
+        <path class="ad-arrow gold" d="M340 356 V326" marker-end="url(#adh)"/>
+        <text class="ad-bridge" x="360" y="345">gamepad · pose · encoder ticks  ⇅  power · servos · telemetry</text>
+
+        <rect class="ad-frame js" x="44" y="362" width="552" height="120"/>
+        <text class="ad-lbl" x="62" y="384">JAVASCRIPT</text>
+        <rect class="ad-box" x="62" y="398" width="160" height="62"/>
+        <text class="ad-t" x="76" y="424">Rapier physics</text>
+        <text class="ad-s" x="76" y="444">rigid bodies · WASM</text>
+        <rect class="ad-box" x="238" y="398" width="160" height="62"/>
+        <text class="ad-t" x="252" y="424">three.js</text>
+        <text class="ad-s" x="252" y="444">3D field and robots</text>
+        <rect class="ad-box" x="414" y="398" width="164" height="62"/>
+        <text class="ad-t" x="428" y="424">Driver Hub</text>
+        <text class="ad-s" x="428" y="444">gamepads · telemetry</text>
+
+        <text class="ad-s" x="44" y="512">Service worker caches the app, the Java runtime and the jars, so it works offline.</text>
+
+        <!-- deploy -->
+        <text class="ad-lbl blue" x="676" y="55">REAL ROBOT</text>
+        <path class="ad-arrow gold" d="M596 95 H668" marker-end="url(#adh)"/>
+        <rect class="ad-box gold" x="676" y="70" width="290" height="56"/>
+        <text class="ad-t" x="692" y="94">OnBotJava deploy</text>
+        <text class="ad-s" x="692" y="114">source + libraries · .ob package · " OB" names</text>
+
+        <path class="ad-arrow" d="M748 126 V164" marker-end="url(#adh)"/>
+        <path class="ad-arrow" d="M894 126 V164" marker-end="url(#adh)"/>
+        <rect class="ad-box" x="676" y="172" width="140" height="62"/>
+        <text class="ad-t" x="690" y="198">USB cable</text>
+        <text class="ad-s" x="690" y="218">WebUSB → ADB</text>
+        <rect class="ad-box" x="826" y="172" width="140" height="62"/>
+        <text class="ad-t" x="840" y="198">Wi-Fi</text>
+        <text class="ad-s" x="840" y="218">tray bridge → ADB</text>
+
+        <path class="ad-arrow" d="M748 234 V272" marker-end="url(#adh)"/>
+        <path class="ad-arrow" d="M894 234 V272" marker-end="url(#adh)"/>
+        <rect class="ad-box blue" x="676" y="280" width="290" height="70"/>
+        <text class="ad-t" x="692" y="308">REV Control Hub</text>
+        <text class="ad-s" x="692" y="330">OnBotJava compiles with the real SDK 12.0</text>
+
+        <path class="ad-arrow" d="M821 350 V388" marker-end="url(#adh)"/>
+        <rect class="ad-box blue" x="676" y="396" width="290" height="64"/>
+        <text class="ad-t" x="692" y="422">Driver Hub</text>
+        <text class="ad-s" x="692" y="444">your OpMode appears as "MecanumDrive OB"</text>
+      </svg>
+    </div>
+
+    <div class="glance">
+      <div><b>In the browser</b><small>Compile, run and simulate with no install and no server</small></div>
+      <div><b>Real FTC Java</b><small>Same class names as the FTC SDK 12.0</small></div>
+      <div><b>~60 Hz</b><small>Control loop shared with the physics</small></div>
+      <div><b>USB + Wi-Fi</b><small>Deploy the same source to a real Control Hub</small></div>
+      <div><b>Offline</b><small>Installable app for competition venues</small></div>
+    </div>
+  </section>
+</div>
+
+<div class="sheet">
+  <article class="sheet-inner prose">
+
+<ol class="toc">
+  <li><a href="#idea">The big idea</a></li>
+  <li><a href="#compile">Compiling Java in a browser</a></li>
+  <li><a href="#run">Running an OpMode</a></li>
+  <li><a href="#shims">Shims: how motors and sensors are faked</a></li>
+  <li><a href="#physics">Physics and graphics</a></li>
+  <li><a href="#deps">Dependencies and environments</a></li>
+  <li><a href="#deploy">Deploying to the real robot</a></li>
+  <li><a href="#offline">Offline mode</a></li>
+  <li><a href="#limits">What isn't simulated</a></li>
+  <li><a href="#license">License and warranty</a></li>
+</ol>
+
+<h2 id="idea">The big idea</h2>
+<p>FTC robot code is Java that talks to the robot through the <strong>FTC SDK</strong>: classes like <code>DcMotor</code>, <code>Servo</code>, <code>IMU</code>, <code>Gamepad</code>, <code>Telemetry</code> and <code>LinearOpMode</code>. The simulator provides its own versions of those classes with <strong>exactly the same names and methods</strong>. In the sim, <code>motor.setPower(0.5)</code> drives a simulated motor. On the robot, the same line drives a real one.</p>
+<p>So the code you write in the sim is <em>normal FTC code</em>. When you deploy, the simulator sends your <strong>source files</strong>, not anything sim-specific, to the robot, and the robot compiles them against the real SDK.</p>
+
+<h2 id="compile">Compiling Java in a browser</h2>
+<p>Browsers don't run Java, so the simulator brings its own. <strong>CheerpJ</strong> (from Leaning Technologies) is a full Java 17 virtual machine compiled to WebAssembly. Inside it runs <strong>ECJ</strong>, the Eclipse Compiler for Java, the same kind of compiler an IDE uses. When you press INIT, the sim hands your <code>.java</code> files to ECJ like this:</p>
+<pre><code>ecj -source 1.8 -target 1.8
+    -bootclasspath jdk-base.jar            # the standard Java library
+    -classpath shim.jar:pedro-core.jar     # FTC SDK shims + Pedro Pathing
+    -proc:none -d /files/&lt;slot&gt;/  YourOpMode.java …</code></pre>
+<p><strong>Java 8 language level</strong> matches what OnBotJava accepts on a Control Hub, so anything that compiles in the sim will also compile on the robot. Compiler errors come straight from ECJ with real line numbers.</p>
+<div class="note"><b>Why is the first INIT slow?</b><p>The first compile after loading the page takes about a minute, because the compiler and the Java library load and warm up piece by piece. Later compiles in the same session are much faster.</p></div>
+
+<h2 id="run">Running an OpMode</h2>
+<p>A small Java class called <code>OpModeHost</code> plays the role of the Robot Controller app:</p>
+<ol>
+  <li><strong>INIT</strong>: it loads your freshly compiled classes with a brand-new class loader, so every INIT runs the code you just saved. It builds the <code>hardwareMap</code> and starts your <code>runOpMode()</code> on its own thread, where it waits at <code>waitForStart()</code>.</li>
+  <li><strong>START</strong>: it releases <code>waitForStart()</code> and your loop begins.</li>
+  <li><strong>Every ~16 ms</strong> (about 60 times a second), a second "sampler" thread copies the gamepad into <code>gamepad1</code>, steps the motor models, and sends the results to the JavaScript side: chassis velocity, intake, feeder, shooter, hood and telemetry. It also reads back the robot's pose and the flywheel encoder.</li>
+  <li><strong>STOP</strong>: it requests a stop, exactly like pressing STOP on a Driver Hub.</li>
+</ol>
+<p>Java and JavaScript talk through CheerpJ <strong>natives</strong>, small functions declared in Java and implemented in JavaScript (for example <code>gpLeftX</code>, <code>simYaw</code>, <code>publish</code> and <code>mech</code>). There are two hosts, red and blue, which is how the two-robot <strong>2UP</strong> mode runs two OpModes side by side.</p>
+
+<h2 id="shims">Shims: how motors and sensors are faked</h2>
+<p>A <strong>shim</strong> is a stand-in that looks exactly like the real thing from the outside. The simulator keeps two layers:</p>
+<ul>
+  <li><strong>The shim layer</strong> (<code>shim.jar</code>): the FTC classes your code compiles against. These are mostly interfaces and annotations, such as <code>DcMotorEx</code>, <code>Servo</code> and <code>@TeleOp</code>. These are what you see.</li>
+  <li><strong>The sim layer</strong> (<code>app.jar</code>): hidden classes that implement those interfaces and connect them to the physics. These are what actually happens.</li>
+</ul>
+
+<table>
+  <thead><tr><th>Your code uses</th><th>Behind it in the sim</th></tr></thead>
+  <tbody>
+    <tr><td><code>DcMotor</code> / <code>DcMotorEx</code> (drive)</td><td><code>SimMotor</code> → a goBILDA motor model (312 RPM, 0.15 s spin-up lag) → mecanum kinematics → chassis velocity → physics</td></tr>
+    <tr><td><code>DcMotorEx</code> (shooter)</td><td>The sim models flywheel speed from your power, then feeds encoder ticks (28 per rev) back so <code>getVelocity()</code> reads real ticks/second. That closes the loop for the PID lessons.</td></tr>
+    <tr><td><code>Servo</code></td><td><code>SimServo</code> → position 0–1 → the hood's launch angle</td></tr>
+    <tr><td><code>CRServo</code></td><td><code>SimCRServo</code> → power −1…1 → the feeder</td></tr>
+    <tr><td><code>IMU</code></td><td><code>IMUImpl</code> → the robot body's heading from the physics engine</td></tr>
+    <tr><td><code>GoBildaPinpointDriver</code></td><td>Reads the true position from physics, minus the offset you set with <code>setPosition()</code>, so it only knows motion <em>since</em> you set it, like the real device</td></tr>
+    <tr><td><code>Telemetry</code></td><td><code>SimTelemetry</code> → the simulated Driver Hub screen</td></tr>
+    <tr><td><code>FtcDashboard</code></td><td>Stubs, so code that uses Dashboard still compiles</td></tr>
+  </tbody>
+</table>
+
+<h3>One <code>setPower</code>, start to finish</h3>
+<p class="flow-label">Drive motor</p>
+<ol class="flow"><li>setPower(0.5)</li><li>SimMotor</li><li>Motor model</li><li>Mecanum math</li><li>Chassis velocity</li><li>Rapier</li></ol>
+<p>Each drive motor's model eases toward <em>power × top speed</em> with a short lag, the way a real motor takes a moment to spin up. The four wheel speeds go through standard mecanum kinematics to get a forward, sideways and turning velocity, and the physics engine moves the robot body to match. The left motors are mirrored, just like on a real robot, so the usual "reverse the left motors" code drives correctly.</p>
+
+<h3>Hardware names</h3>
+<p>The simulated <code>hardwareMap</code> answers to the names our robot uses (<code>front_left_motor</code>, <code>intake_motor</code>, <code>shooter</code>, <code>hood</code>, <code>feeder</code>, <code>pinpoint</code>, <code>imu</code> and so on), plus the shorter <code>leftFront</code>-style names used in the lessons. See <a href="/electrical/robot-config/">Robot Configuration</a> for the full list your real Driver Hub needs.</p>
+
+<h2 id="physics">Physics and graphics</h2>
+<ul>
+  <li><strong>Rapier</strong> (a physics engine compiled to WebAssembly) simulates the robot as a rigid body: collisions with walls, the hive and the other robot, game pieces with real mass, and flywheel shots that fly a real arc.</li>
+  <li>A controller pushes the robot body toward the chassis velocity your code commands. When nothing is commanded the robot holds still, so it doesn't drift off walls.</li>
+  <li><strong>three.js</strong> draws the BIOBUZZ field and robots. The field is built from the official field CAD. A graphics setting (High / Auto / Low) keeps slower laptops smooth.</li>
+</ul>
+
+<h2 id="deps">Dependencies and environments</h2>
+<p>The simulator ships everything it needs from its own website, with nothing loaded from other servers at runtime.</p>
+<table>
+  <thead><tr><th>Component</th><th>Role</th><th>License</th></tr></thead>
+  <tbody>
+    <tr><td>CheerpJ (Java 17 runtime)</td><td>Java virtual machine in WebAssembly</td><td>Leaning Technologies' terms</td></tr>
+    <tr><td>ECJ (<code>ecj.jar</code>, ~3.3 MB)</td><td>Compiles your Java</td><td>EPL 2.0</td></tr>
+    <tr><td><code>jdk-base.jar</code> (~13 MB)</td><td>The standard Java library, for compiling</td><td>GPL 2 + Classpath Exception (OpenJDK)</td></tr>
+    <tr><td><code>shim.jar</code> / <code>app.jar</code></td><td>FTC SDK shims / simulator runtime</td><td>Apache 2.0 (ours)</td></tr>
+    <tr><td>Pedro Pathing 2.0.6 (<code>pedro-core.jar</code>, ~108 KB)</td><td>Path following for autonomous</td><td><a href="https://github.com/Pedro-Pathing/PedroPathing" target="_blank" rel="noopener">BSD 3-Clause</a></td></tr>
+    <tr><td>three.js r160</td><td>3D graphics</td><td>MIT</td></tr>
+    <tr><td>Rapier 0.14</td><td>Physics</td><td>Apache 2.0</td></tr>
+    <tr><td>CodeMirror</td><td>Code editor</td><td>MIT</td></tr>
+  </tbody>
+</table>
+
+<h3>Pedro Pathing is a real jar</h3>
+<p>The simulator doesn't imitate Pedro Pathing. It uses the <strong>actual Pedro Pathing 2.0.6 library</strong>, the same jar a robot uses. It's pure Java and depends only on the standard Java library, so it runs unchanged inside CheerpJ. The sim adds a Pinpoint <code>Localizer</code> and a mecanum <code>Drivetrain</code> so Pedro can read the robot's position and drive the wheels. The <strong>Capture</strong> panel lets you drive the robot, record poses, and generate a Pedro autonomous OpMode from them.</p>
+
+<h3>Environments</h3>
+<p>Libraries come in versioned bundles called <strong>environments</strong>. <em>FTC 2026–2027 Standard (SDK 12.0)</em> is the base shims. <em>PedroPathing 2.0.6</em> adds the Pedro jar plus starter files (<code>PinpointLocalizer</code>, <code>MecanumDrivetrainSubsystem</code>, <code>Robot</code>, <code>Subsystem</code>, <code>Intake</code>). Your code packages are saved in the browser's own storage and can be exported and imported as <code>.zip</code> files.</p>
+
+<h2 id="deploy">Deploying to the real robot</h2>
+<p>Every REV Control Hub runs <strong>OnBotJava</strong>, a small web server built into the Robot Controller app that stores Java source and compiles it on the robot. The simulator deploys by talking to OnBotJava directly:</p>
+<ol>
+  <li><strong>Libraries first, only if needed.</strong> If your code imports <code>com.pedropathing</code> and the robot doesn't have the jar yet, the sim uploads it once.</li>
+  <li><strong>Save each file</strong> into a separate <code>.ob</code> package (below), and <strong>clean up</strong> files left from earlier deploys that you've since deleted.</li>
+  <li><strong>Build.</strong> The Control Hub compiles everything against the <em>real</em> FTC SDK 12.0, and the build log appears in the sim.</li>
+</ol>
+
+<h3>Why your OpMode shows up as "… OB"</h3>
+<p>A robot can already have OpModes built into its app from Android Studio. If OnBotJava compiles a class with the <em>same</em> name, the built-in one wins and your new code silently never runs. To avoid that, the sim deploys into its own package, <code>org.firstinspires.ftc.teamcode<strong>.ob</strong></code>, and adds <strong>" OB"</strong> to each OpMode's name. On the Driver Hub you'll see <code>MecanumDrive OB</code> next to any built-in <code>MecanumDrive</code>, and you can tell exactly which one is your fresh deploy. When you import code back from the robot, the <code>.ob</code> and " OB" are removed again.</p>
+
+<h3>Two ways to connect</h3>
+<div class="fig-pair">
+  <div class="note"><b>USB cable</b><p>Plug the Control Hub into the laptop. The browser talks to it directly through <strong>WebUSB</strong>, using the Android debug protocol (ADB), which the sim implements itself. You don't need Android Studio or <code>adb.exe</code>, though Windows may need the standard Android USB driver once. Needs Chrome or Edge.</p></div>
+  <div class="note note-gold"><b>Wi-Fi</b><p>Browsers can't open a raw network connection to the robot, so a small helper does it: the <strong>Impulse Wi-Fi Bridge</strong>, a system-tray app downloaded from the sim's Settings. It listens only on your own computer (<code>127.0.0.1</code>), connects to the Control Hub over ADB on its Wi-Fi network, reconnects on its own when Wi-Fi drops, and warns you if the hub's debug service gets stuck so you can power-cycle it.</p></div>
+</div>
+<p>When you deploy, the sim checks both and picks for you: <strong>the cable wins if it's plugged in</strong>, otherwise it uses Wi-Fi. You can override the choice. Both routes run exactly the same deploy steps.</p>
+<div class="note"><b>About the bridge</b><p>It's a single portable <code>.exe</code> for Windows, with no installer and nothing added to startup. It isn't code-signed yet, so Windows SmartScreen will warn you the first time ("More info → Run anyway"). To remove it, quit it from the tray, delete the <code>.exe</code>, and delete the <code>%AppData%\impulse-wifi-bridge</code> folder (it only remembers your robot's Wi-Fi name).</p></div>
+
+<h2 id="offline">Offline mode</h2>
+<p>Competition venues often have no usable internet, and a robot laptop is usually connected to the robot's Wi-Fi instead. So the simulator works <strong>fully offline</strong>:</p>
+<ul>
+  <li>It's an installable web app. In Chrome or Edge, use <strong>Install app</strong>, or the download button in the sim.</li>
+  <li>A <strong>service worker</strong> keeps two caches: the app itself (refreshed with each new version) and the big runtime pieces (the Java runtime and jars), which are saved the first time they're used.</li>
+  <li>The Wi-Fi Bridge download is cached too, so a robot laptop can install it without internet.</li>
+  <li>The top bar shows <em>Online</em> or <em>Offline</em>, and Settings has <em>Reset offline data</em> if anything ever gets stuck.</li>
+</ul>
+<div class="note note-warn"><b>Before an event</b><p>While you're online, open the sim on the competition laptop and <strong>run one full INIT</strong>. That's what pulls the compiler and Java runtime into the cache. After that, it works with no network at all.</p></div>
+
+<h2 id="limits">What isn't simulated</h2>
+<p>A simulator is a model, and it's honest about where it simplifies:</p>
+<ul>
+  <li><strong>No battery sag.</strong> Motors don't slow down as the battery drains, unlike the real robot (see <a href="/electrical/systems/">Electrical Systems</a>).</li>
+  <li><strong>Perfect odometry.</strong> The simulated Pinpoint has no drift or noise.</li>
+  <li><strong>No cameras or vision.</strong> AprilTag and color processing aren't simulated.</li>
+  <li><strong>Our robot's hardware only.</strong> The <code>hardwareMap</code> knows our device names, not every possible sensor.</li>
+  <li><strong>Browser limits.</strong> USB deploy needs Chrome or Edge on a computer, and the Wi-Fi bridge is Windows-only for now.</li>
+</ul>
+<p>That's why the real robot is always the final test. The sim gets your logic right fast, and the robot tells you about the physical world.</p>
+
+<h2 id="license">License and warranty</h2>
+<p>The Impulse 3D Simulator is <strong>free to use</strong>. It's open source under the <strong>Apache License 2.0</strong> (© 2026 Bolton Robotics FTC), and the Wi-Fi Bridge is under the <strong>MIT License</strong>. You're welcome to use it with your own team. If you reuse or modify it, keep the attribution described in the project's NOTICE file and on our <a href="/use/">Use &amp; Attribution</a> page.</p>
+<div class="note note-warn"><b>No warranty</b><p>As both licenses say, the software is provided <strong>"as is", without warranty of any kind</strong>, express or implied. We built it to help students learn, and we test it on our own robots, but use it at your own risk, especially when deploying to competition hardware.</p></div>
+<p>Third-party components (CheerpJ, ECJ, three.js, Rapier, CodeMirror, Pedro Pathing) remain under their own licenses. The FTC class names in the shims are independent re-implementations, written for compatibility and education. <em>FIRST</em>® and <em>FIRST</em>® Tech Challenge are trademarks of <em>FIRST</em>, which does not sponsor, authorize or endorse this project.</p>
+<p><a class="ps-btn ps-btn-gold ps-btn-sm" href="https://github.com/boltonftc/impulse3dsim" target="_blank" rel="noopener" style="color:var(--ink);text-decoration:none">Source and license on GitHub <span class="arrow" aria-hidden="true">&rarr;</span></a></p>
+
+  </article>
+</div>

@@ -1,70 +1,86 @@
 ---
-layout: page
+layout: site
 title: "Electrical"
+kicker: "Electrical"
+headline: "Wire it <em>once.</em> Wire it <b>right.</b>"
+lede: "A robot that works on the bench and dies in a match almost always has an electrical problem. These two lessons cover how power moves through an FTC robot and how to stop the mid-match resets that come from static, noise and loose connectors."
+description: "Prime Symmetry electrical lessons: FTC power systems, wiring, ESD and noise, plus our Driver Hub robot configuration."
 ---
 
-<style>
-.tier-section { margin-bottom: 1em; border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; }
-.tier-header {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px; cursor: pointer; user-select: none;
-  background: #f8f9fa; border: none; width: 100%; text-align: left;
-  font-size: 1.1em; font-weight: 700;
-}
-.tier-header:hover { background: #e9ecef; }
-.tier-icon { font-size: 1.2em; }
-.tier-count { font-size: 0.8em; font-weight: normal; color: #666; margin-left: auto; }
-.tier-body { padding: 0 16px 8px; display: none; }
-.tier-body.open { display: block; }
-.lesson-card { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
-.lesson-card:last-child { border-bottom: none; }
-.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; white-space: nowrap; }
-.tier-easier { background: #d4edda; color: #155724; }
-.tier-intermediate { background: #fff3cd; color: #856404; }
-.lesson-card a { font-weight: bold; font-size: 1.05em; }
-.lesson-card p { margin: 2px 0 0; color: #555; font-size: 0.92em; }
-</style>
-
-<p>Understand the wiring, power systems, and electronics of your FTC robot. Click a tier to expand.</p>
-
-<div class="tier-section">
-  <button class="tier-header" onclick="toggleTier(this)">
-    <span class="tier-icon">🟢</span> Easier
-    <span class="tier-count">1 lesson</span>
-    <span>▶</span>
-  </button>
-  <div class="tier-body">
-    <div class="lesson-card">
-      <span class="tier-badge tier-easier">Easier</span>
-      <div><a href="easier/electrical/">Electrical Systems</a><p>How power flows from the battery through the REV Control Hub to motors and servos.</p></div>
+<div class="page-body">
+  <section class="wrap sec">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">Lessons</p>
+        <h2>Read, then <em>check yourself</em></h2>
+      </div>
+      <p>Each lesson ends with a short quiz. Nothing is saved or graded. Take it as many times as you like.</p>
     </div>
-  </div>
+    <ol class="ix">
+      <li><a href="/electrical/systems/">
+        <span class="ix-n">01</span>
+        <span class="ix-t">Electrical Systems</span>
+        <span class="ix-d">Volts, amps and watts. The Control Hub's ports. How power gets from the battery through the fuse and switch to motors, servos and sensors. Why the robot is slower at the end of a match.</span>
+        <span class="ix-m"><span class="tag">20 min</span><span class="tag tag-gold">Quiz</span></span>
+      </a></li>
+      <li><a href="/electrical/gremlins/">
+        <span class="ix-n">02</span>
+        <span class="ix-t">Electrical Gremlins</span>
+        <span class="ix-d">Hub reboots, phantom sensor readings and Wi-Fi drops, and the habits that prevent them: isolate the electronics, ground them with an approved strap, add ferrite chokes, route wires cleanly, and look after your connectors.</span>
+        <span class="ix-m"><span class="tag">25 min</span><span class="tag tag-gold">Quiz</span></span>
+      </a></li>
+    </ol>
+  </section>
 </div>
 
-<div class="tier-section">
-  <button class="tier-header" onclick="toggleTier(this)">
-    <span class="tier-icon">🟦</span> Intermediate
-    <span class="tier-count">1 lesson</span>
-    <span>▶</span>
-  </button>
-  <div class="tier-body">
-    <div class="lesson-card">
-      <span class="tier-badge tier-intermediate">Intermediate</span>
-      <div><a href="intermediate/electrical-issues/">Electrical Gremlins</a><p>Diagnose and fix common wiring problems: intermittent cuts, reversed polarity, and loose connections.</p></div>
+<section class="feature">
+  <div class="wrap feature-grid">
+    <div>
+      <p class="kicker">Our robot</p>
+      <h2>Robot <em>configuration</em></h2>
+      <p>The exact device names and types to enter on the Driver Hub for our robot, taken straight from the finished code. If a name doesn't match, the OpMode won't start, so check here first.</p>
+      <ul class="ticks">
+        <li>6 motors across a Control Hub and an Expansion Hub</li>
+        <li>2 servos, including the continuous-rotation feeder</li>
+        <li>Pinpoint odometry and the built-in IMU on I2C</li>
+      </ul>
+      <div class="actions">
+        <a class="ps-btn ps-btn-gold" href="/electrical/robot-config/">Open the config sheet <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+    <div class="feature-art">
+      <div class="frame"><img src="/electrical/systems/control_hub_ports.png" alt="REV Control Hub with its battery, motor, encoder, servo, I2C, digital, analog and UART ports labeled" loading="lazy" style="background:#fff;width:100%"></div>
     </div>
   </div>
-</div>
+</section>
 
-<script>
-function toggleTier(btn) {
-  const body = btn.nextElementSibling;
-  const arrow = btn.querySelector('span:last-child');
-  if (body.classList.contains('open')) {
-    body.classList.remove('open');
-    arrow.textContent = '▶';
-  } else {
-    body.classList.add('open');
-    arrow.textContent = '▼';
-  }
-}
-</script>
+<div class="page-body">
+  <section class="wrap sec">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">Reference</p>
+        <h2>Go <em>deeper</em></h2>
+      </div>
+      <p>The sources our lessons draw from. When a rule or a part number matters, trust these over anyone's memory, including ours.</p>
+    </div>
+    <div class="refs">
+      <div class="refs-group">
+        <h3>Official</h3>
+        <ul>
+          <li><a href="https://docs.revrobotics.com/duo-control/" target="_blank" rel="noopener"><b>REV Control System docs</b><small>Control Hub and Expansion Hub wiring, firmware updates, LED blink codes, troubleshooting.</small><i>REV</i></a></li>
+          <li><a href="https://info.firstinspires.org/hubfs/web/program/ftc/guide-robot-wiring.pdf" target="_blank" rel="noopener"><b>Robot Wiring Guide</b><small>FIRST's official guide to control system layout and power distribution.</small><i>PDF</i></a></li>
+          <li><a href="https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/managing_esd/managing-esd.html" target="_blank" rel="noopener"><b>Managing ESD Effects</b><small>How robots get charged on the field, and FIRST's recommended fixes in order.</small><i>FTC Docs</i></a></li>
+          <li><a href="https://ftc-docs.firstinspires.org/en/latest/_downloads/64f2b78ce9343bbd8b61e6e7710b70c9/analysis-esd-mitigation-echin.pdf" target="_blank" rel="noopener"><b>ESD Mitigation Analysis</b><small>Eric Chin's white paper with test data on how much each ESD technique helps.</small><i>PDF</i></a></li>
+        </ul>
+      </div>
+      <div class="refs-group">
+        <h3>Community</h3>
+        <ul>
+          <li><a href="https://cyborgeagles.weebly.com/uploads/2/1/8/1/21816346/ftc_robot_wiring_guide.pdf" target="_blank" rel="noopener"><b>Cyborg Eagles Wiring Guide</b><small>Extra wiring diagrams and hub layouts from another FTC team.</small><i>PDF</i></a></li>
+          <li><a href="https://drive.google.com/file/d/1f64864o4RRL6wXY1GWElCoUQ9UinvoGr/view" target="_blank" rel="noopener"><b>ESD &amp; Wiring Best Practices</b><small>Kickoff presentation on grounding, wire routing and noise.</small><i>PDF</i></a></li>
+          <li><a href="https://www.youtube.com/watch?v=V8vVv0it0VY" target="_blank" rel="noopener"><b>Electrical troubleshooting walkthrough</b><small>A video tour of real robot wiring problems and how they were fixed.</small><i>Video</i></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>

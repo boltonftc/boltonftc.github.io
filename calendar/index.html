@@ -1,0 +1,112 @@
+---
+layout: site
+title: "Calendar"
+kicker: "2026–27 Season"
+headline: "Team <em>Calendar</em>"
+lede: "We build twice a week, Wednesday afternoons and Sunday evenings, from the end of September through February. Subscribe once and every change shows up on your phone."
+description: "Prime Symmetry (FTC 36563) meeting schedule, events and a calendar feed you can subscribe to."
+css: ["/assets/css/calendar.css"]
+scripts: ["/assets/js/calendar.js"]
+---
+{%- assign cal = site.data.calendar -%}
+{%- assign feed = "/calendar/prime-symmetry.ics" -%}
+{%- assign webcal = site.url | replace: "https://", "webcal://" | replace: "http://", "webcal://" | append: feed -%}
+
+<section class="cal-next" aria-live="polite">
+  <div class="wrap cal-next-grid">
+    <div class="cal-next-main">
+      <p class="kicker" id="next-label">Next up</p>
+      <div id="next-up" class="cal-next-when">
+        <noscript><p class="muted">Turn on JavaScript to see the next meeting and a live countdown.</p></noscript>
+      </div>
+    </div>
+    <ol class="cal-after" id="next-after" aria-label="After that"></ol>
+  </div>
+</section>
+
+<div class="page-body">
+  <section class="wrap sec">
+    <div class="cal-rhythm" aria-label="Regular weekly schedule">
+      {%- for s in cal.series %}
+      <div class="cal-slot cal-slot-{{ s.color | default: 'gold' }}" data-series="{{ s.id }}">
+        <span class="cal-slot-day" data-first="{{ s.first }}">Weekly</span>
+        <span class="cal-slot-time" data-start="{{ s.start }}" data-end="{{ s.end }}">{{ s.start }}–{{ s.end }}</span>
+        <span class="cal-slot-note">{{ s.title }}{% if s.location %} · {{ s.location }}{% endif %}</span>
+      </div>
+      {%- endfor %}
+    </div>
+    <p class="cal-season"><span id="season-range">{{ cal.season.start }} → {{ cal.season.end }}</span> <span aria-hidden="true">·</span> No meetings on US holidays or school breaks. <span aria-hidden="true">·</span> <a href="/meetings/">Notes from past meetings &rarr;</a></p>
+  </section>
+
+  <section class="wrap sec" id="schedule">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">Schedule</p>
+        <h2>Every <em>session</em></h2>
+      </div>
+      <div class="seg" role="tablist" aria-label="Calendar view">
+        <button type="button" class="on" role="tab" aria-selected="true" data-view="agenda">Agenda</button>
+        <button type="button" role="tab" aria-selected="false" data-view="month">Month</button>
+      </div>
+    </div>
+
+    <div id="view-agenda" class="cal-agenda hide-past">
+      <button type="button" class="cal-earlier" id="show-earlier" hidden></button>
+      <div id="agenda"></div>
+    </div>
+
+    <div id="view-month" class="cal-monthview" hidden>
+      <div class="cal-mnav">
+        <button type="button" class="cal-mbtn" id="m-prev" aria-label="Previous month">&larr;</button>
+        <h3 id="m-title" class="cal-mtitle" aria-live="polite"></h3>
+        <button type="button" class="cal-mbtn" id="m-next" aria-label="Next month">&rarr;</button>
+      </div>
+      <div class="cal-grid" id="m-grid" role="grid"></div>
+      <p class="cal-legend">
+        {%- for s in cal.series %}<span><i class="dot dot-{{ s.color | default: 'gold' }}"></i><span class="js-dayname" data-first="{{ s.first }}">{{ s.title }}</span></span>{% endfor %}
+        <span><i class="dot dot-event"></i>Event</span>
+        <span><i class="dot dot-skip"></i>No meeting</span>
+      </p>
+    </div>
+
+    <noscript>
+      <h3>Days off</h3>
+      <ul>{% for k in cal.skip %}<li>{{ k.date }} — {{ k.reason }}</li>{% endfor %}</ul>
+    </noscript>
+  </section>
+
+  <section class="wrap sec cal-sub" id="subscribe">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">Subscribe</p>
+        <h2>Put it on <em>your</em> calendar</h2>
+        <p>Subscribing (instead of importing) means cancellations and new events update on their own. Calendar apps usually refresh a subscribed feed every few hours.</p>
+      </div>
+    </div>
+    <ol class="ix ix-compact">
+      <li><a href="https://calendar.google.com/calendar/r?cid={{ webcal | url_encode }}" target="_blank" rel="noopener">
+        <span class="ix-n">G</span><span class="ix-t">Google Calendar</span>
+        <span class="ix-d">Opens Google Calendar and asks to add the feed. On a phone, do this once from a computer and it syncs everywhere.</span>
+        <span class="ix-m"></span></a></li>
+      <li><a href="{{ webcal }}">
+        <span class="ix-n">A</span><span class="ix-t">Apple Calendar · iPhone · Mac</span>
+        <span class="ix-d">Opens the Calendar app's subscribe dialog. Choose "Subscribe" and pick an alert if you want reminders.</span>
+        <span class="ix-m"></span></a></li>
+      <li><a href="https://outlook.live.com/calendar/0/addfromweb?url={{ site.url | append: feed | url_encode }}&amp;name={{ 'Prime Symmetry FTC 36563' | url_encode }}" target="_blank" rel="noopener">
+        <span class="ix-n">O</span><span class="ix-t">Outlook</span>
+        <span class="ix-d">Adds the feed to Outlook on the web. Desktop Outlook: Add calendar &rarr; From internet, then paste the feed link below.</span>
+        <span class="ix-m"></span></a></li>
+      <li><a href="{{ feed }}" download>
+        <span class="ix-n">&darr;</span><span class="ix-t">Download .ics</span>
+        <span class="ix-d">A one-time snapshot for any other app. It will <b>not</b> update when the schedule changes, so subscribing is better.</span>
+        <span class="ix-m"></span></a></li>
+    </ol>
+    <div class="cal-feed">
+      <span>Feed link</span>
+      <code id="feed-url">{{ site.url }}{{ feed }}</code>
+      <button type="button" class="ps-btn ps-btn-ghost ps-btn-sm" id="copy-feed">Copy</button>
+    </div>
+  </section>
+</div>
+
+<script type="application/json" id="cal-data">{{ cal | jsonify }}</script>

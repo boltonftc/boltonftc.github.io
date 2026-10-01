@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""Rebuild the website inventory page's goBILDA misc section from PDF receipts.
+"""Regenerate the receipt-itemized goBILDA rows in website/_data/inventory.json from PDF receipts.
 
-This replaces the old grouped misc rows with fully itemized rows and updates:
-- misc subtotal in summary bar
-- total invoiced in summary bar
-- misc value in pie chart label/data
-- note text describing grouping behavior
+Items with "source": "receipts" are rebuilt from ftc_receipts/gobilda_*.pdf; "source": "manual"
+items (motors, servos, REV hubs, Amazon/AndyMark/Limelight purchases, on-hand gear) are kept as-is.
+The inventory page computes every total itself, so nothing else needs updating.
 
 Usage:
   c:/my_stuff/ftc/.venv/Scripts/python.exe website/tools/rebuild_inventory.py
@@ -13,23 +11,23 @@ Usage:
 
 from __future__ import annotations
 
-import html
+import json
 import re
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[2]  # c:/my_stuff/ftc
-INVENTORY_HTML = ROOT / "website" / "resources" / "inventory" / "index.html"
+INVENTORY_JSON = ROOT / "website" / "_data" / "inventory.json"
 RECEIPTS_DIR = ROOT / "ftc_receipts"
 
 PRICE_FULL_RE = re.compile(r"^\$([0-9,]+\.\d{2})\s+\$([0-9,]+\.\d{2})$")
 PRICE_INLINE_RE = re.compile(r"^(.*?)\s+\$([0-9,]+\.\d{2})\s+\$([0-9,]+\.\d{2})$")
 
-# These SKUs are already listed in non-misc categories on the page.
+# These SKUs are curated as "manual" rows in inventory.json (not receipt-itemized).
 EXCLUDED_SKUS = {
     "5203-2402-0001",  # motor
     "5203-2402-0005",  # motor
@@ -61,25 +59,6 @@ EXCLUDED_NAME_KEYS = {
 def norm_name(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", text.lower())
 
-
-# Fixed non-misc category subtotals shown on the inventory page. These are the
-# single source of truth for the summary bar + pie-chart aggregate slices.
-# NOTE: includes hand-added non-goBILDA (Amazon) items not covered by the parser below
-# (Drive +$21.53 intake tubing; Electronics +$19.99 3rd gamepad; Field +$10.98 first aid kit).
-CAT_TOTALS = {
-    "Motors": 577.36,
-    "Servos": 776.34,
-    "Drive": 306.51,   # 284.98 mecanum wheels + 21.53 intake tubing (Amazon, Sep 15 2026)
-    "Power": 564.88,   # floodgate 69.98 + battery 389.92 (qty 8) + injector 104.98
-    "Electronics": 1869.99,   # 1850.00 REV hubs + 19.99 3rd Logitech gamepad (Amazon, Sep 9 2026)
-    "Vision/Sensors": 797.98,
-    "Field": 1581.98,   # 1571.00 + 10.98 first aid kit (Amazon, Sep 15 2026)
-}
-BASE_NON_MISC_TOTAL = sum(CAT_TOTALS.values())
-
-# Sum of curated goBILDA line-totals (motors + servos + drive + power + odometry).
-# Used to detect drift when a curated-category quantity changes on a new receipt.
-CURATED_GOBILDA_TOTAL = 2623.54
 
 SUBTOTAL_RE = re.compile(r"^Subtotal\s+\$([0-9,]+\.\d{2})$")
 
@@ -222,6 +201,29 @@ def parse_gobilda_items(pdf_path: Path) -> list[tuple[int, str, str, float]]:
             i += 1
             continue
 
+        # Pattern D: order-page printout where unit price and qty are fused, then the name,
+        # then "SKU: ..." on its own line, e.g. "$2.244 × 3.5mm Bullet Extension" = $2.24 x 4.
+        m4 = re.match(r"^\$([0-9,]+\.\d{2})(\d+)\s*×\s*(.+)$", ln)
+        if m4:
+            unit = float(m4.group(1).replace(",", ""))
+            qty = int(m4.group(2))
+            name_parts = [m4.group(3).strip()]
+            sku = ""
+            i += 1
+            while i < len(lines):
+                sm = re.match(r"^SKU:\s*(\S+)$", lines[i])
+                if sm:
+                    sku = sm.group(1)
+                    i += 1
+                    break
+                if re.match(r"^\$[0-9,]+\.\d{2}\d+\s*×", lines[i]):
+                    break
+                name_parts.append(lines[i])
+                i += 1
+            name = re.sub(r"\s+", " ", " ".join(name_parts)).strip()
+            items.append((qty, sku, name, round(unit * qty, 2)))
+            continue
+
         i += 1
 
     return items
@@ -274,13 +276,13 @@ def money(value: float) -> str:
     return f"${value:,.2f}"
 
 
-def reconcile(misc_total: float) -> bool:
+def reconcile(misc_total: float, curated_total: float) -> bool:
     """Cross-check parsed receipts against printed subtotals and curated rows.
 
     Catches the two silent failure modes that caused past accounting errors:
       1. a receipt line item dropped by the parser (parsed sum < printed Subtotal)
       2. a curated-category quantity that changed on a new receipt but was never
-         updated in the fixed rows (curated receipt sum drifts from the constant)
+         updated in inventory.json's manual rows (curated receipt sum drifts from them)
     """
     ok = True
     total_gobilda = 0.0
@@ -298,6 +300,12 @@ def reconcile(misc_total: float) -> bool:
             for ln in load_lines(pdf)
             if (m := SUBTOTAL_RE.match(ln))
         ]
+        lines = load_lines(pdf)
+        for k, ln in enumerate(lines):
+            if ln == "Subtotal:":  # newer layout: labels first, amounts on the following lines
+                amt = next((x for x in lines[k + 1:k + 5] if re.fullmatch(r"\$[0-9,]+\.\d{2}", x)), None)
+                if amt:
+                    subs.append(float(amt[1:].replace(",", "")))
         printed = max(subs) if subs else None
         if printed is not None and abs(captured - printed) > 0.01:
             ok = False
@@ -308,150 +316,56 @@ def reconcile(misc_total: float) -> bool:
 
     total_gobilda = round(total_gobilda, 2)
     curated_seen = round(curated_seen, 2)
-    if abs(curated_seen - CURATED_GOBILDA_TOTAL) > 0.01:
+    if abs(curated_seen - curated_total) > 0.01:
         ok = False
         print(f"  [FAIL] curated goBILDA rows drift: receipts total {money(curated_seen)} for "
-              f"curated SKUs but the page hardcodes {money(CURATED_GOBILDA_TOTAL)} "
-              f"(diff {money(curated_seen - CURATED_GOBILDA_TOTAL)}). Update the fixed rows "
-              f"and CURATED_GOBILDA_TOTAL / CAT_TOTALS.")
-    if abs((CURATED_GOBILDA_TOTAL + misc_total) - total_gobilda) > 0.01:
+              f"curated SKUs but inventory.json's manual rows sum to {money(curated_total)} "
+              f"(diff {money(curated_seen - curated_total)}). Update those manual rows.")
+    if abs((curated_total + misc_total) - total_gobilda) > 0.01:
         ok = False
-        print(f"  [FAIL] invariant: curated {money(CURATED_GOBILDA_TOTAL)} + misc "
+        print(f"  [FAIL] invariant: curated {money(curated_total)} + misc "
               f"{money(misc_total)} != total goBILDA line items {money(total_gobilda)}")
     print(f"  total goBILDA line items: {money(total_gobilda)} "
-          f"(curated {money(CURATED_GOBILDA_TOTAL)} + misc {money(misc_total)})")
+          f"(curated {money(curated_total)} + misc {money(misc_total)})")
     print("  RECONCILED OK" if ok else "  *** RECONCILIATION PROBLEMS ABOVE ***")
     return ok
 
 
-def make_misc_rows(rows: list[ItemAgg]) -> str:
-    out: list[str] = []
-    for r in rows:
-        sku_text = r.sku if r.sku else "—"
-        search = f"misc gobilda {r.name} {r.sku}".lower()
-        out.append(
-            "\n".join(
-                [
-                    f'    <tr class="data-row row-misc" data-cat="misc" data-search="{html.escape(search, quote=True)}">',
-                    f"      <td>{html.escape(r.name)} <span class=\"tag tag-misc\">Misc</span></td>",
-                    f"      <td class=\"sku\">{html.escape(sku_text)}</td>",
-                    "      <td>Misc</td>",
-                    f"      <td class=\"qty\">{r.qty}</td>",
-                    f"      <td class=\"cost\">{money(r.unit_cost)}</td>",
-                    f"      <td class=\"cost\">{money(r.total)}</td>",
-                    "      <td>goBILDA</td>",
-                    f"      <td>{html.escape(r.purchased_label)}</td>",
-                    "      <td>Itemized from goBILDA receipts</td>",
-                    "    </tr>",
-                ]
-            )
-        )
-    return "\n\n".join(out)
+def to_item(r: ItemAgg) -> dict:
+    return {
+        "name": r.name,
+        "sku": r.sku,
+        "cat": "misc",
+        "qty": r.qty,
+        "unit": round(r.unit_cost, 2),
+        "total": round(r.total, 2),
+        "vendor": "goBILDA",
+        "purchased": r.purchased_label,
+        "source": "receipts",
+    }
 
 
 def main() -> None:
-    html_text = INVENTORY_HTML.read_text(encoding="utf-8")
+    data = json.loads(INVENTORY_JSON.read_text(encoding="utf-8"))
+    manual = [i for i in data["items"] if i.get("source") != "receipts"]
+    curated_total = round(sum(i.get("total") or 0 for i in manual if i.get("sku") in EXCLUDED_SKUS), 2)
 
     rows = build_misc_aggregates()
     misc_total = round(sum(r.total for r in rows), 2)
-    grand_total = round(BASE_NON_MISC_TOTAL + misc_total, 2)
+    data["items"] = manual + [to_item(r) for r in rows]
+    data["updated"] = date.today().isoformat()
 
-    # 1) Update note text.
-    html_text = re.sub(
-        r'<p class="inv-note">.*?</p>',
-        '<p class="inv-note">All receipted goBILDA parts are now listed individually (no grouped Misc order rows).</p>',
-        html_text,
-        count=1,
-        flags=re.DOTALL,
-    )
+    with INVENTORY_JSON.open("w", encoding="utf-8", newline="\n") as f:
+        json.dump(data, f, indent=1, ensure_ascii=False)
+        f.write("\n")
 
-    # 2) Update misc + total values in summary bar.
-    html_text = re.sub(
-        r'Misc goBILDA:\s*<strong>\$[0-9,]+\.\d{2}</strong>',
-        f'Misc goBILDA: <strong>{money(misc_total)}</strong>',
-        html_text,
-        count=1,
-    )
-    html_text = re.sub(
-        r'Total invoiced:\s*<strong style="color:#b71c1c;">\$[0-9,]+\.\d{2}</strong>',
-        f'Total invoiced: <strong style="color:#b71c1c;">{money(grand_total)}</strong>',
-        html_text,
-        count=1,
-    )
+    grand = round(sum(i.get("total") or 0 for i in data["items"]), 2)
+    print(f"Updated: {INVENTORY_JSON}")
+    print(f"Manual rows kept: {len(manual)}  receipt rows: {len(rows)}")
+    print(f"Receipt-itemized goBILDA subtotal: {money(misc_total)}")
+    print(f"Grand total (page computes the same): {money(grand)}")
 
-    # 2b) Update fixed per-category subtotals in the summary bar.
-    for label, val in CAT_TOTALS.items():
-        html_text = re.sub(
-            rf'{re.escape(label)}: <strong>\$[0-9,]+\.\d{{2}}</strong>',
-            f'{label}: <strong>{money(val)}</strong>',
-            html_text,
-            count=1,
-        )
-
-    # 3) Replace misc category block (header + rows).
-    misc_rows_html = make_misc_rows(rows)
-    new_misc_block = (
-        '    <!-- ── MISC GOBILDA PARTS ───────────────────────────────── -->\n'
-        '    <tr class="inv-cat inv-misc" data-cat="misc">\n'
-        '      <td colspan="9">⚙️ Misc goBILDA Parts (itemized from receipts)</td>\n'
-        '    </tr>\n\n'
-        f'{misc_rows_html}\n'
-    )
-
-    html_text = re.sub(
-        r'\s*<!-- ── MISC GOBILDA PARTS[\s\S]*?</tr>\n\n\s*</tbody>',
-        "\n" + new_misc_block + "\n  </tbody>",
-        html_text,
-        count=1,
-    )
-
-    # 4) Rebuild pie chart labels + data from the single-source CAT_TOTALS + misc.
-    pie = [
-        ("Motors", CAT_TOTALS["Motors"]),
-        ("Servos", CAT_TOTALS["Servos"]),
-        ("Drive", CAT_TOTALS["Drive"]),
-        ("Power", CAT_TOTALS["Power"]),
-        ("Electronics (REV)", CAT_TOTALS["Electronics"]),
-        ("Vision/Sensors", CAT_TOTALS["Vision/Sensors"]),
-        ("Field Equipment", CAT_TOTALS["Field"]),
-        ("Misc goBILDA", misc_total),
-    ]
-    pie_labels = ",\n".join(f"        '{name} \u2014 {money(val)}'" for name, val in pie)
-    html_text = re.sub(
-        r"labels:\s*\[[\s\S]*?\],",
-        "labels: [\n" + pie_labels + "\n      ],",
-        html_text,
-        count=1,
-    )
-    pie_data = ", ".join(f"{val:.2f}" for _, val in pie)
-    html_text = re.sub(
-        r"data:\s*\[[0-9.,\s]+\],",
-        f"data: [{pie_data}],",
-        html_text,
-        count=1,
-    )
-
-    # 5) Set visible row count and call update() initially.
-    data_rows_count = len(re.findall(r'class="data-row\s', html_text))
-    html_text = re.sub(
-        r'Showing <strong id="visible-count">\d+</strong> rows',
-        f'Showing <strong id="visible-count">{data_rows_count}</strong> rows',
-        html_text,
-        count=1,
-    )
-    html_text = html_text.replace(
-        "  searchInput.addEventListener('input', update);\n})();",
-        "  searchInput.addEventListener('input', update);\n  update();\n})();",
-    )
-
-    INVENTORY_HTML.write_text(html_text, encoding="utf-8")
-
-    print(f"Updated: {INVENTORY_HTML}")
-    print(f"Itemized misc rows: {len(rows)}")
-    print(f"Misc subtotal: {money(misc_total)}")
-    print(f"Total invoiced: {money(grand_total)}")
-
-    reconcile(misc_total)
+    reconcile(misc_total, curated_total)
 
 
 if __name__ == "__main__":
