@@ -189,8 +189,37 @@ button.ps-btn { border: 0; cursor: pointer; }
 .number { padding: clamp(64px, 8vw, 110px) 0; text-align: center; }
 .number .display.h2 { font-size: clamp(50px, 6.4vw, 92px); margin-top: 16px; }
 .number-lede { margin: 8px 0 0; font: 400 clamp(26px, 2.8vw, 38px)/1.1 var(--display); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
-.number-cheese { max-width: 34em; margin: 18px auto 0; font-size: clamp(16px, 1.5vw, 19px); color: var(--muted); }
+.number-cheese { max-width: 34em; margin: 26px auto 0; font-size: clamp(16px, 1.5vw, 19px); color: var(--muted); }
 .number-cheese em { font-style: normal; color: var(--gold); white-space: nowrap; }
+
+/* 36563 read forwards (gold) then backwards (blue): each digit glows in and out, overlapping the next */
+.palin { display: flex; flex-direction: column; align-items: center; margin: 22px 0 6px; }
+.palin-num { position: relative; display: inline-flex; font: 400 clamp(40px, 5vw, 68px)/.9 var(--display); letter-spacing: .04em; }
+.pd { display: inline-block; padding: 0 .07em; color: rgba(244, 244, 238, .4); transition: color .5s ease-in-out, text-shadow .5s ease-in-out; }
+.pd.lit-f { color: var(--gold); text-shadow: 0 0 24px rgba(239, 171, 40, .35); }
+.pd.lit-b { color: #7d9bf0; text-shadow: 0 0 24px rgba(68, 108, 227, .45); }
+.pd-c.lit-f, .pd-c.lit-b { color: var(--paper); text-shadow: 0 0 24px rgba(244, 244, 238, .35); }
+.palin-seam { position: absolute; left: 50%; top: -10%; bottom: -10%; width: 2px; transform: translateX(-50%); opacity: 0; transition: opacity .5s ease-in-out;
+  background: linear-gradient(180deg, transparent, rgba(244, 244, 238, .6) 30%, rgba(244, 244, 238, .6) 70%, transparent); }
+.palin.at-mid .palin-seam { opacity: 1; }
+.palin-dir { margin-top: 10px; font: 400 22px/1 var(--display); color: var(--gold); opacity: 0; transition: opacity .6s ease-in-out; }
+.palin.rev .palin-dir { color: #7d9bf0; }
+.palin.sweeping .palin-dir { opacity: 1; }
+.palin.still .pd { color: var(--paper); }
+.palin.still .palin-dir { display: none; }
+
+/* Indivisible. ● Perfectly balanced. — split on the seam */
+.number-motto { position: relative; column-gap: clamp(36px, 4vw, 56px); margin-top: 14px; }
+.number-motto b { display: block; font: 400 clamp(30px, 3.6vw, 50px)/1 var(--display); letter-spacing: .03em; text-transform: uppercase; }
+.number-motto small { display: block; margin-top: 6px; font: 700 11px/1 var(--body); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+.nm-l { text-align: right; }
+.nm-l b { color: var(--gold); }
+.nm-r { text-align: left; }
+.nm-r b { color: #7d9bf0; }
+.number-motto::after {
+  content: ""; position: absolute; left: 50%; top: calc(clamp(30px, 3.6vw, 50px) * .45); width: 12px; height: 12px;
+  border-radius: 50%; background: var(--paper); transform: translate(-50%, -50%); box-shadow: 0 0 0 4px var(--ink);
+}
 
 /* ---------- simulator ---------- */
 .sim {
