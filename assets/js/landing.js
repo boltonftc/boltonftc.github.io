@@ -342,4 +342,49 @@
       }, { threshold: 0.35 }).observe(sv);
     }
   }
+
+  /* ---------- 36563: read forwards, pause, read backwards, pause ---------- */
+  var palin = document.querySelector('.palin');
+  if (palin) {
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      palin.classList.add('still');
+    } else {
+      var pds = Array.prototype.slice.call(palin.querySelectorAll('.pd'));
+      var pDir = palin.querySelector('.palin-dir');
+      var pTimers = [];
+      // each digit takes ~1s: 0.5s fade in, 0.5s fade out, overlapping the next digit's fade in
+      var STEP = 500, LIT = 500, FADE = 600, HOLD = 2250;
+      var PASS = (pds.length - 1) * STEP + LIT + FADE;
+      var pAt = function (ms, fn) { pTimers.push(setTimeout(fn, ms)); };
+      var pass = function (order, cls, t0) {
+        pAt(t0, function () { palin.classList.add('sweeping'); });
+        order.forEach(function (i, k) {
+          pAt(t0 + k * STEP, function () { pds[i].classList.add(cls); palin.classList.toggle('at-mid', i === 2); });
+          pAt(t0 + k * STEP + LIT, function () { pds[i].classList.remove(cls); });
+        });
+        pAt(t0 + (order.length - 1) * STEP + LIT, function () { palin.classList.remove('sweeping', 'at-mid'); });
+      };
+      var setDir = function (rev) { palin.classList.toggle('rev', rev); pDir.textContent = rev ? '\u2190' : '\u2192'; };
+      var cycle = function () {
+        pds.forEach(function (d) { d.classList.remove('lit-f', 'lit-b'); });
+        palin.classList.remove('sweeping', 'at-mid');
+        setDir(false);
+        pass([0, 1, 2, 3, 4], 'lit-f', 0);
+        pAt(PASS + 200, function () { setDir(true); });            // swap while the arrow is hidden
+        pass([4, 3, 2, 1, 0], 'lit-b', PASS + HOLD);
+        pAt(2 * PASS + HOLD + 200, function () { setDir(false); });
+        pAt(2 * (PASS + HOLD), cycle);
+      };
+      var stop = function () {
+        pTimers.forEach(clearTimeout);
+        pTimers = [];
+      };
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          stop();
+          if (e.isIntersecting) cycle();
+        });
+      }, { threshold: 0.4 }).observe(palin);
+    }
+  }
 })();
