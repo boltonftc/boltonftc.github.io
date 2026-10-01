@@ -1,157 +1,171 @@
 ---
-layout: home
-title: Bolton Robotics FTC
-subtitle: "Spring 2026 Exploratory Program"
+layout: landing
+title: "Prime Symmetry · FTC Team 36563"
+description: "Prime Symmetry is FIRST Tech Challenge Team 36563 — rookie robot builders and the team behind the Impulse 3D Simulator, a free browser-based training tool for new FTC programmers."
+sim_url: "https://boltonftc.github.io/impulse3dsim/"
+# youtube_url: "https://www.youtube.com/@your-channel"    # uncomment to show the YouTube icon in nav + footer
+# trailer_url: "https://www.youtube.com/watch?v=..."     # uncomment to show the "Watch the trailer" button
 ---
 
-<style>
-/* Hero / logos */
-.hero-logos { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 1.2em; }
-.hero-logos img { height: 80px; width: auto; object-fit: contain; }
-.hero-logos .divider { width: 1px; height: 60px; background: #ddd; }
-
-/* Intro */
-.intro-text { font-size: 1.05em; color: #444; line-height: 1.7; margin-bottom: 1.5em; }
-
-/* Simulator section */
-.sim-section { background: #f0f4ff; border: 1px solid #c5cfe8; border-radius: 10px; padding: 20px 24px; margin-bottom: 2em; }
-.sim-section h2 { margin: 0 0 10px; font-size: 1.2em; color: #1a3a7a; }
-.sim-section p { margin: 0 0 12px; color: #333; line-height: 1.65; }
-.sim-video-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin: 14px 0; }
-.sim-video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-.sim-features { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin: 14px 0; }
-.sim-feature { background: #fff; border-radius: 6px; padding: 10px 14px; border-left: 3px solid #1565c0; font-size: 0.9em; color: #333; }
-.sim-feature strong { display: block; color: #1a3a7a; margin-bottom: 2px; }
-.sim-cta { display: inline-block; margin-top: 6px; padding: 8px 18px; background: #1565c0; color: #fff !important; border-radius: 6px; font-weight: 600; text-decoration: none; }
-.sim-cta:hover { background: #0d47a1; text-decoration: none; }
-.sim-cta-wrap { text-align: center; margin-top: 1em; }
-
-/* Quick links */
-.quick-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin: 1.5em 0 2em; }
-.quick-card { border-radius: 10px; padding: 20px 18px; text-decoration: none; color: #fff; display: block; transition: opacity 0.15s, transform 0.15s; }
-.quick-card:hover { opacity: 0.9; text-decoration: none; transform: translateY(-2px); }
-.quick-card h3 { margin: 0 0 6px; font-size: 1.1em; color: #fff; }
-.quick-card p  { margin: 0; font-size: 0.85em; opacity: 0.88; color: #fff; }
-.card-prog  { background: linear-gradient(135deg, #1565c0, #0288d1); }
-.card-elec  { background: linear-gradient(135deg, #c62828, #e53935); }
-.card-mech  { background: linear-gradient(135deg, #2e7d32, #43a047); }
-.card-sched { background: linear-gradient(135deg, #6a1b9a, #8e24aa); }
-.card-pedro { background: linear-gradient(135deg, #e65100, #f57c00); }
-.card-mecanum { background: linear-gradient(135deg, #00695c, #00897b); }
-.card-parts { background: linear-gradient(135deg, #4527a0, #7b1fa2); }
-.card-sim   { background: linear-gradient(135deg, #1565c0, #6a1b9a); }
-.card-meetings { background: linear-gradient(135deg, #283593, #3949ab); }
-.card-resources { background: linear-gradient(135deg, #37474f, #546e7a); }
-.card-game     { background: linear-gradient(135deg, #f57f17, #fbc02d); color: #1a1a1a !important; }
-.card-game h3, .card-game p { color: #1a1a1a !important; }
-
-/* Resources */
-.resource-section { margin-top: 2em; }
-.resource-section h2 { border-bottom: 2px solid #eee; padding-bottom: 6px; }
-.resource-list { list-style: none; padding: 0; margin: 1em 0 0; }
-.resource-list li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
-.resource-list li:last-child { border-bottom: none; }
-.resource-list a { font-weight: 600; }
-.resource-list span { color: #666; font-size: 0.9em; margin-left: 8px; }
-</style>
-
-<div class="hero-logos">
-  <img src="/assets/img/br_logo.jpg" alt="Bolton Robotics FTC logo">
-  <div class="divider"></div>
-  <img src="/assets/img/ftc_logo.png" alt="FIRST Tech Challenge logo">
-</div>
-
-<p class="intro-text">
-Welcome to <strong>Bolton Robotics FTC</strong> — a hands-on FIRST Tech Challenge program
-where students go from a box of parts to a driving mecanum robot in nine sessions.
-Use the navigation above or the quick links below to get started.
-</p>
-
-<div class="quick-links">
-  <a href="/game/" class="quick-card card-game">
-    <h3>🐝 Pollen Harvest</h3>
-    <p>Our custom spring practice game — rules, field setup, and scoring</p>
-  </a>
-  <a href="/meetings/" class="quick-card card-meetings">
-    <h3>📅 Meetings</h3>
-    <p>Weekly session notes, slides, and build progress</p>
-  </a>
-  <a href="/programming/" class="quick-card card-prog">
-    <h3>💻 Programming</h3>
-    <p>Java OpModes, lessons, and simulator tutorials</p>
-  </a>
-  <a href="/electrical/" class="quick-card card-elec">
-    <h3>⚡ Electrical</h3>
-    <p>Wiring diagrams, REV hub config, and sensor setup</p>
-  </a>
-  <a href="/mechanical/" class="quick-card card-mech">
-    <h3>🔧 Mechanical</h3>
-    <p>Build guides, CAD links, and subsystem overviews</p>
-  </a>
-  <a href="/schedule/" class="quick-card card-sched">
-    <h3>🗓 Schedule</h3>
-    <p>Season calendar and session plan</p>
-  </a>
-  <a href="/mechanical/gobilda-ri3d/" class="quick-card card-parts">
-    <h3>🛒 goBILDA RI3D Parts</h3>
-    <p>Part list, CAD, and subassembly photos</p>
-  </a>
-  <a href="/resources/" class="quick-card card-resources">
-    <h3>📚 Resources</h3>
-    <p>Guides, links, budget, and inventory</p>
-  </a>
-  <a href="/simulator/" class="quick-card card-sim">
-    <h3>🤖 Simulator</h3>
-    <p>Download PIT Mode, release notes, and lesson tracks</p>
-  </a>
-</div>
-
-<!-- SIMULATOR SECTION -->
-<div class="sim-section">
-  <h2>🤖 PIT Mode — Learn to Code Without a Robot</h2>
-  <p>
-    The <strong>FTC 3D Simulator (PIT Mode)</strong> is a custom Godot-based simulator
-    that lets students learn to program an FTC robot before ever touching the real hardware.
-    The PIT (Programming &amp; Integration Terminal) puts you in a virtual workshop with a
-    3D robot, a Driver Hub, and a full Java code editor — all in one window.
-  </p>
-  <p>
-    Lessons in the simulator guide students through writing real Java code step by step.
-    That same code compiles and runs in the simulator, and when you're ready,
-    <strong>it transfers directly to your real robot</strong> — no rewriting required.
-  </p>
-
-  <div class="sim-note" style="margin: 0.7em 0 1.0em;">
-    <strong>What's New in v2026.05.29:</strong> Added a dumper lesson for jam recovery that
-    reverses the intake to clear stuck pollen.
+<!-- ================= HERO ================= -->
+<section class="hero" aria-label="Prime Symmetry">
+  <div class="hero-media" aria-hidden="true">
+    <video class="hero-robot" muted loop playsinline preload="auto" poster="/assets/video/robot-poster.jpg">
+      <source src="/assets/video/robot-loop.mp4" type="video/mp4">
+    </video>
+    <div class="hero-tint"></div>
+    <div class="hero-seam"></div>
+    <video class="hero-splash" muted playsinline preload="auto" poster="/assets/video/splash-poster.jpg">
+      <source src="/assets/video/splash.mp4" type="video/mp4">
+    </video>
   </div>
 
-  <div class="sim-features">
-    <div class="sim-feature"><strong>3D Robot Preview</strong>Orbit a real-time 3D model of the robot on a virtual pit table.</div>
-    <div class="sim-feature"><strong>Live Code Editor</strong>Write Java right in the browser — syntax highlighting, line numbers, instant feedback.</div>
-    <div class="sim-feature"><strong>Real Telemetry</strong>See your <code>telemetry.addData()</code> output on the virtual Driver Hub, just like the real thing.</div>
-    <div class="sim-feature"><strong>Motor &amp; Servo Simulation</strong>Flywheels spin up with inertia, servos sweep to position — physics you can see.</div>
-    <div class="sim-feature"><strong>Encoder &amp; IMU Sensors</strong>Read RPM from the flywheel encoder, heading from the IMU — real sensor data from virtual hardware.</div>
-    <div class="sim-feature"><strong>Full Match Simulation</strong>Run TeleOp and Autonomous OpModes through a simulated FTC match sequence.</div>
+  <div class="hero-copy">
+    <div class="hero-num" aria-label="36563">
+      <span class="hd hd-g" data-pair="a" aria-hidden="true">3</span><span class="hop" aria-hidden="true">+</span><span class="hd hd-g" data-pair="b" aria-hidden="true">6</span><span class="hop" aria-hidden="true">+</span><button class="hd hd-c" type="button" data-egg aria-label="Show the math hidden in 36563">5</button><span class="hop" aria-hidden="true">+</span><span class="hd hd-b" data-pair="b" aria-hidden="true">6</span><span class="hop" aria-hidden="true">+</span><span class="hd hd-b" data-pair="a" aria-hidden="true">3</span>
+      <span class="fold" aria-hidden="true"><span class="fd fd-g">2</span><span class="hop">+</span><span class="fd fd-b">3</span></span>
+    </div>
+
+    <h1 class="seam-row hero-name"><span class="hn-l rise" style="--d:.35s">Prime</span><span class="hn-r rise" style="--d:.35s">Symmetry</span></h1>
+
+    <div class="hero-stack">
+      <div class="hero-lower">
+        <p class="seam-row hero-line rise" style="--d:.6s"><span class="hl-we">We</span><span class="cycler" data-cycle="code,compete,iterate,teach,inspire" data-side="l">code</span></p>
+        <p class="hero-sub rise" style="--d:.75s">A rookie team building robots&hellip;<br><strong>&hellip;and the tools that train the next generation of rookies.</strong></p>
+        <div class="hero-cta rise" style="--d:.9s">
+          <a class="ps-btn ps-btn-gold" href="{{ page.sim_url }}" target="_blank" rel="noopener">Launch the Simulator <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
+
+      <div class="hero-math" aria-live="polite">
+        <p class="math-row r1"><span class="ml"><span class="tok g">3</span><span class="tok op">+</span><span class="tok g">6</span><span class="tok op">+</span></span><span class="mc"><span class="tok w">5</span></span><span class="mr"><span class="tok op">+</span><span class="tok b">6</span><span class="tok op">+</span><span class="tok b">3</span><span class="tok op eq">=</span><span class="tok g">2</span><span class="tok b">3</span></span></p>
+        <p class="math-row r2"><span class="ml"><span class="tok g">2</span></span><span class="mc"><span class="tok op">+</span></span><span class="mr"><span class="tok b">3</span><span class="tok op eq">=</span><span class="tok w ans">5</span></span></p>
+        <p class="math-note"><span class="tok">Back where it started.</span></p>
+      </div>
+    </div>
+
+    <svg class="egg-arc" aria-hidden="true">
+      <defs><linearGradient id="eggArcGrad" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#446CE3"/><stop offset="1" stop-color="#EFAB28"/></linearGradient></defs>
+      <path d=""/>
+    </svg>
   </div>
 
-  <p>Watch the tutorial below to see PIT Mode in action, then download the simulator and open the lessons in the Programming section.</p>
+  <button class="sound-btn" type="button" aria-label="Replay the intro with sound">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
+    Replay intro
+  </button>
+  <a class="scroll-cue" href="#number" aria-label="Scroll down"><span>Scroll</span><i></i></a>
+</section>
 
-  <div class="sim-video-wrap">
-    <iframe src="https://www.youtube.com/embed/M-liCBvgdvc"
-      title="PIT Mode Tutorial"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen></iframe>
+<!-- ================= THE NUMBER ================= -->
+<section class="number" id="number">
+  <div class="wrap">
+    <p class="kicker" data-reveal>The number is the name</p>
+    <h2 class="display h2" data-reveal>Read it either way.</h2>
+    <p class="number-lede" data-reveal>A prime palindrome.</p>
+    <p class="number-cheese" data-reveal>It&rsquo;s our number, our name, and the rule we build by: <em>perfectly balanced, as all robots should be.</em></p>
   </div>
+</section>
 
-  <div class="sim-cta-wrap">
-    <a class="sim-cta" href="/simulator/">Learn More &amp; Download &rarr;</a>
+<!-- ================= SIMULATOR ================= -->
+<section class="sim" id="simulator">
+  <div class="wrap">
+    <header class="sim-head">
+      <p class="kicker" data-reveal>Built by 36563 &middot; Free for every team</p>
+      <h2 class="display" data-reveal>A new kind of <span>rookie</span> training tool.</h2>
+      <p class="sim-name" data-reveal>Impulse 3D Simulator</p>
+      <p class="lede" data-reveal>Write real FTC Java in your browser, watch it drive a 3D robot on the BIOBUZZ field, then send <strong>the same code</strong> to a real Control Hub. No install. No robot required.</p>
+    </header>
+
+    <div class="sim-stage" data-reveal>
+      <ol class="beats" aria-label="What you can do in the simulator">
+        <li class="beat" data-t="0"><b>Learn</b><small>Step-by-step lessons</small></li>
+        <li class="beat" data-t="4"><b>Code</b><small>Real FTC SDK Java</small></li>
+        <li class="beat" data-t="8"><b>Quiz</b><small>Prove you&rsquo;ve got it</small></li>
+        <li class="beat" data-t="11.5"><b>Debug</b><small>Real compiler errors</small></li>
+        <li class="beat" data-t="15.5"><b>Compile</b><small>Build &amp; INIT on the Driver Hub</small></li>
+        <li class="beat" data-t="18.5"><b>Simulate</b><small>Drive, intake, shoot</small></li>
+        <li class="beat" data-t="23.5"><b>Pedro Pathing</b><small>Plan and run autonomous paths</small></li>
+        <li class="beat" data-t="32.5"><b>Deploy</b><small>Push the code to a Control Hub</small></li>
+        <li class="beat" data-t="36.5"><b>Real Robot</b><small>Same code, real hardware</small></li>
+      </ol>
+
+      <div class="device">
+        <div class="device-bar"><span>Impulse 3D &middot; v2</span><span class="live">Live footage</span></div>
+        <video class="sim-video" muted loop playsinline preload="none" poster="/assets/video/sim-poster.jpg" data-src="/assets/video/sim-montage.mp4" aria-label="Footage of the Impulse 3D Simulator: lessons, coding, driving and autonomous pathing"></video>
+        <div class="device-word" aria-hidden="true">Learn</div>
+      </div>
+    </div>
+
+    <div class="proof">
+      <div data-reveal><b>Runs in your browser</b><span>Chrome or Edge. Installs as an app and works offline.</span></div>
+      <div data-reveal><b>17 guided lessons</b><span>From &ldquo;hello robot&rdquo; to a shooter, each with its own quiz.</span></div>
+      <div data-reveal><b>Real FTC code</b><span>FTC SDK Java + Pedro Pathing &mdash; nothing to rewrite for the robot.</span></div>
+    </div>
+
+    <div class="sim-cta">
+      <a class="ps-btn ps-btn-gold" href="{{ page.sim_url }}" target="_blank" rel="noopener">Launch the Simulator <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      {% if page.trailer_url %}<a class="ps-btn ps-btn-blue" href="{{ page.trailer_url }}" target="_blank" rel="noopener">&#9654;&nbsp; Watch the trailer</a>{% endif %}
+    </div>
   </div>
-</div>
+</section>
 
-<div class="attribution-note">
-  <strong>Use &amp; Attribution:</strong> Original Bolton Robotics FTC content may be reused for educational purposes with attribution.
-  Use: <em>Source: Bolton Robotics FTC — https://boltonftc.github.io</em>.
-  Full terms: <a href="/use/">Use &amp; Attribution</a>.
-</div>
+<!-- ================= PILLARS ================= -->
+<section class="pillars" id="build">
+  <div class="wrap">
+    <header class="pillars-head">
+      <p class="kicker" data-reveal>How we build</p>
+      <h2 class="display" data-reveal>Three disciplines. <em>One</em> <b>robot.</b></h2>
+    </header>
+    <div class="pillar-grid">
+      <a class="pillar" href="/mechanical/" data-reveal>
+        <svg class="pillar-art" viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="100" r="74" fill="none" stroke="currentColor" stroke-width="26" stroke-dasharray="20 18.75"/>
+          <circle cx="100" cy="100" r="58" fill="none" stroke="currentColor" stroke-width="10"/>
+          <circle cx="100" cy="100" r="18" fill="none" stroke="currentColor" stroke-width="10"/>
+        </svg>
+        <span class="pillar-num">01</span>
+        <h3>Mechanical</h3>
+        <p>goBILDA chassis, CAD, build guides and subsystem breakdowns &mdash; how the robot goes together.</p>
+        <span class="go">Explore</span>
+      </a>
+      <a class="pillar" href="/electrical/" data-reveal>
+        <svg class="pillar-art" viewBox="0 0 200 200" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 40h50l20 20h90M20 100h40l20-20h40l20 20h40M20 160h70l20-20h70"/>
+          <circle cx="70" cy="40" r="8" fill="currentColor"/><circle cx="120" cy="80" r="8" fill="currentColor"/>
+          <circle cx="160" cy="100" r="8" fill="currentColor"/><circle cx="90" cy="160" r="8" fill="currentColor"/>
+        </svg>
+        <span class="pillar-num">02</span>
+        <h3>Electrical</h3>
+        <p>Control Hub wiring, device configuration, sensors and ESD protection &mdash; how the robot comes alive.</p>
+        <span class="go">Explore</span>
+      </a>
+      <a class="pillar" href="/programming/" data-reveal>
+        <svg class="pillar-art" viewBox="0 0 200 200" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M70 40 30 100l40 60M130 40l40 60-40 60M112 30 88 170"/>
+        </svg>
+        <span class="pillar-num">03</span>
+        <h3>Programming</h3>
+        <p>Java OpModes, Pedro Pathing autonomous and the lesson track behind our simulator &mdash; how the robot thinks.</p>
+        <span class="go">Explore</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SEASON ================= -->
+<section class="season">
+  <div class="wrap season-inner">
+    <div data-reveal>
+      <p class="kicker">2026&ndash;27 Season</p>
+      <h2 class="display">Into <span>BIOBUZZ</span>.</h2>
+      <p>We&rsquo;re designing, building and competing in this year&rsquo;s <em>FIRST</em> Tech Challenge game &mdash; and posting what we learn as we go.</p>
+    </div>
+    <div class="season-links" data-reveal>
+      <a href="/schedule/">Calendar <span>Season plan &amp; dates</span></a>
+      <a href="/meetings/">Meetings <span>Notes &amp; build progress</span></a>
+      <a href="/resources/">Resources <span>Guides, tools &amp; budget</span></a>
+    </div>
+  </div>
+</section>
 
