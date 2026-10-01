@@ -208,18 +208,18 @@ button.ps-btn { border: 0; cursor: pointer; }
 .palin.still .pd { color: var(--paper); }
 .palin.still .palin-dir { display: none; }
 
-/* Indivisible. ● Perfectly balanced. — split on the seam */
-.number-motto { position: relative; column-gap: clamp(36px, 4vw, 56px); margin-top: 14px; }
-.number-motto b { display: block; font: 400 clamp(30px, 3.6vw, 50px)/1 var(--display); letter-spacing: .03em; text-transform: uppercase; }
-.number-motto small { display: block; margin-top: 6px; font: 700 11px/1 var(--body); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
-.nm-l { text-align: right; }
-.nm-l b { color: var(--gold); }
-.nm-r { text-align: left; }
-.nm-r b { color: #7d9bf0; }
-.number-motto::after {
-  content: ""; position: absolute; left: 50%; top: calc(clamp(30px, 3.6vw, 50px) * .45); width: 12px; height: 12px;
-  border-radius: 50%; background: var(--paper); transform: translate(-50%, -50%); box-shadow: 0 0 0 4px var(--ink);
+/* Indivisible. ● Perfectly balanced. — phrases and dot share a centered row, labels share the row below */
+.number-motto {
+  display: grid; grid-template-columns: 1fr auto 1fr; column-gap: clamp(16px, 3vw, 34px); row-gap: 8px;
+  align-items: center; max-width: 900px; margin: 14px auto 0;
 }
+.number-motto b { grid-row: 1; font: 400 clamp(30px, 3.6vw, 50px)/1 var(--display); letter-spacing: .03em; text-transform: uppercase; text-wrap: balance; }
+.number-motto small { grid-row: 2; align-self: start; font: 700 11px/1 var(--body); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+.number-motto .nm-l { grid-column: 1; text-align: right; }
+.number-motto .nm-r { grid-column: 3; text-align: left; }
+.number-motto b.nm-l { color: var(--gold); }
+.number-motto b.nm-r { color: #7d9bf0; }
+.nm-dot { grid-row: 1; grid-column: 2; width: 12px; height: 12px; border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 4px var(--ink), 0 0 18px rgba(244, 244, 238, .25); }
 
 /* ---------- simulator ---------- */
 .sim {
