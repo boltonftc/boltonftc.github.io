@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 {% include head.html %}
-  <link rel="stylesheet" href="/assets/css/site.css">
-{% for href in page.css %}  <link rel="stylesheet" href="{{ href }}">
+  <link rel="stylesheet" href="/assets/css/site.css?v={{ site.time | date: '%Y%m%d%H%M' }}">
+{% for href in page.css %}  <link rel="stylesheet" href="{{ href }}?v={{ site.time | date: '%Y%m%d%H%M' }}">
 {% endfor %}</head>
 <body class="ps nav-solid{% if page.body_class %} {{ page.body_class }}{% endif %}">
 {% include nav.html %}
@@ -23,7 +23,7 @@
   </main>
 
 {% include footer.html %}
-  <script src="/assets/js/core.js" defer></script>
-{% for src in page.scripts %}  <script src="{{ src }}" defer></script>
+  <script src="/assets/js/core.js?v={{ site.time | date: '%Y%m%d%H%M' }}" defer></script>
+{% for src in page.scripts %}  <script src="{{ src }}?v={{ site.time | date: '%Y%m%d%H%M' }}" defer></script>
 {% endfor %}</body>
 </html>
