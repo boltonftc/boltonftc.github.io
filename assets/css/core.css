@@ -163,6 +163,19 @@ button.ps-btn { border: 0; cursor: pointer; }
 .ps-legal p { margin: 4px 0; }
 .ps-legal a { color: rgba(244, 244, 238, .75); }
 
+/* ---------- "the simulator is a desktop app" dialog (touch devices) ---------- */
+.sim-warn {
+  width: min(440px, calc(100% - 32px)); padding: 26px 24px 22px; border: 0; color: var(--paper);
+  background: var(--ink); clip-path: var(--chamfer); --cut: 16px;
+  box-shadow: inset 0 3px 0 var(--gold);
+}
+.sim-warn::backdrop { background: rgba(10, 14, 30, .72); backdrop-filter: blur(3px); }
+.sim-warn .kicker { margin: 0 0 10px; }
+.sim-warn h2 { margin: 0 0 10px; font: 400 32px/1 var(--display); text-transform: uppercase; letter-spacing: .02em; }
+.sim-warn p { margin: 0 0 18px; color: var(--muted); font-size: 15.5px; }
+.sim-warn-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.sim-warn-x { position: absolute; top: 10px; right: 12px; width: 36px; height: 36px; font-size: 26px; line-height: 1; color: var(--muted); background: none; border: 0; cursor: pointer; }
+
 /* ---------- responsive ---------- */
 @media (max-width: 1140px) and (min-width: 861px) {
   .ps-menu { gap: 18px; }

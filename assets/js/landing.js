@@ -208,9 +208,48 @@
       hero.classList.add('intro', 'is-ready');
       setTimeout(function () { hero.classList.remove('intro'); }, 2200);
       setTimeout(Egg.hint, 2000);
+      setTimeout(splitSeam, 1900);   // after the copy has finished rising into place
       session('ps-intro', '1');
       if (!noVideo && robot) robot.play().catch(function () {});
     };
+
+    /* the seam opens around the sub-text: gold branch left, blue branch right (or just fades if too tight) */
+    var subEl = hero.querySelector('.hero-sub');
+    var lineEl = hero.querySelector('.hero-line');
+    var ctaEl = hero.querySelector('.hero-cta');
+    var split = hero.querySelector('.hero-split');
+    var splitSeam = function () {
+      if (!subEl || !split || !hero.classList.contains('is-ready')) return;
+      var range = document.createRange();
+      range.selectNodeContents(subEl);
+      var r = range.getBoundingClientRect(), hb = hero.getBoundingClientRect();
+      var cx = hb.width / 2, pad = 22, k = 46;
+      var L = r.left - hb.left - pad, R = r.right - hb.left + pad;
+      var T = r.top - hb.top - 6, B = r.bottom - hb.top + 6;
+      if (!r.width || L > cx || R < cx) { hero.classList.remove('has-split', 'is-branched'); return; }
+      var fits = L > 16 && R < hb.width - 16;
+      // keep the straight seam through the "We | ___" row above and the button below; split only in between
+      var above = lineEl ? lineEl.getBoundingClientRect().bottom - hb.top + 4 : T - k;
+      var below = ctaEl ? ctaEl.getBoundingClientRect().top - hb.top - 4 : B + k;
+      var y0 = fits ? Math.max(T - k, above) : T - 10, y1 = fits ? Math.min(B + k, below) : B + 10;
+      hero.style.setProperty('--gap-t', y0 + 'px');
+      hero.style.setProperty('--gap-b', y1 + 'px');
+      hero.style.setProperty('--gap-f', fits ? '1px' : '26px');
+      hero.classList.add('has-split');
+      if (fits) {
+        var ct = (T - y0) * 0.6, cb = (y1 - B) * 0.6;
+        var branch = function (x) {
+          return 'M' + cx + ',' + y0 + ' C' + cx + ',' + (y0 + ct) + ' ' + x + ',' + (T - ct) + ' ' + x + ',' + T +
+                 ' L' + x + ',' + B + ' C' + x + ',' + (B + cb) + ' ' + cx + ',' + (y1 - cb) + ' ' + cx + ',' + y1;
+        };
+        split.querySelector('.sl').setAttribute('d', branch(L));
+        split.querySelector('.sr').setAttribute('d', branch(R));
+      }
+      hero.classList.toggle('is-branched', fits);
+    };
+    var splitTimer;
+    window.addEventListener('resize', function () { clearTimeout(splitTimer); splitTimer = setTimeout(splitSeam, 150); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { setTimeout(splitSeam, 50); });
 
     if (noVideo) {
       hero.classList.add('no-video');
