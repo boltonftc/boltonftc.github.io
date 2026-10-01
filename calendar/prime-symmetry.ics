@@ -1,0 +1,82 @@
+---
+layout: null
+permalink: /calendar/prime-symmetry.ics
+sitemap: false
+---
+{%- assign cal = site.data.calendar -%}
+{%- assign stamp = site.time | date: "%Y%m%dT%H%M%SZ" -%}
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Prime Symmetry FTC 36563//Team Calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Prime Symmetry · FTC 36563
+X-WR-CALDESC:Team meetings and events — {{ site.url }}/calendar/
+X-WR-TIMEZONE:America/New_York
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+BEGIN:VTIMEZONE
+TZID:America/New_York
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+TZNAME:EDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+TZNAME:EST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+{%- for s in cal.series %}
+{%- assign day0 = s.first | remove: "-" %}
+{%- assign until = s.until | default: cal.season.end | remove: "-" %}
+{%- assign t0 = s.start | remove: ":" | append: "00" %}
+{%- assign t1 = s.end | remove: ":" | append: "00" %}
+BEGIN:VEVENT
+UID:series-{{ s.id }}-{{ day0 }}@prime-symmetry-36563
+DTSTAMP:{{ stamp }}
+DTSTART;TZID=America/New_York:{{ day0 }}T{{ t0 }}
+DTEND;TZID=America/New_York:{{ day0 }}T{{ t1 }}
+RRULE:FREQ=WEEKLY;UNTIL={{ until }}T235959Z
+{%- for k in cal.skip %}
+EXDATE;TZID=America/New_York:{{ k.date | remove: "-" }}T{{ t0 }}
+{%- endfor %}
+SUMMARY:{{ s.title | replace: ",", "\," | replace: ";", "\;" | strip_newlines }}
+{%- if s.location %}
+LOCATION:{{ s.location | replace: ",", "\," | replace: ";", "\;" | strip_newlines }}
+{%- endif %}
+URL:{{ site.url }}/calendar/
+END:VEVENT
+{%- endfor %}
+{%- for e in cal.events %}
+{%- assign d = e.date | remove: "-" %}
+BEGIN:VEVENT
+UID:event-{{ d }}-{{ e.start | default: "allday" | remove: ":" }}@prime-symmetry-36563
+DTSTAMP:{{ stamp }}
+{%- if e.start %}
+DTSTART;TZID=America/New_York:{{ d }}T{{ e.start | remove: ":" }}00
+DTEND;TZID=America/New_York:{{ d }}T{{ e.end | default: e.start | remove: ":" }}00
+{%- else %}
+DTSTART;VALUE=DATE:{{ d }}
+{%- endif %}
+SUMMARY:{{ e.title | replace: ",", "\," | replace: ";", "\;" | strip_newlines }}
+{%- if e.location %}
+LOCATION:{{ e.location | replace: ",", "\," | replace: ";", "\;" | strip_newlines }}
+{%- endif %}
+{%- if e.notes %}
+DESCRIPTION:{{ e.notes | replace: ",", "\," | replace: ";", "\;" | strip_newlines }}
+{%- endif %}
+{%- if e.url %}
+URL:{% if e.url contains "://" %}{{ e.url }}{% else %}{{ site.url }}{{ e.url }}{% endif %}
+{%- endif %}
+{%- if e.cancelled %}
+STATUS:CANCELLED
+{%- endif %}
+END:VEVENT
+{%- endfor %}
+END:VCALENDAR

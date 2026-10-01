@@ -1,0 +1,262 @@
+---
+layout: lesson
+title: "Electrical Gremlins"
+section: "Electrical"
+section_url: "/electrical/"
+kicker: "Lesson 02"
+headline: "Electrical <em>Gremlins</em>"
+lede: "The robot works on the bench, passes inspection, then reboots mid-match. That's almost never random. It's static, noise, or a loose connector, and each one has a fix you can make in the pit."
+description: "Stop FTC robot resets and glitches: ESD, grounding straps, insulation, ferrite chokes, wire routing, I2C and USB port gotchas, XT30 care and a pre-match checklist."
+scripts: ["/assets/js/quiz.js"]
+prev_url: "/electrical/systems/"
+prev_title: "Electrical Systems"
+next_url: "/electrical/robot-config/"
+next_title: "Robot Configuration"
+---
+
+<div class="lesson-meta"><span><b>About 25 min</b> to read</span><span><b>Read first:</b> <a href="/electrical/systems/">Electrical Systems</a></span><span><b>Quiz</b> at the end</span></div>
+
+<figure>
+  <img src="electrical_gremlin.jpg" alt="Cartoon gremlin lurking in a tangle of robot wiring" loading="lazy">
+</figure>
+
+<p>Every FTC team eventually meets the gremlin. The Control Hub reboots, a motor freezes, or the Driver Hub loses the robot. The team swaps parts in a panic, and the problem disappears as mysteriously as it came.</p>
+
+<p>These failures are almost never truly random. They come from three sources: <strong>static discharge</strong>, <strong>electrical noise</strong>, and <strong>connectors that work loose</strong>. This lesson shows where each one comes from and how to get rid of it for good.</p>
+
+<h2>One battery, two very different jobs</h2>
+
+<figure class="fig-sm">
+  <img src="battery.jpg" alt="12 V NiMH FTC battery pack" loading="lazy">
+</figure>
+
+<p>The same 12 V battery feeds the drive motors and the hub's computer. A motor that stalls or reverses can pull <strong>10 A or more</strong> in a split second. That spike makes the voltage dip and sends electrical noise along every wire it touches, and your Control Hub and sensors are connected to those same wires.</p>
+
+<p>That's the root tension in FTC wiring: <strong>big, noisy motor power</strong> and <strong>tiny, sensitive digital signals</strong> share one small robot, one battery, one metal frame, and often the same wire bundles.</p>
+
+<h2>ESD: the invisible zap</h2>
+
+<p><strong>Electrostatic discharge (ESD)</strong> is the spark you get after shuffling across a carpet in socks and touching a doorknob. Robots do the same thing, at <strong>thousands of volts</strong>.</p>
+
+<figure class="fig-md">
+  <img src="esd_two_robots.jpg" alt="Two robots with different static charges; when they touch, a discharge current flows through their frames" loading="lazy">
+  <figcaption>When two differently charged robots touch, the charge evens out in a fraction of a microsecond, straight through the frames.</figcaption>
+</figure>
+
+<ol>
+  <li><strong>Charging.</strong> Wheels rubbing on the foam tiles move charge onto the robot. This is the <em>triboelectric effect</em>. Wheels that <strong>slide</strong> build charge faster than wheels that roll cleanly, and mecanum rollers slide a lot.</li>
+  <li><strong>Storing.</strong> The metal frame holds that charge like a capacitor.</li>
+  <li><strong>Discharging.</strong> The robot touches another robot, the field wall or a game element, or just gets close to one. A spark can jump a gap of about <strong>10 mm (3/8")</strong>.</li>
+  <li><strong>Damage.</strong> If the path for that spark runs through your electronics, the processor crashes and the hub reboots. Sometimes an I2C port is damaged for good.</li>
+</ol>
+
+<div class="note note-warn"><b>Why it's so hard to diagnose</b><p>ESD depends on humidity, the tiles, your wheels, how you drive and who you hit. One match is fine, and the next has three reboots in 30 seconds. Teams blame the code, the battery and the USB cable before they find the real cause.</p></div>
+
+<h2>Four defenses against ESD</h2>
+
+<p>FIRST's own guidance stacks several defenses together. No single one is enough.</p>
+
+<h3>1. Isolate the electronics from the frame</h3>
+
+<figure class="fig-md">
+  <img src="mount_rev_hub_on_insulator.jpg" alt="REV hub mounted on a non-conductive plate rather than directly on metal channel" loading="lazy">
+  <figcaption>Hubs sit on a non-conductive plate, not on bare metal.</figcaption>
+</figure>
+
+<p>Mount the hubs on something <strong>non-conductive</strong>, such as thin plywood, PVC, polycarbonate or HDPE, instead of bolting them straight to aluminum. Then look for <strong>exposed metal on the electronics</strong>: the backs of sensors, the plastic 4-pin sensor connectors, and servo extension joints. Keep those at least <strong>10 mm away from the frame</strong>, or wrap them in electrical tape.</p>
+
+<h3>2. Ground the electronics to the frame with an approved strap</h3>
+
+<div class="fig-pair">
+  <figure>
+    <img src="official_grounding_strap.jpg" alt="REV Resistive Grounding Strap: XT30 plug on one end, ring terminal on the other" loading="lazy">
+    <figcaption>REV Resistive Grounding Strap (REV-31-1269).</figcaption>
+  </figure>
+  <figure>
+    <img src="grounding_strap_on_bot.jpg" alt="Grounding strap ring terminal bolted to bare metal on the robot frame" loading="lazy">
+    <figcaption>Ring terminal bolted to bare metal on the frame.</figcaption>
+  </figure>
+</div>
+
+<p>This seems to contradict defense 1, but the two work together. The <strong>resistive grounding strap</strong> connects the electronics' ground to the frame through a <strong>470 Ω resistor</strong>. The frame and the electronics then stay at the same voltage, so charge leaks away slowly instead of building up and jumping across as a spark.</p>
+
+<ol>
+  <li>Plug the strap's <strong>XT30 end into a spare XT30 port on a hub</strong>.</li>
+  <li>Bolt the <strong>ring terminal</strong> to the frame with a <strong>metal</strong> bolt. Scrape off any paint or anodizing so it touches bare metal.</li>
+  <li>Tug-test it. It must not loosen during a match.</li>
+</ol>
+
+<div class="note note-warn"><b>Only use an approved, store-bought strap</b><p>Never make your own. The built-in resistor stops a shorted 12 V wire from dumping current into the frame, and the keyed connector stops anyone plugging 12 V straight into the chassis. The game manual lists which cables are legal.</p></div>
+
+<h3>3. Add ferrite chokes to signal cables</h3>
+<p>A <strong>ferrite choke</strong> is a snap-on ring that blocks sudden current spikes. Put one on each <strong>sensor, encoder and servo cable</strong>, and use USB cables that already have chokes. They're cheap and we keep a bag of them in the pit.</p>
+
+<h3>4. Insulate the outside of the robot</h3>
+
+<figure class="fig-md">
+  <img src="insulate_perimeter_of_bot.jpg" alt="Robot with a polycarbonate skin covering its outer metal edges" loading="lazy">
+  <figcaption>No bare metal where the robot is likely to touch anything.</figcaption>
+</figure>
+
+<p>Discharges happen at points of contact. Cover any metal that could touch another robot, the wall or a game element. Polycarbonate panels, wooden or rubber bumpers, and electrical tape on claw tips and channel ends all work. If there's no metal-to-metal contact, there's no path for the spark.</p>
+
+<div class="note"><b>Key idea</b><p>Isolate the hubs and keep exposed connectors away from metal. Ground the electronics to the frame with an approved resistive strap. Choke the signal cables. Insulate the robot's outside. Use all four.</p></div>
+
+<h2>Noise: the sneaky gremlin</h2>
+
+<p>ESD hits all at once and crashes things. <strong>Noise</strong> is quieter. It doesn't reboot the hub. It corrupts sensor readings, makes the IMU drift, or adds random jumps to your odometry.</p>
+
+<p>Motors are noisy. The motor controller switches current on and off thousands of times a second (PWM), so the motor wires broadcast electromagnetic energy like a small radio transmitter. Any wire running alongside them acts as a <strong>receiving antenna</strong>. The closer the wires and the longer they run together, the worse the <em>crosstalk</em>.</p>
+
+<h3>Never coil extra wire</h3>
+
+<figure>
+  <img src="loop_vs_accordian_extra_wire.jpg" alt="Left: extra wire coiled in a loop. Right: the same wire folded back and forth like an accordion." loading="lazy">
+  <figcaption>Left: a coil picks up noise. Right: an accordion fold mostly cancels it out.</figcaption>
+</figure>
+
+<p>Your instinct with extra wire is to wind it into a neat loop and zip-tie it. <strong>Don't.</strong> A coil works like an antenna: it collects every changing magnetic field nearby and turns it into voltage on the wire, and a bigger loop collects more. Fold extra length <strong>back and forth</strong> instead. The noise picked up by neighboring folds mostly cancels out.</p>
+
+<h3>Keep power and signal wires apart</h3>
+
+<figure class="fig-md">
+  <img src="routing_wire_in_conduit.jpg" alt="Separate braided-sleeve bundles routed through channel, with motor power kept apart from signal wires" loading="lazy">
+  <figcaption>Power and signal wires in separate sleeves, with an air gap between them.</figcaption>
+</figure>
+
+<p>Run <strong>motor power</strong> wires along one side of the robot and <strong>signal</strong> wires (encoder, I2C, digital, analog) along the other. Where they have to cross, cross them at <strong>90°</strong> to keep the overlap short. Separate braided sleeves help keep the groups organized and apart. Keep motor wires away from USB camera cables too.</p>
+
+<h2>Port gotchas</h2>
+
+<h3>Leave I2C bus 0 for the IMU</h3>
+
+<figure class="fig-md">
+  <img src="do_not_use_I2C0.jpg" alt="I2C port 0 on a REV hub, which is shared with the built-in IMU" loading="lazy">
+</figure>
+
+<p>On the Control Hub, <strong>I2C bus 0 is shared with the built-in IMU</strong>. An external sensor on that bus has to compete with the IMU for the same two wires, which can corrupt the IMU's data, the sensor's data, or both. Plug external I2C sensors into <strong>buses 1, 2 or 3</strong>.</p>
+
+<h3>Plug cameras into the USB 3.0 port</h3>
+
+<figure class="fig-md">
+  <img src="use_the_usb3_port.jpg" alt="Control Hub USB ports: use the blue USB 3.0 port, not the USB 2.0 port" loading="lazy">
+</figure>
+
+<p>REV and FIRST both warn about this one. A static zap into the Control Hub's <strong>USB 2.0</strong> port can upset the <strong>Wi-Fi chip</strong>, and that looks exactly like a random Driver Hub disconnect. Plug cameras and other USB devices into the <strong>USB 3.0</strong> port (the one with the blue insert).</p>
+
+<h2>Look after your XT30s</h2>
+
+<p>After hundreds of plug-ins, the split pins inside an XT30 lose their springiness. The connector still looks fine, but a bump during a match can break contact for a few milliseconds. That's long enough to reboot the hub.</p>
+
+<figure>
+  <img src="power_con_rebend_pins.jpg" alt="Carefully spreading the split pin of an XT30 connector with a small screwdriver" loading="lazy">
+  <figcaption>Gently spreading a split pin to restore its grip. Only ever do this with the power disconnected.</figcaption>
+</figure>
+
+<ol>
+  <li><strong>Disconnect the battery and all power first.</strong></li>
+  <li>With a small flat screwdriver or tweezers, spread one half of the split pin <strong>very slightly</strong>. It's soft metal and doesn't take much.</li>
+  <li>Test the fit. It should be snug but shouldn't need a lot of force.</li>
+</ol>
+
+<p>If a pin is bent, cracked or still loose, <strong>replace the connector</strong>. XT30 pigtails cost far less than a lost match.</p>
+
+<h2>Pre-match checklist</h2>
+
+<p>Run through this before every competition, and again after any repair. Ticking the boxes doesn't save anything; reloading the page clears them.</p>
+
+<ul class="checklist">
+  <li><label><input type="checkbox"><span><strong>Grounding strap</strong> connected to a hub XT30 port, and the ring terminal is tight on bare metal.</span></label></li>
+  <li><label><input type="checkbox"><span><strong>Hubs on a non-conductive mount.</strong> No metal screws bypassing it.</span></label></li>
+  <li><label><input type="checkbox"><span><strong>Sensor connectors and servo joints</strong> at least 10 mm from the frame, or taped.</span></label></li>
+  <li><label><input type="checkbox"><span><strong>Ferrite chokes</strong> on sensor, encoder and servo cables.</span></label></li>
+  <li><label><input type="checkbox"><span><strong>Outside insulated.</strong> No bare metal where the robot is likely to touch anything.</span></label></li>
+  <li><label><input type="checkbox"><span><strong>Wiring clean.</strong> Power and signal kept apart, crossings at 90°, accordion folds, no coils.</span></label></li>
+  <li><label><input type="checkbox"><span><strong>I2C sensors on buses 1–3</strong>, with bus 0 left for the IMU.</span></label></li>
+  <li><label><input type="checkbox"><span><strong>Camera in the USB 3.0 port.</strong> Nothing in USB 2.0.</span></label></li>
+  <li><label><input type="checkbox"><span><strong>XT30s snug.</strong> Wiggle each one: no play, no clicking.</span></label></li>
+  <li><label><input type="checkbox"><span><strong>Battery charged and inspected.</strong> No swelling, frayed wires or cracked case.</span></label></li>
+</ul>
+
+<p>If every box is ticked, you've removed most of the electrical problems that plague FTC robots. What's left is usually a bad cable (swap it), old firmware (update it), or a real bug in your code, which you can now chase with confidence.</p>
+
+<div class="recap">
+  <h2>What you learned</h2>
+  <ul>
+    <li>Three gremlins: <strong>ESD crashes the processor</strong>, <strong>noise corrupts signals</strong>, and <strong>loose connectors drop power</strong>.</li>
+    <li>Robots pick up static from the tiles, especially with sliding wheels. Sparks can jump about 10 mm.</li>
+    <li>Defenses: <strong>isolate</strong> the electronics, <strong>ground</strong> them with an approved 470 Ω strap, add <strong>ferrite chokes</strong>, and <strong>insulate</strong> the outside.</li>
+    <li>Accordion-fold extra wire, keep power and signal apart, and cross them at 90°.</li>
+    <li>Keep I2C bus 0 for the IMU. Use USB 3.0 for cameras.</li>
+    <li>XT30s wear out. Re-spread the pins with the power off, or replace them.</li>
+  </ul>
+</div>
+
+<h3>References</h3>
+<ul>
+  <li><a href="https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/managing_esd/managing-esd.html" target="_blank" rel="noopener">Managing Electrostatic Discharge Effects</a>, FTC Docs</li>
+  <li><a href="https://ftc-docs.firstinspires.org/en/latest/_downloads/64f2b78ce9343bbd8b61e6e7710b70c9/analysis-esd-mitigation-echin.pdf" target="_blank" rel="noopener">ESD Mitigation Techniques for FTC</a>, Eric Chin (PDF)</li>
+  <li><a href="https://docs.revrobotics.com/duo-control/troubleshooting-the-control-system/troubleshooting-the-control-system" target="_blank" rel="noopener">REV Control System troubleshooting</a>, including the grounding strap and USB guidance</li>
+  <li><a href="https://drive.google.com/file/d/1f64864o4RRL6wXY1GWElCoUQ9UinvoGr/view" target="_blank" rel="noopener">FTC ESD and Wiring Best Practices</a>, kickoff presentation (PDF)</li>
+  <li><a href="https://www.youtube.com/watch?v=V8vVv0it0VY" target="_blank" rel="noopener">FTC electrical troubleshooting walkthrough</a> (video)</li>
+</ul>
+
+<section class="quiz" data-quiz>
+<script type="application/json">
+{
+  "title": "Electrical Gremlins",
+  "draw": 8,
+  "pass": 0.75,
+  "questions": [
+    { "q": "Mid-match, the Control Hub reboots right after your robot bumps another robot. What's the most likely cause?",
+      "correct": "An electrostatic discharge through the electronics",
+      "wrong": ["A bug in the TeleOp code", "The Driver Hub's screen timing out", "The motors running in the wrong direction"],
+      "explain": "A reboot at the moment of contact is the classic ESD signature. Charge built up on the frame finds a path through the hub." },
+    { "q": "How does a robot build up static charge on the field?",
+      "correct": "Wheels rubbing on the foam tiles (the triboelectric effect)",
+      "wrong": ["The battery slowly leaks its charge into the frame", "Wi-Fi signals collect on the metal frame over time", "The field lights heat the aluminum and charge it"],
+      "explain": "Friction between wheels and tiles moves charge onto the robot. Sliding wheels, like mecanum rollers, build charge faster." },
+    { "q": "What's inside the approved REV grounding strap that makes it safe to connect to the frame?",
+      "correct": "A 470 Ω resistor that limits current",
+      "wrong": ["A 20 A fuse that blows during ESD", "A diode that only lets current flow one way", "Nothing, it's a plain copper wire"],
+      "explain": "The resistor lets static leak away slowly, and it stops a shorted 12 V wire from dumping current into the frame. Never make your own strap." },
+    { "q": "Where does the grounding strap's XT30 end plug in?",
+      "correct": "A spare XT30 port on a hub",
+      "wrong": ["Directly into a motor port", "The USB 3.0 port on the Control Hub", "The I2C bus 0 port"],
+      "explain": "Plug the XT30 into a spare hub power port, and bolt the ring terminal to bare metal on the frame." },
+    { "q": "Why mount the hubs on a non-conductive plate AND ground them to the frame with a strap?",
+      "correct": "Isolation blocks sparks; the strap keeps frame and hubs at one voltage",
+      "wrong": ["It's a mistake: you should pick one or the other", "The strap only matters during autonomous", "The plate keeps the hubs cool while the strap holds them in place"],
+      "explain": "The two defenses work together. Isolation removes direct paths, and the resistive strap stops a voltage difference from building up." },
+    { "q": "You have 30 cm of extra encoder cable. What should you do with it?",
+      "correct": "Fold it back and forth in an accordion and secure it",
+      "wrong": ["Wind it into a neat round coil and zip-tie it", "Tape it flat against the aluminum frame", "Bundle it tightly with the motor power wires"],
+      "explain": "A coil acts as an antenna and picks up noise. Accordion folds mostly cancel it out." },
+    { "q": "Motor power wires and sensor wires have to cross. How should they cross?",
+      "correct": "At a 90° angle, so the overlap is as short as possible",
+      "wrong": ["Running side by side for as long as possible", "Twisted tightly together", "Inside the same braided sleeve"],
+      "explain": "Crosstalk grows with how far wires run together. A right-angle crossing keeps that overlap tiny." },
+    { "q": "Which I2C bus should you avoid for external sensors on the Control Hub?",
+      "correct": "Bus 0, because it's shared with the built-in IMU",
+      "wrong": ["Bus 3, because it's the slowest", "Bus 1, because it's reserved for the camera", "None: all four are identical"],
+      "explain": "An external sensor on bus 0 competes with the IMU and can corrupt both. Use buses 1–3." },
+    { "q": "Your webcam is in the Control Hub's USB 2.0 port and the robot keeps dropping Wi-Fi. What should you change?",
+      "correct": "Move the camera to the USB 3.0 port",
+      "wrong": ["Turn the camera's resolution down", "Switch the Wi-Fi to the 2.4 GHz band", "Add a second camera on the same port"],
+      "explain": "A static zap into the USB 2.0 port can disturb the Wi-Fi chip. REV and FIRST both say to use USB 3.0." },
+    { "q": "What do ferrite chokes do on signal cables?",
+      "correct": "Block sudden current spikes, such as those from ESD",
+      "wrong": ["Boost the signal so it travels farther", "Hold the cable in place on the frame", "Measure how much current the cable carries"],
+      "explain": "Ferrites resist fast changes in current, so a spike on a sensor or encoder line is damped before it reaches the hub." },
+    { "q": "An XT30 connector feels loose. What's the right first step?",
+      "correct": "Disconnect all power, then gently spread the split pin",
+      "wrong": ["Wrap it in tape so it can't wiggle", "Squeeze it together with pliers while powered", "Ignore it; XT30s are designed to be loose"],
+      "explain": "Always work on a connector with the power off. If spreading the pin doesn't fix it, replace the connector." },
+    { "q": "How does insulating the robot's outer metal help against ESD?",
+      "correct": "No metal contact means no easy path for a spark",
+      "wrong": ["It stops the wheels from building up charge", "It makes the robot lighter so it collides less", "It cools the motors during the match"],
+      "explain": "The robot can still pick up charge, but without bare metal at the contact points there's nowhere for the discharge to go." }
+  ]
+}
+</script>
+</section>

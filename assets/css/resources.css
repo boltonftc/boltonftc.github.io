@@ -1,0 +1,22 @@
+/* /resources/ — the paper receipt in the inventory feature band */
+.res-receipt {
+  position: relative; max-width: 380px; margin-inline: auto; padding: 26px 28px 34px;
+  font: 14px/1.5 var(--mono); color: #1d2440; background: var(--paper);
+  transform: rotate(-1.5deg); box-shadow: 0 24px 50px rgba(0, 0, 0, .35);
+  /* torn zig-zag bottom edge */
+  -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 10px) no-repeat, conic-gradient(from -45deg at bottom, transparent 90deg, #000 0) bottom / 16px 10px repeat-x;
+          mask: linear-gradient(#000 0 0) top / 100% calc(100% - 10px) no-repeat, conic-gradient(from -45deg at bottom, transparent 90deg, #000 0) bottom / 16px 10px repeat-x;
+}
+.res-receipt-head { margin: 0 0 14px; padding-bottom: 12px; text-align: center; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; border-bottom: 1px dashed rgba(29, 36, 64, .35); }
+.res-receipt-head span { font-weight: 400; text-transform: none; letter-spacing: 0; color: #5a6385; }
+.res-receipt ol { list-style: none; margin: 0; padding: 0; }
+.res-receipt li, .res-receipt-total { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; }
+.res-receipt li span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.res-receipt li span::after { content: " ................................................"; color: rgba(29, 36, 64, .3); }
+.res-receipt-total { margin: 12px 0 0; padding-top: 12px; border-top: 2px solid #1d2440; font-weight: 700; font-size: 17px; }
+.res-receipt-total b { color: #b5790f; }
+.res-receipt-foot { margin: 10px 0 0; text-align: center; font-size: 12px; color: #5a6385; }
+@media (prefers-reduced-motion: no-preference) {
+  .res-receipt { transition: transform .4s ease; }
+  .feature:hover .res-receipt { transform: rotate(0deg) translateY(-4px); }
+}

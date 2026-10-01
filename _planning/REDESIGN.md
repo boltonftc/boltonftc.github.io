@@ -9,7 +9,27 @@ published by Jekyll). Status keys: `[ ]` todo · `[~]` in progress · `[x]` done
 - [x] Home page relaunch (`index.html` + `_layouts/landing.html` + `assets/css/landing.css` + `assets/js/landing.js`)
   — splash → robot loop hero, 36563 on the seam, fold/proof easter egg on the 5, simulator showcase, pillars, season strip.
 - [x] Brand assets in `assets/brand/` (icons, coin-flip back face, lockups, og-share) and `assets/video/`.
-- [ ] Home page committed + pushed (waiting to bundle with the rest, or push now — see Q0).
+- [x] Home page committed + pushed (`c8ab1c4`, 2026-09-30).
+- [x] 2026-10-01 site-wide relaunch: theme foundation (site/lesson layouts, includes, core/site CSS, 404 redirects),
+  calendar (`_data/calendar.yml` + ICS), Electrical (2 lessons + quizzes, robot config), Mechanical (hardware lesson +
+  quiz, 6 CAD lessons, consolidated belt tools, RI3D archive), Programming (sim feature, `/programming/simulator/`
+  architecture page, driver controls; old lessons + deploy page retired), Resources (inventory from
+  `_data/inventory.json`), meetings timeline. Removed outdated season budget + laptop setup.
+- [ ] Still on the legacy wrapper: individual meeting week pages, `/game/`, `/use/`, `/resources/quiz/`.
+
+## Decisions (2026-09-30)
+- Q0 push home now ✔ · Q1 first meeting **Wed 2026-09-30**, through **Sun 2027-02-28**, ET, Massachusetts.
+- Q1b best-guess skips: Wed Nov 11 (Veterans Day), Wed Nov 25 + Sun Nov 29 (Thanksgiving), Wed Dec 23 · Sun Dec 27 ·
+  Wed Dec 30 · Sun Jan 3 (winter break), Sun Jan 17 (MLK weekend), Sun Feb 14 · Wed Feb 17 · Sun Feb 21 (Feb vacation).
+  **User will correct later** — all live in `_data/calendar.yml`.
+- Q2 creative license → dark navy chrome everywhere; long-form lessons sit on a light "paper" reading sheet.
+- Q3 keep CAD series (no quiz, re-skinned, made more intuitive); drop beginner/intermediate everywhere; free to improve text.
+- Q4 **no** sim deep links — Programming lists the sim lessons as a syllabus, features the simulator, external references.
+- Q5 delete the 20 Godot-era programming pages (404 page redirects old URLs).
+- Q6 retire `/simulator/` (Godot download) → redirects to the home page simulator section.
+- Q7 Robot Configuration → Electrical, Driver Controls → Programming.
+- Q8 inventory = scalable JSON data file; agent parses invoices and updates the data.
+- Q9 archive spring-2026 meetings + Pollen Harvest game (kept, re-skinned, clearly labeled archive).
 
 ---
 
@@ -49,7 +69,8 @@ Quiz formats in play:
 - Reading pages use a **light "paper" content surface (#F4F4EE) inside the dark navy chrome** (see Q2).
 
 ### 2.2 Calendar (`/calendar/`, replaces `/schedule/`)
-- Single source of truth: `assets/data/calendar.json`
+- [x] Built. Single source of truth: `_data/calendar.yml` (page embeds it via `jsonify`; the `.ics` feed is
+  rendered by Jekyll itself with RRULE + EXDATE, so there is no build script to rerun)
   - `recurring`: Wed 3:00–5:30 PM and Sun 6:30–8:30 PM, start → end date
   - `skip`: holiday/break dates (with a reason, shown as "No meeting — Veterans Day")
   - `events`: one-offs (scrimmages, competitions, outreach, build days) with optional location/link/notes

@@ -1,106 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ page.title }}</title>
-  <meta name="description" content="{{ page.description }}">
-  <meta name="theme-color" content="#151D3B">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ page.title }}">
-  <meta property="og:description" content="{{ page.description }}">
-  <meta property="og:url" content="https://boltonftc.github.io/">
-  <meta property="og:image" content="https://boltonftc.github.io/assets/brand/og-share.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-
-  <link rel="icon" href="/assets/brand/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" href="/assets/brand/icon-192.png">
-  <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Gothic&display=swap">
+{% include head.html %}
   <link rel="stylesheet" href="/assets/css/landing.css">
-  <script src="/assets/js/landing.js" defer></script>
 </head>
 <body class="ps">
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <header class="ps-nav">
-    <a class="ps-brand" href="/" aria-label="Prime Symmetry home">
-      <span class="ps-coin" aria-hidden="true"><span class="ps-coin-inner">
-        <img class="ps-face" src="/assets/brand/icon-64.png" srcset="/assets/brand/icon-64.png 1x, /assets/brand/icon-192.png 3x" width="40" height="40" alt="">
-        <img class="ps-face ps-face-back" src="/assets/brand/icon-flip-64.png" srcset="/assets/brand/icon-flip-64.png 1x, /assets/brand/icon-flip-192.png 3x" width="40" height="40" alt="">
-      </span></span>
-      <span class="ps-brand-text">
-        <span class="ps-brand-name">Prime Symmetry</span>
-        <span class="ps-brand-num">FTC Team 36563</span>
-      </span>
-    </a>
-
-    <button class="ps-burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="ps-menu">
-      <span></span><span></span><span></span>
-    </button>
-
-    <div class="ps-menu" id="ps-menu">
-      <nav class="ps-links" aria-label="Primary">
-        <a href="/mechanical/">Mechanical</a>
-        <a href="/electrical/">Electrical</a>
-        <a href="/programming/">Programming</a>
-        <a href="/schedule/">Calendar</a>
-      </nav>
-      <div class="ps-actions">
-        {% if page.youtube_url %}
-        <a class="ps-social" href="{{ page.youtube_url }}" target="_blank" rel="noopener" aria-label="Prime Symmetry on YouTube">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9l5.8 3.1-5.8 3.1z"/></svg>
-        </a>
-        {% endif %}
-        <a class="ps-btn ps-btn-gold ps-btn-sm" href="{{ page.sim_url }}" target="_blank" rel="noopener">Launch Simulator</a>
-      </div>
-    </div>
-  </header>
+{% include nav.html %}
 
   <main id="main">
 {{ content }}
   </main>
 
-  <footer class="ps-footer">
-    <div class="split-rule" aria-hidden="true"></div>
-    <div class="ps-footer-inner">
-      <div class="ps-footer-brand">
-        <img src="/assets/brand/lockup-alt.png" width="260" height="148" alt="Prime Symmetry 36563">
-        <p>Prime Symmetry &middot; <em>FIRST</em>&reg; Tech Challenge Team 36563</p>
-      </div>
-      <nav class="ps-footer-col" aria-label="Explore">
-        <h3>Explore</h3>
-        <a href="/mechanical/">Mechanical</a>
-        <a href="/electrical/">Electrical</a>
-        <a href="/programming/">Programming</a>
-        <a href="/schedule/">Calendar</a>
-      </nav>
-      <nav class="ps-footer-col" aria-label="More">
-        <h3>More</h3>
-        <a href="{{ page.sim_url }}" target="_blank" rel="noopener">Impulse 3D Simulator</a>
-        <a href="/meetings/">Meetings</a>
-        <a href="/resources/">Resources</a>
-        <a href="/game/">Practice Game</a>
-      </nav>
-      <div class="ps-footer-col">
-        <h3>Follow</h3>
-        {% if page.youtube_url %}
-        <a class="ps-footer-yt" href="{{ page.youtube_url }}" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9l5.8 3.1-5.8 3.1z"/></svg>
-          YouTube
-        </a>
-        {% endif %}
-        <a href="/use/">Use &amp; Attribution</a>
-      </div>
-    </div>
-    <div class="ps-legal">
-      <p>Original Prime Symmetry content may be reused for educational purposes with attribution &mdash; see <a href="/use/">Use &amp; Attribution</a>.</p>
-      <p><em>FIRST</em>&reg; and <em>FIRST</em>&reg; Tech Challenge are registered trademarks of <em>FIRST</em>&reg; (For Inspiration and Recognition of Science and Technology), which is not overseeing, involved with, or responsible for this site.</p>
-    </div>
-  </footer>
+{% include footer.html %}
+  <script src="/assets/js/core.js" defer></script>
+  <script src="/assets/js/landing.js" defer></script>
 </body>
 </html>

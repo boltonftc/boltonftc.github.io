@@ -1,0 +1,18 @@
+/* /programming/driver-controls/ */
+.dc-svg-wrap { margin-bottom: 34px; padding: 10px; background: radial-gradient(70% 90% at 50% 45%, #1e2a57, var(--ink-2)); border: 1px solid var(--line); clip-path: var(--chamfer); --cut: 18px; }
+.dc-svg-wrap svg { display: block; width: 100%; height: auto; }
+.dc-legend { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-bottom: 26px; background: var(--line); border: 1px solid var(--line); }
+.dc-grp { padding: 18px 20px 14px; background: var(--ink); border-top: 3px solid var(--muted); }
+.dc-grp.g-drive { border-top-color: var(--blue); }
+.dc-grp.g-shoot { border-top-color: var(--gold); }
+.dc-grp.g-intake { border-top-color: #45c47f; }
+.dc-grp.g-unused { border-top-color: rgba(244, 244, 238, .25); }
+.dc-grp h3 { margin: 0 0 10px; font: 400 28px/1 var(--display); letter-spacing: .03em; text-transform: uppercase; }
+.dc-grp ul { list-style: none; margin: 0; padding: 0; }
+.dc-grp li { padding: 7px 0; font-size: 14.5px; color: var(--muted); border-bottom: 1px solid var(--line); }
+.dc-grp li:last-child { border-bottom: 0; }
+.dc-key { font: 700 13px var(--mono); color: var(--paper); }
+.dc-note { padding: 14px 18px; font-size: 15px; color: var(--muted); border-left: 3px solid var(--blue); background: rgba(68, 108, 227, .08); }
+.dc-note b { color: var(--paper); }
+@media (max-width: 900px) { .dc-legend { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .dc-legend { grid-template-columns: 1fr; } }

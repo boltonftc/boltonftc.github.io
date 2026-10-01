@@ -1,0 +1,42 @@
+/* goBILDA RI3D parts lists (hub + 11 sub-assembly pages) */
+.parts-top { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(20px, 3vw, 44px); align-items: center; margin-bottom: 34px; }
+.parts-hero { margin: 0; padding: 12px; background: #fff; clip-path: var(--chamfer); --cut: 18px; }
+.parts-hero img { width: 100%; max-height: 380px; object-fit: contain; }
+.parts-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-bottom: 22px; background: var(--line); border: 1px solid var(--line); }
+.parts-stats div { padding: 18px 20px; background: var(--ink); }
+.parts-stats b { display: block; font: 400 64px/.9 var(--display); color: var(--gold); }
+.parts-stats div + div b { color: var(--blue); }
+.parts-stats small { font: 700 11px/1 var(--body); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.parts-side .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.parts td { vertical-align: middle; }
+.parts .gp-item { width: 44px; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+.parts .gp-img { width: 86px; padding: 6px 10px; }
+.parts .gp-img img { width: 64px; height: 64px; object-fit: contain; padding: 4px; background: #fff; }
+.parts .gp-noimg { display: grid; place-items: center; width: 64px; height: 64px; color: var(--muted); border: 1px dashed var(--line); }
+.parts .gp-qty { width: 60px; text-align: right; font: 400 30px/1 var(--display); color: var(--gold); }
+.parts .gp-sku { white-space: nowrap; font: 13px var(--mono); }
+.parts .gp-sku a { color: var(--paper); }
+.parts .gp-note { color: var(--muted); font-size: 13px; font-style: italic; }
+.parts tr.gp-missing td { color: #ff9b9b; }
+
+/* hub: sub-assembly index with thumbnails */
+.sub-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; border-top: 1px solid var(--line); }
+.sub-list a { display: grid; grid-template-columns: 112px 1fr auto; gap: 18px; align-items: center; padding: 14px 6px 14px 0; text-decoration: none; border-bottom: 1px solid var(--line); transition: background .25s, padding .25s; }
+.sub-list a:hover { background: linear-gradient(90deg, rgba(239, 171, 40, .07), rgba(68, 108, 227, .07)); padding-left: 8px; }
+.sub-list img { width: 112px; height: 84px; object-fit: cover; background: #fff; }
+.sub-list b { display: block; font: 400 28px/1 var(--display); letter-spacing: .03em; text-transform: uppercase; }
+.sub-list a:hover b { color: var(--gold); }
+.sub-list small { display: block; margin-top: 4px; color: var(--muted); font-size: 14px; line-height: 1.35; }
+.sub-list i { font-style: normal; text-align: right; font: 400 30px/1 var(--display); color: var(--gold); }
+.sub-list i small { font: 700 10px/1 var(--body); letter-spacing: .16em; text-transform: uppercase; }
+
+@media (max-width: 900px) {
+  .parts-top { grid-template-columns: 1fr; }
+  .sub-list { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .sub-list a { grid-template-columns: 84px 1fr; }
+  .sub-list img { width: 84px; height: 63px; }
+  .sub-list i { display: none; }
+}

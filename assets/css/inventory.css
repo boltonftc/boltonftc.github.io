@@ -1,0 +1,49 @@
+/* /resources/inventory/ */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.inv-top { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(24px, 4vw, 60px); align-items: start; }
+.inv-total .kicker { margin: 0 0 10px; }
+.inv-total > b { display: block; font: 400 clamp(64px, 9vw, 120px)/.85 var(--display); color: var(--gold); letter-spacing: .01em; }
+.inv-total > small { display: block; margin-top: 10px; color: var(--muted); font-size: 14px; }
+.inv-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 24px 0 0; background: var(--line); border: 1px solid var(--line); }
+.inv-stats div { padding: 12px 14px; background: var(--ink); }
+.inv-stats dt { font: 700 10.5px/1 var(--body); letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.inv-stats dd { margin: 8px 0 0; font: 400 28px/1 var(--display); color: var(--paper); }
+.inv-how .kicker { margin: 0 0 6px; }
+.inv-steps { list-style: none; margin: 0; padding: 0; counter-reset: st; }
+.inv-steps li { position: relative; padding: 12px 0 12px 54px; border-bottom: 1px solid var(--line); counter-increment: st; }
+.inv-steps li::before { content: counter(st, decimal-leading-zero); position: absolute; left: 0; top: 10px; font: 400 34px/1 var(--display); color: var(--blue); }
+.inv-steps li:nth-child(odd)::before { color: var(--gold); }
+.inv-steps b { display: block; font: 400 22px/1.05 var(--display); letter-spacing: .03em; text-transform: uppercase; }
+.inv-steps small { display: block; margin-top: 3px; color: var(--muted); font-size: 14px; }
+
+.inv-spend { margin-top: 38px; }
+.inv-bar { display: flex; height: 26px; overflow: hidden; background: var(--ink-2); clip-path: var(--chamfer); --cut: 10px; }
+.inv-bar span { display: block; min-width: 3px; border-right: 2px solid var(--ink); }
+.inv-bar span:last-child { border-right: 0; }
+.inv-legend { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 24px; margin: 16px 0 0; padding: 0; }
+.inv-legend button { display: grid; grid-template-columns: 14px 1fr auto; grid-template-rows: auto auto; column-gap: 10px; width: 100%; padding: 10px 0; text-align: left; color: var(--paper); background: none; border: 0; border-bottom: 1px solid var(--line); cursor: pointer; font: inherit; transition: opacity .2s; }
+.inv-legend button.off { opacity: .35; }
+.inv-legend button:hover span { color: var(--gold); }
+.inv-legend i { grid-row: span 2; align-self: center; width: 12px; height: 12px; }
+.inv-legend span { font-size: 15px; }
+.inv-legend b { font: 400 22px/1 var(--display); text-align: right; }
+.inv-legend small { grid-column: 2 / span 2; color: var(--muted); font-size: 12.5px; }
+
+.inv-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 14px 18px; margin-bottom: 16px; }
+.inv-search { flex: 1 1 320px; }
+.inv-search .input { font-size: 18px; padding: 14px 16px; }
+.inv-vendor { min-width: 220px; }
+.inv-cats { margin-bottom: 12px; }
+.inv-cats small { margin-left: 4px; font: 700 11px var(--body); opacity: .7; }
+.inv-count { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
+
+.inv-table .inv-name { min-width: 260px; }
+.inv-table .inv-name small { display: block; margin-top: 3px; color: var(--muted); font-size: 13px; line-height: 1.35; }
+.inv-chip { display: inline-block; white-space: nowrap; padding: 2px 8px 2px 7px; font: 700 10.5px/1.5 var(--body); letter-spacing: .1em; text-transform: uppercase; border-left: 3px solid var(--c); background: rgba(244, 244, 238, .06); }
+.inv-onhand { font: 700 10.5px var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.inv-table tfoot td { padding: 14px 12px; font: 400 22px var(--display); letter-spacing: .04em; text-transform: uppercase; border-top: 2px solid var(--gold); }
+.inv-table tfoot .num { color: var(--gold); }
+
+@media (max-width: 1000px) { .inv-legend { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 900px) { .inv-top { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .inv-stats { grid-template-columns: repeat(2, 1fr); } .inv-legend { grid-template-columns: 1fr; } }

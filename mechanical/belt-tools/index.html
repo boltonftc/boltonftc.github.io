@@ -1,0 +1,111 @@
+---
+layout: site
+title: "GT2 Belt Tools"
+section: "Mechanical"
+section_url: "/mechanical/"
+kicker: "Belt Tools"
+headline: "GT2 belt <em>tools</em>"
+lede: "Size goBILDA 2 mm GT2 timing belts without guesswork. Tell it what you already know: the ratio, the pulleys and spacing, or the belt in your hand. It solves the rest, with a live diagram and links to the exact part."
+description: "Free GT2 2mm timing belt calculators for goBILDA: pick pulleys and a belt for a target ratio, find the closest stock belt, or find the center-to-center distance for a belt."
+css: ["/mechanical/belt-tools/belt.css"]
+scripts: ["/mechanical/belt-tools/belt-core.js", "/mechanical/belt-tools/belt-tools.js"]
+---
+
+<div class="page-body">
+  <section class="wrap">
+    <div class="bt-modes" role="tablist" aria-label="What do you already know?">
+      <button type="button" class="bt-mode" role="tab" id="tab-wizard" aria-controls="panel-wizard" data-mode="wizard"><b>01</b><strong>Design it</strong><span>I know the ratio I want and roughly where the shafts go.</span></button>
+      <button type="button" class="bt-mode" role="tab" id="tab-find-belt" aria-controls="panel-find-belt" data-mode="find-belt"><b>02</b><strong>Find a belt</strong><span>My pulleys and shaft spacing are already set.</span></button>
+      <button type="button" class="bt-mode" role="tab" id="tab-center-distance" aria-controls="panel-center-distance" data-mode="center-distance"><b>03</b><strong>Place the shafts</strong><span>I have a belt and need to know where the shafts go.</span></button>
+    </div>
+
+    <div class="bt-bench">
+      <div>
+        <!-- 01 · wizard -->
+        <div class="bt-panel" id="panel-wizard" role="tabpanel" aria-labelledby="tab-wizard" hidden>
+          <h2>Design it</h2>
+          <p>Every pulley pair near your ratio, matched to real goBILDA belts, ranked by how close they land to your spacing.</p>
+          <div class="bt-fields">
+            <label class="field"><span>Target ratio (big : small)</span><input id="o-ratio" type="number" value="2" step="0.05" min="0.1"><small>1 = same size · 2 = 2:1 reduction</small></label>
+            <label class="field"><span>Target center distance (mm)</span><input id="o-c" type="number" value="120" step="1" min="5"><small>Roughly how far apart the shafts sit</small></label>
+          </div>
+          <details class="bt-adv">
+            <summary>Tolerances &amp; pulley range</summary>
+            <div class="bt-fields">
+              <div class="row2">
+                <label class="field"><span>Center ± mm</span><input id="o-ctol" type="number" value="15" step="1" min="0"></label>
+                <label class="field"><span>Ratio ± %</span><input id="o-rtol" type="number" value="2" step="1" min="0"></label>
+              </div>
+              <div class="row2">
+                <label class="field"><span>Min teeth</span><input id="o-tmin" type="number" value="12" step="1" min="8"></label>
+                <label class="field"><span>Max teeth</span><input id="o-tmax" type="number" value="60" step="1" min="8"></label>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- 02 · find belt -->
+        <div class="bt-panel" id="panel-find-belt" role="tabpanel" aria-labelledby="tab-find-belt" hidden>
+          <h2>Find a belt</h2>
+          <p>The ideal belt length for your layout, the nearest stock belts, and how far to nudge a shaft to fit each one.</p>
+          <div class="bt-fields">
+            <div class="row2">
+              <label class="field"><span>Pulley 1 teeth</span><input id="f-n1" type="number" value="24" step="1" min="8"></label>
+              <label class="field"><span>Pulley 2 teeth</span><input id="f-n2" type="number" value="48" step="1" min="8"></label>
+            </div>
+            <label class="field"><span>Center distance (mm)</span><input id="f-c" type="number" value="110" step="1" min="5"><small>Shaft center to shaft center</small></label>
+          </div>
+        </div>
+
+        <!-- 03 · center distance -->
+        <div class="bt-panel" id="panel-center-distance" role="tabpanel" aria-labelledby="tab-center-distance" hidden>
+          <h2>Place the shafts</h2>
+          <p>A belt of fixed length around two known pulleys fits at exactly one spacing. This finds it.</p>
+          <div class="bt-fields">
+            <div class="row2">
+              <label class="field"><span>Pulley 1 teeth</span><input id="p-n1" type="number" value="24" step="1" min="8"></label>
+              <label class="field"><span>Pulley 2 teeth</span><input id="p-n2" type="number" value="48" step="1" min="8"></label>
+            </div>
+            <label class="field"><span>Belt</span><select id="p-belt"></select></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="bt-stage">
+        <div class="bc-diagram"><svg id="bc-svg" viewBox="0 0 640 340" role="img" aria-label="Two-pulley belt drive diagram"></svg></div>
+      </div>
+    </div>
+
+    <div class="bc-out" id="bt-out" aria-live="polite"></div>
+    <div class="bt-how" id="bt-how"></div>
+    <noscript><p class="bc-err">These calculators need JavaScript turned on.</p></noscript>
+  </section>
+
+  <section class="wrap sec">
+    <div class="two-col">
+      <div>
+        <p class="kicker">New to timing belts?</p>
+        <p>A timing belt is a toothed loop that links two toothed pulleys so they turn together without slipping. The <b>ratio</b> of their teeth sets the trade between speed and torque: a 24T pulley driving a 48T pulley is a 2:1 reduction, half the speed and twice the torque.</p>
+        <p class="muted">For the parts themselves, see <a href="/mechanical/hardware/">Robot Hardware</a>.</p>
+      </div>
+      <div>
+        <p class="kicker">The catch</p>
+        <p>Belts only come in certain lengths, so the <b>center-to-center distance</b> between the shafts has to match a belt that exists. That's the problem these tools solve. If you're between two sizes, <b>round up</b> to the slightly looser belt and take up the slack with a tensioner. Never round down.</p>
+        <p class="muted">All belts here are goBILDA 2 mm GT2 continuous loops, 6 mm wide. Check stock and price on goBILDA before you order.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap sec">
+    <details class="bt-cat">
+      <summary>goBILDA GT2 belt catalog <span class="muted">· 22 sizes</span></summary>
+      <div class="dtable-wrap">
+        <table class="dtable bc-tbl" id="ref-tbl">
+          <thead><tr><th class="num">Teeth</th><th class="num">Pitch length</th><th>SKU</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="muted" style="font-size:14px">Need a length that isn't stocked? goBILDA also sells a 5 m cut-to-length roll (<span class="bc-sku">3426-0006-0005</span>) for runs that don't loop back on themselves.</p>
+    </details>
+  </section>
+</div>

@@ -1,93 +1,103 @@
 ---
-layout: page
+layout: site
 title: "Mechanical"
+kicker: "Mechanical"
+headline: "Measure <em>twice.</em> Build <b>once.</b>"
+lede: "Name every part on the build table, then learn to design in CAD. Our belt calculators handle the timing-belt math, and the goBILDA parts lists cover every sub-assembly."
+description: "Prime Symmetry mechanical: FTC robot hardware lesson, Onshape CAD training, GT2 belt calculators and goBILDA RI3D parts lists."
+css: ["/mechanical/belt-tools/belt.css"]
+scripts: ["/mechanical/belt-tools/belt-core.js"]
 ---
 
-<style>
-.tier-section { margin-bottom: 1em; border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; }
-.tier-header {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px; cursor: pointer; user-select: none;
-  background: #f8f9fa; border: none; width: 100%; text-align: left;
-  font-size: 1.1em; font-weight: 700;
-}
-.tier-header:hover { background: #e9ecef; }
-.tier-icon { font-size: 1.2em; }
-.tier-count { font-size: 0.8em; font-weight: normal; color: #666; margin-left: auto; }
-.tier-body { padding: 0 16px 8px; display: none; }
-.tier-body.open { display: block; }
-.lesson-card { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
-.lesson-card:last-child { border-bottom: none; }
-.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; white-space: nowrap; }
-.tier-easier { background: #d4edda; color: #155724; }
-.lesson-card a { font-weight: bold; font-size: 1.05em; }
-.lesson-card p { margin: 2px 0 0; color: #555; font-size: 0.92em; }
-.ri3d-card { background: #f8f9fa; border-radius: 8px; padding: 20px 22px; margin-top: 1.5em; border: 1px solid #dee2e6; }
-.ri3d-card h2 { margin: 0 0 8px; font-size: 1.25em; }
-.ri3d-card p { margin: 0 0 14px; color: #555; }
-.ri3d-card ul { margin: 0 0 14px; padding-left: 1.4em; color: #555; font-size: 0.95em; }
-.ri3d-card ul li { margin-bottom: 4px; }
-.tier-cad { background: #e3f2fd; color: #0d47a1; }
-</style>
-
-<h2>Mechanical Lessons</h2>
-
-<p>Learn about the physical components of your FTC robot. Click a tier to expand.</p>
-
-<div class="tier-section">
-  <button class="tier-header" onclick="toggleTier(this)">
-    <span class="tier-icon">🟢</span> Easier
-    <span class="tier-count">1 lesson</span>
-    <span>▶</span>
-  </button>
-  <div class="tier-body">
-    <div class="lesson-card">
-      <span class="tier-badge tier-easier">Easier</span>
-      <div><a href="easier/hardware/">Robot Hardware</a><p>Identify the structural components, motion hardware, and fasteners on the Impulse robot.</p></div>
+<div class="page-body">
+  <section class="wrap sec">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">Lessons</p>
+        <h2>Learn the <em>parts</em>, then the <b>design</b></h2>
+      </div>
+      <p>Start with hardware. Everything in CAD makes more sense once you've held the real parts.</p>
     </div>
-  </div>
+    <ol class="ix">
+      <li><a href="/mechanical/hardware/">
+        <span class="ix-n">01</span>
+        <span class="ix-t">Robot hardware</span>
+        <span class="ix-d">Metric sizes, screws, nuts, washers, spacers, shafts, bearings, collars, chain and belts, the tools that fit them, and the four mistakes that ruin parts.</span>
+        <span class="ix-m"><span class="tag">25 min</span><span class="tag tag-gold">Quiz</span></span>
+      </a></li>
+      <li><a href="/mechanical/cad-training/">
+        <span class="ix-n">02</span>
+        <span class="ix-t">CAD training</span>
+        <span class="ix-d">A six-lesson Onshape series: sketching, part studios, assemblies and repair tools, then an FTC drivetrain and animated mechanisms.</span>
+        <span class="ix-m"><span class="tag">6 lessons</span><span class="tag tag-blue">Onshape</span></span>
+      </a></li>
+    </ol>
+  </section>
 </div>
 
-<div class="tier-section">
-  <button class="tier-header" onclick="toggleTier(this)">
-    <span class="tier-icon">🖥️</span> CAD Training
-    <span class="tier-count">6 lessons</span>
-    <span>▶</span>
-  </button>
-  <div class="tier-body">
-    <div class="lesson-card">
-      <span class="tier-badge tier-cad">CAD Training</span>
-      <div><a href="cad-training/">OnShape CAD Training</a><p>Summer CAD series: learn OnShape from the ground up and work toward designing FTC robot parts. Lesson 1 &amp; 2 available now.</p></div>
+<section class="feature">
+  <div class="wrap feature-grid">
+    <div>
+      <p class="kicker">Our tool</p>
+      <h2>GT2 belt <em>tools</em></h2>
+      <p>Timing belts only come in certain lengths, so the gap between your shafts can't be just anything. Tell the calculator what you already know and it finds the pulleys, the exact goBILDA belt, and where to put the shafts.</p>
+      <ul class="ticks">
+        <li><a href="/mechanical/belt-tools/#wizard">Design it</a><small>Target ratio + rough spacing → ranked pulley and belt combinations</small></li>
+        <li><a href="/mechanical/belt-tools/#find-belt">Find a belt</a><small>Pulleys + spacing → nearest stock belts and the shaft move for each</small></li>
+        <li><a href="/mechanical/belt-tools/#center-distance">Place the shafts</a><small>Pulleys + the belt you have → exact center-to-center distance</small></li>
+      </ul>
+      <div class="actions">
+        <a class="ps-btn ps-btn-gold" href="/mechanical/belt-tools/">Open belt tools <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+    <div class="feature-art">
+      <div class="bc-diagram"><svg id="belt-demo" viewBox="0 0 640 340" role="img" aria-label="Animated belt drive: a 24-tooth pulley driving a 48-tooth pulley with a 132-tooth GT2 belt"></svg></div>
     </div>
   </div>
-</div>
+</section>
 
-<hr>
-
-<div class="ri3d-card">
-  <h2>goBILDA RI3D Assembly Instructions</h2>
-  <p>Complete parts lists for every sub-assembly of the Impulse robot — with photos, SKUs, and quantities.
-  CAD reference links and assembly photos will be added here as they become available.</p>
-  <ul>
-    <li>Drivetrain (left &amp; right sides)</li>
-    <li>Intake (lower &amp; upper)</li>
-    <li>Indexer &amp; Shooter</li>
-    <li>Upper frame (front, back, left, right)</li>
-    <li>Deflector</li>
-  </ul>
-  <a href="gobilda-ri3d/" class="btn btn-primary">View Parts Lists →</a>
+<div class="page-body">
+  <section class="wrap sec">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">Build references</p>
+        <h2>Parts &amp; <em>docs</em></h2>
+      </div>
+    </div>
+    <ol class="ix ix-compact">
+      <li><a href="/mechanical/gobilda-ri3d/">
+        <span class="ix-n">11</span>
+        <span class="ix-t">goBILDA RI3D parts lists</span>
+        <span class="ix-d">Every part, SKU and quantity for all 11 sub-assemblies of goBILDA's DECODE Robot-in-3-Days build. This was our spring reference robot, kept here for reference.</span>
+        <span class="ix-m"><span class="tag">Spring 2026</span></span>
+      </a></li>
+    </ol>
+    <div class="refs" style="margin-top:42px">
+      <div class="refs-group">
+        <h3>Building</h3>
+        <ul>
+          <li><a href="https://docs.gobilda.com/" target="_blank" rel="noopener"><b>goBILDA documentation</b><small>Specs, drawings and CAD for every goBILDA part.</small><i>Docs</i></a></li>
+          <li><a href="https://www.projectb.net.au/resources/robot-mechanisms/" target="_blank" rel="noopener"><b>Mechanism encyclopedia</b><small>Curated videos of drivetrains, intakes, lifts and shooters.</small><i>Web</i></a></li>
+          <li><a href="https://boltdepot.com/fastener-information/printable-tools/printable-fastener-tools.pdf" target="_blank" rel="noopener"><b>Printable fastener gauges</b><small>Print at 100% to identify screw sizes and lengths.</small><i>PDF</i></a></li>
+          <li><a href="https://www.youtube.com/@BroganMPratt" target="_blank" rel="noopener"><b>Brogan Pratt</b><small>FTC mechanism design and robot breakdowns.</small><i>Video</i></a></li>
+        </ul>
+      </div>
+      <div class="refs-group">
+        <h3>CAD</h3>
+        <ul>
+          <li><a href="https://www.onshape.com/en/education/" target="_blank" rel="noopener"><b>Onshape for Education</b><small>Free browser-based CAD for students. Nothing to install.</small><i>Onshape</i></a></li>
+          <li><a href="https://learn.onshape.com/" target="_blank" rel="noopener"><b>Onshape Learning Center</b><small>The courses our CAD lessons are built on.</small><i>Onshape</i></a></li>
+          <li><a href="https://ftconshape.com/introduction-to-the-ftc-parts-library/" target="_blank" rel="noopener"><b>FTC parts library</b><small>goBILDA, REV, ServoCity and more, ready to insert into Onshape.</small><i>Web</i></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </div>
 
 <script>
-function toggleTier(btn) {
-  const body = btn.nextElementSibling;
-  const arrow = btn.querySelector('span:last-child');
-  if (body.classList.contains('open')) {
-    body.classList.remove('open');
-    arrow.textContent = '▶';
-  } else {
-    body.classList.add('open');
-    arrow.textContent = '▼';
-  }
-}
+document.addEventListener("DOMContentLoaded", function () {
+  var BC = window.BeltCore, svg = document.getElementById("belt-demo");
+  if (!BC || !svg) return;
+  BC.makeDrawer(svg, { animate: true })(24, 48, BC.centerFor(24, 48, 132), "24T : 48T · 132T belt");
+});
 </script>

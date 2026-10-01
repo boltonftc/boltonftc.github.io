@@ -1,117 +1,39 @@
 ---
-layout: page
-title: "OnShape CAD Training — Lesson 6: Mates and Animation"
+layout: lesson
+title: "Mates & Animation"
+section: "CAD Training"
+section_url: "/mechanical/cad-training/"
+kicker: "Lesson 06"
+headline: "Mates <em>&amp;</em> animation"
+lede: "Model a crank-slider from five parts, connect it with slider and revolute mates, then animate it and watch the crank drive the slider."
+description: "Onshape CAD training lesson 6: crank-slider mechanism, slider and revolute mates, animating an assembly."
+scripts: ["/assets/js/media.js"]
+prev_url: "/mechanical/cad-training/parallel-plate-drivetrain/"
+prev_title: "Parallel Plate Drivetrain"
 ---
-<style>
-.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
-.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
-.block-body { padding: 10px 14px; }
-.key-idea  { border: 2px solid #f0c040; }
-.key-idea .block-label  { background: #f0c040; color: #333; }
-.key-idea .block-body   { background: #fffbe6; }
-.todo  { border: 2px solid #5090e0; }
-.todo .block-label  { background: #5090e0; color: #fff; }
-.todo .block-body   { background: #f0f4ff; }
 
-.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; vertical-align: middle; }
-.tier-cad { background: #e3f2fd; color: #0d47a1; }
+<div class="lesson-meta"><span><b>1 tutorial</b></span><span><b>5 parts</b> in one Part Studio</span><span><b>Tools:</b> center rectangle, offset, slot, extrude</span></div>
 
-.breadcrumb { font-size: 0.88em; color: #666; margin-bottom: 0.5em; }
-.breadcrumb a { color: #1a73e8; text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
+<video src="/assets/img/cad-training/slider_mechanism.mp4" poster="/assets/img/cad-training/slider_mechanism.jpg" autoplay muted loop playsinline width="480" aria-label="Animated crank-slider mechanism in Onshape"></video>
 
-.lesson-img { max-width: 100%; border-radius: 8px; display: block; margin: 1em 0; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
-.img-caption { font-size: 0.85em; color: #666; margin-top: -0.5em; margin-bottom: 1.2em; }
+<p>The mechanism has five parts: a <strong>rail</strong>, a <strong>slider</strong>, a <strong>crank</strong>, a <strong>connecting rod</strong> and a <strong>pivot</strong>. You'll model them all in one Part Studio with tools you already know. Then you'll connect them in an Assembly with a <strong>slider mate</strong> for the straight-line motion and <strong>revolute mates</strong> at each pivot. Animate the main revolute mate and the whole thing moves.</p>
 
-.video-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin: 1.2em 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-.video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 8px; }
+<h2>Why this matters for FTC</h2>
+<p>FTC robots are full of moving mechanisms: intakes that fold out, arms that swing, linkages that carry motion from a motor to a claw. Animated mates let you check, before cutting any aluminum, that parts don't collide during travel, that an arm clears the frame at every angle, and that a slide reaches where it needs to. Finding a collision in CAD takes minutes. Finding it after you've drilled the parts takes much longer.</p>
 
-.series-nav { margin-top: 2em; padding: 12px 18px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6; font-size: 0.92em; color: #555; }
-.series-nav strong { color: #222; }
-</style>
+<div class="note note-gold"><b>Key idea</b><p>A <strong>slider mate</strong> lets a part move along one straight line, like a drawer. A <strong>revolute mate</strong> lets it spin around one axis, like a hinge. Combine them and you can model mechanisms that turn spinning into pushing, which is exactly what a robot does with its motors.</p></div>
 
-<div class="breadcrumb">
-  <a href="/mechanical/cad-training/">← CAD Training</a>
-</div>
+<h2>The tutorial</h2>
+<ol>
+  <li>Make a new Onshape document in your training folder.</li>
+  <li>Work through the video section by section, building each piece in Onshape before you move on.</li>
+  <li>Model all five parts, then assemble and mate them.</li>
+  <li>Animate the main revolute mate on a loop and check that the slider moves correctly.</li>
+</ol>
 
-<span class="tier-badge tier-cad">CAD Training — Lesson 6</span>
+<a class="yt" href="https://www.youtube.com/watch?v=T94Y_qqw9E4" data-yt="T94Y_qqw9E4" data-title="Onshape crank-slider mechanism: mates and animation">
+  <img src="https://i.ytimg.com/vi/T94Y_qqw9E4/hqdefault.jpg" alt="" loading="lazy">
+  <span class="yt-cap">Crank-slider · mates &amp; animation</span>
+</a>
 
-<h1>Mates and Animation — Crank-Slider Mechanism</h1>
-
-<p>
-  This is <strong>Lesson 6</strong>. You'll build a complete crank-slider mechanism from
-  scratch — modeling all five parts in a single Part Studio, assembling them with the
-  correct mate types, and then animating the assembly so the crank drives the slider.
-</p>
-
-<p>
-  The mechanism has five parts: a rail, a slider, a crank, a connecting rod, and a pivot.
-  You'll model each one using tools you've seen before — center rectangles, offsets, slots,
-  and extrusions — then move into the assembly environment to connect them. The mates you'll
-  apply are a slider mate for linear motion and revolute mates at each pivot point.
-  When it's done, you can run the animation on the primary revolute mate and watch the
-  whole thing move.
-</p>
-
-<img class="lesson-img" src="/assets/img/cad-training/slider_mechanism.gif" alt="Animated crank-slider mechanism in OnShape" style="max-width:480px;">
-<p class="img-caption">The finished crank-slider mechanism animating in OnShape.</p>
-
-<hr>
-
-<h2>Why This Matters for FTC</h2>
-
-<p>
-  FTC robots are full of mechanisms that move — intakes that fold out, arms that rotate,
-  shooters that spin, and linkages that transfer motion from a motor to an end effector.
-  Before you build any of those in real life, you can model them in CAD and verify that
-  the motion actually works the way you intend.
-</p>
-
-<p>
-  Animated mates let you check that parts don't collide during travel, that a crank arm
-  clears the frame at all angles, or that a slider reaches the positions it needs to.
-  Catching those problems in CAD takes minutes. Catching them after you've cut and drilled
-  aluminum takes much longer. The crank-slider in this lesson is a simple example of the
-  same technique you'll use to validate real robot mechanisms.
-</p>
-
-<div class="lesson-block key-idea">
-  <div class="block-label">💡 Key Idea</div>
-  <div class="block-body">
-    A <strong>slider mate</strong> constrains a part to move along a single axis — like a
-    drawer or a linear slide. A <strong>revolute mate</strong> constrains rotation around
-    a single axis — like a hinge or an axle. Combining them is how you model mechanisms
-    that convert one type of motion into another, which is exactly what motors on a robot do.
-  </div>
-</div>
-
-<hr>
-
-<h2>Tutorial</h2>
-
-<div class="lesson-block todo">
-  <div class="block-label">✅ What to Do</div>
-  <div class="block-body">
-    <ol style="margin:0; padding-left:1.3em;">
-      <li>Create a new OnShape document in your student training folder.
-          (See <a href="/mechanical/onshape-cad/">Lesson 1</a> if you need a reminder.)</li>
-      <li>Open the tutorial video below in a separate tab.</li>
-      <li>Work through it section by section — watch a portion, then switch to OnShape and build that part before continuing.</li>
-      <li>Model all five parts in the Part Studio, then assemble and mate them.</li>
-      <li>Animate the primary revolute mate on a loop and confirm the slider moves correctly.</li>
-    </ol>
-  </div>
-</div>
-
-<div class="video-wrap">
-  <iframe src="https://www.youtube.com/embed/T94Y_qqw9E4"
-    title="OnShape Crank-Slider Mechanism — Mates and Animation"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen></iframe>
-</div>
-
-<div class="series-nav">
-  <strong>Series:</strong> <a href="/mechanical/cad-training/">CAD Training</a> — Lesson 6 &nbsp;|&nbsp;
-  <strong>← Previous:</strong> <a href="/mechanical/cad-training/parallel-plate-drivetrain/">Lesson 5 — Parallel Plate Drivetrain</a> &nbsp;|&nbsp;
-  <strong>Next up:</strong> More FTC-specific design work — coming soon.
-</div>
+<div class="note"><b>What's next</b><p>More FTC design lessons are on the way, building toward modeling our full robot. Check the <a href="/mechanical/cad-training/">CAD Training</a> page for new lessons.</p></div>

@@ -1,0 +1,247 @@
+---
+layout: lesson
+title: "Electrical Systems"
+section: "Electrical"
+section_url: "/electrical/"
+kicker: "Lesson 01"
+headline: "Electrical <em>Systems</em>"
+lede: "Before a robot is anything else, it's an electrical system. This lesson follows the power from one battery to every motor, servo and sensor, and explains why your robot is slower at the end of a match than at the start."
+description: "FTC robot electrical fundamentals: voltage, current, the Control Hub, fuses, wire gauge, connectors, battery sag, motors, servos, sensors and LED codes."
+scripts: ["/assets/js/quiz.js"]
+next_url: "/electrical/gremlins/"
+next_title: "Electrical Gremlins"
+---
+
+<div class="lesson-meta"><span><b>About 20 min</b> to read</span><span><b>No coding</b> needed</span><span><b>Quiz</b> at the end</span></div>
+
+<p>Power flows from the battery through wires, a fuse, a switch and connectors into the hubs, and from there out to motors, servos and sensors. Once you understand that path, you'll wire things correctly the first time, track down problems faster, and know why a robot "feels different" late in a match.</p>
+
+<h2>Volts, amps and watts</h2>
+
+<figure class="fig-md">
+  <img src="water_current_voltage_analogy.jpg" alt="Water analogy: voltage is like water pressure, current is like the flow rate" loading="lazy">
+  <figcaption>Voltage is the pressure and current is the flow.</figcaption>
+</figure>
+
+<p><strong>Voltage</strong>, measured in <strong>volts (V)</strong>, is the electrical "pressure" that pushes charge through a wire. An FTC battery is nominally <strong>12 V</strong>.</p>
+
+<p><strong>Current</strong>, measured in <strong>amps (A)</strong>, is how much charge is actually flowing. An LED draws about 0.02 A. A drive motor pushing hard can pull 5–10 A. If all four drive motors stall at once, say while you're shoving another robot, the drivetrain can ask the battery for 40 A or more.</p>
+
+<p><strong>Power</strong>, measured in <strong>watts (W)</strong>, is the two multiplied together: <strong>watts = volts × amps</strong>. A motor drawing 5 A at 12 V is using 60 W, about the same as an old-style light bulb.</p>
+
+<div class="note note-gold"><b>Key idea</b><p>Voltage pushes and current flows. Power is volts × amps. Big current is what heats wires, blows fuses and drains batteries.</p></div>
+
+<h2>Meet the Control Hub</h2>
+
+<figure class="fig-md">
+  <img src="control_hub_ports.png" alt="REV Control Hub with labeled ports: battery, motor, encoder, servo, 5V, analog, digital, I2C, RS485 and UART" loading="lazy">
+  <figcaption>Every port on the REV Control Hub. The Expansion Hub has the same layout, without the computer.</figcaption>
+</figure>
+
+<p>The <strong>Control Hub</strong> is the robot's brain and its power distribution board in one box. It runs your code, talks to the Driver Hub over Wi-Fi, and has:</p>
+<ul>
+  <li><strong>Battery</strong> port (XT30): where all the robot's power comes in.</li>
+  <li><strong>4 motor ports</strong>, each with a matching <strong>encoder</strong> port that reads how far the motor has turned.</li>
+  <li><strong>6 servo ports</strong> (0–5).</li>
+  <li><strong>I2C</strong> buses 0–3 for "smart" sensors such as odometry computers, color sensors and distance sensors.</li>
+  <li><strong>Digital</strong> and <strong>analog</strong> ports for simple sensors like limit switches and potentiometers.</li>
+  <li><strong>RS485</strong>, which links to an <strong>Expansion Hub</strong> when you need more ports. The Expansion Hub adds 4 more motors and 6 more servos.</li>
+</ul>
+
+<h2>From battery to hub: fuse and switch</h2>
+
+<figure>
+  <img src="power_wiring.jpg" alt="Power wiring: battery, fuse, power switch, then Control Hub and Expansion Hub" loading="lazy">
+  <figcaption>The main power path. Everything on the robot is downstream of these parts.</figcaption>
+</figure>
+
+<h3>The fuse</h3>
+<p>A fuse is a deliberate weak link. It contains a thin metal strip that melts and opens the circuit if too much current flows. The main power line has a <strong>20 A fuse</strong>; on most FTC-legal battery packs it's built into the battery's lead. If a wire shorts or the drivetrain stalls hard for too long, the cheap fuse blows before the wiring, the battery or the hub is damaged.</p>
+
+<h3>The power switch</h3>
+<p>The robot's main <strong>power switch</strong> is required by the rules. It has to be mounted where field staff can reach it and see it, because pressing it cuts all power at once and stops every motor. Put it somewhere a hand can find it quickly, not tucked behind a mechanism.</p>
+
+<div class="note"><b>Key idea</b><p>The fuse protects the robot from too much current. The switch lets a person turn the robot off instantly. Both sit in the main power line, before the hubs.</p></div>
+
+<h2>Wires and connectors</h2>
+
+<figure class="fig-md">
+  <img src="wire_awg_current.jpg" alt="Table of typical FTC wire gauges and connectors: battery XT30 14 AWG, motor 2-pin VH 18 AWG, encoder and I2C 4-pin PH 22 AWG" loading="lazy">
+  <figcaption>The four kinds of wire you'll handle, from thickest to thinnest.</figcaption>
+</figure>
+
+<p>Wire thickness is given as a <strong>gauge</strong> (AWG, American Wire Gauge). The surprising part is that <strong>a lower number means a thicker wire</strong>, so 14 AWG is much thicker than 22 AWG. A thicker wire carries more current without heating up. Push too much current through a thin wire and it acts like a heater: it gets hot, voltage drops along it, and in the worst case the insulation melts.</p>
+
+<table>
+  <thead><tr><th>Job</th><th>Connector</th><th>Typical wire</th></tr></thead>
+  <tbody>
+    <tr><td>Battery and main power</td><td>XT30</td><td>14 AWG</td></tr>
+    <tr><td>Motor power</td><td>2-pin JST-VH</td><td>18 AWG</td></tr>
+    <tr><td>Encoders and I2C sensors</td><td>4-pin JST-PH</td><td>22 AWG</td></tr>
+    <tr><td>Digital and analog sensors</td><td>3- or 4-pin JST-PH</td><td>22 AWG</td></tr>
+  </tbody>
+</table>
+
+<div class="fig-pair">
+  <figure>
+    <img src="xt30_wire_extension.jpg" alt="XT30 power extension cable with yellow connectors" loading="lazy">
+    <figcaption><strong>XT30</strong>: the yellow power connector. Its shaped housing only fits one way round.</figcaption>
+  </figure>
+  <figure>
+    <img src="4pos_jst_ph_motor_encode_cable.jpg" alt="4-position JST-PH encoder cable with small white locking connectors" loading="lazy">
+    <figcaption><strong>JST-PH</strong>: small, white, locking. Only for signals.</figcaption>
+  </figure>
+</div>
+
+<p>The <strong>XT30</strong> is rated for about 15 A continuous, and more in short bursts. It's used for the battery, the hub power inputs and the power jumper between hubs. The tiny <strong>JST-PH</strong> connectors carry milliamp-level signals from encoders and sensors. Never run motor power through a signal connector.</p>
+
+<div class="note note-gold"><b>Key idea</b><p>Lower gauge means thicker wire. Use thick wire for power and thin wire for signals, and match each connector to its job.</p></div>
+
+<h2>The battery: it sags</h2>
+
+<p>The FTC battery is a <strong>12 V NiMH</strong> (nickel-metal hydride) pack. It powers everything: both hubs, every motor, every servo and every sensor.</p>
+
+<figure>
+  <img src="battery_discharge_graph.jpeg" alt="Discharge curves for five FTC NiMH batteries under load. Voltage slides from about 11.8 V toward 10.5 V, then drops steeply." loading="lazy">
+  <figcaption>Real discharge curves for five FTC batteries under load (West Mountain Radio CBA tester).</figcaption>
+</figure>
+
+<p>A battery doesn't give a steady 12 V and then suddenly stop. Under load, a full pack starts around <strong>11.8 V</strong> and slowly slides down. Near empty, the curve <strong>falls off a cliff</strong>: the voltage collapses, the hub can't get enough power, and the robot browns out or reboots. The curves also show that batteries differ, both from brand to brand and as they age.</p>
+
+<p>This changes how your robot behaves. <code>motor.setPower(0.5)</code> asks for <em>half of whatever the battery is giving right now</em>. At 11.8 V that's about 5.9 V at the motor. Late in a match at 10.8 V, the same line of code gives about 5.4 V, so the robot is slower and nothing in your code changed. That's one reason good teams use <strong>velocity control</strong> (<code>setVelocity</code> with encoders), which adjusts automatically as the battery sags.</p>
+
+<div class="note note-warn"><b>Do this</b><p>Start every match on a freshly charged battery. Number your batteries, rotate through them, and check them with a battery tester. A half-charged battery is one of the most common reasons a robot runs inconsistently at a competition.</p></div>
+
+<h2>Motors and motor controllers</h2>
+
+<p>A <strong>DC motor</strong> turns electrical energy into rotation. Each motor port has its own built-in <strong>motor controller</strong>. Your code sends it a number from −1.0 to +1.0, and the controller turns that into voltage using <strong>PWM</strong> (pulse-width modulation). It switches the battery on and off thousands of times a second, and the fraction of time it's on sets the average voltage the motor sees.</p>
+
+<figure>
+  <img src="motor_and_power_wiring.jpg" alt="Wiring diagram: six motors connected to Control Hub and Expansion Hub motor ports, each with a power cable and an encoder cable" loading="lazy">
+  <figcaption>Six motors across two hubs. Each motor has two cables: thick power wires and a thin encoder cable.</figcaption>
+</figure>
+
+<div class="note"><b>Key idea</b><p>Each hub has four motor controllers, one per motor port. They use PWM to turn your −1.0 to +1.0 command into motor voltage. Every motor needs two cables: power and encoder.</p></div>
+
+<h2>Servos</h2>
+
+<figure class="fig-sm">
+  <img src="dual_mode_servo.jpg" alt="goBILDA dual-mode servo" loading="lazy">
+  <figcaption>goBILDA dual-mode servo. It can be set up as a positional or a continuous servo.</figcaption>
+</figure>
+
+<p>A standard <strong>servo</strong> moves to a <em>position</em> and holds it. You command 0.0–1.0 and it drives itself to that angle. A <strong>continuous rotation servo</strong> (CRServo) behaves more like a small motor: you give it a speed, not a position.</p>
+
+<p>Servos plug into the servo ports (0–5). Servo power comes from a <strong>regulated</strong> supply inside the hub, not straight from the battery, so servos get a steady voltage as the battery sags. That supply is <strong>current-limited per pair of ports</strong> (0–1, 2–3, 4–5). A servo that jams and stalls can trip the protection and drop power to the other servo in its pair too. If two servos keep twitching together, look for something binding.</p>
+
+<h2>Sensors</h2>
+
+<figure class="fig-sm">
+  <img src="sparkfun_otos_circuit_board.jpg" alt="SparkFun Optical Tracking Odometry Sensor circuit board" loading="lazy">
+  <figcaption>SparkFun OTOS optical odometry sensor. Our current robot uses the goBILDA Pinpoint for the same job.</figcaption>
+</figure>
+
+<p>Sensors are how the robot perceives the world. Each one measures something, such as distance, color, heading or position, and sends a number to the hub. Your code reads that number and makes decisions. Most smart sensors plug into an <strong>I2C</strong> port with a 4-wire JST-PH cable. They draw only milliamps and get clean, regulated power from the hub, kept separate from the noisy 12 V motor supply.</p>
+
+<figure>
+  <img src="power_motor_servo_sensor_wiring.jpg" alt="Full wiring diagram with battery, switch, both hubs, motors, servos and sensors" loading="lazy">
+  <figcaption>The full system: battery, switch, hubs, then motors, servos and sensors.</figcaption>
+</figure>
+
+<h2>Reading the hub's LED</h2>
+
+<figure class="fig-md">
+  <img src="control_hub_led_indicators.jpg" alt="Control Hub LED chart: solid blue waiting, solid green connected, blinking blue lost connection, blinking orange low power" loading="lazy">
+</figure>
+
+<p>The status LED is the robot's check-engine light. The ones you'll see most:</p>
+<ul>
+  <li><strong>Solid green</strong>: connected to the Driver Hub and ready. This is what you want before every match.</li>
+  <li><strong>Solid blue</strong>: powered on but not talking to the Driver Hub yet. Check the Driver Hub's Wi-Fi connection.</li>
+  <li><strong>Blinking blue</strong>: it was connected and lost the connection.</li>
+  <li><strong>Blinking orange</strong>: the hub is seeing <strong>less than 7 V</strong>. The battery is unplugged, dead, or the hub is running on USB power only.</li>
+</ul>
+
+<h2>The whole picture</h2>
+
+<p class="flow-label">Motor power</p>
+<ol class="flow"><li>Battery</li><li>Fuse</li><li>Switch</li><li>Hub</li><li>Motor controller</li><li>Motor</li></ol>
+<p class="flow-label">Servo power</p>
+<ol class="flow"><li>Hub</li><li>Regulated servo supply</li><li>Servo</li></ol>
+<p class="flow-label">Sensor power and data</p>
+<ol class="flow"><li>Hub</li><li>Regulated low voltage</li><li>Sensor</li><li>Number in your code</li></ol>
+
+<p>It all starts with one battery. When four drive motors stall, all that current comes from the same pack that powers the hub's computer, which is why a hard shove can make the whole robot hiccup. If the robot slows down or resets in the middle of a match, now you know where to start looking.</p>
+
+<div class="recap">
+  <h2>What you learned</h2>
+  <ul>
+    <li><strong>Voltage</strong> pushes, <strong>current</strong> flows, and <strong>watts = volts × amps</strong>.</li>
+    <li>The <strong>Control Hub</strong> runs your code and powers motors (4), servos (6) and sensors. An <strong>Expansion Hub</strong> adds more ports.</li>
+    <li>A <strong>20 A fuse</strong> protects the wiring. The <strong>power switch</strong> lets anyone kill the robot instantly.</li>
+    <li><strong>Lower AWG means thicker wire.</strong> Use XT30 and thick wire for power, JST-PH and thin wire for signals.</li>
+    <li>The battery <strong>sags</strong> during a match. <code>setPower</code> gets weaker as it does, and velocity control compensates.</li>
+    <li>Servo power is <strong>regulated and current-limited per pair</strong> of ports.</li>
+    <li><strong>Solid green</strong> LED means ready. <strong>Blinking orange</strong> means the hub sees under 7 V.</li>
+  </ul>
+</div>
+
+<section class="quiz" data-quiz>
+<script type="application/json">
+{
+  "title": "Electrical Systems",
+  "draw": 8,
+  "pass": 0.75,
+  "questions": [
+    { "q": "A drive motor draws 5 A from a 12 V battery. About how much power is it using?",
+      "correct": "60 watts",
+      "wrong": ["17 watts", "2.4 watts", "7 watts"],
+      "explain": "Watts = volts × amps, so 12 V × 5 A = 60 W." },
+    { "q": "Which wire is the thickest?",
+      "correct": "14 AWG",
+      "wrong": ["18 AWG", "22 AWG", "They're all the same thickness"],
+      "explain": "With AWG, a lower number means a thicker wire, so 14 AWG is the thickest of these." },
+    { "q": "What is the main job of the fuse in the robot's power line?",
+      "correct": "To open the circuit on overcurrent, protecting wires and electronics",
+      "wrong": ["To raise the battery voltage when the motors need more power", "To let a referee switch the whole robot off in an emergency", "To filter electrical noise out of the sensor signal wires"],
+      "explain": "A fuse is a deliberate weak link. It melts and opens the circuit on overcurrent. The referee-accessible part is the power switch." },
+    { "q": "Which connector should carry motor or battery power?",
+      "correct": "XT30, or the 2-pin motor connector",
+      "wrong": ["A 4-pin JST-PH, since more pins carry more current", "Any connector, as long as it locks in place", "The I2C cable, since it already has a power wire"],
+      "explain": "JST-PH connectors and 22 AWG wire are for milliamp-level signals. Power needs XT30 or VH connectors and thicker wire." },
+    { "q": "Your code runs `motor.setPower(0.5)` at the start of a match and again near the end. What happens?",
+      "correct": "It runs slower near the end, because the battery has sagged",
+      "wrong": ["It runs at exactly the same speed both times", "It runs faster near the end, because the motor has warmed up", "It stops, because setPower only works on a full battery"],
+      "explain": "setPower asks for a fraction of the current battery voltage. As the battery sags, the same fraction means fewer volts at the motor. Velocity control compensates for this." },
+    { "q": "Looking at a real discharge curve, how does an FTC NiMH battery die under load?",
+      "correct": "Voltage slides down slowly, then drops off steeply near empty",
+      "wrong": ["It holds exactly 12 V the whole time, then shuts off instantly", "Voltage rises as the pack warms up, then it shuts off", "Voltage drops in even 1 V steps, once every minute"],
+      "explain": "The curve starts around 11.8 V, slopes gently down, then falls off a cliff. That's when brownouts and reboots happen." },
+    { "q": "How does a motor controller turn your −1.0 to +1.0 command into motor voltage?",
+      "correct": "It switches power on and off rapidly; the on-time sets the average voltage",
+      "wrong": ["It sends the motor the exact number of volts you typed in", "It uses a variable resistor that burns off the extra power as heat", "It changes how many battery cells are connected to the motor"],
+      "explain": "PWM (pulse-width modulation) means fast switching. More on-time gives a higher average voltage." },
+    { "q": "Two servos on ports 2 and 3 keep twitching and losing power at the same moment. What's a likely cause?",
+      "correct": "One is jamming and tripping the current limit the pair shares",
+      "wrong": ["Servo ports 2 and 3 are only powered during autonomous", "The battery is too fully charged for servos to work", "Servos only work reliably on even-numbered ports"],
+      "explain": "Servo power is current-limited per pair of ports (0–1, 2–3, 4–5). A stalled servo can trip the limit for its partner too." },
+    { "q": "What's the difference between a standard servo and a continuous rotation servo?",
+      "correct": "Standard holds a position; continuous spins at a set speed",
+      "wrong": ["A continuous servo is just a faster version of a standard one", "A standard servo can only be at 0 or 1, nothing in between", "Only continuous servos need a power connection"],
+      "explain": "Standard servos take a position from 0.0 to 1.0. CRServos take a speed, like a small motor." },
+    { "q": "Before a match, the Control Hub LED is solid blue. What does that mean?",
+      "correct": "It has power but isn't connected to the Driver Hub yet",
+      "wrong": ["Everything is connected and ready to run", "The battery is below 7 V and needs charging", "The hub is in the middle of a firmware update"],
+      "explain": "Solid green means connected and ready. Solid blue means powered but waiting, so check the Driver Hub's Wi-Fi connection." },
+    { "q": "The hub LED is blinking orange. What should you check first?",
+      "correct": "The battery: unplugged, dead, or hub on USB power only",
+      "wrong": ["The Wi-Fi channel the Driver Hub is using", "Whether the OpMode has a typo in a device name", "The servo wiring on ports 0 and 1"],
+      "explain": "Blinking orange means the hub sees less than 7 V of battery power." },
+    { "q": "What does the Expansion Hub add to a robot?",
+      "correct": "4 more motors, 6 more servos and more sensor ports",
+      "wrong": ["A second battery so matches can last longer", "A faster Wi-Fi connection to the Driver Hub", "A backup copy of your code in case of a crash"],
+      "explain": "The Expansion Hub has the same ports as a Control Hub, minus the computer. It connects to the Control Hub over RS485." }
+  ]
+}
+</script>
+</section>

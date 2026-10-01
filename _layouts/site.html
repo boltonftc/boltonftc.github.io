@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% include head.html %}
+  <link rel="stylesheet" href="/assets/css/site.css">
+{% for href in page.css %}  <link rel="stylesheet" href="{{ href }}">
+{% endfor %}</head>
+<body class="ps nav-solid{% if page.body_class %} {{ page.body_class }}{% endif %}">
+{% include nav.html %}
+
+  <main id="main" class="site-main">
+    {% unless page.hide_header %}
+    <header class="page-head">
+      <div class="wrap">
+        {% if page.section %}<p class="crumbs"><a href="{{ page.section_url }}">{{ page.section }}</a>{% if page.kicker %} <span aria-hidden="true">/</span> {{ page.kicker }}{% endif %}</p>
+        {% elsif page.kicker %}<p class="kicker">{{ page.kicker }}</p>{% endif %}
+        <h1 class="display page-title">{% if page.headline %}{{ page.headline }}{% else %}{{ page.title }}{% endif %}</h1>
+        {% if page.lede %}<p class="page-lede">{{ page.lede }}</p>{% endif %}
+      </div>
+    </header>
+    {% endunless %}
+{{ content }}
+  </main>
+
+{% include footer.html %}
+  <script src="/assets/js/core.js" defer></script>
+{% for src in page.scripts %}  <script src="{{ src }}" defer></script>
+{% endfor %}</body>
+</html>

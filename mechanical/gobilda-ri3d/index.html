@@ -1,87 +1,70 @@
 ---
-layout: page
+layout: site
 title: "goBILDA RI3D Parts Lists"
+section: "Mechanical"
+section_url: "/mechanical/"
+kicker: "goBILDA RI3D"
+headline: "Robot in <em>3 days</em>"
+lede: "Parts lists for every sub-assembly of goBILDA's DECODE Robot-in-3-Days build, which we used as our reference robot in the spring. It isn't the current reference, but it's kept here as a well-documented example of a complete competition robot."
+description: "goBILDA Robot-in-3-Days parts lists for every sub-assembly: drivetrain, intake, indexer, shooter, upper frame and deflector."
+css: ["/assets/css/parts.css"]
 ---
 
-<style>
-.parts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 1.5em; }
-.parts-card { border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow 0.15s, border-color 0.15s; }
-.parts-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: #adb5bd; text-decoration: none; }
-.parts-card-thumb { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: #f0f0f0; display: block; }
-.parts-card-body { padding: 10px 14px 12px; flex: 1; }
-.parts-card h3 { margin: 0 0 4px; font-size: 1em; }
-.parts-card p { margin: 0; font-size: 0.85em; color: #666; }
-.intro { color: #555; margin-bottom: 0.5em; }
-.ri3d-hero { text-align: center; margin: 0.5em 0 1.5em; }
-.ri3d-hero img { max-width: 100%; max-height: 380px; object-fit: contain; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.13); }
-.ri3d-resources { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 1em 1.25em; margin-bottom: 1.5em; }
-.ri3d-resources h3 { margin: 0 0 0.6em; font-size: 1em; color: #333; }
-.ri3d-resources ul { margin: 0; padding-left: 1.2em; }
-.ri3d-resources li { margin-bottom: 0.35em; font-size: 0.92em; }
-.ri3d-resources a { color: #1a73e8; }
-</style>
+<section class="feature">
+  <div class="wrap feature-grid">
+    <div>
+      <p class="kicker">Spring 2026 · archive</p>
+      <h2>11 sub-assemblies · <em>504 parts</em></h2>
+      <p>goBILDA's Robot-in-3-Days build comes with full CAD and assembly guides. The parts are split into sub-assemblies, so different groups can build pieces in parallel and then bolt them together.</p>
+      <div class="actions">
+        <a class="ps-btn ps-btn-gold" href="https://cad.onshape.com/documents/3197558e4f3773f6ebe8208b/w/99bc19db4529770977af1b6f/e/cbbb65d9cd5559bbd433aae4" target="_blank" rel="noopener">Open the CAD <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        <a class="ps-btn ps-btn-ghost" href="https://www.gobilda.com/robot-in-3-days-resource-guide-decode/" target="_blank" rel="noopener">goBILDA resource guide</a>
+      </div>
+    </div>
+    <div class="feature-art"><div class="frame" style="background:#fff"><img src="/assets/img/subassembly/gobilda_ri3d.jpg" alt="goBILDA Robot-in-3-Days robot" loading="lazy"></div></div>
+  </div>
+</section>
 
-<p class="intro">Complete goBILDA parts lists for every sub-assembly of the Impulse robot.
-Each page includes photos, SKUs, and quantities needed.
-Use these with your goBILDA order or as a reference during assembly.</p>
+<div class="page-body">
+  <section class="wrap sec">
+    <div class="sec-head">
+      <div>
+        <p class="kicker">Parts lists</p>
+        <h2>Pick a <em>sub-assembly</em></h2>
+      </div>
+      <p>Each page has a photo, every part with its SKU and quantity, and a link to that sub-assembly in Onshape.</p>
+    </div>
+    <ul class="sub-list">
+      <li><a href="left-side-mecanum-drivetrain/"><img src="/assets/img/subassembly/drivetrain_left.jpg" alt="" loading="lazy"><span><b>Left drivetrain</b><small>Mecanum rails, motors and hardware</small></span><i>95<small><br>parts</small></i></a></li>
+      <li><a href="right-side-mecanum-drivetrain/"><img src="/assets/img/subassembly/drivetrain_right.jpg" alt="" loading="lazy"><span><b>Right drivetrain</b><small>Mecanum rails, motors and hardware</small></span><i>76<small><br>parts</small></i></a></li>
+      <li><a href="lower-intake/"><img src="/assets/img/subassembly/lower_intake.jpg" alt="" loading="lazy"><span><b>Lower intake</b><small>Bottom roller, mounts and motor</small></span><i>60<small><br>parts</small></i></a></li>
+      <li><a href="upper-intake/"><img src="/assets/img/subassembly/upper_intake.jpg" alt="" loading="lazy"><span><b>Upper intake</b><small>Upper roller, mounts and linkage</small></span><i>32<small><br>parts</small></i></a></li>
+      <li><a href="indexer/"><img src="/assets/img/subassembly/indexer.jpg" alt="" loading="lazy"><span><b>Indexer</b><small>Servo-driven feeder and mounts</small></span><i>47<small><br>parts</small></i></a></li>
+      <li><a href="shooter/"><img src="/assets/img/subassembly/shooter.jpg" alt="" loading="lazy"><span><b>Shooter</b><small>Flywheel, pulleys and belts</small></span><i>67<small><br>parts</small></i></a></li>
+      <li><a href="upper-front/"><img src="/assets/img/subassembly/upper_front.jpg" alt="" loading="lazy"><span><b>Upper front</b><small>Front upper structure</small></span><i>40<small><br>parts</small></i></a></li>
+      <li><a href="upper-right/"><img src="/assets/img/subassembly/upper_right.jpg" alt="" loading="lazy"><span><b>Upper right</b><small>Right upper structure</small></span><i>32<small><br>parts</small></i></a></li>
+      <li><a href="upper-left/"><img src="/assets/img/subassembly/upper_left.jpg" alt="" loading="lazy"><span><b>Upper left</b><small>Left upper structure</small></span><i>32<small><br>parts</small></i></a></li>
+      <li><a href="upper-back/"><img src="/assets/img/subassembly/upper_back.jpg" alt="" loading="lazy"><span><b>Upper back</b><small>Rear upper structure</small></span><i>7<small><br>parts</small></i></a></li>
+      <li><a href="deflector/"><img src="/assets/img/subassembly/deflector.jpg" alt="" loading="lazy"><span><b>Deflector</b><small>Deflector plate and standoffs</small></span><i>16<small><br>parts</small></i></a></li>
+    </ul>
+  </section>
 
-<div class="ri3d-hero">
-  <img src="/assets/img/subassembly/gobilda_ri3d.jpg" alt="goBILDA Robot In 3 Days">
-</div>
-
-<div class="ri3d-resources">
-  <h3>goBILDA Robot In 3 Days (RI3D) Resources</h3>
-  <ul>
-    <li><a href="https://www.gobilda.com/robot-in-3-days-resource-guide-decode/" target="_blank" rel="noopener">goBILDA Robot overview &amp; resource guide</a></li>
-    <li><a href="https://www.gobilda.com/content/user_manuals/3209-0001-0007_assembly-instructions.min.pdf" target="_blank" rel="noopener">Mecanum Base Assembly Instructions (PDF)</a></li>
-    <li><a href="https://www.youtube.com/watch?v=sjJEbIN4ugw&amp;t=1423s" target="_blank" rel="noopener">Mecanum Base Assembly Video (YouTube)</a></li>
-    <li><a href="https://cad.onshape.com/documents/3197558e4f3773f6ebe8208b/w/99bc19db4529770977af1b6f/e/cbbb65d9cd5559bbd433aae4" target="_blank" rel="noopener">RI3D Onshape CAD File</a></li>
-  </ul>
-</div>
-
-<div class="parts-grid">
-  <a class="parts-card" href="left-side-mecanum-drivetrain/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/drivetrain_left.jpg" alt="Left Drivetrain" loading="lazy">
-    <div class="parts-card-body"><h3>Left Drivetrain</h3><p>Left side mecanum drivebase rails, motors, and hardware</p></div>
-  </a>
-  <a class="parts-card" href="right-side-mecanum-drivetrain/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/drivetrain_right.jpg" alt="Right Drivetrain" loading="lazy">
-    <div class="parts-card-body"><h3>Right Drivetrain</h3><p>Right side mecanum drivebase rails, motors, and hardware</p></div>
-  </a>
-  <a class="parts-card" href="lower-intake/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/lower_intake.jpg" alt="Lower Intake" loading="lazy">
-    <div class="parts-card-body"><h3>Lower Intake</h3><p>Bottom intake roller, mounts, and motor</p></div>
-  </a>
-  <a class="parts-card" href="upper-intake/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/upper_intake.jpg" alt="Upper Intake" loading="lazy">
-    <div class="parts-card-body"><h3>Upper Intake</h3><p>Upper intake roller, mounts, and linkage</p></div>
-  </a>
-  <a class="parts-card" href="indexer/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/indexer.jpg" alt="Indexer" loading="lazy">
-    <div class="parts-card-body"><h3>Indexer</h3><p>Servo-driven indexer arm and mount hardware</p></div>
-  </a>
-  <a class="parts-card" href="shooter/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/shooter.jpg" alt="Shooter" loading="lazy">
-    <div class="parts-card-body"><h3>Shooter</h3><p>Flywheel shooter assembly, pulleys, and belts</p></div>
-  </a>
-  <a class="parts-card" href="upper-front/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/upper_front.jpg" alt="Upper Front" loading="lazy">
-    <div class="parts-card-body"><h3>Upper Front</h3><p>Front upper structure and mounting hardware</p></div>
-  </a>
-  <a class="parts-card" href="upper-right/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/upper_right.jpg" alt="Upper Right" loading="lazy">
-    <div class="parts-card-body"><h3>Upper Right</h3><p>Right upper structure and mounting hardware</p></div>
-  </a>
-  <a class="parts-card" href="upper-left/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/upper_left.jpg" alt="Upper Left" loading="lazy">
-    <div class="parts-card-body"><h3>Upper Left</h3><p>Left upper structure and mounting hardware</p></div>
-  </a>
-  <a class="parts-card" href="upper-back/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/upper_back.jpg" alt="Upper Back" loading="lazy">
-    <div class="parts-card-body"><h3>Upper Back</h3><p>Rear upper structure and mounting hardware</p></div>
-  </a>
-  <a class="parts-card" href="deflector/">
-    <img class="parts-card-thumb" src="/assets/img/subassembly/deflector.jpg" alt="Deflector" loading="lazy">
-    <div class="parts-card-body"><h3>Deflector</h3><p>Ball deflector plate and standoffs</p></div>
-  </a>
+  <section class="wrap sec">
+    <div class="refs">
+      <div class="refs-group">
+        <h3>Build guides</h3>
+        <ul>
+          <li><a href="https://www.gobilda.com/content/user_manuals/3209-0001-0007_assembly-instructions.min.pdf" target="_blank" rel="noopener"><b>Mecanum base assembly instructions</b><small>Step-by-step drawings for the drivetrain.</small><i>PDF</i></a></li>
+          <li><a href="https://www.youtube.com/watch?v=sjJEbIN4ugw&amp;t=1423s" target="_blank" rel="noopener"><b>Mecanum base assembly video</b><small>Watch the drivetrain go together.</small><i>Video</i></a></li>
+        </ul>
+      </div>
+      <div class="refs-group">
+        <h3>Design files</h3>
+        <ul>
+          <li><a href="https://www.gobilda.com/robot-in-3-days-resource-guide-decode/" target="_blank" rel="noopener"><b>RI3D resource guide</b><small>goBILDA's overview of the whole build.</small><i>goBILDA</i></a></li>
+          <li><a href="https://cad.onshape.com/documents/3197558e4f3773f6ebe8208b/w/99bc19db4529770977af1b6f/e/cbbb65d9cd5559bbd433aae4" target="_blank" rel="noopener"><b>RI3D Onshape CAD</b><small>The full robot model. Measure anything.</small><i>Onshape</i></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </div>

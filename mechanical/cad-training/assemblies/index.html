@@ -1,153 +1,42 @@
 ---
-layout: page
-title: "OnShape CAD Training — Lesson 3: Introduction to Assemblies"
+layout: lesson
+title: "Assemblies"
+section: "CAD Training"
+section_url: "/mechanical/cad-training/"
+kicker: "Lesson 03"
+headline: "<em>Assemblies</em> and mates"
+lede: "Parts don't do much on their own. In an Assembly you connect them with mates that define how each part can and can't move. That's how you model a real mechanism."
+description: "Onshape CAD training lesson 3: assemblies, mates and three exercises."
+scripts: ["/assets/js/media.js"]
+prev_url: "/mechanical/cad-training/part-studios/"
+prev_title: "Part Studios"
+next_url: "/mechanical/cad-training/inspection-repair/"
+next_title: "Inspection & Repair"
 ---
-<style>
-.lesson-block { border-radius: 6px; margin: 1.2em 0; padding: 0; overflow: hidden; }
-.block-label { font-size: 0.78em; font-weight: bold; padding: 4px 12px; letter-spacing: 0.05em; text-transform: uppercase; }
-.block-body { padding: 10px 14px; }
-.key-idea  { border: 2px solid #f0c040; }
-.key-idea .block-label  { background: #f0c040; color: #333; }
-.key-idea .block-body   { background: #fffbe6; }
-.todo  { border: 2px solid #5090e0; }
-.todo .block-label  { background: #5090e0; color: #fff; }
-.todo .block-body   { background: #f0f4ff; }
-.hint  { border: 2px solid #c080e0; }
-.hint .block-label  { background: #c080e0; color: #fff; }
-.hint .block-body   { background: #faf0ff; }
 
-.tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78em; font-weight: bold; vertical-align: middle; }
-.tier-cad { background: #e3f2fd; color: #0d47a1; }
+<div class="lesson-meta"><span><b>1 course</b> on learn.onshape.com</span><span><b>3 exercises</b></span><span><b>Stuck logging in?</b> See <a href="/mechanical/cad-training/getting-started/">Lesson 01</a></span></div>
 
-.breadcrumb { font-size: 0.88em; color: #666; margin-bottom: 0.5em; }
-.breadcrumb a { color: #1a73e8; text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
+<p>An <strong>Assembly</strong> is the workspace where separate parts come together: every motor, bracket, shaft and gear placed where it belongs relative to everything else. The links between parts are called <strong>mates</strong>.</p>
 
-.video-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin: 1.2em 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-.video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 8px; }
-
-.exercise-card { border: 1px solid #dee2e6; border-radius: 8px; margin: 1.5em 0; overflow: hidden; }
-.exercise-header { background: #37474f; color: #fff; padding: 8px 16px; font-size: 0.95em; font-weight: bold; }
-.exercise-header .ex-num { font-size: 0.78em; font-weight: normal; opacity: 0.8; margin-right: 6px; }
-.exercise-body { padding: 12px 16px 0; }
-
-.video-label { font-weight: bold; color: #444; margin: 1em 0 0.3em; font-size: 0.95em; }
-.series-nav { margin-top: 2em; padding: 12px 18px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6; font-size: 0.92em; color: #555; }
-.series-nav strong { color: #222; }
-</style>
-
-<div class="breadcrumb">
-  <a href="/mechanical/cad-training/">← CAD Training</a>
+<div class="course-cta">
+  <div><b>Introduction to Onshape Assemblies</b><p>Watch every lesson, pass the knowledge checks, then build all three exercises.</p></div>
+  <a class="ps-btn ps-btn-gold ps-btn-sm" href="https://learn.onshape.com/learn/course/introduction-to-onshape-assemblies" target="_blank" rel="noopener">Open the course <span class="arrow" aria-hidden="true">&rarr;</span></a>
 </div>
 
-<span class="tier-badge tier-cad">CAD Training — Lesson 3</span>
+<div class="note note-gold"><b>Key idea</b><p>A <strong>mate</strong> says how two parts connect and how they can move. A <strong>fastened</strong> mate locks them together, like a bolt. A <strong>revolute</strong> mate lets one spin around an axis, like a hinge or an axle. Picking the right mate is what makes a virtual assembly behave like the real thing.</p></div>
 
-<h1>Introduction to OnShape Assemblies</h1>
+<div class="note"><b>Part flew off somewhere odd?</b><p>Onshape highlights mate connectors as you hover. If a part jumps to a strange place, you probably picked a face instead of the axis you meant. Press <code>Ctrl</code>+<code>Z</code> and pick again.</p></div>
 
-<p>
-  This is <strong>Lesson 3</strong> of the Bolton FTC summer CAD training series.
-  In this lesson you'll learn how to bring multiple parts together into an
-  <strong>Assembly</strong> — the OnShape workspace where individual parts get connected and
-  constrained to each other using <strong>Mates</strong>. Assemblies are how you'll model
-  a complete robot mechanism: every motor, bracket, shaft, and gear placed in its correct
-  position relative to everything else.
-</p>
-<p>
-  Work through the full
-  <a href="https://learn.onshape.com/learn/course/introduction-to-onshape-assemblies" target="_blank" rel="noopener">Introduction to OnShape Assemblies</a>
-  course on learn.onshape.com, then complete the three exercises using the reference videos
-  below if you get stuck.
-</p>
-<p style="font-size:0.92em; color:#555;">
-  <em>Need help logging in or finding the course?</em>
-  See <a href="/mechanical/onshape-cad/">Lesson 1</a> — it walks through login and
-  navigating to learn.onshape.com step by step.
-</p>
-
-<hr>
-
-<div class="lesson-block key-idea">
-  <div class="block-label">💡 Key Idea</div>
-  <div class="block-body">
-    A <strong>Mate</strong> defines the relationship between two parts — it tells OnShape
-    how they connect and how they can (or can't) move relative to each other. A
-    <em>Fastened Mate</em> locks two parts rigidly together. A <em>Revolute Mate</em> allows
-    rotation around an axis, like a hinge or axle. Choosing the right mate type is what
-    makes a virtual assembly behave like the real thing.
-  </div>
-</div>
-
-<div class="lesson-block todo">
-  <div class="block-label">✅ What to Do</div>
-  <div class="block-body">
-    <ol style="margin:0; padding-left:1.3em;">
-      <li>Open the <a href="https://learn.onshape.com/learn/course/introduction-to-onshape-assemblies" target="_blank" rel="noopener">Introduction to OnShape Assemblies</a> course on learn.onshape.com.</li>
-      <li>Work through <strong>all the lessons</strong> in order — watch the videos and complete all knowledge checks.</li>
-      <li>Complete <strong>all three exercises</strong> listed below. Use the reference videos if you get stuck.</li>
-      <li>Mark the course complete before moving on.</li>
-    </ol>
-  </div>
-</div>
-
-<div class="lesson-block hint">
-  <div class="block-label">💜 Hint</div>
-  <div class="block-body">
-    When adding a mate, OnShape highlights valid mate connectors as you hover over parts.
-    If a part is flying off to an unexpected location, check that you selected the right
-    connector on each part — it's easy to accidentally pick a face instead of an axis.
-    Undo (<kbd>Ctrl+Z</kbd>) and try again.
-  </div>
-</div>
-
-<hr>
-<h2>Exercise Reference Videos</h2>
-<p>These videos show a complete walkthrough of each exercise. Watch them only after you've tried
-the exercise yourself, or if you're genuinely stuck.</p>
-
-<!-- Exercise 1 -->
-<div class="exercise-card">
-  <div class="exercise-header"><span class="ex-num">Exercise 1</span> Start an Assembly</div>
-  <div class="exercise-body">
-    <p class="video-label">📹 Reference Video</p>
-    <div class="video-wrap">
-      <iframe src="https://www.youtube.com/embed/hX6nalbu8vo"
-        title="OnShape Assemblies Exercise: Start an Assembly"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-    </div>
-  </div>
-</div>
-
-<!-- Exercise 2 -->
-<div class="exercise-card">
-  <div class="exercise-header"><span class="ex-num">Exercise 2</span> Pneumatic Cylinder</div>
-  <div class="exercise-body">
-    <p class="video-label">📹 Reference Video</p>
-    <div class="video-wrap">
-      <iframe src="https://www.youtube.com/embed/d41DQ2kfKL0"
-        title="OnShape Assemblies Exercise: Pneumatic Cylinder"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-    </div>
-  </div>
-</div>
-
-<!-- Exercise 3 -->
-<div class="exercise-card">
-  <div class="exercise-header"><span class="ex-num">Exercise 3</span> Assembly Structure</div>
-  <div class="exercise-body">
-    <p class="video-label">📹 Reference Video</p>
-    <div class="video-wrap">
-      <iframe src="https://www.youtube.com/embed/oxLoV_VRpso"
-        title="OnShape Assemblies Exercise: Assembly Structure"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-    </div>
-  </div>
-</div>
-
-<div class="series-nav">
-  <strong>Series:</strong> <a href="/mechanical/cad-training/">CAD Training</a> — Lesson 3 of several &nbsp;|&nbsp;
-  <strong>← Previous:</strong> <a href="/mechanical/cad-training/part-studios/">Lesson 2 — Introduction to Part Studios</a> &nbsp;|&nbsp;
-  <strong>Next:</strong> <a href="/mechanical/cad-training/inspection-repair/">Lesson 4 — Inspection and Repair Tools</a>
-</div>
+<h2>Exercises</h2>
+<p>Build each one yourself first. Open the walkthrough only when you're really stuck.</p>
+<ol class="ex-list">
+  <li><details><summary><b>Start an assembly</b><span>Walkthrough</span></summary>
+    <a class="yt" href="https://www.youtube.com/watch?v=hX6nalbu8vo" data-yt="hX6nalbu8vo" data-title="Assemblies exercise: Start an Assembly"><img src="https://i.ytimg.com/vi/hX6nalbu8vo/hqdefault.jpg" alt="" loading="lazy"></a>
+  </details></li>
+  <li><details><summary><b>Pneumatic cylinder</b><span>Walkthrough</span></summary>
+    <a class="yt" href="https://www.youtube.com/watch?v=d41DQ2kfKL0" data-yt="d41DQ2kfKL0" data-title="Assemblies exercise: Pneumatic Cylinder"><img src="https://i.ytimg.com/vi/d41DQ2kfKL0/hqdefault.jpg" alt="" loading="lazy"></a>
+  </details></li>
+  <li><details><summary><b>Assembly structure</b><span>Walkthrough</span></summary>
+    <a class="yt" href="https://www.youtube.com/watch?v=oxLoV_VRpso" data-yt="oxLoV_VRpso" data-title="Assemblies exercise: Assembly Structure"><img src="https://i.ytimg.com/vi/oxLoV_VRpso/hqdefault.jpg" alt="" loading="lazy"></a>
+  </details></li>
+</ol>
