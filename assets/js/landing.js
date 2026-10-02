@@ -13,7 +13,7 @@
     } catch (e) { return null; }
   }
 
-  /* ---------- 36563: twin highlights, a light-up hint, and the fold + proof easter egg ---------- */
+  /* ---------- 36563: twin highlights, a light-up hint, and the fold easter egg ---------- */
   var Egg = { run: function () {}, cancel: function () {}, hint: function () {} };
   (function () {
     var heroEl = document.querySelector('.hero');
@@ -27,20 +27,12 @@
     var ops = slice(num.querySelectorAll(':scope > .hop'));
     var fold = num.querySelector('.fold');
     var fds = slice(fold.querySelectorAll('.fd'));
-    var math = heroEl.querySelector('.hero-math');
-    var copy = heroEl.querySelector('.hero-copy');
-    var arc = heroEl.querySelector('.egg-arc');
-    var arcPath = arc.querySelector('path');
-    var toks = function (sel) { return slice(math.querySelectorAll(sel + ' .tok')); };
-    var row1 = toks('.r1'), row2 = toks('.r2'), note = toks('.math-note');
+    var fdop = fold.querySelector('.hop');
+    var eqs = num.querySelector('.eqs');
     var timers = [], busy = false;
 
     var at = function (ms, fn) { timers.push(setTimeout(fn, ms)); };
     var centerX = function (el) { var r = el.getBoundingClientRect(); return r.left + r.width / 2; };
-    var setToks = function (list, on) { list.forEach(function (t) { t.classList.toggle('on', on); }); };
-    var stagger = function (list, start, step) {
-      list.forEach(function (t, k) { at(start + k * step, function () { t.classList.add('on'); }); });
-    };
     var unlight = function () { digits.forEach(function (d) { d.classList.remove('lit'); }); };
 
     // hovering a digit lights its mirror twin
@@ -66,60 +58,33 @@
       setTimeout(function () { if (!busy) unlight(); }, groups.length * 380 + 320);
     };
 
-    var drawArc = function () {
-      var box = copy.getBoundingClientRect();
-      var a = row2[row2.length - 1].getBoundingClientRect();
-      var b = five.getBoundingClientRect();
-      var sx = a.left + a.width / 2 - box.left, sy = a.top - box.top - 6;
-      var ex = b.left + b.width / 2 - box.left, ey = b.bottom - box.top + 10;
-      var reach = Math.max(80, (sx - ex) * 0.9);
-      arcPath.setAttribute('d', 'M' + sx + ' ' + sy +
-        ' C' + (sx + reach * 0.5) + ' ' + (sy - 60) + ' ' + (ex + reach) + ' ' + (ey + 70) + ' ' + ex + ' ' + ey);
-      var len = arcPath.getTotalLength();
-      arcPath.style.transition = 'none';
-      arcPath.style.strokeDasharray = len;
-      arcPath.style.strokeDashoffset = len;
-      arcPath.getBoundingClientRect();
-      arc.classList.add('on');
-      arcPath.style.transition = 'stroke-dashoffset .75s cubic-bezier(.4, 0, .2, 1)';
-      arcPath.style.strokeDashoffset = 0;
-    };
-
     var reset = function () {
       timers.forEach(clearTimeout);
       timers = [];
       num.classList.remove('spread');
       fold.classList.remove('show', 'split');
+      eqs.classList.remove('on');
       num.style.transition = '';
-      digits.concat(ops, fds).forEach(function (el) { el.style.transition = ''; el.style.transform = ''; el.style.opacity = ''; });
+      digits.concat(ops, fds, [fdop]).forEach(function (el) { el.style.transition = ''; el.style.transform = ''; el.style.opacity = ''; });
       five.classList.remove('flash');
-      setToks(row1.concat(row2, note), false);
-      arc.classList.remove('on');
-      arcPath.style.strokeDasharray = '';
-      arcPath.style.strokeDashoffset = '';
       heroEl.classList.remove('egg-on');
       busy = false;
     };
-    var finish = function () {
-      heroEl.classList.remove('egg-on');
-      arc.classList.remove('on');
-      at(450, reset);
-    };
     Egg.cancel = function () { if (busy) reset(); };
 
+    // 3 + 6 + 5 + 6 + 3  =  23  ->  2 + 3  =  5  ->  36563 again
     Egg.run = function () {
       if (busy || !heroEl.classList.contains('is-ready')) return;
       busy = true;
       unlight();
       heroEl.classList.add('egg-on');
-      if (reduceMotion) { setToks(row1.concat(row2, note), true); at(6500, finish); return; }
+      if (reduceMotion) { five.classList.add('flash'); at(1500, reset); return; }
 
-      // 1) plus signs open up between the digits:  3 + 6 + 5 + 6 + 3
+      // 1) plus signs open up between the digits
       num.classList.add('spread');
-      stagger(row1.slice(0, 9), 150, 85);
 
       // 2) everything slides into the center line...
-      at(1000, function () {
+      at(1300, function () {
         var c = centerX(num);
         var s = num.getBoundingClientRect().width / num.offsetWidth || 1;   // dx must be in the scaled element's own units
         digits.concat(ops).forEach(function (el) {
@@ -129,8 +94,9 @@
         });
       });
 
-      // 3) ...and 23 blooms out of it. Quietly re-park the hidden digits at the center of the un-spread layout.
-      at(1700, function () {
+      // 3) ...and becomes "=" while the hidden digits quietly re-park at the center of the un-spread layout
+      at(1950, function () {
+        eqs.classList.add('on');
         num.style.transition = 'none';
         ops.forEach(function (o) { o.style.transition = 'none'; });
         digits.forEach(function (d) { d.style.transition = 'none'; d.style.transform = 'none'; });
@@ -140,53 +106,49 @@
         digits.forEach(function (d) { d.style.transform = 'translateX(' + (c - centerX(d)) + 'px) scale(.35)'; });
         void num.offsetWidth;
         num.style.transition = '';
-        fold.classList.add('show');
-        stagger(row1.slice(9), 120, 110);
       });
 
-      // 4) 2 + 3
-      at(2650, function () {
-        fold.classList.add('split');
-        stagger(row2.slice(0, 3), 0, 90);
-      });
+      // 4) = gives way to 23
+      at(2900, function () { eqs.classList.remove('on'); });
+      at(3150, function () { fold.classList.add('show'); });
 
-      // 5) the 2 and 3 crash together on the seam...
-      at(3450, function () {
+      // 5) 23 opens into 2 + 3
+      at(4200, function () { fold.classList.add('split'); });
+
+      // 6) the 2 and 3 crash together on the seam...
+      at(5300, function () {
         var c = centerX(num);
         fds.forEach(function (f) {
           f.style.transition = 'transform .5s cubic-bezier(.6, 0, .4, 1), opacity .35s ease .15s';
           f.style.transform = 'translateX(' + (c - centerX(f)) + 'px) scale(.4)';
           f.style.opacity = '0';
         });
-        stagger(row2.slice(3), 80, 120);
+        fdop.style.opacity = '0';
       });
 
-      // 6) ...and become the real 5, right where it started
-      at(3950, function () {
+      // 7) ...into "=" again...
+      at(5850, function () { eqs.classList.add('on'); });
+
+      // 8) ...which becomes the real 5, right where it started
+      at(6800, function () {
+        eqs.classList.remove('on');
         five.style.transition = 'transform .55s cubic-bezier(.2, .8, .2, 1), opacity .3s ease';
         five.style.transform = '';
         five.style.opacity = '';
         five.classList.add('flash');
       });
 
-      // 7) the written answer loops back up into it
-      at(4150, drawArc);
-
-      // 8) 36563 unfolds back out around the 5
-      at(4950, function () {
+      // 9) 36563 unfolds back out around the 5
+      at(7700, function () {
         outer.forEach(function (d) {
           d.style.transition = 'transform .9s cubic-bezier(.2, .8, .2, 1), opacity .6s ease';
           d.style.transform = '';
           d.style.opacity = '';
         });
-        five.classList.remove('flash');
-        void five.offsetWidth;
-        five.classList.add('flash');
-        stagger(note, 450, 0);
       });
 
-      at(6200, function () { five.classList.remove('flash'); });
-      at(8600, finish);
+      at(8900, function () { five.classList.remove('flash'); });
+      at(9400, reset);
     };
 
     slice(document.querySelectorAll('[data-egg]')).forEach(function (b) {
