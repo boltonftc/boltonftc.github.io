@@ -69,6 +69,13 @@ events:
     kind: scrimmage
     start: "09:00"
     end: "14:00"
+  - date: "2026-11-17"
+    title: "FLL Explore Expo"
+    kind: outreach
+    start: "17:00"
+    end: "20:00"
+    location: "FSS"
+    notes: "Setup starts at 5:00; done by 8:00"
 
 # Template:
 #  - date: "2026-11-14"
