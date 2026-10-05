@@ -1,0 +1,133 @@
+---
+layout: page
+title: "Week 7 — Turret Shooter Reference: Top Flywheel + Scoop Hood"
+---
+
+<style>
+.meeting-meta { color: #666; font-size: 0.92em; margin: -0.5em 0 1.5em; }
+.meeting-meta span { margin-right: 1.2em; }
+.section-label {
+  font-size: 0.75em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a73e8;
+  margin-bottom: 0.4em;
+}
+.agenda-card {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.1em 1.25em 1.4em;
+  margin-bottom: 1.8em;
+}
+.agenda-card h3 { margin: 0 0 0.9em; font-size: 1.05em; color: #222; }
+.agenda-item {
+  display: flex;
+  gap: 1em;
+  padding: 0.8em 0;
+  border-bottom: 1px solid #e9ecef;
+  align-items: flex-start;
+}
+.agenda-item:last-child { border-bottom: none; padding-bottom: 0; }
+.agenda-icon { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
+.agenda-text h4 { margin: 0 0 0.2em; font-size: 0.97em; color: #1a1a1a; }
+.agenda-text p  { margin: 0 0 0.35em; font-size: 0.88em; color: #555; }
+.agenda-text p:last-child { margin-bottom: 0; }
+.agenda-text a  { color: #1a73e8; }
+.agenda-text ul { margin: 0.2em 0 0.35em; padding-left: 1.2em; font-size: 0.88em; color: #555; }
+.agenda-text li { margin-bottom: 0.2em; }
+.agenda-imgs { display: flex; flex-wrap: wrap; gap: 0.6em; margin-top: 0.6em; }
+.agenda-imgs a { line-height: 0; }
+.agenda-imgs img {
+  max-width: 320px; width: 100%; height: auto;
+  border-radius: 6px; border: 1px solid #dee2e6; background: #fff;
+}
+.meeting-nav { display: flex; justify-content: space-between; margin-top: 2em; font-size: 0.9em; }
+.meeting-nav a { color: #1a73e8; }
+</style>
+
+<p class="meeting-meta">
+  <span>📅 October 5, 2026</span>
+  <span>🏷️ Turret Shooter Reference</span>
+</p>
+
+<div class="agenda-card">
+  <div class="section-label">Design Reference</div>
+  <h3>Week 7 — Team 26949's goBILDA Turret: Flywheel on Top, Hood as a Scoop</h3>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🎥</div>
+    <div class="agenda-text">
+      <h4>Watch: Team 26949 Royal Society of Robotics — BIOBUZZ Snapshot</h4>
+      <p>A reference for anyone working on our turret. Watch the short, then study the photo below.</p>
+      <p><a href="https://www.youtube.com/shorts/Wd3mQ8ENxlk" target="_blank" rel="noopener">→ New goBILDA Turret | 26949 Royal Society of Robotics | FTC BIOBUZZ Snapshot (YouTube)</a></p>
+      <div class="agenda-imgs">
+        <a href="turret_design.png" target="_blank" rel="noopener"><img src="turret_design.png" alt="Team 26949's turret: a goBILDA flywheel mounted above a red curved scoop hood marked 68 degrees, on a rotating turret ring" loading="lazy"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🔄</div>
+    <div class="agenda-text">
+      <h4>What makes this one different</h4>
+      <ul>
+        <li><strong>The flywheel is on top.</strong> Most shooters we've looked at put the flywheel below the ball, with a hood above it.</li>
+        <li><strong>The hood is a scoop.</strong> The red curved piece sits <em>under</em> the ball. The flywheel presses down on top of the pollen and rolls it forward along the scoop.</li>
+        <li><strong>The shooter angle is marked at 68°.</strong> Look closely at the red scoop: the angle is written right on the part. That's a steep, lobbing shot.</li>
+        <li><strong>They use the smaller goBILDA flywheel.</strong> More on what that means below.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🌀</div>
+    <div class="agenda-text">
+      <h4>Front spin vs. back spin — why it matters for the hive</h4>
+      <p>When a ball is squeezed between a spinning wheel and a surface that isn't moving, the side touching the wheel gets dragged forward and the side touching the surface gets held back. That makes the ball spin.</p>
+      <ul>
+        <li><strong>Flywheel below, hood above</strong> (the usual layout) → the bottom of the ball is pushed forward → <strong>back spin</strong>.</li>
+        <li><strong>Flywheel above, scoop below</strong> (this design) → the top of the ball is pushed forward → <strong>front spin</strong> (also called top spin).</li>
+      </ul>
+      <p>Spin changes two things:</p>
+      <ul>
+        <li><strong>The flight path (the Magnus effect).</strong> A spinning ball drags air around with it. Back spin creates lift, so the ball floats and flies flatter and farther. Front spin pushes the ball down, so it dives more steeply at the end of its arc. Light, big balls like pollen feel this strongly.</li>
+        <li><strong>What happens when it lands.</strong> A back-spinning ball tends to check up, skip or kick back toward you when it hits something. A front-spinning ball keeps rolling forward when it lands.</li>
+      </ul>
+      <p><strong>Why we care:</strong> pollen that lands in the hive with back spin can bounce or roll right back out. With front spin, the ball wants to keep rolling <em>deeper into the hive</em>, so it's more likely to stay in and score. Combine that with a steep 68° lob that drops in from above, and the pollen arrives moving down and rolling forward — both working to keep it in.</p>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">⚙️</div>
+    <div class="agenda-text">
+      <h4>Things to keep in mind for our turret</h4>
+      <ul>
+        <li><strong>Exit speed is about half the wheel's surface speed.</strong> When one side of the ball is held by a stationary scoop, the ball's center moves at roughly half the speed of the wheel's rim. Plan your RPM with that in mind.</li>
+        <li><strong>A smaller flywheel has less stored energy.</strong> It spins up faster and is lighter, but it slows down more on each shot, so it needs a moment to recover between shots. It also has to spin at a higher RPM to match the rim speed of a bigger wheel. Fast back-to-back shots are where you'll notice this.</li>
+        <li><strong>Compression matters.</strong> How hard the scoop squeezes the pollen against the wheel controls both grip (speed) and how much spin you get. Too little and the ball slips; too much and it jams or loses speed.</li>
+        <li><strong>The scoop's curve sets the launch angle.</strong> The ball leaves along the end of the curve, so the angle where the scoop ends is your shot angle — likely why the team wrote 68° right on the part.</li>
+        <li><strong>The turret ring</strong> lets them aim without turning the whole robot. Notice how the shooter, motor and scoop all ride on the ring.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">💬</div>
+    <div class="agenda-text">
+      <h4>Discussion questions</h4>
+      <ul>
+        <li>Which way does the pollen spin when it leaves our current shooter design? Draw it.</li>
+        <li>Would front spin or back spin be better for our target? What about a flatter shot from farther away?</li>
+        <li>How could we make the launch angle adjustable instead of fixed at 68°?</li>
+        <li>How would you test whether the smaller flywheel can keep up with rapid shots?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="meeting-nav">
+  <a href="../week-6/">&larr; Week 6</a>
+  <a href="../../">All Meetings</a>
+</div>
