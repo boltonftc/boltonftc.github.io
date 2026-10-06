@@ -1,0 +1,427 @@
+---
+layout: page
+title: "Week 8 — What Can I Work On?"
+---
+
+<style>
+.meeting-meta { color: #666; font-size: 0.92em; margin: -0.5em 0 1.5em; }
+.meeting-meta span { margin-right: 1.2em; }
+.section-label {
+  font-size: 0.75em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a73e8;
+  margin-bottom: 0.4em;
+}
+.agenda-card {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.1em 1.25em 1.4em;
+  margin-bottom: 1.8em;
+}
+.agenda-card h3 { margin: 0 0 0.9em; font-size: 1.05em; color: #222; }
+.agenda-item {
+  display: flex;
+  gap: 1em;
+  padding: 0.8em 0;
+  border-bottom: 1px solid #e9ecef;
+  align-items: flex-start;
+}
+.agenda-item:last-child { border-bottom: none; padding-bottom: 0; }
+.agenda-icon { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
+.agenda-text h4 { margin: 0 0 0.2em; font-size: 0.97em; color: #1a1a1a; }
+.agenda-text p  { margin: 0 0 0.35em; font-size: 0.88em; color: #555; }
+.agenda-text p:last-child { margin-bottom: 0; }
+.agenda-text a  { color: #1a73e8; }
+.agenda-text ul, .agenda-text ol { margin: 0.2em 0 0.35em; padding-left: 1.2em; font-size: 0.88em; color: #555; }
+.agenda-text li { margin-bottom: 0.2em; }
+.agenda-text ul ul { font-size: 1em; margin-top: 0.2em; }
+.rule { font-size: 0.78em; color: #888; white-space: nowrap; }
+.countdown {
+  background: #fff8e6;
+  border: 1px solid #f0c66b;
+  border-left: 5px solid #EFAB28;
+  border-radius: 10px;
+  padding: 1em 1.25em;
+  margin-bottom: 1.8em;
+}
+.countdown h3 { margin: 0 0 0.6em; font-size: 1.1em; color: #222; }
+.cd-stats { display: flex; flex-wrap: wrap; gap: 0.6em 1.6em; margin: 0 0 0.7em; }
+.cd-stat b { display: block; font-size: 1.9em; line-height: 1; color: #b7791f; }
+.cd-stat span { font-size: 0.8em; color: #666; }
+.countdown p { margin: 0 0 0.4em; font-size: 0.88em; color: #555; }
+.countdown ol { margin: 0.2em 0 0; padding-left: 1.3em; font-size: 0.92em; }
+.countdown li { margin-bottom: 0.2em; }
+.countdown a { color: #1a73e8; }
+.checklist { list-style: none; padding-left: 0 !important; }
+.checklist li { display: flex; gap: 0.55em; align-items: flex-start; }
+.checklist input { margin-top: 0.25em; flex-shrink: 0; }
+.meeting-nav { display: flex; justify-content: space-between; margin-top: 2em; font-size: 0.9em; }
+.meeting-nav a { color: #1a73e8; }
+</style>
+
+<p class="meeting-meta">
+  <span>📅 October 7, 2026</span>
+  <span>🏷️ Open Work Session</span>
+</p>
+
+<p>Not sure what to do? Pick something from this page! There is always something useful you can work on — you don't need to wait for a coach to tell you what to do.</p>
+
+<div class="countdown">
+  <h3>🏁 Scrimmage countdown — Bolts, Boos &amp; Bots, Sunday Oct 25</h3>
+  <div class="cd-stats">
+    <div class="cd-stat"><b>18</b><span>days away</span></div>
+    <div class="cd-stat"><b>3</b><span>meetings left (including tonight)</span></div>
+    <div class="cd-stat"><b>7</b><span>hours to prepare</span></div>
+  </div>
+  <p>Tonight (Wed Oct 7, 2½ h) · Wed Oct 14 (2½ h) · Sun Oct 18 (2 h). No meeting Sun Oct 11 or Wed Oct 21.</p>
+  <p><strong>Top priorities — if you can help with one of these, start here:</strong></p>
+  <ol>
+    <li><a href="#signs">Robot signs</a> for both robots</li>
+    <li><a href="#pinpoint">Wire the goBILDA Pinpoint</a></li>
+    <li><a href="#auto">A simple autonomous</a></li>
+    <li><a href="#inspect">Self-inspection checklist</a> — check the robot against the rules before the scrimmage</li>
+  </ol>
+</div>
+
+<div class="agenda-card">
+  <div class="section-label">Announcements</div>
+  <h3>📢 This week</h3>
+  <div class="agenda-item">
+    <div class="agenda-icon">🎪</div>
+    <div class="agenda-text">
+      <h4>Outreach: Backyard Bolton</h4>
+      <p>Saturday, October 17, 10:00 AM – 3:00 PM.</p>
+    </div>
+  </div>
+  <div class="agenda-item">
+    <div class="agenda-icon">🔍</div>
+    <div class="agenda-text">
+      <h4>Missing equipment</h4>
+      <p>Does anyone know where our <strong>motor speed controller</strong> was put away at the end of Sunday's meeting?</p>
+    </div>
+  </div>
+  <div class="agenda-item">
+    <div class="agenda-icon">🏆</div>
+    <div class="agenda-text">
+      <h4>Scrimmage: Sunday, October 25, 9:00 AM – 2:00 PM</h4>
+      <p>Are we entering <strong>one or two robots?</strong></p>
+    </div>
+  </div>
+  <div class="agenda-item">
+    <div class="agenda-icon">📅</div>
+    <div class="agenda-text">
+      <h4>No meeting Sunday, October 11 (holiday weekend)</h4>
+      <p>The next meeting is <strong>Wednesday, October 14</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <div class="section-label">Top Priorities</div>
+  <h3>🎯 Get ready for the scrimmage</h3>
+
+  <div class="agenda-item" id="signs">
+    <div class="agenda-icon">🪧</div>
+    <div class="agenda-text">
+      <h4>1. Make the robot signs (both robots)</h4>
+      <p>Every robot needs signs that show its team number <em>and</em> its alliance color. The rules are specific:</p>
+      <ul>
+        <li><strong>At least two signs per robot</strong>, on surfaces at least 90° apart (for example, front and side). <span class="rule">R401</span></li>
+        <li>Each sign is at least <strong>6.5 in wide × 2.5 in tall</strong>, made of something sturdy, and held by the robot's frame. <span class="rule">R401</span></li>
+        <li>The background is a <strong>solid red or blue</strong> rectangle that matches the alliance you're assigned for that match. <span class="rule">R402</span></li>
+        <li>The numbers are <strong>solid white</strong>, about <strong>2.25 in tall</strong>, side by side (not stacked), with about 0.25 in of background around them. <span class="rule">R403</span></li>
+      </ul>
+      <p><strong>How many?</strong> We play some matches as red and some as blue, so each robot needs <strong>2 red + 2 blue</strong> signs — <strong>8 signs total</strong> for 36563 and 36564. (A reversible sign is OK only if the wrong color can't be seen.)</p>
+      <ol>
+        <li>Read rules R401–R403 in the competition manual.</li>
+        <li>Look for existing OnShape sign designs if you don't want to start from scratch.</li>
+        <li>Design the sign in OnShape. Raised or recessed numbers look great — just make sure they end up <strong>white on red or blue</strong>.</li>
+        <li>3D print the signs.</li>
+      </ol>
+      <p>No time for a 3D model? Signs can also be <strong>printed and laminated</strong>. FIRST provides a printable sign template.</p>
+    </div>
+  </div>
+
+  <div class="agenda-item" id="pinpoint">
+    <div class="agenda-icon">🧭</div>
+    <div class="agenda-text">
+      <h4>2. Wire the goBILDA Pinpoint</h4>
+      <p>Make sure the <strong>goBILDA Pinpoint</strong> is wired correctly. Our odometry — and the autonomous below — depends on it.</p>
+      <p><a href="https://www.gobilda.com/4-bar-odometry-pack-2-pods-1-pinpoint-computer/" target="_blank" rel="noopener">→ goBILDA Pinpoint documentation</a></p>
+    </div>
+  </div>
+
+  <div class="agenda-item" id="auto">
+    <div class="agenda-icon">🤖</div>
+    <div class="agenda-text">
+      <h4>3. Build a simple autonomous</h4>
+      <p>After finishing the <strong>Odometry</strong> and <strong>Autonomous</strong> lessons in the simulator (and once the Pinpoint is wired), create an autonomous program that:</p>
+      <ol>
+        <li>Starts from a <strong>legal starting position</strong>.</li>
+        <li>Leaves the starting area legally.</li>
+        <li>Drives to a location where it can score points.</li>
+        <li>Parks in a useful scoring position.</li>
+      </ol>
+      <p><strong>Legal start</strong> — before the match, the robot must be: <span class="rule">G304</span></p>
+      <ul>
+        <li>completely on our alliance's side of the field (columns A–C for red, D–F for blue),</li>
+        <li><strong>touching the field perimeter wall</strong>,</li>
+        <li><strong>not</strong> in the loading zone, and not touching a flower,</li>
+        <li>inside its 18-inch starting size,</li>
+        <li>touching <strong>exactly 4 pollen</strong> pre-loads, and</li>
+        <li>completely still after INIT.</li>
+      </ul>
+      <p><strong>Easy points in AUTO</strong> (checked at the end of the 30-second AUTO period):</p>
+      <ul>
+        <li><strong>LEAVE — 3 points:</strong> the robot is no longer touching the perimeter wall.</li>
+        <li><strong>PARK — 5 points:</strong> the robot is at least partly inside our loading zone.</li>
+      </ul>
+      <p>Leave the wall and park in the loading zone and that's <strong>8 points</strong> without shooting anything.</p>
+      <p><strong>Other AUTO rules to know:</strong></p>
+      <ul>
+        <li>An OpMode must be selected and INIT pressed before every match. For an AUTO OpMode, the 30-second timer must be turned on. <span class="rule">G305</span></li>
+        <li>Hands off during AUTO — no touching the robot or the Driver Station except to start or stop it. <span class="rule">G401</span></li>
+        <li>Stay on our side. Driving into the other alliance's side during AUTO is risky and can be a penalty. <span class="rule">G402</span></li>
+        <li>The robot must be still between AUTO and TELEOP. If your TeleOp INIT moves servos, wait until TELEOP starts to press INIT. <span class="rule">G403</span></li>
+      </ul>
+      <p>Build and test it in the <a href="{{ site.sim_url }}" target="_blank" rel="noopener">Impulse 3D Simulator</a>. <strong>You do not need to program the path by hand</strong> — drive the route and record it with the simulator's <strong>Path Capture</strong> tool.</p>
+      <p>Don't worry about shooting pollen yet. The goal for now is to get comfortable with odometry, autonomous movement, path planning, starting positions and scoring locations.</p>
+    </div>
+  </div>
+
+  <div class="agenda-item" id="inspect">
+    <div class="agenda-icon">✅</div>
+    <div class="agenda-text">
+      <h4>4. Self-inspection checklist</h4>
+      <p>Every robot is inspected before it can play. Check ours now so there are no surprises at the scrimmage:</p>
+      <ul class="checklist">
+        <li><input type="checkbox" aria-label="done"><span>Fits inside an <strong>18 × 18 × 18 in</strong> cube with every part still. Pre-loaded pollen may stick out. <span class="rule">R102</span></span></li>
+        <li><input type="checkbox" aria-label="done"><span>Holds that size <strong>on its own</strong> without pushing on the sizing box. INIT may hold servos and motors in place, but don't stall a motor against a hard stop. <span class="rule">R103</span></span></li>
+        <li><input type="checkbox" aria-label="done"><span><strong>Robot signs</strong> are on, meet the rules, and we have both colors. <span class="rule">R401–R403</span></span></li>
+        <li><input type="checkbox" aria-label="done"><span>No wiring uses the <strong>robot frame</strong> to carry current. <span class="rule">R605</span></span></li>
+        <li><input type="checkbox" aria-label="done"><span><strong>Grounding strap</strong> is an approved part, plugged into an XT30 port on a store-bought device, with its resistor end attached to the frame. <span class="rule">R605</span></span></li>
+        <li><input type="checkbox" aria-label="done"><span>Fuses, power devices and their wiring can be shown to an inspector, and the <strong>Control Hub's status lights</strong> can be seen. <span class="rule">R606</span></span></li>
+        <li><input type="checkbox" aria-label="done"><span>An OpMode selects and INITs cleanly on the Driver Station. <span class="rule">G305</span></span></li>
+      </ul>
+      <p>This is our quick self-check from the BIOBUZZ competition manual. The latest manual, team updates and FIRST's official inspection materials are on the <a href="https://ftc-resources.firstinspires.org/ftc/game" target="_blank" rel="noopener">FTC Game &amp; Season Materials</a> page.</p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <div class="section-label">More Things to Work On</div>
+  <h3>🤖 Focus on a subsystem</h3>
+  <div class="agenda-item">
+    <div class="agenda-icon">🔧</div>
+    <div class="agenda-text">
+      <h4>Pick one subsystem and learn everything you can about it</h4>
+      <ul>
+        <li><strong>Intake</strong></li>
+        <li><strong>Indexer</strong></li>
+        <li><strong>Drivetrain</strong></li>
+        <li><strong>Shooter</strong> — start with our <a href="../week-7/">Week 7 turret reference</a> (top flywheel, scoop hood, front spin)</li>
+        <li><strong>Odometry</strong> — goBILDA Pinpoint</li>
+        <li><strong>Pollen extraction from flowers</strong></li>
+      </ul>
+      <p>Ask yourself:</p>
+      <ul>
+        <li>How does it work?</li>
+        <li>Why did we design it this way?</li>
+        <li>What could be improved?</li>
+        <li>What problems are we having?</li>
+        <li>Can you think of a different design?</li>
+        <li>Can you find examples of other teams doing this differently?</li>
+      </ul>
+      <p>For inspiration, check out this mechanism: <a href="https://www.youtube.com/shorts/FAaP7D8itDM" target="_blank" rel="noopener">→ watch on YouTube</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <h3>🔎 General research</h3>
+  <div class="agenda-item">
+    <div class="agenda-icon">📺</div>
+    <div class="agenda-text">
+      <h4>Scout some matches</h4>
+      <p>Watch a few FTC matches on YouTube and look for things other teams are doing that we aren't. Write your observations in our Google Doc and share interesting ideas with the team.</p>
+      <p>Things to look for:</p>
+      <ul>
+        <li>Interesting robot designs</li>
+        <li>Different intake mechanisms</li>
+        <li>Different shooters</li>
+        <li>Autonomous strategies</li>
+        <li>Endgame strategies</li>
+        <li>How teams deal with defense</li>
+        <li>Things that seem particularly effective</li>
+        <li>Things that seem like they don't work very well</li>
+      </ul>
+      <p><strong>Don't just watch the match — study the robots!</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <h3>🛠️ CAD</h3>
+  <div class="agenda-item">
+    <div class="agenda-icon">📐</div>
+    <div class="agenda-text">
+      <h4>Complete the OnShape CAD lessons</h4>
+      <p>Continue working through the <a href="/mechanical/cad-training/">CAD training</a>.</p>
+      <p>Want a real design job? The <a href="#signs">robot signs</a> need to be designed in OnShape.</p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <h3>💻 Programming</h3>
+  <div class="agenda-item">
+    <div class="agenda-icon">🎓</div>
+    <div class="agenda-text">
+      <h4>Complete the simulator lessons</h4>
+      <p>Keep working toward completing all of the quizzes in the <a href="{{ site.sim_url }}" target="_blank" rel="noopener">Impulse 3D Simulator</a>. Then take on the <a href="#auto">simple autonomous</a>.</p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <h3>⚡ Electrical</h3>
+  <div class="agenda-item">
+    <div class="agenda-icon">🔌</div>
+    <div class="agenda-text">
+      <h4>Complete the electrical training</h4>
+      <p>Work through the <a href="/electrical/">electrical training</a>. Then help <a href="#pinpoint">wire the Pinpoint</a>.</p>
+    </div>
+  </div>
+  <div class="agenda-item">
+    <div class="agenda-icon">⏚</div>
+    <div class="agenda-text">
+      <h4>Add the grounding strap</h4>
+      <p>Add the grounding strap to the robot. Make sure you understand <strong>why it is there and what it does</strong>, rather than simply attaching it.</p>
+      <p>Rule R605 only allows these straps: <strong>REV REV-31-1269</strong>, <strong>AndyMark am-4648a</strong> or <strong>Swyft SR-Ground-01</strong>. It plugs into an XT30 port on a store-bought device and attaches to the frame through its resistor end.</p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <h3>🖨️ 3D printing</h3>
+  <div class="agenda-item">
+    <div class="agenda-icon">📏</div>
+    <div class="agenda-text">
+      <h4>REX shaft spacers</h4>
+      <p>Print REX shaft spacers in <strong>0.25 cm steps</strong>: 0.25 cm, 0.5 cm, 0.75 cm, 1 cm, and so on.</p>
+    </div>
+  </div>
+  <div class="agenda-item">
+    <div class="agenda-icon">🛞</div>
+    <div class="agenda-text">
+      <h4>Directional mecanum intake wheels</h4>
+      <p>Print some directional mecanum intake wheels for testing. Try different orientations and configurations and see how they affect the intake.</p>
+    </div>
+  </div>
+  <div class="agenda-item">
+    <div class="agenda-icon">🪧</div>
+    <div class="agenda-text">
+      <h4>Robot signs</h4>
+      <p>Once the <a href="#signs">robot sign</a> design is ready, we need <strong>8 signs</strong>: 2 red + 2 blue each for <strong>36563</strong> and <strong>36564</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <h3>🎥 Media <small>(36563)</small></h3>
+  <div class="agenda-item">
+    <div class="agenda-icon">🎬</div>
+    <div class="agenda-text">
+      <h4>Make a robot video</h4>
+      <p>Make a short video showcasing some aspect of the robot. For example:</p>
+      <ul>
+        <li>Show an interesting mechanism.</li>
+        <li>Explain how part of the robot works.</li>
+        <li>Demonstrate something the robot can do.</li>
+        <li>Interview a teammate about something they designed.</li>
+      </ul>
+      <p><strong>Important for now:</strong></p>
+      <ul>
+        <li><strong>Only show the robot.</strong></li>
+        <li><strong>Do not show students in the videos yet.</strong></li>
+        <li><strong>Do not use student names yet.</strong></li>
+      </ul>
+    </div>
+  </div>
+  <div class="agenda-item">
+    <div class="agenda-icon">🎙️</div>
+    <div class="agenda-text">
+      <h4>Example interview</h4>
+      <p><strong>Student 1:</strong> Hi, this is Team 36563 Prime Symmetry, and today we'd like to show off our [mechanism]. We're here with the designer. Tell me a bit about how this works.</p>
+      <p><strong>Student 2:</strong> [Explains how the mechanism works.]</p>
+      <p><strong>Student 1:</strong> What do you like about this design?</p>
+      <p><strong>Student 2:</strong> [Answers.]</p>
+      <p><strong>Student 1:</strong> What do you plan to improve?</p>
+      <p><strong>Student 2:</strong> [Answers.]</p>
+      <p><strong>Student 1:</strong> Awesome! Thanks for telling us about [mechanism]. Check back with our channel for more updates!</p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <h3>📓 Engineering portfolio <small>(36563)</small></h3>
+  <div class="agenda-item">
+    <div class="agenda-icon">📚</div>
+    <div class="agenda-text">
+      <h4>Research existing portfolios</h4>
+      <p>Start preparing now — <strong>don't wait until the end of the season.</strong> Look at engineering portfolios from successful FTC teams and pay attention to:</p>
+      <ul>
+        <li>What information they include</li>
+        <li>How they organize their engineering process</li>
+        <li>How they document design decisions</li>
+        <li>How they show iterations</li>
+        <li>How they describe problems and solutions</li>
+        <li>What kinds of photos and diagrams they use</li>
+      </ul>
+    </div>
+  </div>
+  <div class="agenda-item">
+    <div class="agenda-icon">📸</div>
+    <div class="agenda-text">
+      <h4>Start collecting our own information</h4>
+      <p>As we work, start collecting:</p>
+      <ul>
+        <li>Photos of the robot and its mechanisms</li>
+        <li>CAD screenshots</li>
+        <li>Design ideas and sketches</li>
+        <li>Problems we encountered, solutions we tried, and things that didn't work</li>
+        <li>Design changes</li>
+        <li>Programming milestones and testing results</li>
+        <li>Match observations</li>
+        <li>Outreach activities</li>
+      </ul>
+      <p><strong>Take pictures as we go!</strong> It is much easier to build a good portfolio with documentation from the whole season than trying to remember everything at the end.</p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <h3>⭐ Still not sure what to do?</h3>
+  <div class="agenda-item">
+    <div class="agenda-icon">💡</div>
+    <div class="agenda-text">
+      <p>Pick <strong>one</strong> thing from this page and start. If you're stuck, try this:</p>
+      <ol>
+        <li><strong>Find something on the robot you don't understand.</strong></li>
+        <li>Figure out how it works.</li>
+        <li>Find out why we designed it that way.</li>
+        <li>Think of one way it could be improved.</li>
+        <li>Share your idea with the team.</li>
+      </ol>
+      <p>You don't need to wait for someone to give you a job. <strong>If you see something that could be better, investigate it!</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="meeting-nav">
+  <a href="../week-7/">&larr; Week 7</a>
+  <a href="../../">All Meetings</a>
+</div>
