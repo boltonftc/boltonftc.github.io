@@ -60,31 +60,50 @@ title: "Week 8 — What Can I Work On?"
 .checklist input { margin-top: 0.25em; flex-shrink: 0; }
 .meeting-nav { display: flex; justify-content: space-between; margin-top: 2em; font-size: 0.9em; }
 .meeting-nav a { color: #1a73e8; }
+
+/* ---- standup assignment board ---- */
+.standup { border: 2px solid #162F65; border-radius: 12px; overflow: hidden; margin-bottom: 1.8em; background: #fff; }
+.su-head { background: #162F65; color: #F4F4EE; padding: 0.9em 1.2em; }
+.su-head h3 { margin: 0; font-size: 1.2em; color: #fff; }
+.su-head p { margin: 0.3em 0 0; font-size: 0.88em; color: #c9d4ee; }
+.su-care { display: flex; gap: 0.8em; background: #fff4e5; border-bottom: 1px solid #f0c66b; padding: 0.8em 1.2em; font-size: 0.86em; color: #5c4400; }
+.su-care b { color: #8a5a00; }
+.su-care .ic { font-size: 1.4em; line-height: 1; }
+.su-wrap { overflow-x: auto; }
+.su-table { width: 100%; border-collapse: collapse; font-size: 0.88em; min-width: 640px; }
+.su-table th, .su-table td { padding: 0.65em 0.7em; border-bottom: 1px solid #e5e8ee; vertical-align: top; text-align: left; }
+.su-table thead th { background: #eef2fb; color: #162F65; font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.06em; }
+.su-table thead th.bot { text-align: center; width: 19%; }
+.su-table thead th.bot small { display: block; text-transform: none; letter-spacing: 0; font-weight: normal; color: #5a6b8c; }
+.su-table tbody tr:nth-child(even) { background: #fafbfd; }
+.su-table tr.must { background: #fff7f7 !important; }
+.su-num { font-weight: bold; color: #162F65; width: 1.6em; }
+.su-task h4 { margin: 0 0 0.25em; font-size: 1em; color: #1a1a1a; }
+.su-task p { margin: 0; color: #555; font-size: 0.95em; }
+.su-task a { color: #1a73e8; }
+.su-pri { width: 5.5em; white-space: nowrap; }
+.badge-must { display: inline-block; background: #d93025; color: #fff; font-weight: bold; font-size: 0.78em; letter-spacing: 0.06em; padding: 0.25em 0.6em; border-radius: 999px; }
+.su-rank { width: 3.2em; padding: 0.3em; border: 1px dashed #9aa8c2; border-radius: 6px; text-align: center; font: inherit; }
+.su-rank-lbl { display: block; font-size: 0.75em; color: #777; margin-bottom: 0.2em; }
+.su-name { width: 100%; box-sizing: border-box; padding: 0.45em 0.5em; border: 1px solid #c8d1e3; border-radius: 6px; font: inherit; background: #fff; }
+.su-name:focus, .su-rank:focus { outline: 2px solid #446CE3; border-color: #446CE3; }
+.su-name:placeholder-shown { background: #fffdf3; }
+tr.must .su-name:placeholder-shown { background: #fff0ef; border-color: #f1a7a1; }
+.tag-share { display: inline-block; margin-top: 0.35em; font-size: 0.78em; color: #2a6b3f; background: #e8f5ec; border-radius: 999px; padding: 0.15em 0.6em; }
+.su-foot { padding: 0.75em 1.2em; font-size: 0.82em; color: #666; background: #f8f9fa; display: flex; justify-content: space-between; gap: 1em; flex-wrap: wrap; }
+.su-foot button { font: inherit; font-size: 0.95em; background: none; border: 1px solid #c8d1e3; border-radius: 6px; padding: 0.25em 0.7em; cursor: pointer; color: #555; }
+.su-foot .su-actions { display: flex; gap: 0.5em; flex-wrap: wrap; }
+.su-foot #su-csv, .su-foot #su-copy { background: #162F65; border-color: #162F65; color: #fff; }
+@media print {
+  .su-name, .su-rank { border: none; border-bottom: 1px solid #333; border-radius: 0; background: none !important; }
+  .su-foot button { display: none; }
+}
 </style>
 
 <p class="meeting-meta">
   <span>📅 October 7, 2026</span>
   <span>🏷️ Open Work Session</span>
 </p>
-
-<p>Not sure what to do? Pick something from this page! There is always something useful you can work on — you don't need to wait for a coach to tell you what to do.</p>
-
-<div class="countdown">
-  <h3>🏁 Scrimmage countdown — Bolts, Boos &amp; Bots, Sunday Oct 25</h3>
-  <div class="cd-stats">
-    <div class="cd-stat"><b>18</b><span>days away</span></div>
-    <div class="cd-stat"><b>3</b><span>meetings left (including tonight)</span></div>
-    <div class="cd-stat"><b>7</b><span>hours to prepare</span></div>
-  </div>
-  <p>Tonight (Wed Oct 7, 2½ h) · Wed Oct 14 (2½ h) · Sun Oct 18 (2 h). No meeting Sun Oct 11 or Wed Oct 21.</p>
-  <p><strong>Top priorities — if you can help with one of these, start here:</strong></p>
-  <ol>
-    <li><a href="#signs">Robot signs</a> for both robots</li>
-    <li><a href="#pinpoint">Wire the goBILDA Pinpoint</a></li>
-    <li><a href="#auto">A simple autonomous</a></li>
-    <li><a href="#inspect">Self-inspection checklist</a> — check the robot against the rules before the scrimmage</li>
-  </ol>
-</div>
 
 <div class="agenda-card">
   <div class="section-label">Announcements</div>
@@ -118,6 +137,159 @@ title: "Week 8 — What Can I Work On?"
     </div>
   </div>
 </div>
+
+<p>Not sure what to do? Pick something from this page! There is always something useful you can work on — you don't need to wait for a coach to tell you what to do.</p>
+
+<div class="countdown">
+  <h3>🏁 Scrimmage countdown — Bolts, Boos &amp; Bots, Sunday Oct 25</h3>
+  <div class="cd-stats">
+    <div class="cd-stat"><b>18</b><span>days away</span></div>
+    <div class="cd-stat"><b>3</b><span>meetings left (including tonight)</span></div>
+    <div class="cd-stat"><b>7</b><span>hours to prepare</span></div>
+  </div>
+  <p>Tonight (Wed Oct 7, 2½ h) · Wed Oct 14 (2½ h) · Sun Oct 18 (2 h). No meeting Sun Oct 11 or Wed Oct 21.</p>
+  <p><strong>Tonight's standup:</strong> give every scrimmage task an owner for each robot — <a href="#standup">see the board below</a>.</p>
+</div>
+
+<div class="standup" id="standup">
+  <div class="su-head">
+    <h3>🗣️ Standup: who owns what before the scrimmage?</h3>
+    <p>One rep per robot walks the list. Every <b style="color:#fff">MUST</b> needs a name. For the rest, the team ranks them (1 = do first) and decides who works on them. One person can cover both robots where it makes sense.</p>
+  </div>
+  <div class="su-care">
+    <span class="ic">⚠️</span>
+    <div><b>Handle with care.</b> What we have now is close to being able to compete. Treat the robots with respect — they <em>will</em> break if mishandled or driven recklessly. It may be difficult or impossible to repair a robot in time for the scrimmage, and many parts take <b>a week or more</b> to replace.</div>
+  </div>
+  <div class="su-wrap">
+    <table class="su-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Task</th>
+          <th>Priority</th>
+          <th class="bot">🤖 Gabe<small>owner</small></th>
+          <th class="bot">🤖 Gurt Parallel<small>owner</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="must">
+          <td class="su-num">1</td>
+          <td class="su-task"><h4>Review the FIRST inspection checklist</h4><p>Check the robot against everything needed to compete: size, safety, power switch, signs, wiring. Start with our <a href="#inspect">self-inspection checklist</a>.</p><span class="tag-share">↔ one person can check both robots</span></td>
+          <td class="su-pri"><span class="badge-must">MUST</span></td>
+          <td><input class="su-name" data-k="check.a" placeholder="Name" aria-label="Gabe owner: inspection checklist"></td>
+          <td><input class="su-name" data-k="check.b" placeholder="Name" aria-label="Gurt Parallel owner: inspection checklist"></td>
+        </tr>
+        <tr class="must">
+          <td class="su-num">2</td>
+          <td class="su-task"><h4>Make and install legal team number signs</h4><p>Two sets per robot: <strong>RED and BLUE</strong> alliance signs. Most teams make drop-in 3D-printed cards that slide into a slot mounted on the robot, so swapping colors takes seconds. <a href="#signs">Sign rules</a>.</p><span class="tag-share">↔ one person can make signs for both</span></td>
+          <td class="su-pri"><span class="badge-must">MUST</span></td>
+          <td><input class="su-name" data-k="signs.a" placeholder="Name" aria-label="Gabe owner: team number signs"></td>
+          <td><input class="su-name" data-k="signs.b" placeholder="Name" aria-label="Gurt Parallel owner: team number signs"></td>
+        </tr>
+        <tr class="must">
+          <td class="su-num">3</td>
+          <td class="su-task"><h4>Back up the code — often</h4><p>In the simulator: <strong>Deploy → Zip file (Export)</strong>. Put the .zip on a USB stick and give it to your coach. Do this often — we'll move to GitHub later.</p></td>
+          <td class="su-pri"><span class="badge-must">MUST</span></td>
+          <td><input class="su-name" data-k="backup.a" placeholder="Name" aria-label="Gabe owner: code backup"></td>
+          <td><input class="su-name" data-k="backup.b" placeholder="Name" aria-label="Gurt Parallel owner: code backup"></td>
+        </tr>
+        <tr>
+          <td class="su-num">4</td>
+          <td class="su-task"><h4>Make sure the robot can drive</h4><p>Reliable, controllable driving with the gamepad.</p></td>
+          <td class="su-pri"><span class="su-rank-lbl">Rank</span><input class="su-rank" data-k="drive.r" inputmode="numeric" aria-label="Rank: robot can drive"></td>
+          <td><input class="su-name" data-k="drive.a" placeholder="Name" aria-label="Gabe owner: robot can drive"></td>
+          <td><input class="su-name" data-k="drive.b" placeholder="Name" aria-label="Gurt Parallel owner: robot can drive"></td>
+        </tr>
+        <tr>
+          <td class="su-num">5</td>
+          <td class="su-task"><h4>An autonomous that scores by moving</h4><p>Wire the <strong>goBILDA Pinpoint</strong> and add it to the Control Hub's <a href="/electrical/robot-config/">robot configuration</a> — auto depends on it. Finish the simulator lessons through Autonomous, then build an auto that scores by moving: <strong>LEAVE (3 pts) + PARK (5 pts)</strong>. Know the rules for these points. Don't worry about shooting pollen. <a href="#auto">AUTO rules</a>.</p></td>
+          <td class="su-pri"><span class="su-rank-lbl">Rank</span><input class="su-rank" data-k="auto.r" inputmode="numeric" aria-label="Rank: autonomous"></td>
+          <td><input class="su-name" data-k="auto.a" placeholder="Name" aria-label="Gabe owner: autonomous"></td>
+          <td><input class="su-name" data-k="auto.b" placeholder="Name" aria-label="Gurt Parallel owner: autonomous"></td>
+        </tr>
+        <tr>
+          <td class="su-num">6</td>
+          <td class="su-task"><h4>Pollen scoring: intake → indexer → shooter</h4><p>Get pollen into the robot, lined up, and launched into the hive.</p></td>
+          <td class="su-pri"><span class="su-rank-lbl">Rank</span><input class="su-rank" data-k="pollen.r" inputmode="numeric" aria-label="Rank: pollen scoring"></td>
+          <td><input class="su-name" data-k="pollen.a" placeholder="Name" aria-label="Gabe owner: pollen scoring"></td>
+          <td><input class="su-name" data-k="pollen.b" placeholder="Name" aria-label="Gurt Parallel owner: pollen scoring"></td>
+        </tr>
+        <tr>
+          <td class="su-num">7</td>
+          <td class="su-task"><h4>Know the match rules (avoid penalties)</h4><p>Learn the driving and competing rules so we don't rack up penalties. Write them down and share them with the team. For example: <em>what counts as a pin?</em></p><span class="tag-share">↔ one person can cover both</span></td>
+          <td class="su-pri"><span class="su-rank-lbl">Rank</span><input class="su-rank" data-k="rules.r" inputmode="numeric" aria-label="Rank: match rules"></td>
+          <td><input class="su-name" data-k="rules.a" placeholder="Name" aria-label="Gabe owner: match rules"></td>
+          <td><input class="su-name" data-k="rules.b" placeholder="Name" aria-label="Gurt Parallel owner: match rules"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="su-foot">
+    <span>Names and ranks are saved in this browser only. Export to open it in Google Sheets.</span>
+    <span class="su-actions">
+      <button type="button" id="su-csv">⬇ Download CSV</button>
+      <button type="button" id="su-copy">⧉ Copy for Google Sheets</button>
+      <button type="button" id="su-clear">Clear board</button>
+    </span>
+  </div>
+</div>
+
+<script>
+(function () {
+  var KEY = 'ps.meetings.week8.standup.v2';
+  var data = {};
+  try { data = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+  var fields = document.querySelectorAll('.standup [data-k]');
+  fields.forEach(function (f) {
+    if (data[f.dataset.k]) f.value = data[f.dataset.k];
+    f.addEventListener('input', function () {
+      data[f.dataset.k] = f.value;
+      try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
+    });
+  });
+  document.getElementById('su-clear').addEventListener('click', function () {
+    if (!confirm('Clear all names and ranks on this board?')) return;
+    data = {};
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    fields.forEach(function (f) { f.value = ''; });
+  });
+
+  function rows() {
+    var out = [['#', 'Task', 'Priority', 'Rank', 'Gabe owner', 'Gurt Parallel owner']];
+    document.querySelectorAll('.su-table tbody tr').forEach(function (tr) {
+      var val = function (sel) { var el = tr.querySelector(sel); return el ? el.value.trim() : ''; };
+      out.push([
+        tr.querySelector('.su-num').textContent.trim(),
+        tr.querySelector('.su-task h4').textContent.trim(),
+        tr.classList.contains('must') ? 'MUST' : 'Ranked',
+        val('.su-rank'),
+        val('[data-k$=".a"]'),
+        val('[data-k$=".b"]')
+      ]);
+    });
+    return out;
+  }
+  // keep typed names from being treated as spreadsheet formulas
+  var safe = function (v) { return /^[=+\-@]/.test(v) ? "'" + v : v; };
+  var csvCell = function (v) { v = safe(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+
+  document.getElementById('su-csv').addEventListener('click', function () {
+    var csv = rows().map(function (r) { return r.map(csvCell).join(','); }).join('\r\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'standup_2026-10-07.csv';
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+  });
+  document.getElementById('su-copy').addEventListener('click', function () {
+    var btn = this;
+    var tsv = rows().map(function (r) { return r.map(function (v) { return safe(v).replace(/[\t\n]/g, ' '); }).join('\t'); }).join('\n');
+    navigator.clipboard.writeText(tsv).then(function () {
+      var old = btn.textContent; btn.textContent = '✓ Copied — paste into a Sheet'; setTimeout(function () { btn.textContent = old; }, 1800);
+    }, function () { alert('Could not copy — use Download CSV instead.'); });
+  });
+})();
+</script>
 
 <div class="agenda-card">
   <div class="section-label">Top Priorities</div>
@@ -158,7 +330,8 @@ title: "Week 8 — What Can I Work On?"
     <div class="agenda-icon">🤖</div>
     <div class="agenda-text">
       <h4>3. Build a simple autonomous</h4>
-      <p>After finishing the <strong>Odometry</strong> and <strong>Autonomous</strong> lessons in the simulator (and once the Pinpoint is wired), create an autonomous program that:</p>
+      <p><strong>First, the Pinpoint:</strong> make sure it's <a href="#pinpoint">wired</a> and added to the Control Hub's <a href="/electrical/robot-config/">robot configuration</a> as a <strong>goBILDA Pinpoint Odometry Computer</strong> named <code>pinpoint</code> on I2C bus 1, 2 or 3. The autonomous can't track where the robot is without it.</p>
+      <p>Then, after finishing the <strong>Odometry</strong> and <strong>Autonomous</strong> lessons in the simulator, create an autonomous program that:</p>
       <ol>
         <li>Starts from a <strong>legal starting position</strong>.</li>
         <li>Leaves the starting area legally.</li>
@@ -201,6 +374,8 @@ title: "Week 8 — What Can I Work On?"
         <li><input type="checkbox" aria-label="done"><span>Fits inside an <strong>18 × 18 × 18 in</strong> cube with every part still. Pre-loaded pollen may stick out. <span class="rule">R102</span></span></li>
         <li><input type="checkbox" aria-label="done"><span>Holds that size <strong>on its own</strong> without pushing on the sizing box. INIT may hold servos and motors in place, but don't stall a motor against a hard stop. <span class="rule">R103</span></span></li>
         <li><input type="checkbox" aria-label="done"><span><strong>Robot signs</strong> are on, meet the rules, and we have both colors. <span class="rule">R401–R403</span></span></li>
+        <li><input type="checkbox" aria-label="done"><span><strong>Main power switch:</strong> exactly one approved switch (ours is the goBILDA Floodgate, 3103-0005-0001) and all battery power goes through it. It must be <strong>easy for the team to reach</strong>, away from fast-moving parts and pinch points — and ideally protected so another robot can't bump it off. <span class="rule">R603</span></span></li>
+        <li><input type="checkbox" aria-label="done"><span><strong>Exactly one</strong> approved 12V NiMH robot battery, unmodified. <span class="rule">R601</span></span></li>
         <li><input type="checkbox" aria-label="done"><span>No wiring uses the <strong>robot frame</strong> to carry current. <span class="rule">R605</span></span></li>
         <li><input type="checkbox" aria-label="done"><span><strong>Grounding strap</strong> is an approved part, plugged into an XT30 port on a store-bought device, with its resistor end attached to the frame. <span class="rule">R605</span></span></li>
         <li><input type="checkbox" aria-label="done"><span>Fuses, power devices and their wiring can be shown to an inspector, and the <strong>Control Hub's status lights</strong> can be seen. <span class="rule">R606</span></span></li>
