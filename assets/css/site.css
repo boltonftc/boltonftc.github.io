@@ -287,7 +287,8 @@
 .dtable-wrap { overflow-x: auto; border-top: 2px solid var(--gold); }
 .dtable { width: 100%; border-collapse: collapse; font-size: 14.5px; }
 .dtable th {
-  position: sticky; top: var(--nav-h); z-index: 1; padding: 12px 12px; text-align: left; white-space: nowrap;
+  /* top is relative to .dtable-wrap (its overflow makes it the scroll container), not the page */
+  position: sticky; top: 0; z-index: 1; padding: 12px 12px; text-align: left; white-space: nowrap;
   background: var(--ink-2); color: var(--muted); font: 700 11px/1.2 var(--body); letter-spacing: .16em; text-transform: uppercase;
   border-bottom: 1px solid var(--line);
 }
