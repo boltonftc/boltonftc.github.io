@@ -69,6 +69,7 @@ events:
     kind: scrimmage
     start: "09:00"
     end: "14:00"
+    location: "Westford Academy, 30 Patten Rd., Westford, MA 01886"
   - date: "2026-11-17"
     title: "FLL Explore Expo"
     kind: outreach
