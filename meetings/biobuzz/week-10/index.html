@@ -1,0 +1,131 @@
+---
+layout: page
+title: "Week 10 — Training Sign-Off, Shooting Autos & Pollen Removal"
+---
+
+<style>
+.meeting-meta { color: #666; font-size: 0.92em; margin: -0.5em 0 1.5em; }
+.meeting-meta span { margin-right: 1.2em; }
+.section-label {
+  font-size: 0.75em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a73e8;
+  margin-bottom: 0.4em;
+}
+.agenda-card {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 1.1em 1.25em 1.4em;
+  margin-bottom: 1.8em;
+}
+.agenda-card h3 { margin: 0 0 0.9em; font-size: 1.05em; color: #222; }
+.agenda-item {
+  display: flex;
+  gap: 1em;
+  padding: 0.8em 0;
+  border-bottom: 1px solid #e9ecef;
+  align-items: flex-start;
+}
+.agenda-item:last-child { border-bottom: none; padding-bottom: 0; }
+.agenda-icon { font-size: 1.3em; flex-shrink: 0; margin-top: 0.05em; }
+.agenda-text h4 { margin: 0 0 0.2em; font-size: 0.97em; color: #1a1a1a; }
+.agenda-text p  { margin: 0 0 0.35em; font-size: 0.88em; color: #555; }
+.agenda-text p:last-child { margin-bottom: 0; }
+.agenda-text a  { color: #1a73e8; }
+.agenda-text ul { margin: 0.2em 0 0.35em; padding-left: 1.2em; font-size: 0.88em; color: #555; }
+.agenda-text li { margin-bottom: 0.2em; }
+.meeting-nav { display: flex; justify-content: space-between; margin-top: 2em; font-size: 0.9em; }
+.meeting-nav a { color: #1a73e8; }
+</style>
+
+<p class="meeting-meta">
+  <span>📅 October 28, 2026</span>
+  <span>🏷️ Training, Autos &amp; Robot Work</span>
+</p>
+
+<p>Tonight we split our time between <strong>finishing the Java training</strong> (with mentor sign-off for the
+engineering portfolio), a <strong>new simulator lesson</strong> that adds shooting to autonomous, and hands-on work on
+both robots: the <strong>Gurt turret</strong>, <strong>pollen removal</strong> on Gurt and Gabe, and
+<strong>driver practice</strong>.</p>
+
+<div class="agenda-card">
+  <div class="section-label">Programming</div>
+  <h3>💻 Training &amp; autonomous</h3>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🎓</div>
+    <div class="agenda-text">
+      <h4>Everyone: complete all Java training lessons — with mentor sign-off</h4>
+      <p>Every student works toward completing <strong>all</strong> of the lessons in the
+      <a href="{{ site.sim_url }}" target="_blank" rel="noopener">Impulse 3D Simulator</a>. When you pass a lesson's
+      quiz, show a mentor so they can <strong>sign it off</strong>. The signed sheet goes into our
+      <strong>engineering portfolio</strong>, so it's real evidence of what our team learned.</p>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🌼</div>
+    <div class="agenda-text">
+      <h4>New lesson: Actions in Autonomous — Make It Shoot</h4>
+      <p>There's a new last lesson in the simulator. It explains how an OpMode really runs &mdash; the run loop,
+      <code>robot.update()</code>, why <code>sleep()</code> freezes the robot, <code>for</code> loops and
+      <code>opModeIsActive()</code> &mdash; and how to mark a shooting spot in Path Capture by pressing
+      <strong>X</strong>.</p>
+      <p><strong>Pass its quiz to unlock the code</strong> that makes a captured auto spin up the flywheel and shoot. Then
+      add it to your auto and test it in the simulator.</p>
+    </div>
+  </div>
+</div>
+
+<div class="agenda-card">
+  <div class="section-label">Robots</div>
+  <h3>🤖 Build &amp; drive</h3>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🔄</div>
+    <div class="agenda-text">
+      <h4>Gurt: turret assembly</h4>
+      <p>Keep assembling Gurt's turret. For reference, see our <a href="../week-7/">Week 7 turret notes</a> (top flywheel,
+      scoop hood, front spin).</p>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🌸</div>
+    <div class="agenda-text">
+      <h4>Gurt: pollen removal</h4>
+      <p>Design and build a way for Gurt to remove pollen from the flowers. Reference video (first shared in
+      <a href="../week-8/">Week 8</a>):
+      <a href="https://www.youtube.com/shorts/FAaP7D8itDM" target="_blank" rel="noopener">→ Passive Flower Intake | FTC BIOBUZZ (Hexadecimal Nibble Robotics, YouTube)</a></p>
+      <p>We can have <strong>more than one pollen extractor in the works</strong> at the same time &mdash; we'll use the
+      one that works best.</p>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🌸</div>
+    <div class="agenda-text">
+      <h4>Gabe: pollen removal</h4>
+      <p>Same goal for Gabe. Here too, <strong>more than one solution can be in the works</strong> &mdash; we'll use the
+      one that works best. The two robots don't need the same design, so compare ideas with the Gurt group and share what
+      works.</p>
+    </div>
+  </div>
+
+  <div class="agenda-item">
+    <div class="agenda-icon">🎮</div>
+    <div class="agenda-text">
+      <h4>Driver practice</h4>
+      <p>Drivers get time on the robot. Know what every button does &mdash; see our
+      <a href="/programming/driver-controls/">Driver Controls</a> page.</p>
+    </div>
+  </div>
+</div>
+
+<div class="meeting-nav">
+  <a href="../week-9/">&larr; Week 9</a>
+  <a href="../../">All Meetings</a>
+</div>
