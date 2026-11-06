@@ -86,6 +86,12 @@ events:
     end: "18:00"
     location: "FSS cafeteria"
     notes: "Our FTC team will be presenting what FTC is and a bit about our robot"
+  - date: "2026-11-20"
+    title: "Outreach & Driver Practice"
+    kind: outreach
+    start: "18:00"
+    end: "21:00"
+    location: "Acton-Boxborough Regional High School, 36 Charter Rd., Acton, MA 01720"
   - date: "2026-12-06"
     title: "Littleton Holiday Bazaar"
     kind: outreach
