@@ -5,7 +5,7 @@ url: "https://boltonftc.github.io"
 baseurl: ""
 
 sim_url: "https://boltonftc.github.io/impulse3dsim/"
-# youtube_url: "https://www.youtube.com/@your-channel"   # uncomment to show YouTube in the nav + footer
+youtube_url: "https://www.youtube.com/@FTCTeam36563PrimeSymmetry"   # shows YouTube in the nav + footer
 
 plugins:
   - jekyll-sitemap
