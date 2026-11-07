@@ -139,7 +139,12 @@ button.hd-c {
 
 .hero-sub { margin: 34px auto 0; max-width: 40em; font-size: clamp(15px, 1.5vw, 19px); line-height: 1.55; color: var(--muted); }
 .hero-sub strong { color: var(--paper); font-weight: 600; }
-.hero-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 38px; }
+/* two equal buttons mirrored across the seam: same size, mirrored chamfers, arrows pointing outward */
+.hero-cta { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(14px, 1.8vw, 28px); margin-top: 38px; }
+.hero-cta .ps-btn { width: min(100%, 320px); justify-content: space-between; white-space: nowrap; }
+.hero-cta .cta-l { justify-self: end; }
+.hero-cta .cta-r { justify-self: start; clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut))); }
+.hero-cta .cta-l:hover .arrow { transform: translateX(-4px); }
 button.ps-btn { border: 0; cursor: pointer; }
 
 .sound-btn {
@@ -383,6 +388,11 @@ button.ps-btn { border: 0; cursor: pointer; }
 
 @media (max-width: 1100px) {
   .hero-num { --spread-scale: .82; }
+}
+
+@media (max-width: 760px) {
+  .hero-cta { grid-template-columns: 1fr; row-gap: 12px; }
+  .hero-cta .cta-l, .hero-cta .cta-r { justify-self: center; }
 }
 
 @media (max-width: 640px) {
