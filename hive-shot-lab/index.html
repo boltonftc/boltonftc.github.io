@@ -1,0 +1,72 @@
+---
+layout: site
+title: "Hive Shot Lab"
+kicker: "Built by 36563 · Free for every team"
+headline: "Hive Shot <em>Lab</em>"
+lede: "Film your shooter in slow motion and get the launch speed, launch angle and IN / LOW / HIGH result of every pollen ball. Free, open source, made by FTC team 36563 Prime Symmetry."
+description: "Hive Shot Lab measures FTC BIOBUZZ pollen shots from slow-motion video: launch speed, angle, and IN / LOW / HIGH at the hive cell. Free and open source."
+css: ["/assets/css/hsl.css"]
+scripts: ["/assets/js/media.js"]
+---
+
+<div class="page-body">
+
+  <div class="wrap hsl-top">
+    <a class="yt hsl-video" href="https://www.youtube.com/watch?v=eeBYfQXmmgQ" data-yt="eeBYfQXmmgQ" data-title="FTC Team 36563 Prime Symmetry - Hive Shot Lab">
+      <img src="/assets/video/hsl-poster.jpg" alt="" loading="lazy">
+      <span class="yt-cap">Watch Hive Shot Lab in action</span>
+    </a>
+    <div class="hsl-get">
+      <a class="ps-btn ps-btn-gold" href="{{ site.hsl_repo }}/releases/latest" target="_blank" rel="noopener">Download for Windows <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      <a class="ps-btn ps-btn-blue" href="{{ site.hsl_repo }}" target="_blank" rel="noopener">Source on GitHub</a>
+      <p>Windows 10/11 download, or run it on Mac and Linux with Python. Apache&nbsp;2.0.</p>
+    </div>
+  </div>
+
+  <div class="wrap sec">
+    <div class="sec-head"><div><p class="kicker">What you get</p><h2>See every <em>shot</em></h2></div></div>
+    <div class="hsl-shot">
+      <figure><img src="/assets/img/hsl/hsl-video.jpg" alt="Hive Shot Lab video tab: a four-ball burst tracked over the video with a 1-foot grid, the virtual hive cell and a scoreboard of IN, LOW and HIGH" loading="lazy" width="1600" height="945"></figure>
+      <div><span class="hsl-n">01</span><h3>Track</h3><p>Every ball is found and followed frame by frame, drawn over your video on a 1-foot grid. A scoreboard counts IN, LOW and HIGH, and the result flashes as each ball reaches the cell.</p></div>
+    </div>
+    <div class="hsl-shot flip">
+      <figure><img src="/assets/img/hsl/hsl-burst.jpg" alt="Side-view chart of every flight path in a set of bursts, colored by ball number, with the hive cell opening" loading="lazy" width="1600" height="878"></figure>
+      <div><span class="hsl-n">02</span><h3>Measure</h3><p>Each flight is fitted with real projectile physics, air drag included. You get launch speed, launch angle and the full path, even past where the camera lost the ball.</p></div>
+    </div>
+    <div class="hsl-shot">
+      <figure><img src="/assets/img/hsl/hsl-session.jpg" alt="Chart of every shot from a batch of videos, with filters for flywheel speed and flywheel mass" loading="lazy" width="1600" height="858"></figure>
+      <div><span class="hsl-n">03</span><h3>Compare</h3><p>Batch-process a whole practice. Name videos like <code>robot1_2571rpm_152g</code> and every chart splits by robot setup, with filters for flywheel speed and mass. Export a CSV or a one-page report.</p></div>
+    </div>
+  </div>
+
+  <div class="wrap sec">
+    <div class="two-col">
+      <div>
+        <p class="kicker">Film it right</p>
+        <ul class="ticks">
+          <li><b>Slow motion, 120 or 240 fps</b><small>A phone on a tripod, looking straight at the side of the shot.</small></li>
+          <li><b>One AprilTag in the flight plane</b><small>A printed tag36h11 tag standing where the ball flies. It sets the scale, so nothing else needs measuring.</small></li>
+          <li><b>Plain background</b><small>A green screen is ideal. Keep anything else yellow out of view.</small></li>
+          <li><b>Bright, steady light</b><small>Lock focus and exposure so the ball stays sharp.</small></li>
+          <li><b>Copy the original file</b><small>Not a "for sharing" copy, so the slow motion survives.</small></li>
+        </ul>
+      </div>
+      <div>
+        <p class="kicker">Then</p>
+        <ul class="ticks">
+          <li><b>Open the video</b><small>The tag is found and a grid appears.</small></li>
+          <li><b>Click the turret once</b><small>That's the origin for every measurement.</small></li>
+          <li><b>Press Process</b><small>Every shot is tracked, fitted and judged.</small></li>
+          <li><b>Read the results</b><small>Charts, shots table, summary, CSV and report.</small></li>
+        </ul>
+        <p class="hsl-more">Full filming guide and troubleshooting in the <a href="{{ site.hsl_repo }}#readme" target="_blank" rel="noopener">README</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap sec hsl-thanks">
+    <p><b>Special thanks to</b> the open-source projects that make it possible: OpenCV, AprilTag (University of Michigan APRIL Lab), FFmpeg, Qt for Python, NumPy, SciPy, pandas, Matplotlib and PyInstaller.</p>
+    <p><i>FIRST</i>&reg; and <i>FIRST</i>&reg; Tech Challenge are registered trademarks of <i>FIRST</i>&reg;, which is not overseeing, involved with, or responsible for this software.</p>
+  </div>
+
+</div>

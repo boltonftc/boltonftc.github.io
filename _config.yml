@@ -6,6 +6,7 @@ baseurl: ""
 
 sim_url: "https://boltonftc.github.io/impulse3dsim/"
 youtube_url: "https://www.youtube.com/@FTCTeam36563PrimeSymmetry"   # shows YouTube in the nav + footer
+hsl_repo: "https://github.com/boltonftc/hive-shot-lab"
 
 plugins:
   - jekyll-sitemap

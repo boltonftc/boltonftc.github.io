@@ -35,6 +35,7 @@ sim_url: "https://boltonftc.github.io/impulse3dsim/"
       <p class="hero-sub rise" style="--d:.75s">A rookie team building robots&hellip;<br><strong>&hellip;and the tools that train the next generation of rookies&hellip;</strong></p>
       <div class="hero-cta rise" style="--d:.9s">
         <a class="ps-btn ps-btn-gold" href="{{ site.sim_url }}" target="_blank" rel="noopener">Launch the Simulator <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        <a class="ps-btn ps-btn-blue" href="#hive-shot-lab">Hive Shot Lab</a>
       </div>
     </div>
   </div>
@@ -62,7 +63,7 @@ sim_url: "https://boltonftc.github.io/impulse3dsim/"
 </section>
 
 <!-- ================= SIMULATOR ================= -->
-<section class="sim" id="simulator">
+<section class="sim" id="simulator" data-montage>
   <div class="wrap">
     <header class="sim-head">
       <p class="kicker" data-reveal>Built by 36563 &middot; Free for every team</p>
@@ -100,6 +101,50 @@ sim_url: "https://boltonftc.github.io/impulse3dsim/"
     <div class="sim-cta">
       <a class="ps-btn ps-btn-gold" href="{{ site.sim_url }}" target="_blank" rel="noopener">Launch the Simulator <span class="arrow" aria-hidden="true">&rarr;</span></a>
       {% if page.trailer_url %}<a class="ps-btn ps-btn-blue" href="{{ page.trailer_url }}" target="_blank" rel="noopener">&#9654;&nbsp; Watch the trailer</a>{% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- ================= HIVE SHOT LAB ================= -->
+<section class="sim hsl" id="hive-shot-lab" data-montage>
+  <div class="wrap">
+    <header class="sim-head">
+      <p class="kicker" data-reveal>Built by 36563 &middot; Free for every team</p>
+      <h2 class="display" data-reveal>Every shot, <span>measured.</span></h2>
+      <p class="sim-name" data-reveal>Hive Shot Lab</p>
+      <p class="lede" data-reveal>Film your shooter in slow motion. Hive Shot Lab tracks every pollen ball and tells you its <strong>launch speed, angle, and whether it&rsquo;s IN</strong>, for one shot or a whole batch of videos.</p>
+    </header>
+
+    <div class="sim-stage flip" data-reveal>
+      <div class="device">
+        <div class="device-bar"><span>Hive Shot Lab &middot; v1.0</span><span class="live">Real footage</span></div>
+        <video class="sim-video" muted loop playsinline preload="none" poster="/assets/video/hsl-poster.jpg" data-src="/assets/video/hsl-montage.mp4" aria-label="Hive Shot Lab tracking a four-ball burst against a green screen, then comparing every shot in charts"></video>
+        <div class="device-word" aria-hidden="true">Film</div>
+      </div>
+      <ol class="beats" aria-label="What Hive Shot Lab does">
+        <li class="beat" data-t="0"><b>Film</b><small>Slow-mo, side view, one AprilTag</small></li>
+        <li class="beat" data-t="1.8"><b>Track</b><small>Every ball, frame by frame</small></li>
+        <li class="beat" data-t="6.9"><b>Judge</b><small>IN, LOW or HIGH at the hive cell</small></li>
+        <li class="beat" data-t="11.8"><b>Measure</b><small>Speed and angle of every shot</small></li>
+        <li class="beat" data-t="16"><b>Compare</b><small>Robot setups, side by side</small></li>
+      </ol>
+    </div>
+
+    <div class="hsl-lab">
+      <figure class="hsl-arcs" data-src="/assets/data/hsl-arcs.json" data-reveal>
+        <svg viewBox="-8 -88 126 92" role="img" aria-label="Four real flight paths from one burst, drawn from the turret to the hive cell"></svg>
+        <figcaption>Four real shots from one burst, fitted with air drag. <span>Slowed 4&times;.</span></figcaption>
+      </figure>
+      <div class="hsl-stats">
+        <div data-reveal><b data-count="0.3" data-dec="1" data-pre="&plusmn;" data-post="%">&plusmn;0.3%</b><span>Launch-speed accuracy, tested against known answers</span></div>
+        <div data-reveal><b>1 tag</b><span>One AprilTag sets the scale and which way is up</span></div>
+        <div data-reveal><b>$0</b><span>Free and open source, for every team</span></div>
+      </div>
+    </div>
+
+    <div class="sim-cta">
+      <a class="ps-btn ps-btn-gold" href="{{ site.hsl_repo }}/releases/latest" target="_blank" rel="noopener">Download for Windows <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      <a class="ps-btn ps-btn-blue" href="/hive-shot-lab/">See how it works</a>
     </div>
   </div>
 </section>

@@ -257,12 +257,13 @@
     }, 2800);
   }
 
-  /* ---------- simulator montage synced to the beat rail ---------- */
-  var sv = document.querySelector('.sim-video');
-  if (sv) {
-    var beats = Array.prototype.slice.call(document.querySelectorAll('.beat'));
+  /* ---------- tool montages (simulator, Hive Shot Lab) synced to their beat rails ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-montage]'), function (root) {
+    var sv = root.querySelector('.sim-video');
+    if (!sv) return;
+    var beats = Array.prototype.slice.call(root.querySelectorAll('.beat'));
     var times = beats.map(function (b) { return parseFloat(b.getAttribute('data-t')); });
-    var word = document.querySelector('.device-word');
+    var word = root.querySelector('.device-word');
     var current = -1;
 
     var load = function () {
@@ -303,6 +304,101 @@
         });
       }, { threshold: 0.35 }).observe(sv);
     }
+  });
+
+  /* ---------- Hive Shot Lab: real fitted flight paths fly into the hive cell ---------- */
+  var arcs = document.querySelector('.hsl-arcs');
+  if (arcs && window.fetch) fetch(arcs.getAttribute('data-src')).then(function (r) { return r.json(); }).then(function (data) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = arcs.querySelector('svg');
+    var SLOW = 4;                                  // play the flight at 1/4 speed
+    var FPS = 60;                                  // the path points are 1/60 s apart
+    var mk = function (tag, attrs, parent) {
+      var el = document.createElementNS(NS, tag);
+      Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
+      (parent || svg).appendChild(el);
+      return el;
+    };
+    var Y = function (y) { return -y; };
+    for (var gx = 0; gx <= 108; gx += 12) mk('line', { 'class': 'grid', x1: gx, y1: 0, x2: gx, y2: -84 });
+    for (var gy = 12; gy <= 84; gy += 12) mk('line', { 'class': 'grid', x1: -6, y1: -gy, x2: 114, y2: -gy });
+    mk('line', { 'class': 'floor', x1: -6, y1: 0, x2: 114, y2: 0 });
+    var c0 = data.cell[0], c1 = data.cell[1];
+    mk('line', { 'class': 'cell', x1: c0[0], y1: Y(c0[1]), x2: c1[0], y2: Y(c1[1]) });
+    var flash = mk('text', { 'class': 'flash', x: c1[0] + 5, y: Y(c1[1]) - 2 });
+    mk('circle', { 'class': 'turret', cx: data.turret[0], cy: Y(data.turret[1]), r: 2.2 });
+    var flights = data.shots.map(function (s) {
+      var d = s.p.map(function (p, j) { return (j ? 'L' : 'M') + p[0] + ' ' + Y(p[1]); }).join('');
+      var g = mk('g', { 'class': 'flight r-' + s.r.toLowerCase() });
+      var path = mk('path', { d: d, pathLength: 1 }, g);
+      var lens = [0];
+      for (var j = 1; j < s.p.length; j++) lens.push(lens[j - 1] + Math.hypot(s.p[j][0] - s.p[j - 1][0], s.p[j][1] - s.p[j - 1][1]));
+      var ball = mk('circle', { 'class': 'ball', r: 1.6, cx: s.p[0][0], cy: Y(s.p[0][1]) }, g);
+      return { s: s, g: g, path: path, lens: lens, ball: ball };
+    });
+    var showAll = function () {
+      flights.forEach(function (f) { f.path.style.strokeDashoffset = 0; f.ball.style.opacity = 0; });
+    };
+    var raf = 0, start = 0, cycle = 0;
+    var frame = function (now) {
+      if (!start) start = now;
+      var t = (now - start) / 1000 / SLOW, done = true;
+      flights.forEach(function (f) {
+        var k = (t - f.s.dt) * FPS, n = f.s.p.length - 1;
+        if (k < n) done = false;
+        k = Math.max(0, Math.min(n, k));
+        var j = Math.floor(k), u = k - j, a = f.s.p[j], b = f.s.p[Math.min(n, j + 1)];
+        var len = f.lens[j] + u * (f.lens[Math.min(n, j + 1)] - f.lens[j]);
+        f.path.style.strokeDashoffset = 1 - len / f.lens[n];
+        f.ball.setAttribute('cx', a[0] + u * (b[0] - a[0]));
+        f.ball.setAttribute('cy', Y(a[1] + u * (b[1] - a[1])));
+        f.ball.style.opacity = t >= f.s.dt && k < n ? 1 : 0;
+        if (f.s.c !== null && k >= f.s.c && !f.hit) {
+          f.hit = true;
+          flash.textContent = f.s.r === 'IN' ? 'IN!' : f.s.r;
+          flash.setAttribute('class', 'flash');
+          void flash.getBoundingClientRect();          // restart the pop animation
+          flash.setAttribute('class', 'flash on r-' + f.s.r.toLowerCase());
+        }
+      });
+      if (!done) { raf = requestAnimationFrame(frame); return; }
+      cycle = setTimeout(play, 2600);
+    };
+    var play = function () {
+      cancelAnimationFrame(raf); clearTimeout(cycle);
+      flights.forEach(function (f) { f.hit = false; });
+      flash.setAttribute('class', 'flash');
+      start = 0; raf = requestAnimationFrame(frame);
+    };
+    var stop = function () { cancelAnimationFrame(raf); clearTimeout(cycle); };
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      showAll();
+    } else {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) play(); else stop(); });
+      }, { threshold: 0.4 }).observe(arcs);
+    }
+  }).catch(function () {});
+
+  /* ---------- count-up numbers ---------- */
+  var counters = document.querySelectorAll('[data-count]');
+  if (counters.length && !reduceMotion && 'IntersectionObserver' in window) {
+    var countIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        countIO.unobserve(e.target);
+        var el = e.target, to = parseFloat(el.getAttribute('data-count')), dec = +(el.getAttribute('data-dec') || 0);
+        var pre = el.getAttribute('data-pre') || '', post = el.getAttribute('data-post') || '', t0 = 0;
+        var step = function (now) {
+          if (!t0) t0 = now;
+          var p = Math.min(1, (now - t0) / 1400), v = to * (1 - Math.pow(1 - p, 3));
+          el.textContent = pre + v.toFixed(dec) + post;
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.6 });
+    Array.prototype.forEach.call(counters, function (el) { countIO.observe(el); });
   }
 
   /* ---------- 36563: read forwards, pause, read backwards, pause ---------- */
