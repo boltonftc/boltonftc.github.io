@@ -1,0 +1,54 @@
+{%- comment -%} schema.org JSON-LD for the homepage: tells search engines who the team is and what the two tools are. {%- endcomment -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "{{ site.url }}/#team",
+        "name": "Prime Symmetry",
+        "alternateName": ["FTC Team 36563", "FTC 36563", "Team 36563", "Prime Symmetry FTC", "Bolton FTC"],
+        "description": "FIRST Tech Challenge (FTC) robotics team 36563 from Bolton, Massachusetts.",
+        "url": "{{ site.url }}/",
+        "logo": "{{ site.url }}/assets/brand/icon-512.png",
+        "image": "{{ site.url }}/assets/brand/og-share.jpg",
+        "address": { "@type": "PostalAddress", "addressLocality": "Bolton", "addressRegion": "MA", "addressCountry": "US" },
+        "sameAs": ["{{ site.youtube_url }}", "https://github.com/boltonftc"],
+        "knowsAbout": ["FIRST Tech Challenge", "FTC BIOBUZZ", "robotics", "FTC Java programming", "robot simulation"]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "{{ site.url }}/#website",
+        "name": "Prime Symmetry · FTC Team 36563",
+        "alternateName": "Prime Symmetry",
+        "url": "{{ site.url }}/",
+        "publisher": { "@id": "{{ site.url }}/#team" }
+      },
+      {
+        "@type": "WebApplication",
+        "name": "Impulse 3D Simulator",
+        "alternateName": "FTC BIOBUZZ Robotics Simulator",
+        "description": "Free browser-based FTC robotics simulator. Write real FTC Java, drive a 3D robot on the BIOBUZZ field, then run the same code on a real Control Hub.",
+        "url": "{{ site.sim_url }}",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any (web browser)",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "creator": { "@id": "{{ site.url }}/#team" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Hive Shot Lab",
+        "description": "Free, open-source FTC BIOBUZZ shot tracker. Measures pollen launch speed, launch angle and IN / LOW / HIGH from slow-motion video.",
+        "url": "{{ site.url }}/hive-shot-lab/",
+        "sameAs": "{{ site.hsl_repo }}",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Windows 10, Windows 11, macOS, Linux",
+        "license": "https://www.apache.org/licenses/LICENSE-2.0",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "creator": { "@id": "{{ site.url }}/#team" }
+      }
+    ]
+  }
+  </script>
