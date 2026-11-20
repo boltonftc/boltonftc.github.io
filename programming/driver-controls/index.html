@@ -98,7 +98,8 @@ css: ["/assets/css/driver-controls.css"]
     <polyline class="lead" points="242,240 300,244 315,247"/>
     <circle class="dot" cx="315" cy="247" r="3"/>
 
-    <text x="235" y="344"><tspan class="k">D-pad</tspan><tspan class="f">  ·  (unused)</tspan></text>
+    <text x="235" y="344"><tspan class="k">D-pad</tspan><tspan class="f">  ·  Pollen extractor</tspan></text>
+    <text x="235" y="362" class="lbl"><tspan class="f">&#8593; Raise  ·  &#8595; Lower</tspan></text>
     <polyline class="lead" points="242,340 300,332 340,328"/>
     <circle class="dot" cx="340" cy="328" r="3"/>
   </g>
@@ -109,7 +110,8 @@ css: ["/assets/css/driver-controls.css"]
     <polyline class="lead" points="718,100 660,110 616,130"/>
     <circle class="dot" cx="616" cy="130" r="3"/>
 
-    <text x="725" y="150"><tspan class="k">RB</tspan><tspan class="f">  ·  Reset heading</tspan></text>
+    <text x="725" y="150"><tspan class="k">RB</tspan><tspan class="f">  ·  Tap: reset heading</tspan></text>
+    <text x="725" y="168" class="lbl"><tspan class="f">Hold &#189; s at HOME: reset position</tspan></text>
     <polyline class="lead" points="718,146 660,158 622,164"/>
     <circle class="dot" cx="622" cy="164" r="3"/>
 
@@ -126,7 +128,7 @@ css: ["/assets/css/driver-controls.css"]
     <circle cx="732" cy="252" r="8" fill="#c62828"/>
     <text x="748" y="257"><tspan class="k">B</tspan><tspan class="f">  ·  Intake reverse</tspan></text>
     <circle cx="732" cy="282" r="8" fill="#1565c0"/>
-    <text x="748" y="287"><tspan class="k">X</tspan><tspan class="f">  ·  Feed (hold)</tspan></text>
+    <text x="748" y="287"><tspan class="k">X</tspan><tspan class="f">  ·  Shoot (hold)</tspan></text>
     <circle cx="732" cy="312" r="8" fill="#f9a825"/>
     <text x="748" y="317"><tspan class="k">Y</tspan><tspan class="f">  ·  Flywheel on/off</tspan></text>
   </g>
@@ -141,7 +143,8 @@ css: ["/assets/css/driver-controls.css"]
       <li><span class="dc-key">Left stick</span> &mdash; drive (&#8597;) &amp; strafe (&#8596;), field-centric</li>
       <li><span class="dc-key">Left trigger</span> &mdash; turn left (spin CCW)</li>
       <li><span class="dc-key">Right trigger</span> &mdash; turn right (spin CW)</li>
-      <li><span class="dc-key">Right bumper</span> &mdash; reset heading (re-zero field-centric)</li>
+      <li><span class="dc-key">Right bumper (tap)</span> &mdash; reset heading (re-zero field-centric)</li>
+      <li><span class="dc-key">Right bumper (hold &#189; s)</span> &mdash; HOME reset: park at HOME, hold until the "position reset" message, then let go. Resets heading <em>and</em> tells odometry exactly where the robot is</li>
     </ul>
   </div>
   <div class="dc-grp g-shoot">
@@ -150,20 +153,22 @@ css: ["/assets/css/driver-controls.css"]
       <li><span class="dc-key">Y</span> &mdash; flywheel on/off (toggle)</li>
       <li><span class="dc-key">Right stick &#8597;</span> &mdash; trim flywheel speed (up = stronger)</li>
       <li><span class="dc-key">Right stick &#8596;</span> &mdash; aim the hood</li>
-      <li><span class="dc-key">X</span> &mdash; feed a piece into the shooter (hold)</li>
+      <li><span class="dc-key">X</span> &mdash; shoot (hold)</li>
     </ul>
   </div>
   <div class="dc-grp g-intake">
-    <h3>Intake</h3>
+    <h3>Intake &amp; pollen extraction</h3>
     <ul>
       <li><span class="dc-key">A</span> &mdash; intake IN (press to toggle)</li>
       <li><span class="dc-key">B</span> &mdash; intake REVERSE (press to toggle)</li>
+      <li><span class="dc-key">D-pad &#8595;</span> &mdash; lower the pollen extractor</li>
+      <li><span class="dc-key">D-pad &#8593;</span> &mdash; raise (stow) the pollen extractor</li>
     </ul>
   </div>
   <div class="dc-grp g-unused">
     <h3>Unused</h3>
     <ul>
-      <li><span class="dc-key">Left bumper</span>, <span class="dc-key">D-pad</span></li>
+      <li><span class="dc-key">Left bumper</span></li>
       <li><span class="dc-key">Stick clicks</span> (L3 / R3)</li>
       <li><span class="dc-key">View</span>, <span class="dc-key">Menu</span>, <span class="dc-key">Guide</span></li>
     </ul>
